@@ -1,0 +1,40 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.title {
+	background-color: #2757c0;
+	text-align: center;
+	padding : 7px;
+	font-size: 24px;
+	border-radius: 10px;
+	color : white;
+}
+
+.tab {
+	/* background-color: black; */
+	/* text-align: center; */
+	width : 309px;
+	padding : 7px;
+}
+.tab2 {
+	display :inline-block;
+	margin : 17px;
+	/* 배율 작아지면 갑자기 팍 줄어듦 */
+} 
+
+.list {
+	background-color: #1c408f;
+	/* flex : 1; */
+	/* height : 86vh; */
+	border-radius: 10px;
+	height : 1010px;
+	padding : 7px;
+}
+
+.item {
+	background-color: #67dbfb;
+	border-radius: 10px;
+	height : 50px;
+}
