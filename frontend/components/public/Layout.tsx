@@ -10,7 +10,7 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          backgroundColor: "yellow",
+          backgroundColor: "#4270d6",
           padding: 0,
           margin: 0,
         }}
