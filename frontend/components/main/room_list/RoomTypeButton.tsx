@@ -1,8 +1,8 @@
 export default function RoomTypeButton() {
-	return (
-		<div>
-			<button className="notdm tab2">Public / Protected</button>
-			<button className="dm tab2">DM</button>
-		</div>
-	);
+  return (
+    <div>
+      <button className="notdm typebutton">Public / Protected</button>
+      <button className="dm typebutton">DM</button>
+    </div>
+  );
 }
