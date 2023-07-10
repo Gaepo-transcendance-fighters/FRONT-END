@@ -1,13 +1,17 @@
 "use client";
 
 import { Card, CardContent, Stack } from "@mui/material";
+import FriendList from "../main/friend_list/FriendList";
 
-const Box = () => {
+const Layout = () => {
   return (
     <Card sx={{ display: "flex" }}>
-      <CardContent sx={{ flex: 1, height: "100vh", backgroundColor: "yellow" }}>
-        friend list
-      </CardContent>
+      <Stack sx={{ flex: 1, height: "100vh", backgroundColor: "yellow" }}>
+        <CardContent sx={{ height: "35vh", backgroundColor: "brown" }}>
+          my profile
+        </CardContent>
+        <FriendList />
+      </Stack>
       <Stack sx={{ flex: 3, height: "100vh", backgroundColor: "green" }}>
         <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
           game start
@@ -23,4 +27,4 @@ const Box = () => {
   );
 };
 
-export default Box;
+export default Layout;
