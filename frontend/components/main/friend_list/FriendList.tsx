@@ -21,13 +21,22 @@ const mockFriendList: IFriend[] = [
     name: "jaekim",
     isOnline: false,
   },
+  {
+    name: "hoslimhoslim1231231231231231231231231",
+    isOnline: true,
+  },
 ];
 
 const FriendList = () => {
   return (
     <>
       <CardContent
-        sx={{ padding: 0, height: "55vh", backgroundColor: "#1c4361" }}
+        sx={{
+          flex: 1,
+          padding: 0,
+          height: "55vh",
+          backgroundColor: "#1c4361",
+        }}
       >
         <Typography sx={{ margin: 1 }} color={"#ffffff"}>
           친구 리스트
