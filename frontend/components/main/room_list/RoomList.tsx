@@ -1,17 +1,14 @@
 // use client;
 
-import Title from "./Title"
-
-import { Button } from '@mui/material';
+import Title from "./Title";
 import List from "./List";
+import RoomTypeButton from "./RoomTypeButton";
 export default function RoomList() {
-
-	return <>
-		<Title />
-		<div>
-			<button className="notdm tab2">Public / Protected</button>
-			<button className="dm tab2">DM</button>
-		</div>
-		<List />
-	</>;
+  return (
+    <>
+      <Title />
+      <RoomTypeButton />
+      <List />
+    </>
+  );
 }
