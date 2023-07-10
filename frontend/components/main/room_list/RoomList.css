@@ -36,10 +36,12 @@
 .list {
   background-color: #1c408f;
   border-radius: 10px;
-  height: 83vh;
+  height: 43vh;
+  /* height: 83vh; */
   bottom: 0;
   padding: 7px 11px;
   padding-right: 0px;
+  padding-bottom: 7px;
   overflow-y: scroll;
 }
 .list::-webkit-scrollbar {
