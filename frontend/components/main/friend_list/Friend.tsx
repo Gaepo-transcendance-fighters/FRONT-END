@@ -2,11 +2,13 @@
 
 import { Button, Card, Typography, Stack, Tooltip } from "@mui/material";
 import { IFriend } from "./FriendList";
+import Image from "next/image";
 
-const mockup: IFriend = {
-  name: "유저123",
-  isOnline: true,
-};
+const loginOn = <Image src="/logon.png" alt="online" width={10} height={10} />;
+
+const loginOff = (
+  <Image src="/logoff.png" alt="offline" width={10} height={10} />
+);
 
 const Friend = ({ prop }: { prop: IFriend }) => {
   return (
@@ -27,8 +29,8 @@ const Friend = ({ prop }: { prop: IFriend }) => {
               {prop.name}
             </Typography>
           </Tooltip>
-          <Stack direction={"row"}>
-            <Typography my={1}>{prop.isOnline ? "O" : "X"}</Typography>
+          <Stack direction={"row"} alignItems={"center"}>
+            {prop.isOnline ? loginOn : loginOff}
             <Button type="button">더보기</Button>
           </Stack>
         </Stack>
