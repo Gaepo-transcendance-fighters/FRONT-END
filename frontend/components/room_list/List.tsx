@@ -8,13 +8,9 @@ export default function List() {
 
 	return (
 	<div className="list">
-	    	<ThemeProvider theme={theme}>
-				<Button variant="contained" color="primary">
-				Success
-			</Button>
-		    </ThemeProvider>
-		<div></div>
-		<div></div>
-
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="add">+</button>
 	</div>);
 }
