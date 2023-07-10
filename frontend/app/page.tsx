@@ -1,9 +1,9 @@
-import Box from "@/components/public/Box";
+import Layout from "@/components/public/Layout";
 
 export default function Home() {
   return (
     <>
-      <Box></Box>
+      <Layout></Layout>
     </>
   );
 }
