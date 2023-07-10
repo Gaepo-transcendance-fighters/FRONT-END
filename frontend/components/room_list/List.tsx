@@ -1,8 +1,6 @@
 // use client;
 
 import "@/components/room_list/RoomList.css";
-import { Button, ThemeProvider } from "@mui/material";
-import {theme} from "@/components/room_list/theme";
 
 export default function List() {
 

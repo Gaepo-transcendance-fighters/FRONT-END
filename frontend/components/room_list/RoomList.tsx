@@ -8,9 +8,9 @@ export default function RoomList() {
 
 	return <>
 		<Title />
-		<div className="tab">
-			<button className="tab2">public / protected</button>
-			<button className="tab2">DM</button>
+		<div>
+			<button className="notdm tab2">Public / Protected</button>
+			<button className="dm tab2">DM</button>
 			{/* <Button variant="contained" className="tab2">public / protected</Button>
 			<Button variant="contained" className="tab2">DM</Button> */}
 		</div>

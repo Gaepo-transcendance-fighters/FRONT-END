@@ -12,26 +12,32 @@
 	color : white;
 }
 
-.tab {
-	padding : 7px;
-	background-color: black;
-	/* margin : 0px auto; */
-}
 .tab2 {
-	background-color: #2757c0;
+	background-color: #214aa4;
 	border-radius: 10px;
-	height : 50px;
+	height : 33px;
 	border : 0px;
-	margin-right : 1px;
-	width : 42%;
 	color : white;
+	margin : 7px 3px;
 	font-size: 13px;
+}
+.notdm {
+	width : 70%;
+	margin-right: 0;
+	margin-left: 1px;
+	font-size: 15px;
+} 
+.dm {
+	float: right;
+	margin-right: 1px;
+	margin-left: 0;
+	width : 27%;
 } 
 
 .list {
 	background-color: #1c408f;
 	border-radius: 10px;
-	height : 78%;
+	height : 83vh;
 	bottom : 0;
 	padding : 7px 11px;
 	padding-right: 0px;
@@ -58,7 +64,7 @@
 	margin : 3px auto;
 	width : 100%;
 	color : white;
-	font-size: 20px;
+	font-size: 17px;
 }
 
 .add {
