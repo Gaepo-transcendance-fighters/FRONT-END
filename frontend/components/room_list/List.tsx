@@ -11,6 +11,18 @@ export default function List() {
 		<button className="item">jeekim님이 만든 방?</button>
 		<button className="item">jeekim님이 만든 방?</button>
 		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
+		<button className="item">jeekim님이 만든 방?</button>
 		<button className="add">+</button>
 	</div>);
 }
