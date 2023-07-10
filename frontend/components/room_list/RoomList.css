@@ -13,15 +13,19 @@
 }
 
 .tab {
-	/* background-color: black; */
-	/* text-align: center; */
-	width : 309px;
 	padding : 7px;
+	background-color: black;
+	/* margin : 0px auto; */
 }
 .tab2 {
-	display :inline-block;
-	margin : 17px;
-	/* 배율 작아지면 갑자기 팍 줄어듦 */
+	background-color: #2757c0;
+	border-radius: 10px;
+	height : 50px;
+	border : 0px;
+	margin-right : 1px;
+	width : 42%;
+	color : white;
+	font-size: 13px;
 } 
 
 .list {
