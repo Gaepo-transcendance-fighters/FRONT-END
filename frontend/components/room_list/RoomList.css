@@ -26,14 +26,14 @@
 
 .list {
 	background-color: #1c408f;
-	/* flex : 1; */
-	/* height : 86vh; */
 	border-radius: 10px;
-	height : 1010px;
+	height : 78%;
+	bottom : 0;
 	padding : 7px;
 }
 
 .item {
+	overflow: scroll;
 	background-color: #67dbfb;
 	border-radius: 10px;
 	height : 50px;
