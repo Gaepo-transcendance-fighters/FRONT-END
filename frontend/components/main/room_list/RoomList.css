@@ -41,7 +41,6 @@
   bottom: 0;
   padding: 7px 11px;
   padding-right: 0px;
-  overflow: hidden;
   overflow-y: scroll;
 }
 .list::-webkit-scrollbar {
@@ -57,6 +56,7 @@
 }
 
 .item {
+  display: block;
   background-color: #67dbfb;
   border-radius: 10px;
   height: 50px;
@@ -65,9 +65,11 @@
   width: 100%;
   color: white;
   font-size: 17px;
+  overflow: hidden;
   /* white-space: nowrap; */
-  /* overflow: "hidden"; */
-  /* text-overflow: ellipsis; */
+  padding-left: 10px;
+  padding-right: 10px;
+  text-overflow: ellipsis;
 }
 
 .add {
