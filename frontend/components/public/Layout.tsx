@@ -2,6 +2,7 @@
 
 import { Card, CardContent, Stack } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
+import RoomList from "../main/room_list/RoomList";
 
 const Layout = () => {
   return (
@@ -40,15 +41,17 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          backgroundColor: "magenta",
+          backgroundColor: "#3171dd",
           padding: 0,
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
+        {/* <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
           room member
+        </CardContent> */}
+        <CardContent sx={{'&:last-child': { pb: 0 }}}>
+          <RoomList />
         </CardContent>
-        <CardContent>room list</CardContent>
       </Stack>
     </Card>
   );

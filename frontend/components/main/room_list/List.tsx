@@ -1,67 +1,24 @@
 // use client;
+import { useEffect, useState } from "react";
+import { mockChatRoomList } from "./RoomTypeButton";
+import { chatRoomType } from "./RoomTypeButton";
+import {IChatRoom} from "./RoomTypeButton";
 
 import "@/components/main/room_list/RoomList.css";
-import { IFriend } from "../friend_list/FriendList";
 
-const mockFriendList: IFriend[] = [
-  {
-    name: "hoslim",
-    isOnline: true,
-  },
-  {
-    name: "jeekim",
-    isOnline: true,
-  },
-  {
-    name: "jaekim",
-    isOnline: false,
-  },
-  {
-    name: "hoslimhoslim1231231231231231231231231",
-    isOnline: true,
-  },
-  {
-    name: "hoslim",
-    isOnline: true,
-  },
-  {
-    name: "jeekim",
-    isOnline: true,
-  },
-  {
-    name: "jaekim",
-    isOnline: false,
-  },
-  {
-    name: "hoslimhoslim1231231231231231231231231",
-    isOnline: true,
-  },
-  {
-    name: "hoslim",
-    isOnline: true,
-  },
-  {
-    name: "jeekim",
-    isOnline: true,
-  },
-  {
-    name: "jaekim",
-    isOnline: false,
-  },
-  {
-    name: "hoslimhoslim1231231231231231231231231",
-    isOnline: true,
-  },
-];
+export default function List({roomsProp}:{roomsProp :IChatRoom[]}) {
+  // const [render, setRender] = useState(false);
+  // useEffect(() => {
 
-export default function List() {
+  // }, [render]);
+  console.log("In List!!! : ", roomsProp);
   return (
     <div className="list">
-      {mockFriendList.map((friend, idx) => (
-        <button key={idx} className="item">
-          {friend.name}
-        </button>
-      ))}
+      {
+      roomsProp.map((room) => {
+        return <button className="item">{room.participants}</button>;
+      })
+      }
       <button className="add">+</button>
     </div>
   );
