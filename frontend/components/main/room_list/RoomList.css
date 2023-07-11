@@ -2,7 +2,7 @@
   background-color: #2757c0;
   text-align: center;
   padding: 7px;
-  font-size: 24px;
+  font-size: 21px;
   border-radius: 10px;
   color: white;
   overflow: hidden;
@@ -42,7 +42,7 @@
   background-color: #1c408f;
   border-radius: 10px;
   /* height: 43vh; */
-  height: 82vh;
+  height: 83vh;
   bottom: 0;
   padding: 7px 11px;
   padding-right: 0px;
@@ -86,4 +86,9 @@
   width: 100%;
   color: #67dbfb;
   font-size: 24px;
+}
+
+.pr {
+  font-size: 17px;
+  display: inline;
 }

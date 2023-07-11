@@ -93,21 +93,31 @@ export default function RoomTypeButton() {
   useEffect(() => {
     DivideRoom();
   }, []);
-  const NonDmBtnClick = () => {
+  const OnClick = (isNotDm : boolean) => {
     setNonDmRooms([]);
     setDmRooms([]);
     DivideRoom();
 
-    roomTypeRef.current = true;
-    setDisabled(true);
+    roomTypeRef.current = isNotDm;
+    setDisabled(isNotDm);
+  }
+  const NonDmBtnClick = () => {
+    // setNonDmRooms([]);
+    // setDmRooms([]);
+    // DivideRoom();
+
+    // roomTypeRef.current = true;
+    // setDisabled(true);
+    OnClick(true);
   };
   const DmBtnClick = () => {
-    setNonDmRooms([]);
-    setDmRooms([]);
-    DivideRoom();
+    // setNonDmRooms([]);
+    // setDmRooms([]);
+    // DivideRoom();
 
-    roomTypeRef.current = false;
-    setDisabled(false);
+    // roomTypeRef.current = false;
+    // setDisabled(false);
+    OnClick(false);
   };
 
   return (
