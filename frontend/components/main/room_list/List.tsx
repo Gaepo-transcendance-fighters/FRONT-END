@@ -6,12 +6,8 @@ import {IChatRoom} from "./RoomTypeButton";
 
 import "@/components/main/room_list/RoomList.css";
 
-export default function List({roomsProp}:{roomsProp :IChatRoom[]}) {
-  // const [render, setRender] = useState(false);
-  // useEffect(() => {
-
-  // }, [render]);
-  console.log("In List!!! : ", roomsProp);
+export default function List({roomsProp, channelType}:{roomsProp :IChatRoom[],channelType:boolean }) {
+  console.log("In List!!! : ", channelType);
   return (
     <div className="list">
       <button className="add">+</button>
