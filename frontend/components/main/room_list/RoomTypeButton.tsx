@@ -42,8 +42,12 @@ export const mockChatRoomList: IChatRoom[] = [
 
 export default function RoomTypeButton() {
   const [rooms, setRooms] = useState<IChatRoom[]>([]);
+  const [nonDmDisabled, setNonDmDisabled] = useState(false);
+  const [dmDisabled, setDmDisabled] = useState(false);
   
   const NonDmBtnClick = () => {
+    setNonDmDisabled(true);
+    setDmDisabled(false);
     console.log("hi");
     mockChatRoomList.map((room, idx) => {
       console.log("rooms : ", rooms);
@@ -52,11 +56,13 @@ export default function RoomTypeButton() {
         setRooms((prev) => {return [...prev, room];});
         console.log("after setRooms rooms : ", rooms);
     }
-        // return <List isProtected={true}/>;
-      // else if (room.channelType == chatRoomType.dm)
-        // return ;
-      // return <button>{room.participants}</button>;
     })
+
+  }
+  const DmBtnClick = () => {
+    setNonDmDisabled(false);
+    setDmDisabled(true);
+
   }
   useEffect(() => {
     console.log("after setRooms rooms : ", rooms);
@@ -65,8 +71,8 @@ export default function RoomTypeButton() {
   return (
     <>
       <div>
-        <button className="notdm typebutton" onClick={NonDmBtnClick}>Public / Protected</button>
-        <button className="dm typebutton">DM</button>
+        <button className="notdm typebutton" onClick={NonDmBtnClick} disabled={nonDmDisabled}>Public / Protected</button>
+        <button className="dm typebutton"onClick={DmBtnClick} disabled={dmDisabled}>DM</button>
       </div>
       <List roomsProp={rooms}/>
     </>

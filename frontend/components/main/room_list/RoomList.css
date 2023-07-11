@@ -20,6 +20,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.typebutton:disabled {
+  background-color: #7b8aa9;
+  color: rgba(255, 255, 255, 0.294);
+}
+
 .notdm {
   width: 70%;
   margin-right: 0;

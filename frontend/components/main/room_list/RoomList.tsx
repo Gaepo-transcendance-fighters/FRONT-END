@@ -8,7 +8,6 @@ export default function RoomList() {
     <>
       <Title />
       <RoomTypeButton />
-      {/* <List /> */}
     </>
   );
 }
