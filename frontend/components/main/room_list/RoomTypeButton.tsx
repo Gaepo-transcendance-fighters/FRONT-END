@@ -1,7 +1,6 @@
 // use client;
 
 import { useEffect, useState, useRef } from "react";
-import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import List from "./List";
 
 // dm 이냐 아니냐

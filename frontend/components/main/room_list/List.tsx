@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { mockChatRoomList } from "./RoomTypeButton";
 import { chatRoomType } from "./RoomTypeButton";
 import { IChatRoom } from "./RoomTypeButton";
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
 
 import "@/components/main/room_list/RoomList.css";
 
@@ -17,7 +18,11 @@ export default function List({
     <div className="list">
       {channelType ? <button className="add">+</button> : ""}
       {roomsProp.map((room) => {
-        return <button className="item">{room.participants}</button>;
+        return  (<button className="item">{(room.password == "") ? room.participants : 
+        <>
+          <LockRoundedIcon sx={{width:"13px"}}/>{room.participants}
+        </>}
+        </button>);
       })}
     </div>
   );
