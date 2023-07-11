@@ -14,12 +14,12 @@ export default function List({roomsProp}:{roomsProp :IChatRoom[]}) {
   console.log("In List!!! : ", roomsProp);
   return (
     <div className="list">
+      <button className="add">+</button>
       {
       roomsProp.map((room) => {
         return <button className="item">{room.participants}</button>;
       })
       }
-      <button className="add">+</button>
     </div>
   );
 }
