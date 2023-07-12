@@ -6,6 +6,7 @@ import GameStartButton from "../gameStartButton/GameStartButton";
 import ModalBasic from "../main/myprofile/ModalBasic";
 import Modal from "../main/myprofile/Modal";
 import Myprofile from "../main/myprofile/MyProfile";
+import RoomList from "../main/room_list/RoomList";
 
 const Layout = () => {
   return (
@@ -14,7 +15,7 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          backgroundColor: "yellow",
+          backgroundColor: "#4270d6",
           padding: 0,
           margin: 0,
         }}
@@ -47,15 +48,17 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          backgroundColor: "magenta",
+          backgroundColor: "#3171dd",
           padding: 0,
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
+        {/* <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
           room member
+        </CardContent> */}
+        <CardContent sx={{ "&:last-child": { pb: 0 } }}>
+          <RoomList />
         </CardContent>
-        <CardContent>room list</CardContent>
       </Stack>
     </Card>
   );

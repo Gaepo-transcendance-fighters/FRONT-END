@@ -1,10 +1,11 @@
 "use client";
 
-import { Button, Card, Typography, Stack, Tooltip } from "@mui/material";
+import { Card, Typography, Stack, Tooltip } from "@mui/material";
 import { IFriend } from "./FriendList";
 import Image from "next/image";
+import FriendProfile from "./FriendProfile";
 
-const loginOn = <Image src="/logon.png" alt="online" width={10} height={10} />;
+const loginOn = <Image src="/logon1.png" alt="online" width={10} height={10} />;
 
 const loginOff = (
   <Image src="/logoff.png" alt="offline" width={10} height={10} />
@@ -13,7 +14,7 @@ const loginOff = (
 const Friend = ({ prop }: { prop: IFriend }) => {
   return (
     <>
-      <Card sx={{ margin: 1, backgroundColor: "#FFFFFF" }}>
+      <Card sx={{ margin: 1, backgroundColor: "#86d8f7" }}>
         <Stack direction={"row"} justifyContent={"space-between"}>
           <Tooltip title={prop.name} arrow>
             <Typography
@@ -28,7 +29,7 @@ const Friend = ({ prop }: { prop: IFriend }) => {
           </Tooltip>
           <Stack direction={"row"} alignItems={"center"}>
             {prop.isOnline ? loginOn : loginOff}
-            <Button type="button">더보기</Button>
+            <FriendProfile prop={prop} />
           </Stack>
         </Stack>
       </Card>
