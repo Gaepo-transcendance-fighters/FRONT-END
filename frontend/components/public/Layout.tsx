@@ -49,9 +49,7 @@ const Layout = () => {
         {/* <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
           room member
         </CardContent> */}
-        <CardContent sx={{'&:last-child': { pb: 0 }}}>
-          <RoomList />
-        </CardContent>
+        <RoomList />
       </Stack>
     </Card>
   );
