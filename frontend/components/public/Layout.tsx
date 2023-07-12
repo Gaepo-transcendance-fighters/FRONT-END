@@ -53,9 +53,6 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        {/* <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
-          room member
-        </CardContent> */}
         <RoomList />
       </Stack>
     </Card>

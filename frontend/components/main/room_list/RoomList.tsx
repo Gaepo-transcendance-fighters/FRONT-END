@@ -3,21 +3,26 @@
 import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
 import { Card, CardContent } from "@mui/material";
+import { useEffect, useState } from "react";
 export default function RoomList() {
+  const [showFriendList, setShowFriendList] = useState(false);
+  useEffect(() => {
+    console.log("showFriendList has changed to ", showFriendList);
+  }, [showFriendList]);
   return (
     <>
       <CardContent
         sx={{
-          height: "35vh",
           backgroundColor: "magenta",
-          "&:last-child": { pb: 0 },
         }}
-      >
-        1
-      </CardContent>
+        className={showFriendList ? "flactivate" : "fldeactivate"}
+      ></CardContent>
       <CardContent sx={{ "&:last-child": { pb: 0 } }}>
         <Title />
-        <RoomTypeButton />
+        <RoomTypeButton
+          showFriendList={showFriendList}
+          setShowFriendList={setShowFriendList}
+        />
       </CardContent>
     </>
   );

@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 
 const style = {
   position: "absolute" as "absolute",
@@ -26,10 +26,17 @@ const style = {
 export default function List({
   roomsProp,
   channelType,
+  showFriendList,
+  setShowFriendList,
 }: {
   roomsProp: IChatRoom[];
   channelType: boolean;
+  showFriendList: boolean;
+  setShowFriendList: Dispatch<SetStateAction<boolean>>;
 }) {
+  const onClick = () => {
+    setShowFriendList(true);
+  }
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -40,7 +47,7 @@ export default function List({
     else return idx;
   };
   return (
-    <div className="list">
+    <div className={!showFriendList ? "list" : "roomclicked"}>
       {channelType ? (
         <>
           <button className="add" onClick={handleOpen}>
@@ -71,7 +78,7 @@ export default function List({
       )}
       {roomsProp.map((room) => {
         return (
-          <button className="item">
+          <button className="item" onClick={onClick}>
             <div className="roomidx">{leftPadding(room.channelIdx)}</div>
             <div className="owner">{room.owner}'s</div>
             <div className="lock">
