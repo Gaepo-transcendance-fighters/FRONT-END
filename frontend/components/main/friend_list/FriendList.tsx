@@ -1,14 +1,15 @@
 "use client";
 
 import {
-  Button,
+  ToggleButton,
   Card,
   CardContent,
   Typography,
-  Stack,
   Box,
+  Stack,
 } from "@mui/material";
 import Friend from "./Friend";
+import { useEffect, useState } from "react";
 
 export interface IFriend {
   name: string;
@@ -79,13 +80,40 @@ const mockFriendList: IFriend[] = [
   },
 ];
 
+const mockBlockList = [
+  {
+    name: "hoslim",
+    isOnline: true,
+    imgUrl: "",
+  },
+  {
+    name: "hoslim",
+    isOnline: true,
+    imgUrl: "",
+  },
+  {
+    name: "hoslim",
+    isOnline: true,
+    imgUrl: "",
+  },
+  {
+    name: "hoslim",
+    isOnline: true,
+    imgUrl: "",
+  },
+];
+
 const FriendList = () => {
+  const [select, setSelect] = useState<boolean>(false);
+
+  const showList = select ? mockBlockList : mockFriendList;
+
   return (
     <>
       <CardContent
         sx={{
           height: "55vh",
-          backgroundColor: "#4270d6",
+          backgroundColor: "#3478c5",
         }}
       >
         <Box
@@ -112,7 +140,27 @@ const FriendList = () => {
             padding: "10px",
           }}
         >
-          {mockFriendList.map((friend, idx) => (
+          <Stack width={"max-content"}>
+            <ToggleButton
+              value="show"
+              selected={select}
+              onChange={() => setSelect(!select)}
+              sx={{
+                backgroundColor: "#48a0ed",
+                color: "black",
+                padding: 0,
+                "&:hover": {
+                  backgroundColor: "#48a0ed",
+                },
+                "&.Mui-selected, &.Mui-selected:hover": {
+                  backgroundColor: "#3478c5",
+                },
+              }}
+            >
+              {select ? "Block" : "Friend"}
+            </ToggleButton>
+          </Stack>
+          {showList.map((friend, idx) => (
             <Friend key={idx} prop={friend} />
           ))}
         </Card>
