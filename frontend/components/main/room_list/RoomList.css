@@ -64,8 +64,8 @@
 .item {
   /* display: block; */
   display: flex;
-    align-items: center;
-
+  align-items: center;
+  
   background-color: #67dbfb;
   border-radius: 10px;
   height: 50px;
@@ -73,11 +73,27 @@
   margin: 3px auto;
   width: 100%;
   color: white;
-  font-size: 17px;
+  font-size: 18px;
   padding-left: 10px;
   padding-right: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.roomidx {
+  display: inline-block;
+  width : 17%;
+  margin : auto;
+  font-size: 16px;
+  vertical-align: middle;
+}
+.owner{
+  width : 70%;
+  text-align: center;
+}
+
+.lock {
+  width : 13%;
+  float:right;
 }
 
 .add {
@@ -89,19 +105,4 @@
   width: 100%;
   color: #67dbfb;
   font-size: 24px;
-}
-
-.pr {
-  font-size: 17px;
-  display: inline;
-}
-
-.roomidx {
-  margin : auto;
-  font-size: 10px;
-  vertical-align: middle;
-  float:left;
-}
-.lock {
-  float:right;
 }

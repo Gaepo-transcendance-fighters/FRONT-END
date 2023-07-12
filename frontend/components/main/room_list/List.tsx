@@ -25,8 +25,8 @@ export default function List({
         return (
           <button className="item">
             <div className="roomidx">{leftPadding(room.channelIdx)}</div>
-            <span>{room.owner}'s room</span>
-            <span className="lock">{room.password == "" ? "" : <LockRoundedIcon sx={{ height: "13px" }} />}</span>
+            <div className="owner">{room.owner}'s</div>
+            <div className="lock">{room.password == "" ? "" : <LockRoundedIcon sx={{ height: "13px" }} />}</div>
           </button>
         );
       })}

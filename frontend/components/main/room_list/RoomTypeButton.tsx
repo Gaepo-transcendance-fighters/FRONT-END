@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import List from "./List";
-// todo : 인덱스 누가만든방 자물쇠
-// todo : 비번 길이, 닉네임 길이(10자) 정하기
+
+// todo : issue에 비번 길이, 닉네임 길이(10자) 정하기
 // todo : issue에 방이 999개 넘어가면 어떻게 할건지 정하기
 // todd : issue에 닉네임 영어로만 되게 하기, 사이트 다 영어로 구성(exception : 도움말, 채팅 등) ex) ~님의 방 대신 's room 같이 영어로 통일
 
