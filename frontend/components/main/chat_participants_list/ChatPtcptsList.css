@@ -25,7 +25,6 @@
 }
 .pllist::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.783);
-  /* 스크롤바의 색상 */
   background-clip: padding-box;
   border: 4px solid transparent;
   border-radius: 50px;
@@ -38,7 +37,7 @@
   background-color: rgb(24, 175, 255);
   border-radius: 10px;
   height: 73px;
-  width : 100%;
+  width: 100%;
   border: 0px;
   color: white;
   margin: 3px auto;
@@ -48,28 +47,19 @@
   background-color: magenta;
   border-radius: 10px;
   overflow: hidden;
-  /* width : 63px; */
-  width : 37%;
-  height : 63px;
+  width: 37%;
+  height: 63px;
   margin-left: 5px;
   margin-right: 3px;
 }
-/* .roomidx {
-  display: inline-block;
-  width: 17%;
-  margin: auto;
-  font-size: 16px;
-  vertical-align: middle;
-} */
+
 .name {
-  /* background-color: green; */
   width: 51%;
   text-align: center;
   font-size: 14px;
 }
 
 .icon {
-  /* background-color: yellow; */
   width: 12%;
   float: right;
   margin-right: 3px;

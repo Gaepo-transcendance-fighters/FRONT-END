@@ -6,7 +6,15 @@ import { chatRoomType } from "../room_list/RoomTypeButton";
 export const mockChatRoom: IChatRoom = {
   channelIdx: 1,
   owner: "jaekim",
-  Ptcpts: ["aaaaaaaaaa", "bbbbbbbbbb", "bbbbbbbbbb", "wochae", "silee", "jujeon", "hoslim"],
+  Ptcpts: [
+    "aaaaaaaaaa",
+    "bbbbbbbbbb",
+    "bbbbbbbbbb",
+    "wochae",
+    "silee",
+    "jujeon",
+    "hoslim",
+  ],
   channelType: chatRoomType.nonDm,
   password: "qwer",
 };
@@ -16,8 +24,8 @@ export default function PtcptList() {
   return (
     <div className="pllist">
       <div>
-        {mockChatRoom.Ptcpts.map((person) => {
-          return <Ptcpt person={person} />;
+        {mockChatRoom.Ptcpts.map((person, idx) => {
+          return <Ptcpt key={idx} person={person} />;
         })}
       </div>
     </div>

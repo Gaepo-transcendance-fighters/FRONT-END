@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useState, Dispatch, SetStateAction, MouseEventHandler } from "react";
-//2871139
+
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -33,9 +33,8 @@ export default function List({
   showPtcptsList: boolean;
   setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
 }) {
-  // const RoomClick = (e:MouseEventHandler<HTMLButtonElement>) => {
-  const RoomClick = () => {
-    // console.log("event : ", e);
+  const RoomClick = (room : IChatRoom) => {
+    console.log("room info : ", room);
     setShowPtcptsList(true);
   };
   const [open, setOpen] = useState(false);
@@ -61,7 +60,6 @@ export default function List({
             aria-describedby="create-non-dm-room-modal"
           >
             <Box sx={style}>
-              {/* <Typography id="create-room-modal" variant="h6" component="h2"> */}
               <Typography id="create-room-modal" variant="h5">
                 Create Chat Room
               </Typography>
@@ -75,9 +73,9 @@ export default function List({
       ) : (
         ""
       )}
-      {roomsProp.map((room) => {
+      {roomsProp.map((room ,idx) => {
         return (
-          <button className="item" onClick={RoomClick}>
+          <button key={idx} className="item" onClick={() => RoomClick(room)}>
             <div className="roomidx">{leftPadding(room.channelIdx)}</div>
             <div className="owner">{room.owner}'s</div>
             <div className="lock">
@@ -87,7 +85,7 @@ export default function List({
                 <LockRoundedIcon sx={{ height: "13px" }} />
               )}
             </div>
-          </button>
+          </button> //room button 누르면 room idx 넘겨주기
         );
       })}
     </div>
