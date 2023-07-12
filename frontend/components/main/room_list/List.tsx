@@ -13,11 +13,14 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
+  //여기까지 모달 위치
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
+  bgcolor: "#67dcfb",
+  border: 0,
+  borderRadius : "10px",
+  p: 10, // 모달 크기,
+  color : "white",
+
 };
 
 export default function List({
@@ -44,20 +47,24 @@ export default function List({
             +
           </button>
           <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box>
-      </Modal>
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="create-room-modal"
+            aria-describedby="create-non-dm-room-modal"
+          >
+            <Box sx={style}>
+              {/* <Typography id="create-room-modal" variant="h6" component="h2"> */}
+              <Typography id="create-room-modal" variant="h5">
+                Create Chat Room
+              </Typography>
+              <div>
+                
+              </div>
+              <Typography id="create-non-dm-room-modal" sx={{ mt: 2 }}>
+                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+              </Typography>
+            </Box>
+          </Modal>
         </>
       ) : (
         ""
