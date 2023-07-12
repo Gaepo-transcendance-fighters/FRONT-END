@@ -7,21 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  //여기까지 모달 위치
-  width: 400,
-  bgcolor: "#67dcfb",
-  border: 0,
-  borderRadius : "10px",
-  p: 10, // 모달 크기,
-  color : "white",
-
-};
+import CreateRoomModal from "./CreateRoomModal";
 
 export default function List({
   roomsProp,
@@ -52,18 +38,7 @@ export default function List({
             aria-labelledby="create-room-modal"
             aria-describedby="create-non-dm-room-modal"
           >
-            <Box sx={style}>
-              {/* <Typography id="create-room-modal" variant="h6" component="h2"> */}
-              <Typography id="create-room-modal" variant="h5">
-                Create Chat Room
-              </Typography>
-              <div>
-                
-              </div>
-              <Typography id="create-non-dm-room-modal" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </Typography>
-            </Box>
+            <CreateRoomModal prop={handleClose} />
           </Modal>
         </>
       ) : (
