@@ -16,7 +16,7 @@
   transform: translate(-50%, -50%);
 
   /* 모달창 디자인 */
-  background-color: gray;
+  background-color: #84d6f5;
   border: 1px solid black;
   border-radius: 8px;
 }

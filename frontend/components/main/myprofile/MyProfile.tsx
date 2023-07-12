@@ -28,6 +28,7 @@ const Myprofile = () => {
             textAlign: "center",
             alignItems: "center",
             margin: "0 auto",
+            backgroundColor: "#67dbfb",
           }}
         >
           NickName
@@ -43,6 +44,7 @@ const Myprofile = () => {
             textAlign: "center",
             alignItems: "center",
             margin: "0 auto",
+            backgroundColor: "WHITE",
           }}
           onClick={showModal}
         >
