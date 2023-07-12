@@ -6,8 +6,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useState, Dispatch, SetStateAction } from "react";
-
+import { useState, Dispatch, SetStateAction, MouseEventHandler } from "react";
+//2871139
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -33,7 +33,9 @@ export default function List({
   showPtcptsList: boolean;
   setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
 }) {
-  const onClick = () => {
+  // const RoomClick = (e:MouseEventHandler<HTMLButtonElement>) => {
+  const RoomClick = () => {
+    // console.log("event : ", e);
     setShowPtcptsList(true);
   };
   const [open, setOpen] = useState(false);
@@ -75,7 +77,7 @@ export default function List({
       )}
       {roomsProp.map((room) => {
         return (
-          <button className="item" onClick={onClick}>
+          <button className="item" onClick={RoomClick}>
             <div className="roomidx">{leftPadding(room.channelIdx)}</div>
             <div className="owner">{room.owner}'s</div>
             <div className="lock">

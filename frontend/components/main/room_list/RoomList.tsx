@@ -17,7 +17,7 @@ export default function RoomList() {
         <>
           <CardContent
             sx={{
-              backgroundColor: "magenta",
+              backgroundColor: "rgb(22, 181, 238)",
             }}
             className="flactivate"
           >

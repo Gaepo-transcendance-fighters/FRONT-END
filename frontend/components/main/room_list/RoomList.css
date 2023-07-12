@@ -7,7 +7,7 @@
 }
 
 .chatroomlist {
-  background-color: #2757c0;
+  background-color: rgb(39, 87, 192);
   text-align: center;
   padding: 7px;
   font-size: 21px;
@@ -90,7 +90,6 @@
 }
 
 .item {
-  /* display: block; */
   display: flex;
   align-items: center;
 
