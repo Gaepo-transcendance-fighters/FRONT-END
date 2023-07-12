@@ -29,7 +29,7 @@
   width: 70%;
   margin-right: 0;
   margin-left: 1px;
-  font-size: 13px;
+  font-size: 15px;
 }
 .dm {
   float: right;
@@ -62,7 +62,10 @@
 }
 
 .item {
-  display: block;
+  /* display: block; */
+  display: flex;
+    align-items: center;
+
   background-color: #67dbfb;
   border-radius: 10px;
   height: 50px;
@@ -91,4 +94,14 @@
 .pr {
   font-size: 17px;
   display: inline;
+}
+
+.roomidx {
+  margin : auto;
+  font-size: 10px;
+  vertical-align: middle;
+  float:left;
+}
+.lock {
+  float:right;
 }

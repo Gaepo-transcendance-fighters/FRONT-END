@@ -11,23 +11,23 @@ export default function List({
   roomsProp: IChatRoom[];
   channelType: boolean;
 }) {
+
+  const leftPadding = (idx: number) => {
+    if (idx < 10) return "00" + idx.toString();
+    else if (idx < 100) return "0" + idx.toString();
+    else
+      return idx;
+  };
   return (
     <div className="list">
       {channelType ? <button className="add">+</button> : ""}
       {roomsProp.map((room) => {
         return (
-          <Tooltip title={room.participants} arrow>
-            <button className="item">
-              {room.password == "" ? (
-                room.participants
-              ) : (
-                <>
-                  <LockRoundedIcon sx={{ height: "13px" }} />
-                  <div className="pr">{room.participants}</div>
-                </>
-              )}
-            </button>
-          </Tooltip>
+          <button className="item">
+            <div className="roomidx">{leftPadding(room.channelIdx)}</div>
+            <span>{room.owner}'s room</span>
+            <span className="lock">{room.password == "" ? "" : <LockRoundedIcon sx={{ height: "13px" }} />}</span>
+          </button>
         );
       })}
     </div>
