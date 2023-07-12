@@ -4,24 +4,35 @@ import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
 import { Card, CardContent } from "@mui/material";
 import { useEffect, useState } from "react";
+import ChatPtcptsList from "../chat_participants_list/ChatPtcptsList";
+
 export default function RoomList() {
-  const [showFriendList, setShowFriendList] = useState(false);
+  const [showPtcptsList, setShowPtcptsList] = useState(false);
   useEffect(() => {
-    console.log("showFriendList has changed to ", showFriendList);
-  }, [showFriendList]);
+    console.log("showPtcptsList has changed to ", showPtcptsList);
+  }, [showPtcptsList]);
   return (
     <>
-      <CardContent
-        sx={{
-          backgroundColor: "magenta",
-        }}
-        className={showFriendList ? "flactivate" : "fldeactivate"}
-      ></CardContent>
+      {showPtcptsList ? (
+        <>
+          <CardContent
+            sx={{
+              backgroundColor: "magenta",
+            }}
+            className="flactivate"
+          >
+            <ChatPtcptsList />
+          </CardContent>
+        </>
+      ) : (
+        ""
+      )}
+
       <CardContent sx={{ "&:last-child": { pb: 0 } }}>
-        <Title />
+        <Title title={"chatroomlist"} text={"Chat Room List"} />
         <RoomTypeButton
-          showFriendList={showFriendList}
-          setShowFriendList={setShowFriendList}
+          showPtcptsList={showPtcptsList}
+          setShowPtcptsList={setShowPtcptsList}
         />
       </CardContent>
     </>

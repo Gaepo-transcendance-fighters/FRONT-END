@@ -17,26 +17,25 @@ const style = {
   width: 400,
   bgcolor: "#67dcfb",
   border: 0,
-  borderRadius : "10px",
+  borderRadius: "10px",
   p: 10, // 모달 크기,
-  color : "white",
-
+  color: "white",
 };
 
 export default function List({
   roomsProp,
   channelType,
-  showFriendList,
-  setShowFriendList,
+  showPtcptsList,
+  setShowPtcptsList,
 }: {
   roomsProp: IChatRoom[];
   channelType: boolean;
-  showFriendList: boolean;
-  setShowFriendList: Dispatch<SetStateAction<boolean>>;
+  showPtcptsList: boolean;
+  setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
 }) {
   const onClick = () => {
-    setShowFriendList(true);
-  }
+    setShowPtcptsList(true);
+  };
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -47,7 +46,7 @@ export default function List({
     else return idx;
   };
   return (
-    <div className={!showFriendList ? "list" : "roomclicked"}>
+    <div className={!showPtcptsList ? "list" : "roomclicked"}>
       {channelType ? (
         <>
           <button className="add" onClick={handleOpen}>
@@ -64,9 +63,7 @@ export default function List({
               <Typography id="create-room-modal" variant="h5">
                 Create Chat Room
               </Typography>
-              <div>
-                
-              </div>
+              <div></div>
               <Typography id="create-non-dm-room-modal" sx={{ mt: 2 }}>
                 Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
               </Typography>

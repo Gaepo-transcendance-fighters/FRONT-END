@@ -12,7 +12,7 @@ import List from "./List";
 export interface IChatRoom {
   channelIdx: number;
   owner: string;
-  participants: Array<string>;
+  Ptcpts: Array<string>;
   channelType: chatRoomType;
   password: string;
 }
@@ -26,72 +26,68 @@ export const mockChatRoomList: IChatRoom[] = [
   {
     channelIdx: 0,
     owner: "hoslim",
-    participants: ["hoslim"],
+    Ptcpts: ["hoslim"],
     channelType: chatRoomType.dm,
     password: "",
   },
   {
     channelIdx: 0, // dm은 channelIdx !dm이랑 따로 한다 했나?
     owner: "jeekim",
-    participants: ["jeekim"],
+    Ptcpts: ["jeekim"],
     channelType: chatRoomType.nonDm,
     password: "asdf",
   },
   {
     channelIdx: 1,
     owner: "jaekim",
-    participants: [
-      "jaekim",
-      "haryu",
-      "wochaeefwoijewfoisjdoifjoisdjfoisidjfksjdkl",
-    ],
+    Ptcpts: ["jaekim", "haryu", "wochaeefwoijewfoisjdoifjoisdjfoisidjfksjdkl"],
     channelType: chatRoomType.nonDm,
     password: "qwer",
   },
   {
     channelIdx: 2,
     owner: "0123456789",
-    participants: ["hoslimhoslim1231231231231231231231231"],
+    Ptcpts: ["hoslimhoslim1231231231231231231231231"],
     channelType: chatRoomType.nonDm,
     password: "",
   },
   {
     channelIdx: 1,
     owner: "aaaaaaaaaa",
-    participants: ["2hoslim"],
+    Ptcpts: ["2hoslim"],
     channelType: chatRoomType.dm,
     password: "",
   },
   {
     channelIdx: 3, // dm은 channelIdx !dm이랑 따로 한다 했나?
     owner: "bbbbbbbbbb",
-    participants: ["2jeekim"],
+    Ptcpts: ["2jeekim"],
     channelType: chatRoomType.nonDm,
     password: "asdf",
   },
   {
     channelIdx: 4,
     owner: "0123456789",
-    participants: ["2jaekim", "haryu", "wochae"],
+    Ptcpts: ["2jaekim", "haryu", "wochae"],
     channelType: chatRoomType.nonDm,
     password: "qwer",
   },
   {
     channelIdx: 5,
     owner: "zzzzzzzzzz",
-    participants: ["2hoslimhoslim1231231231231231231231231"],
+    Ptcpts: ["2hoslimhoslim1231231231231231231231231"],
     channelType: chatRoomType.nonDm,
     password: "",
   },
 ];
 
-// export default function RoomTypeButton({ showFriendList, setShowFriendList }: { showFriendList: boolean, setShowFriendList:Dispatch<SetStateAction<boolean>> }) {
+// export default function RoomTypeButton({ ShowPtcptsList, setShowPtcptsList }: { ShowPtcptsList: boolean, setShowPtcptsList:Dispatch<SetStateAction<boolean>> }) {
 export default function RoomTypeButton({
-  showFriendList,
-  setShowFriendList,
+  showPtcptsList,
+  setShowPtcptsList,
 }: {
-  showFriendList: boolean;
-  setShowFriendList: Dispatch<SetStateAction<boolean>>;
+  showPtcptsList: boolean;
+  setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
 }) {
   const [nonDmrooms, setNonDmRooms] = useState<IChatRoom[]>([]);
   const [dmRooms, setDmRooms] = useState<IChatRoom[]>([]);
@@ -147,8 +143,8 @@ export default function RoomTypeButton({
       <List
         roomsProp={disabled ? nonDmrooms : dmRooms}
         channelType={disabled}
-        showFriendList={showFriendList}
-        setShowFriendList={setShowFriendList}
+        showPtcptsList={showPtcptsList}
+        setShowPtcptsList={setShowPtcptsList}
       />
     </>
   );
