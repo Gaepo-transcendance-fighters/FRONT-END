@@ -1,6 +1,6 @@
 // use client;
 
-import { useEffect, useState, useRef, Dispatch, SetStateAction } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import List from "./List";
 
 // dm 이냐 아니냐
@@ -31,7 +31,7 @@ export const mockChatRoomList: IChatRoom[] = [
     password: "",
   },
   {
-    channelIdx: 0, // dm은 channelIdx !dm이랑 따로 한다 했나?
+    channelIdx: 0,
     owner: "jeekim",
     Ptcpts: ["jeekim"],
     channelType: chatRoomType.nonDm,
@@ -40,28 +40,38 @@ export const mockChatRoomList: IChatRoom[] = [
   {
     channelIdx: 1,
     owner: "jaekim",
-    Ptcpts: ["jaekim", "haryu", "wochaeefwoijewfoisjdoifjoisdjfoisidjfksjdkl"],
+    Ptcpts: [
+      "jaekim",
+      "haryu",
+      "wochae",
+      "jaekim",
+      "haryu",
+      "wochae",
+      "jaekim",
+      "haryu",
+      "wochae",
+    ],
     channelType: chatRoomType.nonDm,
     password: "qwer",
   },
   {
     channelIdx: 2,
     owner: "0123456789",
-    Ptcpts: ["hoslimhoslim1231231231231231231231231"],
+    Ptcpts: ["0123456789", "hoslimhosl"],
     channelType: chatRoomType.nonDm,
     password: "",
   },
   {
     channelIdx: 1,
     owner: "aaaaaaaaaa",
-    Ptcpts: ["2hoslim"],
+    Ptcpts: ["aaaaaaaaaa", "2hoslim"],
     channelType: chatRoomType.dm,
     password: "",
   },
   {
-    channelIdx: 3, // dm은 channelIdx !dm이랑 따로 한다 했나?
+    channelIdx: 3,
     owner: "bbbbbbbbbb",
-    Ptcpts: ["2jeekim"],
+    Ptcpts: ["bbbbbbbbbb", "2jeekim"],
     channelType: chatRoomType.nonDm,
     password: "asdf",
   },
@@ -75,13 +85,12 @@ export const mockChatRoomList: IChatRoom[] = [
   {
     channelIdx: 5,
     owner: "zzzzzzzzzz",
-    Ptcpts: ["2hoslimhoslim1231231231231231231231231"],
+    Ptcpts: ["zzzzzzzzzz", "2hoslimh"],
     channelType: chatRoomType.nonDm,
     password: "",
   },
 ];
 
-// export default function RoomTypeButton({ ShowPtcptsList, setShowPtcptsList }: { ShowPtcptsList: boolean, setShowPtcptsList:Dispatch<SetStateAction<boolean>> }) {
 export default function RoomTypeButton({
   showPtcptsList,
   setShowPtcptsList,

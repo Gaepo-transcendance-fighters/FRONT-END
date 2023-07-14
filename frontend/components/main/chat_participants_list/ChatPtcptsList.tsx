@@ -1,16 +1,18 @@
 import "@/components/main/room_list/RoomList.css";
 import "@/components/main/chat_participants_list/ChatPtcptsList.css";
-import List from "../room_list/List";
 import Title from "../room_list/Title";
-import { mockChatRoomList } from "../room_list/RoomTypeButton";
 import PtcptList from "./PtcptList";
-import { CardContent } from "@mui/material";
+import { IChatRoom } from "../room_list/RoomTypeButton";
 
-export default function ChatPtcptsList() {
+export default function ChatPtcptsList({
+  aRoom,
+}: {
+  aRoom: IChatRoom | undefined;
+}) {
   return (
     <>
-        <Title title={"pltitle"} text={"Participants List"} />
-        <PtcptList />
+      <Title title={"pltitle"} text={"Participants List"} />
+      <PtcptList aRoom={aRoom} />
     </>
   );
 }

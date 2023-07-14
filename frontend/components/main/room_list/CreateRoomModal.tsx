@@ -1,8 +1,8 @@
 "use client";
 
-import "@/components/main/room_list/RoomList.css";
-import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
+import "@/components/main/room_list/RoomList.css";
 
 const style = {
   position: "absolute" as "absolute",

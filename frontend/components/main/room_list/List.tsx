@@ -1,12 +1,17 @@
 // use client;
-import { IChatRoom } from "./RoomTypeButton";
-import LockRoundedIcon from "@mui/icons-material/LockRounded";
-import "@/components/main/room_list/RoomList.css";
-import Modal from "@mui/material/Modal";
-import { useState, Dispatch, SetStateAction } from "react";
-import CreateRoomModal from "./CreateRoomModal";
-import { forwardRef, useEffect } from "react";
+import {
+  useState,
+  Dispatch,
+  SetStateAction,
+  forwardRef,
+  useEffect,
+} from "react";
 import { createPortal } from "react-dom";
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
+import Modal from "@mui/material/Modal";
+import "@/components/main/room_list/RoomList.css";
+import { IChatRoom } from "./RoomTypeButton";
+import CreateRoomModal from "./CreateRoomModal";
 import ChatPtcptsList from "../chat_participants_list/ChatPtcptsList";
 
 const Bar = forwardRef((props: any, ref: any) => (
@@ -27,11 +32,11 @@ export default function List({
   setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
 }) {
   const RoomClick = (room: IChatRoom) => {
-    console.log("room info : ", room);
+    setARoom(room);
     setShowPtcptsList(true);
   };
   const [portalContainer, setPortalContainer] = useState(
-    document.getElementById("portal")
+    document?.getElementById("portal")
   );
   useEffect(() => {
     const container = document.getElementById("portal");
@@ -44,7 +49,7 @@ export default function List({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const [aRoom, setARoom] = useState<IChatRoom>();
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
     else if (idx < 100) return "0" + idx.toString();
@@ -85,12 +90,13 @@ export default function List({
                   <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
                 )}
               </div>
-            </button> //room button 누르면 room idx 넘겨주기
+            </button>
           );
         })}
       </div>
-      {showPtcptsList && portalContainer &&
-		  createPortal(<ChatPtcptsList />, portalContainer)}
+      {showPtcptsList &&
+        portalContainer &&
+        createPortal(<ChatPtcptsList aRoom={aRoom} />, portalContainer)}
     </>
   );
 }
