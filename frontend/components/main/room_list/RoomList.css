@@ -1,5 +1,13 @@
-.title {
-  background-color: #2757c0;
+.flactivate {
+  height : 35vh;
+}
+.fldeactivate {
+  height : 0;
+  padding : 0;
+}
+
+.chatroomlist {
+  background-color: rgb(39, 87, 192);
   text-align: center;
   padding: 7px;
   font-size: 21px;
@@ -41,8 +49,7 @@
 .list {
   background-color: #1c408f;
   border-radius: 10px;
-  height: 43vh;
-  /* height: 83vh; */
+  height: 83vh;
   bottom: 0;
   padding: 7px 11px;
   padding-right: 0px;
@@ -60,13 +67,34 @@
   border: 4px solid transparent;
   border-radius: 50px;
 }
+.roomclicked {
+  background-color: #1c408f;
+  border-radius: 10px;
+  height: 43vh;
+  bottom: 0;
+  padding: 7px 11px;
+  padding-right: 0px;
+  padding-bottom: 7px;
+  overflow-y: scroll;
+}
+.roomclicked::-webkit-scrollbar {
+  background-color: transparent;
+  width: 17px;
+}
+.roomclicked::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.783);
+  /* 스크롤바의 색상 */
+  background-clip: padding-box;
+  border: 4px solid transparent;
+  border-radius: 50px;
+}
 
 .item {
-  /* display: block; */
   display: flex;
   align-items: center;
 
-  background-color: #67dbfb;
+  background-color: rgb(103 219	251);
+  /* background-color: #67dbfb; */
   border-radius: 10px;
   height: 50px;
   border: 0px;
@@ -85,6 +113,7 @@
   margin: auto;
   font-size: 16px;
   vertical-align: middle;
+  color: rgb(255, 221, 0);
 }
 .owner {
   width: 70%;

@@ -3,11 +3,10 @@ import { IChatRoom } from "./RoomTypeButton";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
-import React from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import CreateRoomModal from "./CreateRoomModal";
-
-const Bar = React.forwardRef((props: any, ref: any) => (
+import { forwardRef } from "react";
+const Bar = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
     {props.children}
   </span>
@@ -16,11 +15,19 @@ const Bar = React.forwardRef((props: any, ref: any) => (
 export default function List({
   roomsProp,
   channelType,
+  showPtcptsList,
+  setShowPtcptsList,
 }: {
   roomsProp: IChatRoom[];
   channelType: boolean;
+  showPtcptsList: boolean;
+  setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [open, setOpen] = useState<boolean>(false);
+  const RoomClick = (room : IChatRoom) => {
+    console.log("room info : ", room);
+    setShowPtcptsList(true);
+  };
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -30,7 +37,7 @@ export default function List({
     else return idx;
   };
   return (
-    <div className="list">
+    <div className={!showPtcptsList ? "list" : "roomclicked"}>
       {channelType ? (
         <>
           <button className="add" onClick={handleOpen}>
@@ -50,19 +57,19 @@ export default function List({
       ) : (
         ""
       )}
-      {roomsProp.map((room, idx) => {
+      {roomsProp.map((room ,idx) => {
         return (
-          <button className="item" key={idx}>
+          <button key={idx} className="item" onClick={() => RoomClick(room)}>
             <div className="roomidx">{leftPadding(room.channelIdx)}</div>
             <div className="owner">{room.owner}'s</div>
             <div className="lock">
               {room.password == "" ? (
                 ""
               ) : (
-                <LockRoundedIcon sx={{ height: "13px" }} />
+                <LockRoundedIcon sx={{ height: "13px", color:"#afb2b3" }} />
               )}
             </div>
-          </button>
+          </button> //room button 누르면 room idx 넘겨주기
         );
       })}
     </div>
