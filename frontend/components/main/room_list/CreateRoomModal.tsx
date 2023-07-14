@@ -48,6 +48,8 @@ export default function CreateRoomModal({ prop }: { prop: () => void }) {
               <TextField
                 sx={{ backgroundColor: "#ffffff" }}
                 value={value}
+                type="password"
+                autoComplete="false"
                 onChange={(e) => setValue(e.currentTarget.value)}
               />
             </Stack>
