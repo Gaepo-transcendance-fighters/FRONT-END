@@ -13,21 +13,8 @@ export default function RoomList() {
   }, [showPtcptsList]);
   return (
     <>
-      {showPtcptsList ? (
-        <>
-          <CardContent
-            sx={{
-              backgroundColor: "rgb(22, 181, 238)",
-            }}
-            className="flactivate"
-          >
-            <ChatPtcptsList />
-          </CardContent>
-        </>
-      ) : (
-        ""
-      )}
-
+      {/* {showPtcptsList ? <CardContent id="portal" className="flactivate"></CardContent> : ""} */}
+      <CardContent sx={{ padding: 0 } }/>
       <CardContent sx={{ "&:last-child": { pb: 0 } }}>
         <Title title={"chatroomlist"} text={"Chat Room List"} />
         <RoomTypeButton

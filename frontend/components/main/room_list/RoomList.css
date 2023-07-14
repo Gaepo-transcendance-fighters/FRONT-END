@@ -1,9 +1,10 @@
 .flactivate {
-  height : 35vh;
+  height: 35vh;
+  background-color: rgb(22, 181, 238);
 }
 .fldeactivate {
-  height : 0;
-  padding : 0;
+  height: 0;
+  padding: 0;
 }
 
 .chatroomlist {
@@ -93,7 +94,7 @@
   display: flex;
   align-items: center;
 
-  background-color: rgb(103 219	251);
+  background-color: rgb(103 219 251);
   /* background-color: #67dbfb; */
   border-radius: 10px;
   height: 50px;
