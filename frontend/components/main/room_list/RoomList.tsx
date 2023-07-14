@@ -2,7 +2,7 @@
 
 import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
-import { Card, CardContent } from "@mui/material";
+import { CardContent } from "@mui/material";
 import { useEffect, useState } from "react";
 import ChatPtcptsList from "../chat_participants_list/ChatPtcptsList";
 

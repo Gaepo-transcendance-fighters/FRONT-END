@@ -92,8 +92,9 @@ export default function RoomTypeButton({
   const [nonDmrooms, setNonDmRooms] = useState<IChatRoom[]>([]);
   const [dmRooms, setDmRooms] = useState<IChatRoom[]>([]);
   const [disabled, setDisabled] = useState(true);
+
   const DivideRoom = () => {
-    mockChatRoomList.map((room, idx) => {
+    mockChatRoomList.map((room) => {
       if (room.channelType != chatRoomType.dm) {
         setNonDmRooms((prev) => {
           return [...prev, room];
@@ -105,9 +106,11 @@ export default function RoomTypeButton({
       }
     });
   };
+
   useEffect(() => {
     DivideRoom();
   }, []);
+
   const OnClick = (isNotDm: boolean) => {
     setNonDmRooms([]);
     setDmRooms([]);
@@ -115,9 +118,11 @@ export default function RoomTypeButton({
 
     setDisabled(isNotDm);
   };
+
   const NonDmBtnClick = () => {
     OnClick(true);
   };
+
   const DmBtnClick = () => {
     OnClick(false);
   };
