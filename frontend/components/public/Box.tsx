@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent, Stack } from "@mui/material";
-import GameStartButton from "../gameStartButton/GameStartButton";
 
 const Box = () => {
   return (

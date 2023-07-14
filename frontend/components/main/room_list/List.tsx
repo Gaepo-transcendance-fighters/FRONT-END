@@ -2,12 +2,16 @@
 import { IChatRoom } from "./RoomTypeButton";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import "@/components/main/room_list/RoomList.css";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
+import React from "react";
 import CreateRoomModal from "./CreateRoomModal";
+
+const Bar = React.forwardRef((props: any, ref: any) => (
+  <span {...props} ref={ref}>
+    {props.children}
+  </span>
+));
 
 export default function List({
   roomsProp,
@@ -16,7 +20,7 @@ export default function List({
   roomsProp: IChatRoom[];
   channelType: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -38,15 +42,17 @@ export default function List({
             aria-labelledby="create-room-modal"
             aria-describedby="create-non-dm-room-modal"
           >
-            <CreateRoomModal prop={handleClose} />
+            <Bar>
+              <CreateRoomModal prop={handleClose} />
+            </Bar>
           </Modal>
         </>
       ) : (
         ""
       )}
-      {roomsProp.map((room) => {
+      {roomsProp.map((room, idx) => {
         return (
-          <button className="item">
+          <button className="item" key={idx}>
             <div className="roomidx">{leftPadding(room.channelIdx)}</div>
             <div className="owner">{room.owner}'s</div>
             <div className="lock">
