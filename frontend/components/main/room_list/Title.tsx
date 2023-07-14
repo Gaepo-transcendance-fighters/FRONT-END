@@ -1,3 +1,5 @@
+"use client";
+
 import "@/components/main/chat_participants_list/ChatPtcptsList";
 import "@/components/main/room_list/RoomList.css";
 

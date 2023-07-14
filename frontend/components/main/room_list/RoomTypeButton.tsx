@@ -1,4 +1,4 @@
-// use client;
+"use client";
 
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import List from "./List";
@@ -20,6 +20,17 @@ export interface IChatRoom {
 export enum chatRoomType {
   dm,
   nonDm,
+}
+// 0 : 일반
+// 1: 오너
+// 2: 어드민
+// 3: 밴
+// 4: 뮤트
+export enum permissonType {
+  normal,
+  owner,
+  admin,
+  ban
 }
 
 export const mockChatRoomList: IChatRoom[] = [

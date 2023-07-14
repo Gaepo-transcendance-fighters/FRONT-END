@@ -1,4 +1,5 @@
-// use client;
+"use client";
+
 import {
   useState,
   Dispatch,
@@ -35,9 +36,9 @@ export default function List({
     setARoom(room);
     setShowPtcptsList(true);
   };
-  const [portalContainer, setPortalContainer] = useState(
-    document?.getElementById("portal")
-  );
+
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+
   useEffect(() => {
     const container = document.getElementById("portal");
     setPortalContainer(container);
@@ -46,10 +47,13 @@ export default function List({
       setPortalContainer(null);
     };
   }, []);
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const [aRoom, setARoom] = useState<IChatRoom>();
+
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
     else if (idx < 100) return "0" + idx.toString();

@@ -1,3 +1,5 @@
+"use client";
+
 import "@/components/main/chat_participants_list/ChatPtcptsList.css";
 import Ptcpt from "./Ptcpt";
 import { IChatRoom } from "../room_list/RoomTypeButton";

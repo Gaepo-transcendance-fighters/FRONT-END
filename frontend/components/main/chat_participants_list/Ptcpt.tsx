@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
