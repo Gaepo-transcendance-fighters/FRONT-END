@@ -77,7 +77,7 @@ const ChatField = () => {
 			}}>
 			{msgHistories.map((value, i) => {
 				return (
-					<ul style={{margin: "1% 0% 1% 0%", padding:"2% 2% 0.5% 2%"}}>
+					<ul key={i} style={{margin: "1% 0% 1% 0%", padding:"2% 2% 0.5% 2%"}}>
 						<li className='message_box'>{value.name + ": " + value.message}</li>
 					</ul>
 				)
