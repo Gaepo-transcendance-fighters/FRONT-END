@@ -41,8 +41,8 @@
 .list {
   background-color: #1c408f;
   border-radius: 10px;
-  /* height: 43vh; */
-  height: 83vh;
+  height: 43vh;
+  /* height: 83vh; */
   bottom: 0;
   padding: 7px 11px;
   padding-right: 0px;
@@ -65,7 +65,7 @@
   /* display: block; */
   display: flex;
   align-items: center;
-  
+
   background-color: #67dbfb;
   border-radius: 10px;
   height: 50px;
@@ -81,19 +81,19 @@
 }
 .roomidx {
   display: inline-block;
-  width : 17%;
-  margin : auto;
+  width: 17%;
+  margin: auto;
   font-size: 16px;
   vertical-align: middle;
 }
-.owner{
-  width : 70%;
+.owner {
+  width: 70%;
   text-align: center;
 }
 
 .lock {
-  width : 13%;
-  float:right;
+  width: 13%;
+  float: right;
 }
 
 .add {
