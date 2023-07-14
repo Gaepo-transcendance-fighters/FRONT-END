@@ -110,9 +110,9 @@ const FriendList = () => {
 
   return (
     <>
-      <CardContent
+      <Box
         sx={{
-          height: "55vh",
+          height: "61vh",
           backgroundColor: "#3478c5",
         }}
       >
@@ -121,13 +121,17 @@ const FriendList = () => {
             backgroundColor: "#3356b9",
             margin: "10px",
             borderRadius: "5px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
           }}
         >
           <Typography
             color={"#ffffff"}
             fontSize={"large"}
             align="center"
-            sx={{ verticalAlign: "middle" }}
+            sx={{
+              verticalAlign: "middle",
+            }}
           >
             친구 리스트
           </Typography>
@@ -164,7 +168,7 @@ const FriendList = () => {
             <Friend key={idx} prop={friend} />
           ))}
         </Card>
-      </CardContent>
+      </Box>
     </>
   );
 };
