@@ -1,6 +1,7 @@
 .flactivate {
-  height: 35vh;
+  height: 37vh;
   background-color: rgb(22, 181, 238);
+  /* padding: 16px; */
 }
 .fldeactivate {
   height: 0;

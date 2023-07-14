@@ -14,7 +14,11 @@ export default function RoomList() {
   return (
     <>
       {/* {showPtcptsList ? <CardContent id="portal" className="flactivate"></CardContent> : ""} */}
-      <CardContent sx={{ padding: 0 } }/>
+      <CardContent
+        id="portal"
+        sx={{ pb: 0 }}
+        className={showPtcptsList ? "flactivate" : "deflactivate"}
+      ></CardContent>
       <CardContent sx={{ "&:last-child": { pb: 0 } }}>
         <Title title={"chatroomlist"} text={"Chat Room List"} />
         <RoomTypeButton
