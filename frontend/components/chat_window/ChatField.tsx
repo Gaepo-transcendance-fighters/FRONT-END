@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Box } from "@mui/material";
 import './ChatWindow.css'
 
 export interface IChat {
@@ -66,15 +67,22 @@ const ChatField = () => {
 	}, [])
 
 	return (
-		<div className="chat_field">
-				{msgHistories.map((value, i) => {
-					return (
-						<ul style={{margin: "1% 0% 1% 0%", padding:"2% 2% 0.5% 2%"}}>
-							<li className='message_box'>{value.name + ": " + value.message}</li>
-						</ul>	
-					)
-				})}
-			</div>
+		<Box sx={{
+				backgroundColor: "#3272D2",
+				height: "83.5%",
+				borderRadius: "5px",
+				listStyleType: "none",
+				overflowY: "scroll",
+				margin: "0% 2% 4% 2%"
+			}}>
+			{msgHistories.map((value, i) => {
+				return (
+					<ul style={{margin: "1% 0% 1% 0%", padding:"2% 2% 0.5% 2%"}}>
+						<li className='message_box'>{value.name + ": " + value.message}</li>
+					</ul>
+				)
+			})}
+		</Box>
 	);
 }
 

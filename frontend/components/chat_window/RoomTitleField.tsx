@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography'
 import VpnKeyTwoToneIcon from '@mui/icons-material/VpnKeyTwoTone';
 import SettingsIcon from '@mui/icons-material/Settings';
 import './ChatWindow.css'
+import { Box } from "@mui/material";
 import IconButtons from './SettingIconButton'
 
 export interface IChatRoom {
