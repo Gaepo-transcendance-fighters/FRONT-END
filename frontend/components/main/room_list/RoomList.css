@@ -93,7 +93,8 @@
   display: flex;
   align-items: center;
 
-  background-color: #67dbfb;
+  background-color: rgb(103 219	251);
+  /* background-color: #67dbfb; */
   border-radius: 10px;
   height: 50px;
   border: 0px;
@@ -112,6 +113,7 @@
   margin: auto;
   font-size: 16px;
   vertical-align: middle;
+  color: rgb(255, 221, 0);
 }
 .owner {
   width: 70%;

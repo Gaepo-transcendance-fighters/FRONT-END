@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import CreateRoomModal from "./CreateRoomModal";
 
 export default function List({
@@ -61,7 +61,7 @@ export default function List({
               {room.password == "" ? (
                 ""
               ) : (
-                <LockRoundedIcon sx={{ height: "13px" }} />
+                <LockRoundedIcon sx={{ height: "13px", color:"#afb2b3" }} />
               )}
             </div>
           </button> //room button 누르면 room idx 넘겨주기
