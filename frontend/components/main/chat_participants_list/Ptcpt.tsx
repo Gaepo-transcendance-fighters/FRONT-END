@@ -7,7 +7,7 @@ export default function Ptcpt({ person }: { person: string }) {
   return (
     <div className="plbtn">
       <div className="img">
-        <Image src="/seal.png" alt="profile" width={63} height={63} />
+        <Image src="/seal.png" alt="profile" width={53} height={53} />
       </div>
       <div className="name">{person}</div>
       <div className="icon">
