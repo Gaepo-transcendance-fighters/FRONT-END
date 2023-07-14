@@ -1,6 +1,6 @@
 // use client;
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import List from "./List";
 
 // dm 이냐 아니냐
@@ -25,56 +25,60 @@ export enum chatRoomType {
 export const mockChatRoomList: IChatRoom[] = [
   {
     channelIdx: 0,
-    owner : "hoslim",
+    owner: "hoslim",
     participants: ["hoslim"],
     channelType: chatRoomType.dm,
     password: "",
   },
   {
     channelIdx: 0, // dm은 channelIdx !dm이랑 따로 한다 했나?
-    owner : "jeekim",
+    owner: "jeekim",
     participants: ["jeekim"],
     channelType: chatRoomType.nonDm,
     password: "asdf",
   },
   {
     channelIdx: 1,
-    owner : "jaekim",
-    participants: ["jaekim", "haryu", "wochaeefwoijewfoisjdoifjoisdjfoisidjfksjdkl"],
+    owner: "jaekim",
+    participants: [
+      "jaekim",
+      "haryu",
+      "wochaeefwoijewfoisjdoifjoisdjfoisidjfksjdkl",
+    ],
     channelType: chatRoomType.nonDm,
     password: "qwer",
   },
   {
     channelIdx: 2,
-    owner : "0123456789",
+    owner: "0123456789",
     participants: ["hoslimhoslim1231231231231231231231231"],
     channelType: chatRoomType.nonDm,
     password: "",
   },
   {
     channelIdx: 1,
-    owner : "aaaaaaaaaa",
+    owner: "aaaaaaaaaa",
     participants: ["2hoslim"],
     channelType: chatRoomType.dm,
     password: "",
   },
   {
     channelIdx: 3, // dm은 channelIdx !dm이랑 따로 한다 했나?
-    owner : "bbbbbbbbbb",
+    owner: "bbbbbbbbbb",
     participants: ["2jeekim"],
     channelType: chatRoomType.nonDm,
     password: "asdf",
   },
   {
     channelIdx: 4,
-    owner : "0123456789",
+    owner: "0123456789",
     participants: ["2jaekim", "haryu", "wochae"],
     channelType: chatRoomType.nonDm,
     password: "qwer",
   },
   {
     channelIdx: 5,
-    owner : "zzzzzzzzzz",
+    owner: "zzzzzzzzzz",
     participants: ["2hoslimhoslim1231231231231231231231231"],
     channelType: chatRoomType.nonDm,
     password: "",
@@ -85,8 +89,9 @@ export default function RoomTypeButton() {
   const [nonDmrooms, setNonDmRooms] = useState<IChatRoom[]>([]);
   const [dmRooms, setDmRooms] = useState<IChatRoom[]>([]);
   const [disabled, setDisabled] = useState(true);
+
   const DivideRoom = () => {
-    mockChatRoomList.map((room, idx) => {
+    mockChatRoomList.map((room) => {
       if (room.channelType != chatRoomType.dm) {
         setNonDmRooms((prev) => {
           return [...prev, room];
@@ -98,9 +103,11 @@ export default function RoomTypeButton() {
       }
     });
   };
+
   useEffect(() => {
     DivideRoom();
   }, []);
+
   const OnClick = (isNotDm: boolean) => {
     setNonDmRooms([]);
     setDmRooms([]);
@@ -108,9 +115,11 @@ export default function RoomTypeButton() {
 
     setDisabled(isNotDm);
   };
+
   const NonDmBtnClick = () => {
     OnClick(true);
   };
+
   const DmBtnClick = () => {
     OnClick(false);
   };

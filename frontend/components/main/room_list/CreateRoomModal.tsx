@@ -1,15 +1,7 @@
 "use client";
 
 import "@/components/main/room_list/RoomList.css";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 
 const style = {

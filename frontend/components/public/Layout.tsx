@@ -8,10 +8,6 @@ import {
   createTheme,
 } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
-import GameStartButton from "../gameStartButton/GameStartButton";
-import ModalBasic from "../main/myprofile/ModalBasic";
-import Modal from "../main/myprofile/Modal";
-import Myprofile from "../main/myprofile/MyProfile";
 import RoomList from "../main/room_list/RoomList";
 
 const font = createTheme({
@@ -53,7 +49,6 @@ const Layout = () => {
           </CardContent>
           <CardContent>chatting window</CardContent>
         </Stack>
-
 
         <Stack
           sx={{
