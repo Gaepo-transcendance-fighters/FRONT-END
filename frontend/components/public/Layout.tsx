@@ -7,6 +7,7 @@ import ModalBasic from "../main/myprofile/ModalBasic";
 import Modal from "../main/myprofile/Modal";
 import Myprofile from "../main/myprofile/MyProfile";
 import RoomList from "../main/room_list/RoomList";
+import ChatWindow from "../chat_window/ChatWindow";
 
 const Layout = () => {
   return (
@@ -31,7 +32,7 @@ const Layout = () => {
         sx={{
           width: "60vw",
           height: "100vh",
-          backgroundColor: "green",
+          backgroundColor: "#6EC2F5",
           padding: 0,
           margin: 0,
         }}
@@ -40,8 +41,7 @@ const Layout = () => {
           game start
           <GameStartButton />
         </CardContent>
-
-        <CardContent>chatting window</CardContent>
+        <ChatWindow/>
       </Stack>
 
       <Stack
