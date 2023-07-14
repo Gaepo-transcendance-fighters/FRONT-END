@@ -25,7 +25,7 @@ const Layout = () => {
           sx={{
             width: "20vw",
             height: "100vh",
-            backgroundColor: "yellow",
+            backgroundColor: "#3478c5",
             padding: 0,
             margin: 0,
           }}
@@ -48,7 +48,7 @@ const Layout = () => {
           <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
             game start
           </CardContent>
-          <ChatWindow/>
+          <ChatWindow />
         </Stack>
 
         <Stack
