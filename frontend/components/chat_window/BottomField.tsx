@@ -1,18 +1,24 @@
 import SendButton from './SendButton'
 import TextField from './TextField'
 import './ChatWindow.css'
+import { Box } from "@mui/material";
 import { useState } from 'react'
 
 const BottomField = () => {
 	const [msg, setMsg] = useState<string>('');
 
 	return (
-		<div className="bottom_field">
+		<Box sx={{
+			backgroundColor: "#4174D3", 
+			height: "11%", 
+			display: "flex", 
+			justifyContent: "center",
+			margin: "0.5% 2% 2% 2%",
+			borderRadius: "5px",
+			minWidth: "260px"}}>
 			<TextField/>
-			<div>
-				<SendButton/>
-			</div>
-		</div>
+			<SendButton/>
+		</Box>
 	)
 }
 

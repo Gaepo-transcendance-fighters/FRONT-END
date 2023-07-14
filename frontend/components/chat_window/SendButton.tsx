@@ -6,7 +6,7 @@ import './ChatWindow.css'
 const SendButton = () => {
 	
 	return (
-		<Button className='send_button' variant="contained" endIcon={<SendIcon />}>
+		<Button className='send_button' variant="contained">
 		Send
 		</Button>
 	)

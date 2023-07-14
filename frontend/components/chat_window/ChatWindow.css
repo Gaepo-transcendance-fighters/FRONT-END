@@ -87,7 +87,7 @@
 .input_field {
 	background-color: #1E4CA9;
 	height: 5%;
-	width: 40vw;
+	width: 45vw;
 	margin: 8px;
 	color: white;
 	margin-top: 2%;
@@ -99,9 +99,9 @@
 	color: white;
 }
 .send_button {
-	width: 13vw;
+	width: 8.5vw;
 	justify-content: center;
 	align-items: center;  
 	vertical-align:middle;
-	margin-top: 14%;
+	margin: 2.5% 0 2.5% 0;
 }
