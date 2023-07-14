@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
+import ChatWindow from "../chat_window/ChatWindow";
 
 const font = createTheme({
   typography: {
@@ -39,7 +40,7 @@ const Layout = () => {
           sx={{
             width: "60vw",
             height: "100vh",
-            backgroundColor: "green",
+            backgroundColor: "#6EC2F5",
             padding: 0,
             margin: 0,
           }}
@@ -47,7 +48,7 @@ const Layout = () => {
           <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
             game start
           </CardContent>
-          <CardContent>chatting window</CardContent>
+          <ChatWindow/>
         </Stack>
 
         <Stack
