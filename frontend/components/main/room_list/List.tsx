@@ -6,6 +6,7 @@ import {
   SetStateAction,
   forwardRef,
   useEffect,
+  useRef
 } from "react";
 import { createPortal } from "react-dom";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
@@ -37,7 +38,9 @@ export default function List({
     setShowPtcptsList(true);
   };
 
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
+    null
+  );
 
   useEffect(() => {
     const container = document.getElementById("portal");
@@ -51,6 +54,7 @@ export default function List({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const isProtectedRef = useRef(false);
 
   const [aRoom, setARoom] = useState<IChatRoom>();
 
@@ -84,17 +88,25 @@ export default function List({
         )}
         {roomsProp.map((room, idx) => {
           return (
-            <button key={idx} className="item" onClick={() => RoomClick(room)}>
-              <div className="roomidx">{leftPadding(room.channelIdx)}</div>
-              <div className="owner">{room.owner}'s</div>
-              <div className="lock">
-                {room.password == "" ? (
-                  ""
-                ) : (
-                  <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
-                )}
-              </div>
-            </button>
+              <button
+                key={idx}
+                className="item"
+                onClick={() => RoomClick(room)}
+              >
+                {room.password == "" ? null : (isProtectedRef.current = true)}
+                <div className="roomidx">{leftPadding(room.channelIdx)}</div>
+                <div className="owner">{room.owner}'s</div>
+                <div className="lock">
+                  {isProtectedRef.current ? (
+                    <LockRoundedIcon
+                      sx={{ height: "13px", color: "#afb2b3" }}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              {isProtectedRef.current = false}
+              </button>
           );
         })}
       </div>
