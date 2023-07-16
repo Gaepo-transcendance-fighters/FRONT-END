@@ -1,3 +1,5 @@
+"use client";
+
 import Modal from "@mui/material/Modal";
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { Box, Typography } from "@mui/material";
@@ -16,37 +18,27 @@ const style = {
 };
 
 export default function ProtectedModal({
-  protectedRef,
-  setProtectedModal,
-  closeProtectedModal,
-  protectedModal,
+  open2,
+  handleClose2,
 }: {
-  protectedRef: boolean;
-  setProtectedModal: Dispatch<SetStateAction<boolean>>;
-  closeProtectedModal: () => void;
-  protectedModal: boolean;
+  open2: boolean;
+  handleClose2: () => void;
 }) {
-  console.log("protectedRef : ", protectedRef);
-  useEffect(() => {
-    setProtectedModal(protectedRef);
-  }, [protectedRef]);
   return (
-    <>
-      <Modal
-        open={protectedModal}
-        onClose={closeProtectedModal}
-        aria-labelledby="create-room-modal"
-        aria-describedby="create-non-dm-room-modal"
-      >
-        <Box sx={style}>
-          <Typography id="create-room-modal" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="create-non-dm-room-modal" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box>
-      </Modal>
-    </>
+    <Modal
+      open={open2}
+      onClose={handleClose2}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+          Text in a modal
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+        </Typography>
+      </Box>
+    </Modal>
   );
 }

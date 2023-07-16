@@ -16,6 +16,7 @@ import { IChatRoom } from "./RoomTypeButton";
 import CreateRoomModal from "./CreateRoomModal";
 import ChatPtcptsList from "../chat_participants_list/ChatPtcptsList";
 import { Typography, Box } from "@mui/material";
+import ProtectedModal from "./ProtectedModal";
 
 const style = {
   position: "absolute" as "absolute",
@@ -29,6 +30,12 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+const Bar2 = forwardRef((props: any, ref: any) => (
+  <span {...props} ref={ref}>
+    {props.children}
+  </span>
+));
 
 const Bar = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
@@ -70,10 +77,7 @@ export default function List({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [open2, setOpen2] = useState(false);
-  const handleOpen2 = () => {
-    console.log("it's protected room!");
-    setOpen2(true);
-  };
+  const handleOpen2 = () => setOpen2(true);
   const handleClose2 = () => setOpen2(false);
   const [aRoom, setARoom] = useState<IChatRoom>();
 
@@ -120,22 +124,7 @@ export default function List({
             </button>
           );
         })}
-
-        <Modal
-          open={open2}
-          onClose={handleClose2}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
-          </Box>
-        </Modal>
+        <ProtectedModal open2={open2} handleClose2={handleClose2}/>
       </div>
       {showPtcptsList &&
         portalContainer &&
