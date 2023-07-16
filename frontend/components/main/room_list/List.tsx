@@ -6,7 +6,7 @@ import {
   SetStateAction,
   forwardRef,
   useEffect,
-  useRef
+  useRef,
 } from "react";
 import { createPortal } from "react-dom";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
@@ -15,7 +15,7 @@ import "@/components/main/room_list/RoomList.css";
 import { IChatRoom } from "./RoomTypeButton";
 import CreateRoomModal from "./CreateRoomModal";
 import ChatPtcptsList from "../chat_participants_list/ChatPtcptsList";
-import { Typography, Box, } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -69,12 +69,11 @@ export default function List({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const isProtectedRef = useRef(false);
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => {
     console.log("it's protected room!");
     setOpen2(true);
-  }
+  };
   const handleClose2 = () => setOpen2(false);
   const [aRoom, setARoom] = useState<IChatRoom>();
 
@@ -108,44 +107,35 @@ export default function List({
         )}
         {roomsProp.map((room, idx) => {
           return (
-              <button
-                key={idx}
-                className="item"
-                onClick={() => RoomClick(room)}
-              >
-                {room.password == "" ? null : (isProtectedRef.current = true)}
-                <div className="roomidx">{leftPadding(room.channelIdx)}</div>
-                <div className="owner">{room.owner}'s</div>
-                <div className="lock">
-                  {isProtectedRef.current ? (
-                    <LockRoundedIcon
-                      sx={{ height: "13px", color: "#afb2b3" }}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </div>
-              {isProtectedRef.current = false}
-              </button>
+            <button key={idx} className="item" onClick={() => RoomClick(room)}>
+              <div className="roomidx">{leftPadding(room.channelIdx)}</div>
+              <div className="owner">{room.owner}'s</div>
+              <div className="lock">
+                {room.password ? (
+                  <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
+                ) : (
+                  ""
+                )}
+              </div>
+            </button>
           );
         })}
 
-
-      <Modal
-        open={open2}
-        onClose={handleClose2}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box>
-      </Modal>
+        <Modal
+          open={open2}
+          onClose={handleClose2}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+          </Box>
+        </Modal>
       </div>
       {showPtcptsList &&
         portalContainer &&
