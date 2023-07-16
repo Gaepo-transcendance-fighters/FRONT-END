@@ -27,7 +27,9 @@ export default function CreateRoomModal({ prop }: { prop: () => void }) {
   return (
     <>
       <Box sx={style}>
-        <Card sx={{ margin: 1, backgroundColor: "#50aef8" }}>
+        {/* <Card sx={{ margin: 1, backgroundColor: "#50aef8" }}> */}
+        {/* <Box sx={{ margin: 1, backgroundColor: "#50aef8", borderRadius: "4px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }}> */}
+        <Box sx={{ margin: 1, backgroundColor: "#50aef8", borderRadius: "4px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }}>
           <Box margin={1}>
             <Typography>방 생성 하기</Typography>
           </Box>
@@ -62,7 +64,8 @@ export default function CreateRoomModal({ prop }: { prop: () => void }) {
               방 생성
             </Button>
           </Stack>
-        </Card>
+        {/* </Card> */}
+        </Box>
       </Box>
     </>
   );
