@@ -15,6 +15,20 @@ import "@/components/main/room_list/RoomList.css";
 import { IChatRoom } from "./RoomTypeButton";
 import CreateRoomModal from "./CreateRoomModal";
 import ChatPtcptsList from "../chat_participants_list/ChatPtcptsList";
+import { Typography, Box, } from "@mui/material";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "400px",
+  bgcolor: "#67dcfb",
+  borderRadius: "10px",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const Bar = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
@@ -36,6 +50,7 @@ export default function List({
   const RoomClick = (room: IChatRoom) => {
     setARoom(room);
     setShowPtcptsList(true);
+    room.password == "" ? null : handleOpen2();
   };
 
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
@@ -55,7 +70,12 @@ export default function List({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const isProtectedRef = useRef(false);
-
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => {
+    console.log("it's protected room!");
+    setOpen2(true);
+  }
+  const handleClose2 = () => setOpen2(false);
   const [aRoom, setARoom] = useState<IChatRoom>();
 
   const leftPadding = (idx: number) => {
@@ -109,6 +129,23 @@ export default function List({
               </button>
           );
         })}
+
+
+      <Modal
+        open={open2}
+        onClose={handleClose2}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
       </div>
       {showPtcptsList &&
         portalContainer &&
