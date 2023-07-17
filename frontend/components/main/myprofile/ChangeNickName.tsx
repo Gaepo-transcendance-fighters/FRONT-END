@@ -1,3 +1,4 @@
+"use client";
 import {
   Avatar,
   Button,
@@ -11,6 +12,7 @@ import {
   Typography,
   Input,
 } from "@mui/material";
+
 import { useState } from "react";
 const ChangeNickNameModalStyle = {
   position: "absolute" as "absolute",
@@ -46,7 +48,9 @@ const ChangeNickName = () => {
   };
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
-      <Box sx={ChangeNickNameModalStyle} borderRadius={"10px"}></Box>
+      <Box sx={ChangeNickNameModalStyle} borderRadius={"10px"}>
+        <CardContent> asdasd</CardContent>
+      </Box>
     </Modal>
   );
 };

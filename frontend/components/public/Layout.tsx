@@ -7,6 +7,7 @@ import {
   ThemeProvider,
   createTheme,
 } from "@mui/material";
+
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../chat_window/ChatWindow";
@@ -32,7 +33,7 @@ const Layout = () => {
             margin: 0,
           }}
         >
-          <CardContent sx={{ height: "35vh", backgroundColor: "brown" }}>
+          <CardContent sx={{ height: "35vh", backgroundColor: "#628FCE" }}>
             my profile
             <Myprofile />
           </CardContent>
@@ -43,12 +44,17 @@ const Layout = () => {
           sx={{
             width: "60vw",
             height: "100vh",
-            backgroundColor: "#6EC2F5",
+            backgroundColor: "#387E29",
             padding: 0,
             margin: 0,
           }}
         >
-          <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
+          <CardContent
+            sx={{
+              height: "35vh",
+              backgroundColor: "#387E29",
+            }}
+          >
             game start
             <GameStartButton />
           </CardContent>
