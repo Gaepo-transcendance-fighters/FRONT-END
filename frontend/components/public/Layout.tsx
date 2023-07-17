@@ -10,6 +10,8 @@ import {
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../chat_window/ChatWindow";
+import GameStartButton from "../gameStartButton/GameStartButton";
+import Myprofile from "../main/myprofile/MyProfile";
 
 const font = createTheme({
   typography: {
@@ -32,6 +34,7 @@ const Layout = () => {
         >
           <CardContent sx={{ height: "35vh", backgroundColor: "brown" }}>
             my profile
+            <Myprofile />
           </CardContent>
           <FriendList />
         </Stack>
@@ -47,6 +50,7 @@ const Layout = () => {
         >
           <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
             game start
+            <GameStartButton />
           </CardContent>
           <ChatWindow />
         </Stack>

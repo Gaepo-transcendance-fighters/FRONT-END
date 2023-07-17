@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import Image from "next/image";
 
 const GameStartButton = () => {
   const onClick = () => {
@@ -23,7 +24,12 @@ const GameStartButton = () => {
           backgroundColor: "WHITE",
         }}
       >
-        Game Start
+        <Image
+          src="/CrazyPong.png"
+          alt="offline"
+          width={150}
+          height={100}
+        ></Image>
       </Button>
     </div>
   );
