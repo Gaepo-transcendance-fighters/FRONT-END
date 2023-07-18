@@ -3,6 +3,7 @@
 import Modal from "@mui/material/Modal";
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { Box, Typography, Card } from "@mui/material";
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
 
 const style = {
   position: "absolute" as "absolute",
@@ -10,29 +11,33 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   //여기까지 모달 위치
-  width : "400px",
-  height : "300px",
+  width: "400px",
+  height: "300px",
   bgcolor: "#67dcfb",
   border: 0,
   borderRadius: "10px",
-  // p: 100, // 모달 크기,
-  color: "white",
-  padding : 1,
-};
-const style2 = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  //여기까지 모달 위치
-  width : "400px",
-  height : "300px",
-  bgcolor: "#67dcfb",
-  border: 0,
-  borderRadius: "10px",
-  // p: 100, // 모달 크기,
+  // p: 1, // padding,
   color: "white",
   // padding : "1",
+};
+const style2 = {
+  // position: "absolute" as "absolute",
+  // top: "50%",
+  // left: "50%",
+  // transform: "translate(-50%, -50%)",
+  // width : "300px",
+  width: "100",
+  //width는 100하면 꽉 채워지는데
+  height: "236px",
+  //height는 100하면 글 줄 수에따라 바뀐다
+  //고정하고 싶어서 px로 정함
+  bgcolor: "#50aef8",
+  border: 0,
+  borderRadius: "10px",
+  // p: 100,,
+  color: "white",
+  // padding : "1", 안됨 p로 써야됨
+  m: 4,
 };
 
 export default function ProtectedModal({
@@ -48,18 +53,19 @@ export default function ProtectedModal({
       onClose={handleClose2}
       aria-labelledby="protected-room-modal"
       aria-describedby="enter-password-modal"
-
     >
       <Box sx={style}>
-        {/* <Box sx={style2}> */}
-        <Box sx={{ margin: 1, backgroundColor: "#50aef8", borderRadius: "10px", height : "100%"}}>
-        {/* <Box sx={{...style2, margin : 1}}> */}
+        <Box sx={style2}>
+          <div>
+            <LockRoundedIcon sx={{ height: "42px", width: "42px" }} />
+          </div>
+
           <Typography id="protected-room-modal" variant="h6" component="h2">
             Text in a modal
           </Typography>
 
           <Typography id="enter-password-modal" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            Duis mollis
           </Typography>
         </Box>
       </Box>
