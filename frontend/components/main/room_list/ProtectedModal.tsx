@@ -13,7 +13,7 @@ const style = {
   //여기까지 모달 위치
   width: "400px",
   height: "300px",
-  bgcolor: "#67dcfb",
+  bgcolor: "rgb(25, 200, 255)",
   border: 0,
   borderRadius: "10px",
   // p: 1, // padding,
@@ -31,10 +31,10 @@ const style2 = {
   height: "236px",
   //height는 100하면 글 줄 수에따라 바뀐다
   //고정하고 싶어서 px로 정함
-  bgcolor: "#50aef8",
+  bgcolor: "rgb(18, 163, 255)",
   border: 0,
   borderRadius: "10px",
-  // p: 100,,
+  // pt: 1, 이걸하면 box가 내려감
   color: "white",
   // padding : "1", 안됨 p로 써야됨
   m: 4,
@@ -56,17 +56,20 @@ export default function ProtectedModal({
     >
       <Box sx={style}>
         <Box sx={style2}>
-          <div>
-            <LockRoundedIcon sx={{ height: "42px", width: "42px" }} />
+          <div style={{ height: "42px", width: "42px", margin: "auto", padding:"10px" }}>
+            <LockRoundedIcon
+              sx={{ height: "100%", width: "100%", color: "#6c899b" }}
+            />
+            {/* <LockRoundedIcon /> */}
           </div>
 
-          <Typography id="protected-room-modal" variant="h6" component="h2">
+          {/* <Typography id="protected-room-modal" variant="h6" component="h2">
             Text in a modal
           </Typography>
 
           <Typography id="enter-password-modal" sx={{ mt: 2 }}>
             Duis mollis
-          </Typography>
+          </Typography> */}
         </Box>
       </Box>
     </Modal>
