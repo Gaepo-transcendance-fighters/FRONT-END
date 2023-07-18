@@ -43,13 +43,13 @@ export default function ProtectedModal({
       aria-describedby="enter-password-modal"
     >
       <Box sx={style}>
-              <button className="xbutton">X</button>
+        <button className="xbutton" onClick={handleClose2}>X</button>
         <Box sx={style2}>
-            <div className="prlock">
-              <LockRoundedIcon
-                sx={{ height: "100%", width: "100%", color: "#6c899b" }}
-              />
-            </div>
+          <div className="prlock">
+            <LockRoundedIcon
+              sx={{ height: "100%", width: "100%", color: "#6c899b" }}
+            />
+          </div>
           {/* <Typography id="protected-room-modal" variant="h6" component="h2">
             Text in a modal
           </Typography>
