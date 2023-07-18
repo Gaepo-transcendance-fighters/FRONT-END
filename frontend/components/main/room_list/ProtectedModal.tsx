@@ -11,16 +11,17 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "400px",
-  height: "300px",
+  width: "333px",
+  height: "177px",
   bgcolor: "rgb(25, 200, 255)",
   border: 0,
   borderRadius: "10px",
   color: "white",
+  pb : 1,
 };
 const style2 = {
   width: "100",
-  height: "236px",
+  // height: "136px",
   bgcolor: "rgb(18, 163, 255)",
   border: 0,
   borderRadius: "10px",
@@ -50,22 +51,27 @@ export default function ProtectedModal({
               sx={{ height: "100%", width: "100%", color: "#6c899b" }}
             />
           </div>
-          {/* <Typography id="protected-room-modal" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-
-          <Typography id="enter-password-modal" sx={{ mt: 2 }}>
-            Duis mollis
-          </Typography> */}
+          <Box className="BoxContainer">
+            <input className="input" type="password" placeholder="enter the room pw"></input>
+            <button className="submitButton">submit</button>
+          </Box>
         </Box>
       </Box>
     </Modal>
   );
 }
 
+{/* <Typography id="protected-room-modal" variant="h6" component="h2">
+  Text in a modal
+</Typography>
+
+<Typography id="enter-password-modal" sx={{ mt: 2 }}>
+  Duis mollis
+</Typography> */}
+
 {
   /* <Box sx={style}>
-        <Typography id="protected-room-modal" variant="h6" component="h2">
+  <Typography id="protected-room-modal" variant="h6" component="h2">
           Text in a modal
         </Typography>
         <Typography id="enter-password-modal" sx={{ mt: 2 }}>

@@ -18,3 +18,31 @@
   font-weight: bold;
   margin: 9px;
 }
+
+.BoxContainer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 10px;
+	padding-bottom: 23px;
+  }
+
+.input {
+	border : 0;
+	height : 23px;
+	padding : 3px;
+	margin-left : 17px;
+	border-radius: 4px;
+}
+
+.submitButton {
+	background-color: rgb(13, 111, 255);
+	border-radius: 7px;
+	height: 33px;
+	width: 77px;
+	border: 0px;
+	color: white;
+	font-size: 17px;
+	margin-right : 17px;
+	float: right;
+}
