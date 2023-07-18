@@ -1,0 +1,20 @@
+
+.prlock {
+	height: 42px;
+	width: 42px;
+	margin: auto;
+	padding: 10px;
+}
+
+.xbutton {
+  background-color: #ef2922ea;
+  border-radius: 10px;
+  height: 27px;
+  width: 27px;
+  border: 0px;
+  color: white;
+  font-size: 20px;
+  float: right;
+  font-weight: bold;
+  margin: 6px;
+}
