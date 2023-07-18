@@ -57,7 +57,7 @@ export default function List({
   const RoomClick = (room: IChatRoom) => {
     setARoom(room);
     setShowPtcptsList(true);
-    room.password == "" ? null : handleOpen2();
+    room.password == "" ? setIsRight(true) : handleOpen2();
   };
 
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
@@ -80,6 +80,8 @@ export default function List({
   const handleOpen2 = () => setOpen2(true);
   const handleClose2 = () => setOpen2(false);
   const [aRoom, setARoom] = useState<IChatRoom>();
+
+  const [isRight, setIsRight] = useState(false);
 
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
@@ -124,11 +126,19 @@ export default function List({
             </button>
           );
         })}
-        <ProtectedModal open2={open2} handleClose2={handleClose2}/>
+        <ProtectedModal
+          open2={open2}
+          handleClose2={handleClose2}
+          // isRight={isRight}
+          setIsRight={setIsRight}
+          // aRoom={aRoom}
+        />
       </div>
-      {showPtcptsList &&
+      {
+      isRight &&
+        showPtcptsList &&
         portalContainer &&
-        createPortal(<ChatPtcptsList aRoom={aRoom} />, portalContainer)}
+        createPortal(<ChatPtcptsList aRoom={aRoom} isRight={isRight} setIsRight={setIsRight} />, portalContainer)}
     </>
   );
 }

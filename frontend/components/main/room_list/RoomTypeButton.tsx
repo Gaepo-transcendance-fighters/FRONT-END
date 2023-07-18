@@ -46,7 +46,7 @@ export const mockChatRoomList: IChatRoom[] = [
     owner: "jeekim",
     Ptcpts: ["jeekim"],
     channelType: chatRoomType.nonDm,
-    password: "asdf",
+    password: "0000",
   },
   {
     channelIdx: 1,
@@ -63,7 +63,7 @@ export const mockChatRoomList: IChatRoom[] = [
       "wochae",
     ],
     channelType: chatRoomType.nonDm,
-    password: "qwer",
+    password: "0000",
   },
   {
     channelIdx: 2,
@@ -84,14 +84,14 @@ export const mockChatRoomList: IChatRoom[] = [
     owner: "bbbbbbbbbb",
     Ptcpts: ["bbbbbbbbbb", "2jeekim"],
     channelType: chatRoomType.nonDm,
-    password: "asdf",
+    password: "0000",
   },
   {
     channelIdx: 4,
     owner: "0123456789",
     Ptcpts: ["2jaekim", "haryu", "wochae"],
     channelType: chatRoomType.nonDm,
-    password: "qwer",
+    password: "0000",
   },
   {
     channelIdx: 5,
