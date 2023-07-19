@@ -21,6 +21,11 @@ const Bar = forwardRef((props: any, ref: any) => (
     {props.children}
   </span>
 ));
+const Bar2 = forwardRef((props: any, ref: any) => (
+  <span {...props} ref={ref}>
+    {props.children}
+  </span>
+));
 
 export default function List({
   roomsProp,
@@ -121,6 +126,7 @@ export default function List({
           aRoom={aRoom}
           fail={fail}
           setFail={setFail}
+          Bar2={Bar2}
         />
       </div>
       {showPtcptsList &&
