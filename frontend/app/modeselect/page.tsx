@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import DirectionStack from "@/components/chat_window/Stack";
 
 const ModeSelect = () => {
+  const router = useRouter();
   return (
     <ThemeProvider theme={font}>
       <Card sx={{ display: "flex" }}>
@@ -60,7 +61,7 @@ const ModeSelect = () => {
             <Card
               style={{
                 width: "100%",
-                height: "65vh",
+                height: "70vh",
                 border: "2px solid black",
                 alignItems: "center",
                 backgroundColor: "#0477DE",
@@ -68,12 +69,9 @@ const ModeSelect = () => {
               id={"middle_big"}
             >
               {/*게임속도옵션*/}
-
-              <Card
+              <Stack
+                sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
                 style={{
-                  display: "flex",
-                  gap: "10px",
-                  flex-direction: "column",
                   backgroundColor: "#0477DE",
                   padding: "10px 0px 0px 0px",
                 }}
@@ -105,11 +103,12 @@ const ModeSelect = () => {
                 >
                   속도옵션 들어갈 자리
                 </Card>
-              </Card>
+              </Stack>
 
               {/*맵선택옵션부분*/}
 
-              <Card
+              <Stack
+                sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
                 style={{
                   backgroundColor: "#0477DE",
                   padding: "10px 0px 0px 0px",
@@ -142,17 +141,17 @@ const ModeSelect = () => {
                 >
                   맵옵션 버튼 들어갈 자리
                 </Card>
-              </Card>
+              </Stack>
               <Card
                 style={{
                   width: "20%",
                   height: "10vh",
-                  border: "2px solid black",
                   margin: "auto",
                   padding: "10px 0px 0px 0px",
                   display: "flex",
                   justifyContent: "space-around",
                   alignItems: "center",
+                  backgroundColor: "#0477DE",
                 }}
               >
                 <Button
@@ -165,6 +164,9 @@ const ModeSelect = () => {
                     justifyContent: "center",
                     fontSize: "2rem",
                     backgroundColor: "#F8C800",
+                  }}
+                  onClick={() => {
+                    return router.push("./gameplaying");
                   }}
                 >
                   Get Ready!

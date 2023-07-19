@@ -12,7 +12,6 @@ const font = createTheme({
 import { positions } from "@mui/system";
 import Image from "next/image";
 import { useState } from "react";
-import ModalBasic from "@/components/main/myprofile/ModalBasic";
 import ChangeNickName from "@/components/main/myprofile/ChangeNickName";
 import MyProfileRoute from "@/components/MyProfileRoute/MyProfileRoute";
 import { useRouter } from "next/navigation";
