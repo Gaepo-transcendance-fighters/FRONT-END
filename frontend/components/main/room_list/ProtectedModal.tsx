@@ -2,7 +2,6 @@
 
 import Modal from "@mui/material/Modal";
 import {
-  useEffect,
   useState,
   Dispatch,
   SetStateAction,
@@ -26,12 +25,11 @@ const style = {
   border: 0,
   borderRadius: "10px",
   color: "white",
-  // pb: 1,
 };
 
 const style2 = {
   width: "100",
-  height : "136px",
+  height: "136px",
   bgcolor: "rgb(18, 163, 255)",
   border: 0,
   borderRadius: "10px",
@@ -42,20 +40,26 @@ const style2 = {
 export default function ProtectedModal({
   open2,
   handleClose2,
+  isRight,
   setIsRight,
   aRoom,
+  fail,
+  setFail,
 }: {
   open2: boolean;
   handleClose2: () => void;
+  isRight: boolean;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   aRoom: IChatRoom | undefined;
+  fail : boolean;
+  setFail : Dispatch<SetStateAction<boolean>>;
 }) {
   const pwRef = useRef("");
-  const [fail, setFail] = useState<boolean>(false);
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     pwRef.current = e.target.value;
   };
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
+    setFail(false);
     e.preventDefault();
     console.log("aRoom?.password", aRoom?.password);
     if (pwRef.current == aRoom?.password) {
@@ -99,8 +103,7 @@ export default function ProtectedModal({
           </Box>
           <div className="failMsg">
             {!fail ? null : (
-              // <Typography fontSize={"small"}>
-              <Typography sx={{fontSize: "16px"}}>
+              <Typography sx={{ fontSize: "16px" }}>
                 Please check your password!
               </Typography>
             )}

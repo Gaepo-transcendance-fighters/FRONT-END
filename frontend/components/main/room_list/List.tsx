@@ -61,7 +61,11 @@ export default function List({
   const handleClose = () => setOpen(false);
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => setOpen2(true);
-  const handleClose2 = () => setOpen2(false);
+  const [fail, setFail] = useState<boolean>(false);
+  const handleClose2 = () => {
+    setOpen2(false);
+    setFail(false);
+  }
   const [aRoom, setARoom] = useState<IChatRoom>();
 
   const RoomClick = (room: IChatRoom) => {
@@ -134,9 +138,11 @@ export default function List({
         <ProtectedModal
           open2={open2}
           handleClose2={handleClose2}
-          // isRight={isRight}
+          isRight={isRight}
           setIsRight={setIsRight}
           aRoom={aRoom}
+          fail={fail}
+          setFail={setFail}
         />
       </div>
       {showPtcptsList &&
