@@ -3,12 +3,6 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import List from "./List";
 
-// dm 이냐 아니냐
-//          V
-// pw 있냐 없냐
-//         V = public
-//     V = protected
-
 export interface IChatRoom {
   channelIdx: number;
   owner: string;
@@ -21,11 +15,7 @@ export enum chatRoomType {
   dm,
   nonDm,
 }
-// 0 : 일반
-// 1: 오너
-// 2: 어드민
-// 3: 밴
-// 4: 뮤트
+
 export enum permissonType {
   normal,
   owner,

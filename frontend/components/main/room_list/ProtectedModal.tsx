@@ -2,14 +2,13 @@
 
 import Modal from "@mui/material/Modal";
 import {
-  useState,
   Dispatch,
   SetStateAction,
   ChangeEvent,
   MouseEvent,
   useRef,
 } from "react";
-import { Box, Typography, Card, TextField } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import "./ProtectedModal.css";
 import { IChatRoom } from "./RoomTypeButton";
@@ -40,7 +39,6 @@ const style2 = {
 export default function ProtectedModal({
   open2,
   handleClose2,
-  isRight,
   setIsRight,
   aRoom,
   fail,
@@ -51,8 +49,8 @@ export default function ProtectedModal({
   isRight: boolean;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   aRoom: IChatRoom | undefined;
-  fail : boolean;
-  setFail : Dispatch<SetStateAction<boolean>>;
+  fail: boolean;
+  setFail: Dispatch<SetStateAction<boolean>>;
 }) {
   const pwRef = useRef("");
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -112,25 +110,4 @@ export default function ProtectedModal({
       </Box>
     </Modal>
   );
-}
-
-{
-  /* <Typography id="protected-room-modal" variant="h6" component="h2">
-  Text in a modal
-</Typography>
-
-<Typography id="enter-password-modal" sx={{ mt: 2 }}>
-  Duis mollis
-</Typography> */
-}
-
-{
-  /* <Box sx={style}>
-  <Typography id="protected-room-modal" variant="h6" component="h2">
-          Text in a modal
-        </Typography>
-        <Typography id="enter-password-modal" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-      </Box> */
 }

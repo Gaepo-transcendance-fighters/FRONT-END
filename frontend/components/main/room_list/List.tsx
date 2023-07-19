@@ -6,8 +6,6 @@ import {
   SetStateAction,
   forwardRef,
   useEffect,
-  useRef,
-  useCallback,
 } from "react";
 import { createPortal } from "react-dom";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
@@ -16,27 +14,7 @@ import "@/components/main/room_list/RoomList.css";
 import { IChatRoom } from "./RoomTypeButton";
 import CreateRoomModal from "./CreateRoomModal";
 import ChatPtcptsList from "../chat_participants_list/ChatPtcptsList";
-import { Typography, Box } from "@mui/material";
 import ProtectedModal from "./ProtectedModal";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "400px",
-  bgcolor: "#67dcfb",
-  borderRadius: "10px",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-const Bar2 = forwardRef((props: any, ref: any) => (
-  <span {...props} ref={ref}>
-    {props.children}
-  </span>
-));
 
 const Bar = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
@@ -65,7 +43,7 @@ export default function List({
   const handleClose2 = () => {
     setOpen2(false);
     setFail(false);
-  }
+  };
   const [aRoom, setARoom] = useState<IChatRoom>();
 
   const RoomClick = (room: IChatRoom) => {

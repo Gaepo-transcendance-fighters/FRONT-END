@@ -27,9 +27,7 @@ export default function ChatPtcptsList({
       {showPtcptsList ? (
         <>
           <Title title={"pltitle"} text={"Participants List"} />
-          <PtcptList
-            aRoom={aRoom}
-          />
+          <PtcptList aRoom={aRoom} />
         </>
       ) : null}
     </>
