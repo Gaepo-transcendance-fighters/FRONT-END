@@ -1,9 +1,12 @@
 import { Button } from "@mui/material";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const GameStartButton = () => {
+  const router = useRouter();
+
   const onClick = () => {
-    //버튼 클릭 시 여기서 처리하면됨
-    console.log("Game Start Clicked");
+    router.push("./game");
   };
 
   return (
@@ -20,10 +23,16 @@ const GameStartButton = () => {
         style={{
           padding: "40px 60px",
           borderRadius: "15px",
+          border: "10px solid",
           backgroundColor: "WHITE",
         }}
       >
-        Game Start
+        <Image
+          src="/CrazyPong.png"
+          alt="offline"
+          width={250}
+          height={150}
+        ></Image>
       </Button>
     </div>
   );

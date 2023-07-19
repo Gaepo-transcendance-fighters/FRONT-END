@@ -2,10 +2,12 @@
 
 import Layout from "@/components/public/Layout";
 
-export default function Home() {
+const Layout = () => {
   return (
     <>
-      <Layout />
+      <Layout></Layout>
     </>
   );
-}
+};
+
+export default Layout;
