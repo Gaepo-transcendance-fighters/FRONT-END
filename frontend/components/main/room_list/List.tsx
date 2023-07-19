@@ -23,7 +23,7 @@ export default function List({
   showPtcptsList: boolean;
   setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
 }) {
-  const RoomClick = (room : IChatRoom) => {
+  const RoomClick = (room: IChatRoom) => {
     console.log("room info : ", room);
     setShowPtcptsList(true);
   };
@@ -57,7 +57,7 @@ export default function List({
       ) : (
         ""
       )}
-      {roomsProp.map((room ,idx) => {
+      {roomsProp.map((room, idx) => {
         return (
           <button key={idx} className="item" onClick={() => RoomClick(room)}>
             <div className="roomidx">{leftPadding(room.channelIdx)}</div>
@@ -66,7 +66,7 @@ export default function List({
               {room.password == "" ? (
                 ""
               ) : (
-                <LockRoundedIcon sx={{ height: "13px", color:"#afb2b3" }} />
+                <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
               )}
             </div>
           </button> //room button 누르면 room idx 넘겨주기
