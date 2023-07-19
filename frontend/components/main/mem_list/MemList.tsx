@@ -25,7 +25,7 @@ export default function MemList({
     <>
       {showPtcptsList ? (
         <>
-          <Title title={"pltitle"} text={"Participants List"} />
+          <Title title={"pltitle"} text={"Members List"} />
           <Mems aRoom={aRoom} />
         </>
       ) : null}

@@ -3,7 +3,17 @@
 import Image from "next/image";
 import StarIcon from "@mui/icons-material/Star";
 import "@/components/main/mem_list/MemList.css";
-import { Modal, Box, Card, Stack, Typography, Menu, CardContent, Button, MenuItem } from "@mui/material";
+import {
+  Modal,
+  Box,
+  Card,
+  Stack,
+  Typography,
+  Menu,
+  CardContent,
+  Button,
+  MenuItem,
+} from "@mui/material";
 import { useState } from "react";
 import { IChatRoom } from "../room_list/RoomTypeButton";
 import { IFriend } from "../friend_list/FriendList";
