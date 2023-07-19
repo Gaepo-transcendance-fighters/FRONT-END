@@ -41,13 +41,13 @@ export default function ProtectedModal({
   open2,
   handleClose2,
   setIsRight,
-  // isRight
-  // aRoom,
-}: {
+} // isRight
+// aRoom,
+: {
   open2: boolean;
   handleClose2: () => void;
   // isRight: boolean;
-  setIsRight:Dispatch<SetStateAction<boolean>>;
+  setIsRight: Dispatch<SetStateAction<boolean>>;
   // aRoom : IChatRoom | undefined;
 }) {
   const pwRef = useRef("");
@@ -57,12 +57,16 @@ export default function ProtectedModal({
   };
   const onSubmit = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    pwRef.current == "0000" ? setIsRight(true) : setIsRight(false);
+    // pwRef.current == "0000" ? setIsRight(true) : setIsRight(false);
+    if (pwRef.current == "0000") {
+      setIsRight(true);
+      handleClose2();
+    } else setIsRight(false);
     // pwRef.current == aRoom?.password ? setIsRight(true) : setIsRight(false);
     //각 방 pw 들어 갈 자리
     console.log("onSubmit : ", e);
   };
-// ref 비워주는 작업?
+  // ref 비워주는 작업?
   return (
     <Modal
       open={open2}
