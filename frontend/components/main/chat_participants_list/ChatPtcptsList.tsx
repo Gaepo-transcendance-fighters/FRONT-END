@@ -11,10 +11,12 @@ export default function ChatPtcptsList({
   aRoom,
   setIsRight,
   isRight,
+  showPtcptsList,
 }: {
   aRoom: IChatRoom | undefined;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
+  showPtcptsList: boolean;
 }) {
   useEffect(() => {
     isRight ? setIsRight(false) : null;
@@ -22,8 +24,14 @@ export default function ChatPtcptsList({
   }, [isRight]);
   return (
     <>
-      <Title title={"pltitle"} text={"Participants List"} />
-      <PtcptList aRoom={aRoom} />
+      {showPtcptsList ? (
+        <>
+          <Title title={"pltitle"} text={"Participants List"} />
+          <PtcptList
+            aRoom={aRoom}
+          />
+        </>
+      ) : null}
     </>
   );
 }

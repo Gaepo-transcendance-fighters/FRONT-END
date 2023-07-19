@@ -67,10 +67,12 @@ export default function List({
   const RoomClick = (room: IChatRoom) => {
     setARoom(room);
     room.password == "" ? setIsRight(true) : handleOpen2();
+    setShowPtcptsList(false);
   };
 
   useEffect(() => {
     isRight ? setShowPtcptsList(true) : null;
+    console.log("List isRight : ", isRight);
   }, [isRight]);
 
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
@@ -141,6 +143,7 @@ export default function List({
         portalContainer &&
         createPortal(
           <ChatPtcptsList
+            showPtcptsList={showPtcptsList}
             aRoom={aRoom}
             isRight={isRight}
             setIsRight={setIsRight}
