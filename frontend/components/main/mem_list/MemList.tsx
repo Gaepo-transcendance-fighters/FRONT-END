@@ -1,13 +1,13 @@
 "use client";
 
 import "@/components/main/room_list/RoomList.css";
-import "@/components/main/chat_participants_list/ChatPtcptsList.css";
 import Title from "../room_list/Title";
-import PtcptList from "./PtcptList";
+import Mems from "./Mems";
 import { IChatRoom } from "../room_list/RoomTypeButton";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import "@/components/main/mem_list/MemList.css";
 
-export default function ChatPtcptsList({
+export default function MemList({
   aRoom,
   setIsRight,
   isRight,
@@ -20,14 +20,13 @@ export default function ChatPtcptsList({
 }) {
   useEffect(() => {
     isRight ? setIsRight(false) : null;
-    console.log("isRight : ", isRight);
   }, [isRight]);
   return (
     <>
       {showPtcptsList ? (
         <>
           <Title title={"pltitle"} text={"Participants List"} />
-          <PtcptList aRoom={aRoom} />
+          <Mems aRoom={aRoom} />
         </>
       ) : null}
     </>

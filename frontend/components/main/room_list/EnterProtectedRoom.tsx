@@ -54,7 +54,6 @@ export default function EnterProtectedRoom({
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     setFail(false);
     e.preventDefault();
-    console.log("aRoom?.password", aRoom?.password);
     if (pwRef.current == aRoom?.password) {
       setIsRight(true);
       handleClose2();

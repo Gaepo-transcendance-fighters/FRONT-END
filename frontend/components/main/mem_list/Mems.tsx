@@ -1,8 +1,8 @@
 "use client";
 
-import "@/components/main/chat_participants_list/ChatPtcptsList.css";
-import Ptcpt from "./Ptcpt";
+import Mem from "./Mem";
 import { IChatRoom } from "../room_list/RoomTypeButton";
+import "@/components/main/mem_list/MemList.css";
 
 export default function PtcptList({ aRoom }: { aRoom: IChatRoom | undefined }) {
   return (
@@ -10,7 +10,7 @@ export default function PtcptList({ aRoom }: { aRoom: IChatRoom | undefined }) {
       <div>
         {aRoom?.Ptcpts.map((person, idx) => (
           <div key={idx}>
-            <Ptcpt idx={idx} person={person} />
+            <Mem idx={idx} person={person} />
           </div>
         ))}
       </div>

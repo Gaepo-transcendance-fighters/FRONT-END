@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import StarIcon from "@mui/icons-material/Star";
-import "@/components/main/chat_participants_list/ChatPtcptsList.css";
+import "@/components/main/mem_list/MemList.css";
 
-export default function Ptcpt({
+export default function Mem({
   idx,
   person,
 }: {

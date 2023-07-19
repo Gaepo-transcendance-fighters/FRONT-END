@@ -13,7 +13,7 @@ import Modal from "@mui/material/Modal";
 import "@/components/main/room_list/RoomList.css";
 import { IChatRoom } from "./RoomTypeButton";
 import CreateRoomModal from "./CreateRoomModal";
-import ChatPtcptsList from "../chat_participants_list/ChatPtcptsList";
+import MemList from "../mem_list/MemList";
 import ProtectedModal from "./ProtectedModal";
 
 const Bar = forwardRef((props: any, ref: any) => (
@@ -59,7 +59,6 @@ export default function List({
 
   useEffect(() => {
     isRight ? setShowPtcptsList(true) : null;
-    console.log("List isRight : ", isRight);
   }, [isRight]);
 
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
@@ -132,7 +131,7 @@ export default function List({
       {showPtcptsList &&
         portalContainer &&
         createPortal(
-          <ChatPtcptsList
+          <MemList
             showPtcptsList={showPtcptsList}
             aRoom={aRoom}
             isRight={isRight}
