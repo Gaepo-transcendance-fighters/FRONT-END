@@ -7,6 +7,7 @@ import {
   forwardRef,
   useEffect,
   useRef,
+  useCallback,
 } from "react";
 import { createPortal } from "react-dom";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
@@ -54,11 +55,23 @@ export default function List({
   showPtcptsList: boolean;
   setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
 }) {
+  const [isRight, setIsRight] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
+  const [aRoom, setARoom] = useState<IChatRoom>();
+
   const RoomClick = (room: IChatRoom) => {
     setARoom(room);
-    setShowPtcptsList(true);
     room.password == "" ? setIsRight(true) : handleOpen2();
   };
+
+  useEffect(() => {
+    isRight ? setShowPtcptsList(true) : null;
+  }, [isRight]);
 
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
     null
@@ -72,16 +85,6 @@ export default function List({
       setPortalContainer(null);
     };
   }, []);
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [open2, setOpen2] = useState(false);
-  const handleOpen2 = () => setOpen2(true);
-  const handleClose2 = () => setOpen2(false);
-  const [aRoom, setARoom] = useState<IChatRoom>();
-
-  const [isRight, setIsRight] = useState(false);
 
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
@@ -134,11 +137,16 @@ export default function List({
           // aRoom={aRoom}
         />
       </div>
-      {
-      isRight &&
-        showPtcptsList &&
+      {showPtcptsList &&
         portalContainer &&
-        createPortal(<ChatPtcptsList aRoom={aRoom} isRight={isRight} setIsRight={setIsRight} />, portalContainer)}
+        createPortal(
+          <ChatPtcptsList
+            aRoom={aRoom}
+            isRight={isRight}
+            setIsRight={setIsRight}
+          />,
+          portalContainer
+        )}
     </>
   );
 }

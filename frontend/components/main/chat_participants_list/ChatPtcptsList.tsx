@@ -5,7 +5,7 @@ import "@/components/main/chat_participants_list/ChatPtcptsList.css";
 import Title from "../room_list/Title";
 import PtcptList from "./PtcptList";
 import { IChatRoom } from "../room_list/RoomTypeButton";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 export default function ChatPtcptsList({
   aRoom,
@@ -16,8 +16,10 @@ export default function ChatPtcptsList({
   setIsRight: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
 }) {
-  isRight ? setIsRight(false) : null;
-
+  useEffect(() => {
+    isRight ? setIsRight(false) : null;
+    console.log("isRight : ", isRight);
+  }, [isRight]);
   return (
     <>
       <Title title={"pltitle"} text={"Participants List"} />

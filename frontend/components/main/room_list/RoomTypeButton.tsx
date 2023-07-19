@@ -30,7 +30,7 @@ export enum permissonType {
   normal,
   owner,
   admin,
-  ban
+  ban,
 }
 
 export const mockChatRoomList: IChatRoom[] = [
@@ -114,7 +114,7 @@ export default function RoomTypeButton({
   const [disabled, setDisabled] = useState(true);
 
   const DivideRoom = () => {
-    mockChatRoomList.map((room) => {
+    mockChatRoomList.map((room, idx) => {
       if (room.channelType != chatRoomType.dm) {
         setNonDmRooms((prev) => {
           return [...prev, room];
