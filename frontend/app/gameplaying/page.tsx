@@ -1,5 +1,4 @@
 "use client";
-import Layout from "@/components/public/Layout";
 import { ThemeProvider } from "@emotion/react";
 import {
   Button,
@@ -15,19 +14,12 @@ const font = createTheme({
     fontFamily: "neodgm",
   },
 });
-import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const GamePlaying = () => {
   const router = useRouter();
   const ClickNomalGame = () => {
     router.push("./modeselect");
-  };
-
-  const ClickRankGame = () => {
-    //임시로해놓겠습니다
-    router.push("./gameresult");
   };
 
   const BackToMain = () => {

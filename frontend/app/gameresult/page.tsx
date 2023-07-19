@@ -1,35 +1,17 @@
 "use client";
-import Layout from "@/components/public/Layout";
 import { ThemeProvider } from "@emotion/react";
 import FriendProfile from "@/components/main/friend_list/FriendProfile";
-import {
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  createTheme,
-  Modal,
-} from "@mui/material";
+import { Button, Card, CardContent, Stack, createTheme } from "@mui/material";
 
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
   },
 });
-import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const GameResult = () => {
   const router = useRouter();
-  const ClickNomalGame = () => {
-    router.push("./modeselect");
-  };
-
-  const ClickRankGame = () => {
-    //임시로해놓겠습니다
-    router.push("./gameresult");
-  };
 
   const BackToMain = () => {
     router.push("/");

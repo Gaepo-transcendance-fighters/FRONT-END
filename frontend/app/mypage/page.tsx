@@ -1,5 +1,4 @@
 "use client";
-import Layout from "@/components/public/Layout";
 import { ThemeProvider } from "@emotion/react";
 import { Button, Card, CardContent, Stack, createTheme } from "@mui/material";
 
@@ -9,11 +8,6 @@ const font = createTheme({
   },
 });
 
-import { positions } from "@mui/system";
-import Image from "next/image";
-import { useState } from "react";
-import ChangeNickName from "@/components/main/myprofile/ChangeNickName";
-import MyProfileRoute from "@/components/MyProfileRoute/MyProfileRoute";
 import { useRouter } from "next/navigation";
 import RedirMyProfile from "@/components/main/myprofile/RedirMyProfile";
 

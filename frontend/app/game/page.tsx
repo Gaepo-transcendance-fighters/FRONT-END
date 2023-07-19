@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 
 const Game = () => {
   const router = useRouter();
+
   const ClickNomalGame = () => {
     router.push("./modeselect");
   };

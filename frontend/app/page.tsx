@@ -33,7 +33,7 @@ const Layout = () => {
             margin: 0,
           }}
         >
-          <CardContent sx={{ height: "35vh", backgroundColor: "#3478c5" }}>
+          <CardContent sx={{ height: "35vh", backgroundColor: "#253F8A" }}>
             my profile
             <Myprofile />
           </CardContent>

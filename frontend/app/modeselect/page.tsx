@@ -1,5 +1,4 @@
 "use client";
-import Layout from "@/components/public/Layout";
 import { ThemeProvider } from "@emotion/react";
 import {
   Button,
@@ -16,10 +15,7 @@ const font = createTheme({
   },
 });
 
-import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import DirectionStack from "@/components/chat_window/Stack";
 
 const ModeSelect = () => {
   const router = useRouter();

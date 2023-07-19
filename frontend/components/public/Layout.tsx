@@ -28,12 +28,12 @@ const Layout = () => {
           sx={{
             width: "20vw",
             height: "100vh",
-            backgroundColor: "#3478c5",
+            backgroundColor: "#253F8A",
             padding: 0,
             margin: 0,
           }}
         >
-          <CardContent sx={{ height: "35vh", backgroundColor: "#628FCE" }}>
+          <CardContent sx={{ height: "35vh", backgroundColor: "#253F8A" }}>
             my profile
             <Myprofile />
           </CardContent>
