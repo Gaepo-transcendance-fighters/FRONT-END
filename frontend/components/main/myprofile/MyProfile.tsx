@@ -65,22 +65,22 @@ const Myprofile = () => {
     <div>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Avatar
-          alt="Remy Sharp"
           src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
-          sx={{ width: 130, height: 130 }}
+          style={{ width: "70%", height: "22vh", border: "4px solid #8CCAE5" }}
         />
       </div>
       <div style={{ padding: 10 }}>
         <Card
           style={{
-            height: 60,
-            width: 150,
+            height: "4vh",
+            width: "50%",
             display: "flex",
             justifyContent: "center",
             textAlign: "center",
             alignItems: "center",
             margin: "0 auto",
             backgroundColor: "#67dbfb",
+            border: "1px solid black",
           }}
         >
           NickName
@@ -92,7 +92,12 @@ const Myprofile = () => {
           type="button"
           // onClick={handleOpenModal}
           onClick={RedirMyprofile}
-          style={{ backgroundColor: "WHITE" }}
+          style={{
+            backgroundColor: "WHITE",
+            height: "4vh",
+            width: "25%",
+            border: "1px solid black",
+          }}
         >
           더보기
         </Button>
