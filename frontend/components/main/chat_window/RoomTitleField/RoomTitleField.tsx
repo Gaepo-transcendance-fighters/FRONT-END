@@ -1,11 +1,12 @@
 
-import Stack from './Stack'
+import Stack from '../Stack'
 import Typography from '@mui/material/Typography'
 import VpnKeyTwoToneIcon from '@mui/icons-material/VpnKeyTwoTone';
 import SettingsIcon from '@mui/icons-material/Settings';
-import './ChatWindow.css'
-import { Box } from "@mui/material";
+import '../ChatWindow.css'
+import { Box, Modal, Button, } from "@mui/material";
 import IconButtons from './SettingIconButton'
+import { useState } from 'react';
 
 export interface IChatRoom {
 	roomName: string;
@@ -31,8 +32,24 @@ const mockChatRoomList: IChatRoom[] = [
 	},
 ];
 
+const style = {
+	position: 'absolute' as 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	width: 400,
+	bgcolor: 'background.paper',
+	border: '2px solid #000',
+	boxShadow: 24,
+	p: 4,
+  };
+
 const RoomTitleField = () => {
 	
+	const [open, setOpen] = useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
+  
 	return (
 		<div className="room_title_field">
 			<div className='room_title_field_left'>
@@ -44,7 +61,9 @@ const RoomTitleField = () => {
 					{mockChatRoomList[0].isProtected ? <VpnKeyTwoToneIcon/> : null}
 				</div>
 				<div className='room_setting'>
-					<IconButtons/>
+					<IconButtons></IconButtons>
+					{/* <Button onClick={handleOpen}>Open modal</Button> */}
+					
 				</div>
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Box } from "@mui/material";
-import './ChatWindow.css'
+import '../ChatWindow.css'
 
 export interface IChat {
 	name: string;

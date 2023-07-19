@@ -1,9 +1,9 @@
 "use client";
 
 import "./ChatWindow.css";
-import BottomField from "./BottomField";
-import ChatField from "./ChatField";
-import RoomTitleField from "./RoomTitleField";
+import BottomField from "./BottomField/BottomField";
+import ChatField from "./ChatField/ChatField";
+import RoomTitleField from "./RoomTitleField/RoomTitleField";
 import { Box } from "@mui/material";
 
 const ChatWindow = () => {

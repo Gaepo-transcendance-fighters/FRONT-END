@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
-import ChatWindow from "../chat_window/ChatWindow";
+import ChatWindow from "../main/chat_window/ChatWindow";
 
 const font = createTheme({
   typography: {

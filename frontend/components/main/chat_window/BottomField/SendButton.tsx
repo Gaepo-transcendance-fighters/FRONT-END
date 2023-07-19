@@ -1,7 +1,7 @@
 
 import { Button } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
-import './ChatWindow.css'
+import '../ChatWindow.css'
 
 const SendButton = () => {
 	
