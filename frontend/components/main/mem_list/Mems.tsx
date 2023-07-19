@@ -8,7 +8,7 @@ export default function PtcptList({ aRoom }: { aRoom: IChatRoom | undefined }) {
   return (
     <div className="pllist">
       <div>
-        {aRoom?.Ptcpts.map((person, idx) => (
+        {aRoom?.mems.map((person, idx) => (
           <div key={idx}>
             <Mem idx={idx} person={person} />
           </div>

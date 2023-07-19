@@ -2,11 +2,13 @@
 
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import List from "./List";
+import { IFriend } from "../friend_list/FriendList";
 
 export interface IChatRoom {
   channelIdx: number;
   owner: string;
-  Ptcpts: Array<string>;
+  mems: Array<IFriend>;
+  // mems: Array<string>;
   channelType: chatRoomType;
   password: string;
 }
@@ -23,34 +25,36 @@ export enum permissonType {
   ban,
 }
 
+// {
+//   name: string;
+//   isOnline: boolean;
+//   imgUrl: string;
+// }
 export const mockChatRoomList: IChatRoom[] = [
   {
     channelIdx: 0,
     owner: "hoslim",
-    Ptcpts: ["hoslim"],
+    mems: [{name : "hoslim", isOnline : true, imgUrl : ""}],
     channelType: chatRoomType.dm,
     password: "",
   },
   {
     channelIdx: 0,
     owner: "jeekim",
-    Ptcpts: ["jeekim"],
+    mems: [{name : "jeekim", isOnline : true, imgUrl : ""}],
     channelType: chatRoomType.nonDm,
     password: "0000",
   },
   {
     channelIdx: 1,
     owner: "jaekim",
-    Ptcpts: [
-      "jaekim",
-      "haryu",
-      "wochae",
-      "jaekim",
-      "haryu",
-      "wochae",
-      "jaekim",
-      "haryu",
-      "wochae",
+    mems: [
+      {name : "jaekim", isOnline : true, imgUrl : ""},
+      {name : "haryu", isOnline : false, imgUrl : ""},
+      {name : "wochae", isOnline : true, imgUrl : ""},
+      {name : "jaekim", isOnline : true, imgUrl : ""},
+      {name : "haryu", isOnline : false, imgUrl : ""},
+      {name : "wochae", isOnline : true, imgUrl : ""},
     ],
     channelType: chatRoomType.nonDm,
     password: "0000",
@@ -58,35 +62,35 @@ export const mockChatRoomList: IChatRoom[] = [
   {
     channelIdx: 2,
     owner: "0123456789",
-    Ptcpts: ["0123456789", "hoslimhosl"],
+    mems: [{name : "0123456789", isOnline : false, imgUrl : ""},{name : "cccccccccc", isOnline : true, imgUrl : ""},],
     channelType: chatRoomType.nonDm,
     password: "",
   },
   {
     channelIdx: 1,
     owner: "aaaaaaaaaa",
-    Ptcpts: ["aaaaaaaaaa", "2hoslim"],
+    mems: [{name : "aaaaaaaaaa", isOnline : false, imgUrl : ""},{name : "2hoslim", isOnline : true, imgUrl : ""},],
     channelType: chatRoomType.dm,
     password: "",
   },
   {
     channelIdx: 3,
     owner: "bbbbbbbbbb",
-    Ptcpts: ["bbbbbbbbbb", "2jeekim"],
+    mems: [{name : "bbbbbbbbbb", isOnline : false, imgUrl : ""},{name : "2jeekim", isOnline : false, imgUrl : ""},],
     channelType: chatRoomType.nonDm,
     password: "0000",
   },
   {
     channelIdx: 4,
     owner: "0123456789",
-    Ptcpts: ["2jaekim", "haryu", "wochae"],
+    mems: [{name : "2jaekim", isOnline : false, imgUrl : ""},{name : "haryu", isOnline : false, imgUrl : ""},],
     channelType: chatRoomType.nonDm,
     password: "0000",
   },
   {
     channelIdx: 5,
     owner: "zzzzzzzzzz",
-    Ptcpts: ["zzzzzzzzzz", "2hoslimh"],
+    mems: [{name : "zzzzzzzzzz", isOnline : true, imgUrl : ""},{name : "2hoslimh", isOnline : false, imgUrl : ""},],
     channelType: chatRoomType.nonDm,
     password: "",
   },
@@ -104,7 +108,7 @@ export default function RoomTypeButton({
   const [disabled, setDisabled] = useState(true);
 
   const DivideRoom = () => {
-    mockChatRoomList.map((room, idx) => {
+    mockChatRoomList.map((room) => {
       if (room.channelType != chatRoomType.dm) {
         setNonDmRooms((prev) => {
           return [...prev, room];
