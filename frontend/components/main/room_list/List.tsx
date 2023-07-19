@@ -136,7 +136,7 @@ export default function List({
           handleClose2={handleClose2}
           // isRight={isRight}
           setIsRight={setIsRight}
-          // aRoom={aRoom}
+          aRoom={aRoom}
         />
       </div>
       {showPtcptsList &&

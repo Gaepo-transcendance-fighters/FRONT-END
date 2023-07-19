@@ -10,7 +10,7 @@ import {
   MouseEvent,
   useRef,
 } from "react";
-import { Box, Typography, Card } from "@mui/material";
+import { Box, Typography, Card, TextField } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import "./ProtectedModal.css";
 import { IChatRoom } from "./RoomTypeButton";
@@ -21,15 +21,17 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "333px",
-  height: "177px",
+  height: "200px",
   bgcolor: "rgb(25, 200, 255)",
   border: 0,
   borderRadius: "10px",
   color: "white",
-  pb: 1,
+  // pb: 1,
 };
+
 const style2 = {
   width: "100",
+  height : "136px",
   bgcolor: "rgb(18, 163, 255)",
   border: 0,
   borderRadius: "10px",
@@ -41,32 +43,32 @@ export default function ProtectedModal({
   open2,
   handleClose2,
   setIsRight,
-} // isRight
-// aRoom,
-: {
+  aRoom,
+}: {
   open2: boolean;
   handleClose2: () => void;
-  // isRight: boolean;
   setIsRight: Dispatch<SetStateAction<boolean>>;
-  // aRoom : IChatRoom | undefined;
+  aRoom: IChatRoom | undefined;
 }) {
   const pwRef = useRef("");
-  // pw : 0000
+  const [fail, setFail] = useState<boolean>(false);
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     pwRef.current = e.target.value;
   };
-  const onSubmit = (e: MouseEvent<HTMLButtonElement>) => {
+  const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // pwRef.current == "0000" ? setIsRight(true) : setIsRight(false);
-    if (pwRef.current == "0000") {
+    console.log("aRoom?.password", aRoom?.password);
+    if (pwRef.current == aRoom?.password) {
       setIsRight(true);
       handleClose2();
-    } else setIsRight(false);
-    // pwRef.current == aRoom?.password ? setIsRight(true) : setIsRight(false);
-    //각 방 pw 들어 갈 자리
-    console.log("onSubmit : ", e);
+      setFail(false);
+    } else {
+      setIsRight(false);
+      setFail(true);
+    }
+    pwRef.current = "";
+    console.log("onClick : ", e);
   };
-  // ref 비워주는 작업?
   return (
     <Modal
       open={open2}
@@ -87,14 +89,22 @@ export default function ProtectedModal({
           <Box className="BoxContainer">
             <input
               className="input"
-              type="text"
-              placeholder="enter the room pw"
+              type="password"
+              placeholder="password"
               onChange={onChange}
             ></input>
-            <button className="submitButton" onClick={onSubmit}>
+            <button className="submitButton" onClick={onClick}>
               submit
             </button>
           </Box>
+          <div className="failMsg">
+            {!fail ? null : (
+              // <Typography fontSize={"small"}>
+              <Typography sx={{fontSize: "16px"}}>
+                Please check your password!
+              </Typography>
+            )}
+          </div>
         </Box>
       </Box>
     </Modal>
