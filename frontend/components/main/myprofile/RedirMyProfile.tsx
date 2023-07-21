@@ -9,11 +9,8 @@ import {
   Input,
 } from "@mui/material";
 
-import { positions } from "@mui/system";
 import Image from "next/image";
 import { useState } from "react";
-import ChangeNickName from "./ChangeNickName";
-import { useRouter } from "next/navigation";
 
 const modalStyle = {
   position: "absolute" as "absolute",

@@ -1,6 +1,13 @@
 "use client";
 import { ThemeProvider } from "@emotion/react";
-import { Button, Card, CardContent, Stack, createTheme } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  Stack,
+  createTheme,
+  Typography,
+} from "@mui/material";
 
 const font = createTheme({
   typography: {
@@ -51,11 +58,12 @@ const Game = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "2rem",
                 border: "2px solid black",
               }}
             >
-              Select Game Mode
+              <Typography sx={{ fontSize: "2rem" }}>
+                Select Game Mode
+              </Typography>
             </Card>
           </CardContent>
           <CardContent>

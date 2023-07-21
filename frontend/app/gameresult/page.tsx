@@ -1,6 +1,13 @@
 "use client";
 import { ThemeProvider } from "@emotion/react";
-import { Button, Card, CardContent, Stack, createTheme } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  Stack,
+  createTheme,
+  Typography,
+} from "@mui/material";
 
 const font = createTheme({
   typography: {
@@ -46,7 +53,7 @@ const GameResult = () => {
                 border: "2px solid black",
               }}
             >
-              Result
+              <Typography sx={{ fontSize: "3rem" }}>Result</Typography>
             </Card>
           </CardContent>
 
@@ -88,9 +95,13 @@ const GameResult = () => {
                   //   닉네임 클릭시, 프로필 모달 띄우는 파트
                   //   onClick={}
                   >
-                    MY NICK NAME
+                    <Typography sx={{ fontSize: "2rem" }}>
+                      MY NICK NAME
+                    </Typography>
                   </Card>
-                  <Card> 100</Card>
+                  <Card>
+                    <Typography sx={{ fontSize: "2rem" }}>100</Typography>
+                  </Card>
                   <Card
                     sx={{ minWidth: "max-content" }}
                     style={{
@@ -108,7 +119,9 @@ const GameResult = () => {
                         alignItems: "center",
                       }}
                     >
-                      Win Rate: 70%
+                      <Typography sx={{ fontSize: "2rem" }}>
+                        Win Rate: 70%
+                      </Typography>
                     </Stack>
                     <Stack
                       style={{
@@ -117,7 +130,7 @@ const GameResult = () => {
                         alignItems: "center",
                       }}
                     >
-                      100W 0L
+                      <Typography sx={{ fontSize: "2rem" }}>100W 0L</Typography>
                     </Stack>
                   </Card>
                 </Stack>
@@ -147,9 +160,13 @@ const GameResult = () => {
                   //   닉네임 클릭시, 프로필 모달 띄우는 파트
                   //   onClick={}
                   >
-                    O_NICK NAME
+                    <Typography sx={{ fontSize: "2rem" }}>
+                      O_NICK NAME
+                    </Typography>
                   </Card>
-                  <Card> 70</Card>
+                  <Card>
+                    <Typography sx={{ fontSize: "2rem" }}>70</Typography>
+                  </Card>
                   <Card
                     sx={{ minWidth: "max-content" }}
                     style={{
@@ -167,7 +184,9 @@ const GameResult = () => {
                         alignItems: "center",
                       }}
                     >
-                      Win Rate: 70%
+                      <Typography sx={{ fontSize: "2rem" }}>
+                        Win Rate: 70%
+                      </Typography>
                     </Stack>
                     <Stack
                       style={{
@@ -176,7 +195,7 @@ const GameResult = () => {
                         alignItems: "center",
                       }}
                     >
-                      100W 0L
+                      <Typography sx={{ fontSize: "2rem" }}>100W 0L</Typography>
                     </Stack>
                   </Card>
                 </Stack>

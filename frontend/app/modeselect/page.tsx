@@ -1,6 +1,13 @@
 "use client";
 import { ThemeProvider } from "@emotion/react";
-import { Button, Card, CardContent, Stack, createTheme } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  Stack,
+  createTheme,
+  Typography,
+} from "@mui/material";
 
 const font = createTheme({
   typography: {
@@ -43,7 +50,7 @@ const ModeSelect = () => {
                 border: "2px solid black",
               }}
             >
-              Select Option
+              <Typography sx={{ fontSize: "2rem" }}>Select Option</Typography>
             </Card>
           </CardContent>
           <CardContent id={"middle"}>
@@ -77,7 +84,7 @@ const ModeSelect = () => {
                     alignItems: "center",
                   }}
                 >
-                  Speed
+                  <Typography sx={{ fontSize: "1.5rem" }}>Speed</Typography>
                 </Card>
                 <Card
                   style={{
@@ -115,7 +122,7 @@ const ModeSelect = () => {
                     alignItems: "center",
                   }}
                 >
-                  Map
+                  <Typography sx={{ fontSize: "1.5rem" }}>Map</Typography>
                 </Card>
                 <Card
                   style={{
