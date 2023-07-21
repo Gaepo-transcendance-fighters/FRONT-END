@@ -1,11 +1,8 @@
 import {
-  Avatar,
   Button,
   Card,
   Box,
   CardContent,
-  Menu,
-  MenuItem,
   Modal,
   Stack,
   Typography,
@@ -16,7 +13,6 @@ import { positions } from "@mui/system";
 import Image from "next/image";
 import { useState } from "react";
 import ChangeNickName from "./ChangeNickName";
-import MyProfileRoute from "@/components/MyProfileRoute/MyProfileRoute";
 import { useRouter } from "next/navigation";
 
 const modalStyle = {

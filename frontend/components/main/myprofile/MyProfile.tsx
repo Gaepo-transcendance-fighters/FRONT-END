@@ -1,60 +1,7 @@
 import { Avatar, Button, Card } from "@mui/material";
-
-import { positions } from "@mui/system";
-import Image from "next/image";
-import { useState } from "react";
-import ChangeNickName from "./ChangeNickName";
-import MyProfileRoute from "@/components/MyProfileRoute/MyProfileRoute";
 import { useRouter } from "next/navigation";
 
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  height: 500,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
 const Myprofile = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [nicknameModal, setNicknameModal] = useState<boolean>(false);
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const OpenFileInput = () => {
-    document.getElementById("file_input")?.click();
-  };
-
-  const HandleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const filelist = event.target.files;
-    console.log(filelist);
-  };
-
-  const OpenChangeNN = () => {
-    <ChangeNickName />;
-  };
-
   const router = useRouter();
 
   const RedirMyprofile = () => {

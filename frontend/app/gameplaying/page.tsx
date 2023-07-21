@@ -1,13 +1,6 @@
 "use client";
 import { ThemeProvider } from "@emotion/react";
-import {
-  Button,
-  Card,
-  Box,
-  CardContent,
-  Stack,
-  createTheme,
-} from "@mui/material";
+import { Button, Card, CardContent, Stack, createTheme } from "@mui/material";
 
 const font = createTheme({
   typography: {

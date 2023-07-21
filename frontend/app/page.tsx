@@ -14,6 +14,8 @@ import ChatWindow from "@/components/chat_window/ChatWindow";
 import GameStartButton from "@/components/gameStartButton/GameStartButton";
 import Myprofile from "@/components/main/myprofile/MyProfile";
 
+import { useRouter } from "next/navigation";
+
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
@@ -21,6 +23,8 @@ const font = createTheme({
 });
 
 const Layout = () => {
+  const router = useRouter();
+
   return (
     <ThemeProvider theme={font}>
       <Card sx={{ display: "flex" }}>

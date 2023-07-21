@@ -1,6 +1,5 @@
 "use client";
 import { ThemeProvider } from "@emotion/react";
-import FriendProfile from "@/components/main/friend_list/FriendProfile";
 import { Button, Card, CardContent, Stack, createTheme } from "@mui/material";
 
 const font = createTheme({
