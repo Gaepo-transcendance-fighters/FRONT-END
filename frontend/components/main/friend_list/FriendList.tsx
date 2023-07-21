@@ -114,6 +114,7 @@ const FriendList = () => {
         sx={{
           height: "61vh",
           backgroundColor: "#3478c5",
+          mx: 1,
         }}
       >
         <Box

@@ -2,7 +2,7 @@
 
 import Layout from "@/components/public/Layout";
 
-const Layout = () => {
+const Page = () => {
   return (
     <>
       <Layout></Layout>
@@ -10,4 +10,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default Page;

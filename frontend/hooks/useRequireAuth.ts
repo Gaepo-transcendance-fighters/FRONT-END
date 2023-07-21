@@ -9,6 +9,9 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
   const router = useRouter();
 
   useEffect(() => {
+    const localData = localStorage.getItem("loggedIn");
+    if (localData === "true") return router.push("/");
+
     if (!isLoggedIn) router.push(redirectUrl);
   }, []);
 };

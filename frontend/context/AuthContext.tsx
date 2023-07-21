@@ -25,9 +25,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("loggedIn");
-    console.log(loggedIn);
+
     if (loggedIn === "true") {
-      console.log("already login");
       setIsLoggedIn(true);
     }
   }, []);

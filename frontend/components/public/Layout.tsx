@@ -1,10 +1,11 @@
 "use client";
 
-import { Card, CardContent, Stack, Box } from "@mui/material";
+import { CardContent, Stack, Box } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import Myprofile from "../main/myprofile/MyProfile";
 
 const Layout = () => {
   useRequireAuth();
@@ -19,8 +20,8 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "brown" }}>
-          my profile
+        <CardContent sx={{ height: "35vh", backgroundColor: "#253F8A" }}>
+          <Myprofile />
         </CardContent>
         <FriendList />
       </Stack>
