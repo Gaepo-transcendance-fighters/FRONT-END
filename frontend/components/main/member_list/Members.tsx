@@ -1,16 +1,16 @@
 "use client";
 
-import Mem from "./Mem";
+import Member from "./Member";
 import { IChatRoom } from "../room_list/RoomTypeButton";
-import "@/components/main/mem_list/MemList.css";
+import "@/components/main/member_list/MemberList.css";
 
-export default function PtcptList({ aRoom }: { aRoom: IChatRoom | undefined }) {
+export default function Members({ aRoom }: { aRoom: IChatRoom | undefined }) {
   return (
     <div className="pllist">
       <div>
         {aRoom?.mems.map((person, idx) => (
           <div key={idx}>
-            <Mem idx={idx} person={person} />
+            <Member idx={idx} person={person} />
           </div>
         ))}
       </div>

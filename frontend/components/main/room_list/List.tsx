@@ -13,7 +13,7 @@ import Modal from "@mui/material/Modal";
 import "@/components/main/room_list/RoomList.css";
 import { IChatRoom } from "./RoomTypeButton";
 import CreateRoomModal from "./CreateRoomModal";
-import MemList from "../mem_list/MemList";
+import MemberList from "../member_list/MemberList";
 import ProtectedModal from "./ProtectedModal";
 
 const Bar = forwardRef((props: any, ref: any) => (
@@ -131,7 +131,7 @@ export default function List({
       {showPtcptsList &&
         portalContainer &&
         createPortal(
-          <MemList
+          <MemberList
             showPtcptsList={showPtcptsList}
             aRoom={aRoom}
             isRight={isRight}

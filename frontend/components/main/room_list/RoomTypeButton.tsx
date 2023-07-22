@@ -8,7 +8,7 @@ export interface IChatRoom {
   channelIdx: number;
   owner: string;
   mems: Array<IFriend>;
-  // mems: Array<string>;
+  // members: Array<string>;
   channelType: chatRoomType;
   password: string;
 }

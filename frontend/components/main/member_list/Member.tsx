@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import StarIcon from "@mui/icons-material/Star";
-import "@/components/main/mem_list/MemList.css";
+import "@/components/main/member_list/MemberList.css";
 import {
   Modal,
   Box,
@@ -15,7 +15,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useState } from "react";
-import { IChatRoom } from "../room_list/RoomTypeButton";
 import { IFriend } from "../friend_list/FriendList";
 
 const loginOn = <Image src="/logon1.png" alt="online" width={10} height={10} />;
@@ -37,13 +36,12 @@ const modalStyle = {
   p: 4,
 };
 
-export default function Mem({
+export default function Member({
   idx,
   person,
 }: {
   idx: number;
   person: IFriend;
-  // person: string;
 }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

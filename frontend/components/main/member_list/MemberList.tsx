@@ -2,12 +2,12 @@
 
 import "@/components/main/room_list/RoomList.css";
 import Title from "../room_list/Title";
-import Mems from "./Mems";
+import Members from "./Members";
 import { IChatRoom } from "../room_list/RoomTypeButton";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import "@/components/main/mem_list/MemList.css";
+import "@/components/main/member_list/MemberList.css";
 
-export default function MemList({
+export default function MemberList({
   aRoom,
   setIsRight,
   isRight,
@@ -26,7 +26,7 @@ export default function MemList({
       {showPtcptsList ? (
         <>
           <Title title={"pltitle"} text={"Members List"} />
-          <Mems aRoom={aRoom} />
+          <Members aRoom={aRoom} />
         </>
       ) : null}
     </>
