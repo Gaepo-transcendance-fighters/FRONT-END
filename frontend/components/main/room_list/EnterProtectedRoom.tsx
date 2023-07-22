@@ -9,7 +9,7 @@ import {
 } from "react";
 import { IChatRoom } from "./RoomTypeButton";
 
-const style = {
+const box = {
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
@@ -22,7 +22,7 @@ const style = {
   color: "white",
 };
 
-const style2 = {
+const box2 = {
   width: "100",
   height: "136px",
   bgcolor: "rgb(18, 163, 255)",
@@ -64,13 +64,14 @@ export default function EnterProtectedRoom({
     }
     pwRef.current = "";
   };
+
   return (
     <>
-      <Box sx={style}>
+      <Box sx={box}>
         <button className="xbutton" onClick={handleClose2}>
           X
         </button>
-        <Box sx={style2}>
+        <Box sx={box2}>
           <div className="prlock">
             <LockRoundedIcon
               sx={{ height: "100%", width: "100%", color: "#6c899b" }}
