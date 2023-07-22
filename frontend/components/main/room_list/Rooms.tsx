@@ -8,13 +8,12 @@ import {
   useEffect,
 } from "react";
 import { createPortal } from "react-dom";
-import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import "@/components/main/room_list/RoomList.css";
 import { IChatRoom } from "./RoomTypeButton";
-import CreateRoomModal from "./CreateRoomModal";
 import MemberList from "../member_list/MemberList";
 import ProtectedModal from "./ProtectedModal";
 import CreateRoomButton from "./CreateRoomButton";
+import Room from "./Room";
 
 const Bar2 = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
@@ -47,12 +46,6 @@ export default function Rooms({
     setFail(false);
   };
 
-  const RoomClick = (room: IChatRoom) => {
-    setARoom(room);
-    room.password == "" ? setIsRight(true) : handleOpen2();
-    setShowMembersList(false);
-  };
-
   useEffect(() => {
     isRight ? setShowMembersList(true) : null;
   }, [isRight]);
@@ -66,29 +59,33 @@ export default function Rooms({
     };
   }, []);
 
-  const leftPadding = (idx: number) => {
-    if (idx < 10) return "00" + idx.toString();
-    else if (idx < 100) return "0" + idx.toString();
-    else return idx;
-  };
-
   return (
     <>
       <div className={!showMembersList ? "list" : "roomclicked"}>
         <CreateRoomButton channelType={channelType} />
         {roomsProp.map((room, idx) => {
           return (
-            <button key={idx} className="item" onClick={() => RoomClick(room)}>
-              <div className="roomidx">{leftPadding(room.channelIdx)}</div>
-              <div className="owner">{room.owner}'s</div>
-              <div className="lock">
-                {room.password ? (
-                  <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
-                ) : (
-                  ""
-                )}
-              </div>
-            </button>
+            // <button key={idx} className="item" onClick={() => RoomClick(room)}>
+            //   <div className="roomidx">{leftPadding(room.channelIdx)}</div>
+            //   <div className="owner">{room.owner}'s</div>
+            //   <div className="lock">
+            //     {room.password ? (
+            //       <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
+            //     ) : (
+            //       ""
+            //     )}
+            //   </div>
+            // </button>
+            // <Room key={idx} room={room} idx={idx} RoomClick={RoomClick} />
+            <Room
+              key={idx}
+              room={room}
+              idx={idx}
+              setARoom={setARoom}
+              setIsRight={setIsRight}
+              handleOpen2={handleOpen2}
+              setShowMembersList={setShowMembersList}
+            />
           );
         })}
         <ProtectedModal
