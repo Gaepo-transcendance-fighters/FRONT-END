@@ -1,8 +1,7 @@
-import Modal from "@mui/material/Modal";
 import { forwardRef, useState } from "react";
 import CreateRoomModal from "./CreateRoomModal";
 
-const HoldRef = forwardRef((props: any, ref: any) => (
+export const HoldRef = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
     {props.children}
   </span>
@@ -15,7 +14,6 @@ export default function CreateRoomButton({
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -24,7 +22,8 @@ export default function CreateRoomButton({
           <button className="add" onClick={handleOpen}>
             +
           </button>
-          <Modal
+          <CreateRoomModal open={open} setOpen={setOpen} />
+          {/* <Modal
             open={open}
             onClose={handleClose}
             aria-labelledby="create-room-modal"
@@ -33,7 +32,7 @@ export default function CreateRoomButton({
             <HoldRef>
               <CreateRoomModal prop={handleClose} />
             </HoldRef>
-          </Modal>
+          </Modal> */}
         </>
       ) : (
         ""
