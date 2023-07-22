@@ -1,5 +1,5 @@
 import Modal from "@mui/material/Modal";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import CreateRoomModal from "./CreateRoomModal";
 
 const HoldRef = forwardRef((props: any, ref: any) => (
@@ -10,15 +10,13 @@ const HoldRef = forwardRef((props: any, ref: any) => (
 
 export default function CreateRoomButton({
   channelType,
-  handleOpen,
-  handleClose,
-  open,
 }: {
   channelType: boolean;
-  handleOpen: () => void;
-  handleClose: () => void;
-  open: boolean;
 }) {
+  const [open, setOpen] = useState<boolean>(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
       {channelType ? (

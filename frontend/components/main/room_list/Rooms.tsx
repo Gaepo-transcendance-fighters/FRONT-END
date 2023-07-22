@@ -14,7 +14,7 @@ import { IChatRoom } from "./RoomTypeButton";
 import CreateRoomModal from "./CreateRoomModal";
 import MemberList from "../member_list/MemberList";
 import ProtectedModal from "./ProtectedModal";
-import CreateRoomButton from "./CreateRoom";
+import CreateRoomButton from "./CreateRoomButton";
 
 const Bar2 = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
@@ -34,9 +34,6 @@ export default function Rooms({
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
 }) {
   const [isRight, setIsRight] = useState(false);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => setOpen2(true);
   const [fail, setFail] = useState<boolean>(false);
@@ -78,31 +75,7 @@ export default function Rooms({
   return (
     <>
       <div className={!showMembersList ? "list" : "roomclicked"}>
-        {/* {channelType ? (
-          <>
-            <button className="add" onClick={handleOpen}>
-              +
-            </button>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="create-room-modal"
-              aria-describedby="create-non-dm-room-modal"
-            >
-              <HoldRef>
-                <CreateRoomModal prop={handleClose} />
-              </HoldRef>
-            </Modal>
-          </>
-        ) : (
-          ""
-        )} */}
-        <CreateRoomButton
-          channelType={channelType}
-          handleOpen={handleOpen}
-          handleClose={handleClose}
-          open={open}
-        />
+        <CreateRoomButton channelType={channelType} />
         {roomsProp.map((room, idx) => {
           return (
             <button key={idx} className="item" onClick={() => RoomClick(room)}>
