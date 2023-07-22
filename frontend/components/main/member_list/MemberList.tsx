@@ -11,19 +11,19 @@ export default function MemberList({
   aRoom,
   setIsRight,
   isRight,
-  showPtcptsList,
+  showMembersList,
 }: {
   aRoom: IChatRoom | undefined;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
-  showPtcptsList: boolean;
+  showMembersList: boolean;
 }) {
   useEffect(() => {
     isRight ? setIsRight(false) : null;
   }, [isRight]);
   return (
     <>
-      {showPtcptsList ? (
+      {showMembersList ? (
         <>
           <Title title={"pltitle"} text={"Members List"} />
           <Members aRoom={aRoom} />

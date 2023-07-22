@@ -30,13 +30,13 @@ const Bar2 = forwardRef((props: any, ref: any) => (
 export default function List({
   roomsProp,
   channelType,
-  showPtcptsList,
-  setShowPtcptsList,
+  showMembersList,
+  setShowMembersList,
 }: {
   roomsProp: IChatRoom[];
   channelType: boolean;
-  showPtcptsList: boolean;
-  setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
+  showMembersList: boolean;
+  setShowMembersList: Dispatch<SetStateAction<boolean>>;
 }) {
   const [isRight, setIsRight] = useState(false);
   const [open, setOpen] = useState(false);
@@ -54,11 +54,11 @@ export default function List({
   const RoomClick = (room: IChatRoom) => {
     setARoom(room);
     room.password == "" ? setIsRight(true) : handleOpen2();
-    setShowPtcptsList(false);
+    setShowMembersList(false);
   };
 
   useEffect(() => {
-    isRight ? setShowPtcptsList(true) : null;
+    isRight ? setShowMembersList(true) : null;
   }, [isRight]);
 
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
@@ -82,7 +82,7 @@ export default function List({
 
   return (
     <>
-      <div className={!showPtcptsList ? "list" : "roomclicked"}>
+      <div className={!showMembersList ? "list" : "roomclicked"}>
         {channelType ? (
           <>
             <button className="add" onClick={handleOpen}>
@@ -128,11 +128,11 @@ export default function List({
           Bar2={Bar2}
         />
       </div>
-      {showPtcptsList &&
+      {showMembersList &&
         portalContainer &&
         createPortal(
           <MemberList
-            showPtcptsList={showPtcptsList}
+            showMembersList={showMembersList}
             aRoom={aRoom}
             isRight={isRight}
             setIsRight={setIsRight}

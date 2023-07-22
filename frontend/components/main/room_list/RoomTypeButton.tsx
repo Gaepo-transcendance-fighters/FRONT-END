@@ -112,11 +112,11 @@ export const mockChatRoomList: IChatRoom[] = [
 ];
 
 export default function RoomTypeButton({
-  showPtcptsList,
-  setShowPtcptsList,
+  showMembersList,
+  setShowMembersList,
 }: {
-  showPtcptsList: boolean;
-  setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
+  showMembersList: boolean;
+  setShowMembersList: Dispatch<SetStateAction<boolean>>;
 }) {
   const [nonDmrooms, setNonDmRooms] = useState<IChatRoom[]>([]);
   const [dmRooms, setDmRooms] = useState<IChatRoom[]>([]);
@@ -177,8 +177,8 @@ export default function RoomTypeButton({
       <List
         roomsProp={disabled ? nonDmrooms : dmRooms}
         channelType={disabled}
-        showPtcptsList={showPtcptsList}
-        setShowPtcptsList={setShowPtcptsList}
+        showMembersList={showMembersList}
+        setShowMembersList={setShowMembersList}
       />
     </>
   );
