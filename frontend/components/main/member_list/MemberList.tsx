@@ -25,7 +25,7 @@ export default function MemberList({
     <>
       {showMembersList ? (
         <>
-          <Title title={"pltitle"} text={"Members List"} />
+          <Title title={"memtitle"} text={"Members List"} />
           <Members aRoom={aRoom} />
         </>
       ) : null}

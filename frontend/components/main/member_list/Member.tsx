@@ -60,9 +60,10 @@ export default function Member({
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
   return (
     <>
-      <div key={idx} className="plbtn" onClick={handleOpenModal}>
+      <div key={idx} className="membtn" onClick={handleOpenModal}>
         <div className="img">
           <Image src="/seal.png" alt="profile" width={53} height={53} />
         </div>

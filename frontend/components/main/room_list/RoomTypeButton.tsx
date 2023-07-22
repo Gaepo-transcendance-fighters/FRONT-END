@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
-import List from "./List";
+import Rooms from "./Rooms";
 import { IFriend } from "../friend_list/FriendList";
 
 export interface IChatRoom {
@@ -174,7 +174,7 @@ export default function RoomTypeButton({
           DM
         </button>
       </div>
-      <List
+      <Rooms
         roomsProp={disabled ? nonDmrooms : dmRooms}
         channelType={disabled}
         showMembersList={showMembersList}

@@ -6,7 +6,7 @@ import "@/components/main/member_list/MemberList.css";
 
 export default function Members({ aRoom }: { aRoom: IChatRoom | undefined }) {
   return (
-    <div className="pllist">
+    <div className="memlist">
       <div>
         {aRoom?.mems.map((person, idx) => (
           <div key={idx}>

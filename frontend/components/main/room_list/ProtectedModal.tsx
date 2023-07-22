@@ -36,7 +36,7 @@ export default function ProtectedModal({
       aria-labelledby="protected-room-modal"
       aria-describedby="enter-password-modal"
     >
-      <Bar2>
+      {/* <Bar2> */}
         <EnterProtectedRoom
           handleClose2={handleClose2}
           setIsRight={setIsRight}
@@ -44,7 +44,7 @@ export default function ProtectedModal({
           fail={fail}
           setFail={setFail}
         />
-      </Bar2>
+      {/* </Bar2> */}
     </Modal>
   );
 }

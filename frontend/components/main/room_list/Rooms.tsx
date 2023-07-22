@@ -16,18 +16,24 @@ import CreateRoomModal from "./CreateRoomModal";
 import MemberList from "../member_list/MemberList";
 import ProtectedModal from "./ProtectedModal";
 
-const Bar = forwardRef((props: any, ref: any) => (
+const HoldRef = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
     {props.children}
   </span>
 ));
+// const Bar = forwardRef((props: any, ref: any) => (
+//   <span {...props} ref={ref}>
+//     {props.children}
+//   </span>
+// ));
+
 const Bar2 = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
     {props.children}
   </span>
 ));
 
-export default function List({
+export default function Rooms({
   roomsProp,
   channelType,
   showMembersList,
@@ -45,11 +51,15 @@ export default function List({
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => setOpen2(true);
   const [fail, setFail] = useState<boolean>(false);
+  const [aRoom, setARoom] = useState<IChatRoom>();
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
+    null
+  );
+
   const handleClose2 = () => {
     setOpen2(false);
     setFail(false);
   };
-  const [aRoom, setARoom] = useState<IChatRoom>();
 
   const RoomClick = (room: IChatRoom) => {
     setARoom(room);
@@ -60,10 +70,6 @@ export default function List({
   useEffect(() => {
     isRight ? setShowMembersList(true) : null;
   }, [isRight]);
-
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
-    null
-  );
 
   useEffect(() => {
     const container = document.getElementById("portal");
@@ -94,9 +100,9 @@ export default function List({
               aria-labelledby="create-room-modal"
               aria-describedby="create-non-dm-room-modal"
             >
-              <Bar>
+              <HoldRef>
                 <CreateRoomModal prop={handleClose} />
-              </Bar>
+              </HoldRef>
             </Modal>
           </>
         ) : (
