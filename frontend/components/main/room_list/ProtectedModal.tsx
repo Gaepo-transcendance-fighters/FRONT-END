@@ -15,7 +15,7 @@ export default function ProtectedModal({
   open2,
   handleClose2,
   setIsRight,
-  aRoom,
+  room,
   setFail,
   fail,
   Bar2,
@@ -24,7 +24,7 @@ export default function ProtectedModal({
   handleClose2: () => void;
   isRight: boolean;
   setIsRight: Dispatch<SetStateAction<boolean>>;
-  aRoom: IChatRoom | undefined;
+  room: IChatRoom;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
   Bar2: ForwardRefExoticComponent<Omit<any, "ref"> & RefAttributes<unknown>>;
@@ -40,7 +40,7 @@ export default function ProtectedModal({
         <EnterProtectedRoom
           handleClose2={handleClose2}
           setIsRight={setIsRight}
-          aRoom={aRoom}
+          room={room}
           fail={fail}
           setFail={setFail}
         />

@@ -35,13 +35,15 @@ const box2 = {
 export default function EnterProtectedRoom({
   handleClose2,
   fail,
-  aRoom,
+  // aRoom,
+  room,
   setFail,
   setIsRight,
 }: {
   handleClose2: () => void;
   fail: boolean;
-  aRoom: IChatRoom | undefined;
+  // aRoom: IChatRoom | undefined;
+  room: IChatRoom;
   setFail: Dispatch<SetStateAction<boolean>>;
   setIsRight: Dispatch<SetStateAction<boolean>>;
 }) {
@@ -54,7 +56,8 @@ export default function EnterProtectedRoom({
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     setFail(false);
     e.preventDefault();
-    if (pwRef.current == aRoom?.password) {
+    // if (pwRef.current == aRoom?.password) {
+    if (pwRef.current == room.password) {
       setIsRight(true);
       handleClose2();
       setFail(false);
