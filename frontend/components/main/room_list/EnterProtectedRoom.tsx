@@ -35,14 +35,12 @@ const box2 = {
 export default function EnterProtectedRoom({
   handleClose2,
   fail,
-  // aRoom,
   room,
   setFail,
   setIsRight,
 }: {
   handleClose2: () => void;
   fail: boolean;
-  // aRoom: IChatRoom | undefined;
   room: IChatRoom;
   setFail: Dispatch<SetStateAction<boolean>>;
   setIsRight: Dispatch<SetStateAction<boolean>>;
@@ -56,7 +54,6 @@ export default function EnterProtectedRoom({
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     setFail(false);
     e.preventDefault();
-    // if (pwRef.current == aRoom?.password) {
     if (pwRef.current == room.password) {
       setIsRight(true);
       handleClose2();
@@ -71,7 +68,7 @@ export default function EnterProtectedRoom({
   return (
     <>
       <Box sx={box}>
-        <button className="xbutton" onClick={handleClose2}>
+        <button className="prxbutton" onClick={handleClose2}>
           X
         </button>
         <Box sx={box2}>
@@ -80,21 +77,21 @@ export default function EnterProtectedRoom({
               sx={{ height: "100%", width: "100%", color: "#6c899b" }}
             />
           </div>
-          <Box className="BoxContainer">
+          <Box className="prboxcontainer">
             <input
-              className="input"
+              className="prinput"
               type="password"
               placeholder="password"
               onChange={onChange}
             ></input>
-            <button className="submitButton" onClick={onClick}>
+            <button className="prsubmitbutton" onClick={onClick}>
               submit
             </button>
           </Box>
-          <div className="failMsg">
+          <div className="prfailmsg">
             {!fail ? null : (
               <Typography sx={{ fontSize: "16px" }}>
-                Please check your password!
+                Please check your password
               </Typography>
             )}
           </div>

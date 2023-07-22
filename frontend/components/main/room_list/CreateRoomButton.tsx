@@ -23,16 +23,6 @@ export default function CreateRoomButton({
             +
           </button>
           <CreateRoomModal open={open} setOpen={setOpen} />
-          {/* <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="create-room-modal"
-            aria-describedby="create-non-dm-room-modal"
-          >
-            <HoldRef>
-              <CreateRoomModal prop={handleClose} />
-            </HoldRef>
-          </Modal> */}
         </>
       ) : (
         ""
