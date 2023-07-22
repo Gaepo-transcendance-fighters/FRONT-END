@@ -55,16 +55,6 @@ export default function Rooms({
             />
           );
         })}
-        {/* <ProtectedModal
-          open2={open2}
-          handleClose2={handleClose2}
-          isRight={isRight}
-          setIsRight={setIsRight}
-          // aRoom={aRoom}
-          fail={fail}
-          setFail={setFail}
-          Bar2={Bar2}
-        /> */}
       </div>
       {showMembersList &&
         portalContainer &&
