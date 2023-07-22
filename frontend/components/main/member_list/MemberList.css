@@ -1,3 +1,12 @@
+.memactivate {
+  height: 37vh;
+  background-color: rgb(22, 181, 238);
+}
+.memdeactivate {
+  height: 0;
+  padding: 0;
+}
+
 .memtitle {
   background-color: rgb(14, 123, 200);
   text-align: center;
@@ -8,6 +17,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .memlist {
   background-color: rgb(29, 89, 185);
   border-radius: 10px;
@@ -30,6 +40,7 @@
   border-radius: 50px;
   display: inline-block;
 }
+
 .membtn {
   display: flex;
   align-items: center;
@@ -42,7 +53,8 @@
   margin: 3px auto;
   overflow: hidden;
 }
-.img {
+
+.memimg {
   background-color: magenta;
   /* 체크용 다 되면 지우기 */
   border-radius: 10px;
@@ -51,13 +63,15 @@
   height: 53px;
   margin-left: 5px;
 }
-.name {
+
+.memname {
   width: 55%;
   text-align: center;
   font-size: 16px;
   padding: 7px;
 }
-.icon {
+
+.memicon {
   width: 13%;
   float: right;
   margin-right: 3px;

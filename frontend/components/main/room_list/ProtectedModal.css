@@ -1,4 +1,4 @@
-.fontneo {
+.prfontneo {
   font-family: "neodgm";
 }
 
@@ -8,8 +8,9 @@
   margin: auto;
   padding: 10px;
 }
+
 /* 채팅방 눌렀을때 참여자 리스트 그대로 놥두는거 생각해보기 */
-.xbutton {
+.prxbutton {
   background-color: #ef2922ea;
   border-radius: 7px;
   height: 23px;
@@ -22,14 +23,14 @@
   margin: 9px;
 }
 
-.BoxContainer {
+.prboxcontainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 13px;
 }
 
-.input {
+.prinput {
   border: 0;
   height: 23px;
   padding: 3px;
@@ -37,7 +38,7 @@
   border-radius: 4px;
 }
 
-.submitButton {
+.prsubmitbutton {
   background-color: rgb(13, 111, 255);
   border-radius: 7px;
   height: 33px;
@@ -49,7 +50,7 @@
   float: right;
 }
 
-.failMsg {
+.prfailmsg {
   text-align: center;
   padding: 3px;
   color: #ffea2b;
