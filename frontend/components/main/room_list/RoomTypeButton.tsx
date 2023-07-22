@@ -25,11 +25,6 @@ export enum permissonType {
   ban,
 }
 
-// {
-//   name: string;
-//   isOnline: boolean;
-//   imgUrl: string;
-// }
 export const mockChatRoomList: IChatRoom[] = [
   {
     channelIdx: 0,

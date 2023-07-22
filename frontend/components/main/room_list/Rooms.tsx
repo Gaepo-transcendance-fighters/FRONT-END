@@ -9,23 +9,12 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
-import Modal from "@mui/material/Modal";
 import "@/components/main/room_list/RoomList.css";
 import { IChatRoom } from "./RoomTypeButton";
 import CreateRoomModal from "./CreateRoomModal";
 import MemberList from "../member_list/MemberList";
 import ProtectedModal from "./ProtectedModal";
-
-const HoldRef = forwardRef((props: any, ref: any) => (
-  <span {...props} ref={ref}>
-    {props.children}
-  </span>
-));
-// const Bar = forwardRef((props: any, ref: any) => (
-//   <span {...props} ref={ref}>
-//     {props.children}
-//   </span>
-// ));
+import CreateRoomButton from "./CreateRoom";
 
 const Bar2 = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
@@ -89,7 +78,7 @@ export default function Rooms({
   return (
     <>
       <div className={!showMembersList ? "list" : "roomclicked"}>
-        {channelType ? (
+        {/* {channelType ? (
           <>
             <button className="add" onClick={handleOpen}>
               +
@@ -107,7 +96,13 @@ export default function Rooms({
           </>
         ) : (
           ""
-        )}
+        )} */}
+        <CreateRoomButton
+          channelType={channelType}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+          open={open}
+        />
         {roomsProp.map((room, idx) => {
           return (
             <button key={idx} className="item" onClick={() => RoomClick(room)}>
