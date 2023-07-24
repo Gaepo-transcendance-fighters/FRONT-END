@@ -31,7 +31,7 @@ const myProfileStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 1000,
-  height: 700,
+  height: 550,
   bgcolor: "#65d9f9",
   border: "1px solid #000",
   boxShadow: 24,
