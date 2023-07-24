@@ -27,13 +27,13 @@ const style = {
 	p: 4,
   };
 
-export default function IconButtons() {
+export default function SettingIconButton() {
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
   return (
-    <Stack direction="row" spacing={1} >
+    <Stack direction="row" spacing={0} >
       <IconButton color="primary" aria-label="setting" onClick={handleOpen}>
 	  	  <SettingsIcon/>
       </IconButton>

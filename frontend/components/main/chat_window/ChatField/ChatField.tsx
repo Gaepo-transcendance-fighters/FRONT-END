@@ -67,23 +67,28 @@ const ChatField = () => {
 	}, [])
 
 	return (
-		<Box sx={{
-				backgroundColor: "#3272D2",
-				height: "83.5%",
-				borderRadius: "5px",
-				listStyleType: "none",
-				overflowY: "scroll",
-				margin: "0% 2% 4% 2%"
-			}}>
-			{msgHistories.map((value, i) => {
-				return (
-					<ul key={i} style={{margin: "1% 0% 1% 0%", padding:"2% 2% 0.5% 2%"}}>
-						<li className='message_box'>{value.name + ": " + value.message}</li>
-					</ul>
-				)
-			})}
-		</Box>
-	);
-}
+    <Box
+      sx={{
+        backgroundColor: "#3272D2",
+        height: "40vh",
+        borderRadius: "5px",
+        listStyleType: "none",
+        overflowY: "scroll",
+        margin: "0% 2% 2% 2%",
+      }}
+    >
+      {msgHistories.map((value, i) => {
+        return (
+          <ul
+            key={i}
+            style={{ margin: "1% 0% 1% 0%", padding: "2% 2% 0.5% 2%" }}
+          >
+            <li className="message_box">{value.name + ": " + value.message}</li>
+          </ul>
+        );
+      })}
+    </Box>
+  );
+};
 
 export default ChatField

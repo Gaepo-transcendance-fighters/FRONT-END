@@ -4,9 +4,10 @@ import Typography from '@mui/material/Typography'
 import VpnKeyTwoToneIcon from '@mui/icons-material/VpnKeyTwoTone';
 import SettingsIcon from '@mui/icons-material/Settings';
 import '../ChatWindow.css'
-import { Box, Modal, Button, } from "@mui/material";
-import IconButtons from './SettingIconButton'
+import { Box, Modal, Button, IconButton, } from "@mui/material";
+import SettingIconButton from './SettingIconButton'
 import { useState } from 'react';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 export interface IChatRoom {
 	roomName: string;
@@ -61,9 +62,12 @@ const RoomTitleField = () => {
 					{mockChatRoomList[0].isProtected ? <VpnKeyTwoToneIcon/> : null}
 				</div>
 				<div className='room_setting'>
-					<IconButtons></IconButtons>
-					{/* <Button onClick={handleOpen}>Open modal</Button> */}
-					
+					<SettingIconButton/>
+				</div>
+				<div className='room_exit'>
+					<IconButton color="primary" aria-label="add to shopping cart">
+						<DeleteForeverIcon/>
+					</IconButton>
 				</div>
 			</div>
 		</div>
