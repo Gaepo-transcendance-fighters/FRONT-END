@@ -8,7 +8,7 @@ import { Box } from "@mui/material";
 
 const ChatWindow = () => {
   return (
-    <Box sx={{ margin: "0", padding: "0", height: "55vh", minWidth: "300px" }}>
+    <Box sx={{ margin: "0", padding: "0", height: "60vh", minWidth: "300px" }}>
       <RoomTitleField />
       <ChatField />
       <BottomField />

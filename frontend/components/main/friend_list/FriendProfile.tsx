@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Box,
   Button,
@@ -21,7 +20,7 @@ const modalStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 500,
-  height: 500,
+  height: 530,
   bgcolor: "#65d9f9",
   border: "2px solid #000",
   boxShadow: 24,
@@ -158,7 +157,9 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                     "&:last-child": { paddingBottom: "16px" },
                   }}
                 >
-                  <Typography margin={1}>랭크(포인트)</Typography>
+                  <Typography margin={1} minWidth={"max-content"}>
+                    랭크(포인트)
+                  </Typography>
                   <Typography margin={1}>승률</Typography>
                 </CardContent>
               </Card>

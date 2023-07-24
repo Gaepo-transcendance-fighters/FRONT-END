@@ -1,15 +1,8 @@
 "use client";
 
-import {
-  ToggleButton,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Stack,
-} from "@mui/material";
+import { ToggleButton, Card, Typography, Box, Stack } from "@mui/material";
 import Friend from "./Friend";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export interface IFriend {
   name: string;
@@ -114,6 +107,7 @@ const FriendList = () => {
         sx={{
           height: "61vh",
           backgroundColor: "#3478c5",
+          mx: 1,
         }}
       >
         <Box

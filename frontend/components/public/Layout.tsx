@@ -1,72 +1,61 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  Stack,
-  ThemeProvider,
-  createTheme,
-} from "@mui/material";
+import { CardContent, Stack, Box } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../chat_window/ChatWindow";
-
-const font = createTheme({
-  typography: {
-    fontFamily: "neodgm",
-  },
-});
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import Myprofile from "../main/myprofile/MyProfile";
 
 const Layout = () => {
+  useRequireAuth();
   return (
-    <ThemeProvider theme={font}>
-      <Card sx={{ display: "flex" }}>
-        <Stack
-          sx={{
-            width: "20vw",
-            height: "100vh",
-            backgroundColor: "#3478c5",
-            padding: 0,
-            margin: 0,
-          }}
-        >
-          <CardContent sx={{ height: "35vh", backgroundColor: "brown" }}>
-            my profile
-          </CardContent>
-          <FriendList />
-        </Stack>
+    <Box sx={{ display: "flex" }}>
+      <Stack
+        sx={{
+          width: "20vw",
+          height: "100vh",
+          backgroundColor: "#3478c5",
+          padding: 0,
+          margin: 0,
+        }}
+      >
+        <CardContent sx={{ height: "35vh", backgroundColor: "#253F8A" }}>
+          <Myprofile />
+        </CardContent>
+        <FriendList />
+      </Stack>
 
-        <Stack
-          sx={{
-            width: "60vw",
-            height: "100vh",
-            backgroundColor: "#6EC2F5",
-            padding: 0,
-            margin: 0,
-          }}
-        >
-          <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
-            game start
-          </CardContent>
-          <ChatWindow />
-        </Stack>
+      <Stack
+        sx={{
+          width: "60vw",
+          height: "100vh",
+          backgroundColor: "#6EC2F5",
+          padding: 0,
+          margin: 0,
+        }}
+      >
+        <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
+          game start
+        </CardContent>
+        <ChatWindow />
+      </Stack>
 
-        <Stack
-          sx={{
-            width: "20vw",
-            height: "100vh",
-            backgroundColor: "#3171dd",
-            padding: 0,
-            margin: 0,
-          }}
-        >
-          {/* <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
+      <Stack
+        sx={{
+          width: "20vw",
+          height: "100vh",
+          backgroundColor: "#3171dd",
+          padding: 0,
+          margin: 0,
+        }}
+      >
+        {/* <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
           room member
         </CardContent> */}
-          <RoomList />
-        </Stack>
-      </Card>
-    </ThemeProvider>
+        <RoomList />
+      </Stack>
+    </Box>
   );
 };
 
