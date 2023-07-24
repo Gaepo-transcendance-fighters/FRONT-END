@@ -45,12 +45,16 @@ const style = {
 	p: 4,
   };
 
-const RoomTitleField = () => {
+const RoomTitleField = (props:any) => {
 	
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
   
+	const leaveRoom = () => {
+		props.setFunction(false);
+	}
+
 	return (
 		<div className="room_title_field">
 			<div className='room_title_field_left'>
@@ -65,7 +69,7 @@ const RoomTitleField = () => {
 					<SettingIconButton/>
 				</div>
 				<div className='room_exit'>
-					<IconButton color="primary" aria-label="add to shopping cart">
+					<IconButton aria-label="leave room" onClick={leaveRoom}>
 						<DeleteForeverIcon/>
 					</IconButton>
 				</div>

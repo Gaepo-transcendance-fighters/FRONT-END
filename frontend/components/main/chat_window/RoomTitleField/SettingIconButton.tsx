@@ -34,7 +34,7 @@ export default function SettingIconButton() {
 
   return (
     <Stack direction="row" spacing={0} >
-      <IconButton color="primary" aria-label="setting" onClick={handleOpen}>
+      <IconButton aria-label="setting" onClick={handleOpen}>
 	  	  <SettingsIcon/>
       </IconButton>
       <Modal
