@@ -8,13 +8,13 @@ import { Box } from "@mui/material";
 import { useState } from "react";
 
 const ChatWindow = () => {
-  const [isInRoom, setIsInRoom] = useState(true);
+  const [isInRoom, setIsInRoom] = useState<boolean>(true);
 
   return (
     <Box sx={{ margin: "0", padding: "0", height: "60vh", minWidth: "300px" }}>
       {isInRoom ? 
       <>
-        <RoomTitleField status={isInRoom} setFunction={setIsInRoom} />
+        <RoomTitleField setFunction={setIsInRoom} />
         <ChatField />
         <BottomField />
       </> : null}

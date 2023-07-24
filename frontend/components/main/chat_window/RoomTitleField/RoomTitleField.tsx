@@ -8,6 +8,7 @@ import { Box, Modal, Button, IconButton, } from "@mui/material";
 import SettingIconButton from './SettingIconButton'
 import { useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface IChatRoom {
 	roomName: string;
@@ -45,14 +46,14 @@ const style = {
 	p: 4,
   };
 
-const RoomTitleField = (props:any) => {
+const RoomTitleField = ({setFunction}: {setFunction:Dispatch<SetStateAction<boolean>>}) => {
 	
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
   
 	const leaveRoom = () => {
-		props.setFunction(false);
+		setFunction(false);
 	}
 
 	return (
