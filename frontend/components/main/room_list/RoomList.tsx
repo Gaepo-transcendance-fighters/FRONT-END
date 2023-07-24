@@ -12,7 +12,7 @@ export default function RoomList() {
       <CardContent
         id="portal"
         sx={{ pb: 0 }}
-        className={showMembersList ? "flactivate" : "deflactivate"}
+        className={showMembersList ? "memactivate" : "memdeactivate"}
       ></CardContent>
       <CardContent sx={{ "&:last-child": { pb: 0 } }}>
         <Title title={"chatroomlist"} text={"Chat Room List"} />
