@@ -1,13 +1,12 @@
 "use client";
-import Layout from "@/components/public/Layout";
 import { ThemeProvider } from "@emotion/react";
 import {
   Button,
   Card,
-  Box,
   CardContent,
   Stack,
   createTheme,
+  Typography,
 } from "@mui/material";
 
 const font = createTheme({
@@ -15,8 +14,6 @@ const font = createTheme({
     fontFamily: "neodgm",
   },
 });
-import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Game = () => {
@@ -61,11 +58,12 @@ const Game = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "2rem",
                 border: "2px solid black",
               }}
             >
-              Select Game Mode
+              <Typography sx={{ fontSize: "2rem" }}>
+                Select Game Mode
+              </Typography>
             </Card>
           </CardContent>
           <CardContent>
