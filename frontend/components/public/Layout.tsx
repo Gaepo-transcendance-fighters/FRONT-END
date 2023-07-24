@@ -6,6 +6,7 @@ import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
+import GameStartButton from "../gameStartButton/GameStartButton";
 
 const Layout = () => {
   useRequireAuth();
@@ -35,8 +36,9 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
+        <CardContent sx={{ height: "35vh", backgroundColor: "#0077DE" }}>
           game start
+          <GameStartButton />
         </CardContent>
         <ChatWindow />
       </Stack>

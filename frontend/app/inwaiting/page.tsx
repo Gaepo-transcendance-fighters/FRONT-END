@@ -16,7 +16,7 @@ const font = createTheme({
 });
 import { useRouter } from "next/navigation";
 
-const Game = () => {
+const inwaiting = () => {
   const router = useRouter();
 
   const ClickNomalGame = () => {
@@ -66,59 +66,27 @@ const Game = () => {
               </Typography>
             </Card>
           </CardContent>
-          <CardContent>
+          <CardContent
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Card
               style={{
-                width: "100%",
+                width: "60%",
                 height: "65vh",
                 border: "2px solid black",
                 display: "flex",
-                justifyContent: "space-around",
                 alignItems: "center",
+                justifyContent: "center",
                 backgroundColor: "#0477DE",
               }}
             >
-              <Card
-                style={{
-                  width: "80%",
-                  height: "80%",
-                  border: "2px solid black",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
-                <Button
-                  style={{
-                    width: "40%",
-                    height: "70%",
-                    border: "2px solid black",
-                    display: "flex",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    fontSize: "2rem",
-                    backgroundColor: "#0EBEFF",
-                  }}
-                  onClick={ClickNomalGame}
-                >
-                  일반 게임 플레이!
-                </Button>
-                <Button
-                  style={{
-                    width: "40%",
-                    height: "70%",
-                    border: "2px solid black",
-                    display: "flex",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    fontSize: "2rem",
-                    backgroundColor: "#0EBEFF",
-                  }}
-                  onClick={ClickRankGame}
-                >
-                  랭크 게임 플레이!
-                </Button>
-              </Card>
+              <Typography sx={{ fontSize: "3rem" }}>
+                상대방을 기다리고있습니다...
+              </Typography>
             </Card>
           </CardContent>
 
@@ -134,7 +102,7 @@ const Game = () => {
           >
             <Button
               style={{
-                width: "30%",
+                width: "20%",
                 height: "50%",
                 border: "2px solid black",
                 display: "flex",
@@ -145,7 +113,14 @@ const Game = () => {
               }}
               onClick={BackToMain}
             >
-              메인화면으로 돌아가기
+              취소하고 메인으로가기
+            </Button>
+            <Button
+              onClick={() => {
+                router.push("./gameplaying");
+              }}
+            >
+              게임화면으로
             </Button>
           </CardContent>
         </Stack>
@@ -153,4 +128,4 @@ const Game = () => {
     </ThemeProvider>
   );
 };
-export default Game;
+export default inwaiting;

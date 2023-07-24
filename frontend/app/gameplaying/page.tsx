@@ -1,6 +1,7 @@
 "use client";
 import { ThemeProvider } from "@emotion/react";
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -19,7 +20,7 @@ import { useRouter } from "next/navigation";
 const GamePlaying = () => {
   const router = useRouter();
   const ClickNomalGame = () => {
-    router.push("./modeselect");
+    router.push("./optionselect");
   };
 
   const BackToMain = () => {
@@ -115,6 +116,29 @@ const GamePlaying = () => {
               width: "100%",
               height: "30vh",
 
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Card
+              style={{
+                width: "20%",
+                height: "5vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "1px solid black",
+                backgroundColor: "#05BEFF",
+              }}
+            >
+              Mode~~~ || Speed~~~ || Map~~
+            </Card>
+          </CardContent>
+          <CardContent
+            style={{
+              width: "100%",
+              height: "30vh",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
