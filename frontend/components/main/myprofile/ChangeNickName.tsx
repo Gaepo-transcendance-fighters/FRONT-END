@@ -1,17 +1,5 @@
 "use client";
-import {
-  Avatar,
-  Button,
-  Card,
-  Box,
-  CardContent,
-  Menu,
-  MenuItem,
-  Modal,
-  Stack,
-  Typography,
-  Input,
-} from "@mui/material";
+import { Box, CardContent, Modal } from "@mui/material";
 
 import { useState } from "react";
 const ChangeNickNameModalStyle = {

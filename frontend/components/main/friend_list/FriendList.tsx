@@ -2,7 +2,7 @@
 
 import { ToggleButton, Card, Typography, Box, Stack } from "@mui/material";
 import Friend from "./Friend";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { main } from "@/font/color";
 
 export interface IFriend {

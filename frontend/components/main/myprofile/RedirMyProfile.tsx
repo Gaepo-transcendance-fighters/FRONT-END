@@ -1,23 +1,16 @@
 import {
-  Avatar,
   Button,
   Card,
   Box,
   CardContent,
-  Menu,
-  MenuItem,
   Modal,
   Stack,
   Typography,
   Input,
 } from "@mui/material";
 
-import { positions } from "@mui/system";
 import Image from "next/image";
 import { useState } from "react";
-import ChangeNickName from "./ChangeNickName";
-import MyProfileRoute from "@/components/MyProfileRoute/MyProfileRoute";
-import { useRouter } from "next/navigation";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -38,7 +31,7 @@ const myProfileStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 1000,
-  height: 700,
+  height: 550,
   bgcolor: "#65d9f9",
   border: "1px solid #000",
   boxShadow: 24,
