@@ -10,7 +10,7 @@ import {
 
 import FriendList from "@/components/main/friend_list/FriendList";
 import RoomList from "@/components/main/room_list/RoomList";
-import ChatWindow from "@/components/chat_window/ChatWindow";
+import ChatWindow from "@/components/main/chat_window/ChatWindow";
 import GameStartButton from "@/components/gameStartButton/GameStartButton";
 import Myprofile from "@/components/main/myprofile/MyProfile";
 
