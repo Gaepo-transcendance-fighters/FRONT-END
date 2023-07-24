@@ -37,18 +37,16 @@ const box2 = {
 };
 
 export default function ProtectedModal({
-  open2,
-  handleClose2,
-  handleClose3,
+  open,
+  handleClose,
   setIsRight,
   room,
   setFail,
   setARoom,
   fail,
 }: {
-  open2: boolean;
-  handleClose2: () => void;
-  handleClose3: () => void;
+  open: boolean;
+  handleClose: () => void;
   isRight: boolean;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   room: IChatRoom;
@@ -67,7 +65,7 @@ export default function ProtectedModal({
     e.preventDefault();
     if (pwRef.current == room.password) {
       setIsRight(true);
-      handleClose2();
+      handleClose();
       setFail(false);
       setARoom(room);
     } else {
@@ -79,13 +77,13 @@ export default function ProtectedModal({
 
   return (
     <Modal
-      open={open2}
-      onClose={handleClose3}
+      open={open}
+      onClose={handleClose}
       aria-labelledby="protected-room-modal"
       aria-describedby="enter-password-modal"
     >
       <Box sx={box}>
-        <button className="prxbutton" onClick={handleClose2}>
+        <button className="prxbutton" onClick={handleClose}>
           X
         </button>
         <Box sx={box2}>

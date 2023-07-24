@@ -20,7 +20,7 @@ export default function Room({
   isRight: boolean;
   aRoom: IChatRoom | undefined;
 }) {
-  const [open2, setOpen2] = useState(false);
+  const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
 
   const leftPadding = (idx: number) => {
@@ -29,25 +29,19 @@ export default function Room({
     else return idx;
   };
 
-  const handleOpen2 = () => {
-    setOpen2(true);
+  const handleOpen = () => {
+    setOpen(true);
   };
 
-  const handleClose2 = () => {
-    setOpen2(false);
+  const handleClose = () => {
+    setOpen(false);
     setFail(false);
     setShowMembersList(true);
   }; // 올바른 비번
-
-  const handleClose3 = () => {
-    setOpen2(false);
-    setFail(false);
-    setShowMembersList(true);
-  };
-
+  
   const RoomClick = (room: IChatRoom) => {
     room.password || aRoom === room ? null : setARoom(room);
-    room.password == "" ? setIsRight(true) : handleOpen2();
+    room.password == "" ? setIsRight(true) : handleOpen();
   };
 
   return (
@@ -64,9 +58,8 @@ export default function Room({
         </div>
       </button>
       <ProtectedModal
-        open2={open2}
-        handleClose2={handleClose2}
-        handleClose3={handleClose3}
+        open={open}
+        handleClose={handleClose}
         isRight={isRight}
         setIsRight={setIsRight}
         room={room}
