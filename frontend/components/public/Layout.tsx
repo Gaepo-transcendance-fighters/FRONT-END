@@ -6,6 +6,8 @@ import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
+import GameStartButton from "../gameStartButton/GameStartButton";
+import { main } from "@/font/color";
 
 const Layout = () => {
   useRequireAuth();
@@ -15,12 +17,12 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          backgroundColor: "#3478c5",
+          // backgroundColor: main.main1,
           padding: 0,
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "#253F8A" }}>
+        <CardContent sx={{ height: "35vh" }}>
           <Myprofile />
         </CardContent>
         <FriendList />
@@ -30,13 +32,12 @@ const Layout = () => {
         sx={{
           width: "60vw",
           height: "100vh",
-          backgroundColor: "#6EC2F5",
           padding: 0,
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
-          game start
+        <CardContent sx={{ height: "35vh" }}>
+          <GameStartButton />
         </CardContent>
         <ChatWindow />
       </Stack>
@@ -45,7 +46,7 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          backgroundColor: "#3171dd",
+          // backgroundColor: "#3171dd",
           padding: 0,
           margin: 0,
         }}

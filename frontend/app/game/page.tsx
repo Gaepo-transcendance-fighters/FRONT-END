@@ -42,7 +42,6 @@ const Game = () => {
           sx={{
             width: "100%",
             height: "100vh",
-            backgroundColor: "#0EBEFF",
             padding: 0,
             margin: 0,
           }}

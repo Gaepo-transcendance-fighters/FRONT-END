@@ -1,13 +1,13 @@
 .flactivate {
-  height : 35vh;
+  height: 35vh;
 }
 .fldeactivate {
-  height : 0;
-  padding : 0;
+  height: 0;
+  padding: 0;
 }
 
 .chatroomlist {
-  background-color: rgb(39, 87, 192);
+  background-color: #1c478e;
   text-align: center;
   padding: 7px;
   font-size: 21px;
@@ -18,7 +18,7 @@
 }
 
 .typebutton {
-  background-color: #214aa4;
+  background-color: #1c478e;
   border-radius: 10px;
   height: 33px;
   border: 0px;
@@ -47,7 +47,7 @@
 }
 
 .list {
-  background-color: #1c408f;
+  background-color: #1c478e;
   border-radius: 10px;
   height: 83vh;
   bottom: 0;
@@ -93,14 +93,13 @@
   display: flex;
   align-items: center;
 
-  background-color: rgb(103 219	251);
-  /* background-color: #67dbfb; */
+  background-color: #67dbfb;
   border-radius: 10px;
   height: 50px;
   border: 0px;
   margin: 3px auto;
   width: 100%;
-  color: white;
+  color: black;
   font-size: 18px;
   padding-left: 10px;
   padding-right: 10px;

@@ -1,5 +1,5 @@
 .pltitle {
-  background-color: rgb(14, 123, 200);
+  background-color: #1c478e;
   text-align: center;
   padding: 5px;
   font-size: 20px;
@@ -9,7 +9,7 @@
   text-overflow: ellipsis;
 }
 .pllist {
-  background-color: rgb(29, 89, 185);
+  background-color: #1c478e;
   border-radius: 10px;
   height: 28vh;
   bottom: 0;
@@ -33,7 +33,7 @@
 .plbtn {
   display: flex;
   align-items: center;
-  background-color: rgb(24, 175, 255);
+  /* background-color: rgb(24, 175, 255); */
   border-radius: 10px;
   height: 63px;
   width: 100%;

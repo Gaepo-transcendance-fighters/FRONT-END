@@ -14,9 +14,11 @@ export default function RoomList() {
       {showPtcptsList ? (
         <>
           <CardContent
-            sx={{
-              backgroundColor: "rgb(22, 181, 238)",
-            }}
+            sx={
+              {
+                // backgroundColor: "rgb(22, 181, 238)",
+              }
+            }
             className="flactivate"
           >
             <ChatPtcptsList />
