@@ -8,9 +8,7 @@ import ChatPtcptsList from "../chat_participants_list/ChatPtcptsList";
 
 export default function RoomList() {
   const [showPtcptsList, setShowPtcptsList] = useState(false);
-  useEffect(() => {
-    console.log("showPtcptsList has changed to ", showPtcptsList);
-  }, [showPtcptsList]);
+  useEffect(() => {}, [showPtcptsList]);
   return (
     <>
       {showPtcptsList ? (

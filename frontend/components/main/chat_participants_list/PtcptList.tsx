@@ -20,7 +20,6 @@ export const mockChatRoom: IChatRoom = {
 };
 
 export default function PtcptList() {
-  console.log("participants : ", mockChatRoom.Ptcpts);
   return (
     <div className="pllist">
       <div>
