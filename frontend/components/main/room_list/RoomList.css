@@ -1,11 +1,3 @@
-.flactivate {
-  height : 35vh;
-}
-.fldeactivate {
-  height : 0;
-  padding : 0;
-}
-
 .chatroomlist {
   background-color: rgb(39, 87, 192);
   text-align: center;
@@ -67,6 +59,7 @@
   border: 4px solid transparent;
   border-radius: 50px;
 }
+
 .roomclicked {
   background-color: #1c408f;
   border-radius: 10px;
@@ -83,7 +76,6 @@
 }
 .roomclicked::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.783);
-  /* 스크롤바의 색상 */
   background-clip: padding-box;
   border: 4px solid transparent;
   border-radius: 50px;
@@ -93,8 +85,7 @@
   display: flex;
   align-items: center;
 
-  background-color: rgb(103 219	251);
-  /* background-color: #67dbfb; */
+  background-color: rgb(103 219 251);
   border-radius: 10px;
   height: 50px;
   border: 0px;
@@ -107,6 +98,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .roomidx {
   display: inline-block;
   width: 17%;
@@ -119,7 +111,6 @@
   width: 70%;
   text-align: center;
 }
-
 .lock {
   width: 13%;
   float: right;
