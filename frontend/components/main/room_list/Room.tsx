@@ -10,7 +10,6 @@ export default function Room({
   setIsRight,
   setShowMembersList,
   isRight,
-  showMembersList,
   aRoom,
 }: {
   room: IChatRoom;
@@ -19,7 +18,6 @@ export default function Room({
   setIsRight: Dispatch<SetStateAction<boolean>>;
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
-  showMembersList: boolean;
   aRoom: IChatRoom | undefined;
 }) {
   const [open2, setOpen2] = useState(false);
