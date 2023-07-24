@@ -1,8 +1,9 @@
 "use client";
 
-import "@/components/main/room_list/RoomList.css";
+import { useState, Dispatch, SetStateAction } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import "@/components/main/room_list/RoomList.css";
+import Modal from "@mui/material/Modal";
 
 const style = {
   position: "absolute" as "absolute",
@@ -17,53 +18,65 @@ const style = {
   p: 4,
 };
 
-export default function CreateRoomModal({ prop }: { prop: () => void }) {
+export default function CreateRoomModal({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   const [value, setValue] = useState("");
-
   const handleClose = () => {
-    prop();
+    setValue("");
+    setOpen(false);
   };
-
   return (
     <>
-      <Box sx={style}>
-        <Card sx={{ margin: 1, backgroundColor: "#50aef8" }}>
-          <Box margin={1}>
-            <Typography>방 생성 하기</Typography>
-          </Box>
-          <Card sx={{ margin: 1, backgroundColor: "#3b85d8" }}>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="create-room-modal"
+        aria-describedby="create-non-dm-room-modal"
+      >
+        <Box sx={style}>
+          <Card sx={{ margin: 1, backgroundColor: "#50aef8" }}>
+            <Box margin={1}>
+              <Typography>방 생성 하기</Typography>
+            </Box>
+            <Card sx={{ margin: 1, backgroundColor: "#3b85d8" }}>
+              <Stack margin={1}>
+                <Typography>방 제목: </Typography>
+              </Stack>
+              <Stack margin={1}>
+                <Typography>비밀번호 :</Typography>
+                <TextField
+                  sx={{ backgroundColor: "#ffffff" }}
+                  value={value}
+                  type="password"
+                  autoComplete="false"
+                  onChange={(e) => setValue(e.currentTarget.value)}
+                />
+              </Stack>
+            </Card>
             <Stack margin={1}>
-              <Typography>방 제목: </Typography>
-            </Stack>
-            <Stack margin={1}>
-              <Typography>비밀번호 :</Typography>
-              <TextField
-                sx={{ backgroundColor: "#ffffff" }}
-                value={value}
-                type="password"
-                autoComplete="false"
-                onChange={(e) => setValue(e.currentTarget.value)}
-              />
+              <Typography fontSize={"small"}>**주의사항</Typography>
+              <Typography fontSize={"small"}>
+                비밀번호를 입력하지 않으면 다른 사용자에게 공개됩니다.
+              </Typography>
+              <Typography fontSize={"small"}>
+                추후 설정으로 비밀번호를 바꾸거나 추가할수도 있습니다.
+              </Typography>
+              <Button
+                variant="contained"
+                sx={{ margin: "auto" }}
+                onClick={handleClose}
+              >
+                방 생성
+              </Button>
             </Stack>
           </Card>
-          <Stack margin={1}>
-            <Typography fontSize={"small"}>**주의사항</Typography>
-            <Typography fontSize={"small"}>
-              비밀번호를 입력하지 않으면 다른 사용자에게 공개됩니다.
-            </Typography>
-            <Typography fontSize={"small"}>
-              추후 설정으로 비밀번호를 바꾸거나 추가할수도 있습니다.
-            </Typography>
-            <Button
-              variant="contained"
-              sx={{ margin: "auto" }}
-              onClick={handleClose}
-            >
-              방 생성
-            </Button>
-          </Stack>
-        </Card>
-      </Box>
+        </Box>
+      </Modal>
     </>
   );
 }

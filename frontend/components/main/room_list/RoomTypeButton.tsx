@@ -1,18 +1,14 @@
-// use client;
+"use client";
 
-import { useEffect, useState, useRef, Dispatch, SetStateAction } from "react";
-import List from "./List";
-
-// dm 이냐 아니냐
-//          V
-// pw 있냐 없냐
-//         V = public
-//     V = protected
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import Rooms from "./Rooms";
+import { IFriend } from "../friend_list/FriendList";
 
 export interface IChatRoom {
   channelIdx: number;
   owner: string;
-  Ptcpts: Array<string>;
+  mems: Array<IFriend>;
+  // members: Array<string>;
   channelType: chatRoomType;
   password: string;
 }
@@ -22,72 +18,100 @@ export enum chatRoomType {
   nonDm,
 }
 
+export enum permissonType {
+  normal,
+  owner,
+  admin,
+  ban,
+}
+
 export const mockChatRoomList: IChatRoom[] = [
   {
     channelIdx: 0,
     owner: "hoslim",
-    Ptcpts: ["hoslim"],
+    mems: [{ name: "hoslim", isOnline: true, imgUrl: "" }],
     channelType: chatRoomType.dm,
     password: "",
   },
   {
-    channelIdx: 0, // dm은 channelIdx !dm이랑 따로 한다 했나?
+    channelIdx: 0,
     owner: "jeekim",
-    Ptcpts: ["jeekim"],
+    mems: [{ name: "jeekim", isOnline: true, imgUrl: "" }],
     channelType: chatRoomType.nonDm,
-    password: "asdf",
+    password: "0000",
   },
   {
     channelIdx: 1,
     owner: "jaekim",
-    Ptcpts: ["jaekim", "haryu", "wochaeefwoijewfoisjdoifjoisdjfoisidjfksjdkl"],
+    mems: [
+      { name: "jaekim", isOnline: true, imgUrl: "" },
+      { name: "haryu", isOnline: false, imgUrl: "" },
+      { name: "wochae", isOnline: true, imgUrl: "" },
+      { name: "jaekim", isOnline: true, imgUrl: "" },
+      { name: "haryu", isOnline: false, imgUrl: "" },
+      { name: "wochae", isOnline: true, imgUrl: "" },
+    ],
     channelType: chatRoomType.nonDm,
-    password: "qwer",
+    password: "0000",
   },
   {
     channelIdx: 2,
     owner: "0123456789",
-    Ptcpts: ["hoslimhoslim1231231231231231231231231"],
+    mems: [
+      { name: "0123456789", isOnline: false, imgUrl: "" },
+      { name: "cccccccccc", isOnline: true, imgUrl: "" },
+    ],
     channelType: chatRoomType.nonDm,
     password: "",
   },
   {
     channelIdx: 1,
     owner: "aaaaaaaaaa",
-    Ptcpts: ["2hoslim"],
+    mems: [
+      { name: "aaaaaaaaaa", isOnline: false, imgUrl: "" },
+      { name: "2hoslim", isOnline: true, imgUrl: "" },
+    ],
     channelType: chatRoomType.dm,
     password: "",
   },
   {
-    channelIdx: 3, // dm은 channelIdx !dm이랑 따로 한다 했나?
+    channelIdx: 3,
     owner: "bbbbbbbbbb",
-    Ptcpts: ["2jeekim"],
+    mems: [
+      { name: "bbbbbbbbbb", isOnline: false, imgUrl: "" },
+      { name: "2jeekim", isOnline: false, imgUrl: "" },
+    ],
     channelType: chatRoomType.nonDm,
-    password: "asdf",
+    password: "0000",
   },
   {
     channelIdx: 4,
     owner: "0123456789",
-    Ptcpts: ["2jaekim", "haryu", "wochae"],
+    mems: [
+      { name: "2jaekim", isOnline: false, imgUrl: "" },
+      { name: "haryu", isOnline: false, imgUrl: "" },
+    ],
     channelType: chatRoomType.nonDm,
-    password: "qwer",
+    password: "0000",
   },
   {
     channelIdx: 5,
     owner: "zzzzzzzzzz",
-    Ptcpts: ["2hoslimhoslim1231231231231231231231231"],
+    mems: [
+      { name: "zzzzzzzzzz", isOnline: true, imgUrl: "" },
+      { name: "2hoslimh", isOnline: false, imgUrl: "" },
+    ],
     channelType: chatRoomType.nonDm,
     password: "",
   },
 ];
 
-// export default function RoomTypeButton({ ShowPtcptsList, setShowPtcptsList }: { ShowPtcptsList: boolean, setShowPtcptsList:Dispatch<SetStateAction<boolean>> }) {
 export default function RoomTypeButton({
-  showPtcptsList,
-  setShowPtcptsList,
+  showMembersList,
+  setShowMembersList,
 }: {
-  showPtcptsList: boolean;
-  setShowPtcptsList: Dispatch<SetStateAction<boolean>>;
+  showMembersList: boolean;
+  setShowMembersList: Dispatch<SetStateAction<boolean>>;
 }) {
   const [nonDmrooms, setNonDmRooms] = useState<IChatRoom[]>([]);
   const [dmRooms, setDmRooms] = useState<IChatRoom[]>([]);
@@ -145,11 +169,11 @@ export default function RoomTypeButton({
           DM
         </button>
       </div>
-      <List
+      <Rooms
         roomsProp={disabled ? nonDmrooms : dmRooms}
         channelType={disabled}
-        showPtcptsList={showPtcptsList}
-        setShowPtcptsList={setShowPtcptsList}
+        showMembersList={showMembersList}
+        setShowMembersList={setShowMembersList}
       />
     </>
   );
