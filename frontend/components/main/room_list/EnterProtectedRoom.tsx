@@ -34,16 +34,21 @@ const box2 = {
 
 export default function EnterProtectedRoom({
   handleClose2,
+  handleClose3,
   fail,
   room,
   setFail,
   setIsRight,
-}: {
+  setARoom,
+}
+: {
   handleClose2: () => void;
+  handleClose3: () => void;
   fail: boolean;
   room: IChatRoom;
   setFail: Dispatch<SetStateAction<boolean>>;
   setIsRight: Dispatch<SetStateAction<boolean>>;
+  setARoom: Dispatch<SetStateAction<IChatRoom | undefined>>;
 }) {
   const pwRef = useRef("");
 
@@ -58,6 +63,7 @@ export default function EnterProtectedRoom({
       setIsRight(true);
       handleClose2();
       setFail(false);
+      setARoom(room);
     } else {
       setIsRight(false);
       setFail(true);
