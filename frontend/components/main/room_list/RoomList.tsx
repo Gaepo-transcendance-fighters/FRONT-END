@@ -13,9 +13,7 @@ export default function RoomList() {
         id="portal"
         sx={{ pb: 0 }}
         className={showMembersList ? "memactivate" : "memdeactivate"}
-      >
-        {/* {showMembersList ? <div style={{height : "13px"}}>hi</div> : null} */}
-      </CardContent>
+      ></CardContent>
       <CardContent sx={{ "&:last-child": { pb: 0 } }}>
         <Title title={"chatroomlist"} text={"Chat Room List"} />
         <RoomTypeButton

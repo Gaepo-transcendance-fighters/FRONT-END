@@ -17,6 +17,7 @@ export default function ProtectedModal({
 }: {
   open2: boolean;
   handleClose2: () => void;
+  isRight: boolean;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   room: IChatRoom;
   setFail: Dispatch<SetStateAction<boolean>>;

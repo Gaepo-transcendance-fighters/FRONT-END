@@ -2,7 +2,6 @@ import { IChatRoom } from "./RoomTypeButton";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { Dispatch, SetStateAction, useState } from "react";
 import ProtectedModal from "./ProtectedModal";
-import MemberList from "../member_list/MemberList";
 
 export default function Room({
   room,
@@ -11,8 +10,6 @@ export default function Room({
   setIsRight,
   setShowMembersList,
   isRight,
-  showMembersList,
-  aRoom,
 }: {
   room: IChatRoom;
   idx: number;
@@ -20,8 +17,6 @@ export default function Room({
   setIsRight: Dispatch<SetStateAction<boolean>>;
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
-  showMembersList: boolean;
-  aRoom: IChatRoom | undefined;
 }) {
   const [open2, setOpen2] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
@@ -33,8 +28,8 @@ export default function Room({
   };
 
   const RoomClick = (room: IChatRoom) => {
+    setARoom(room);
     room.password == "" ? setIsRight(true) : handleOpen2();
-    isRight ? setARoom(room) : null;
     setShowMembersList(false);
   };
 
@@ -61,19 +56,12 @@ export default function Room({
       <ProtectedModal
         open2={open2}
         handleClose2={handleClose2}
+        isRight={isRight}
         setIsRight={setIsRight}
         room={room}
         fail={fail}
         setFail={setFail}
       />
-      {showMembersList ? (
-        <MemberList
-          showMembersList={showMembersList}
-          aRoom={aRoom}
-          isRight={isRight}
-          setIsRight={setIsRight}
-        />
-      ) : null}
     </>
   );
 }
