@@ -16,7 +16,7 @@ const font = createTheme({
   },
 });
 import { useRouter } from "next/navigation";
-
+import { main } from "@/components/public/Layout";
 const GamePlaying = () => {
   const router = useRouter();
   const ClickNomalGame = () => {
@@ -34,11 +34,18 @@ const GamePlaying = () => {
           sx={{
             width: "100%",
             height: "100vh",
-            backgroundColor: "#0EBEFF",
+            backgroundColor: main.main1,
             padding: 0,
             margin: 0,
           }}
         >
+          <Button
+            onClick={() => {
+              return router.push("./gameresult");
+            }}
+          >
+            결과창보기
+          </Button>
           <CardContent
             style={{
               display: "flex",
@@ -69,7 +76,7 @@ const GamePlaying = () => {
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
-                backgroundColor: "#0477DE",
+                backgroundColor: main.main3,
               }}
             >
               <Card
@@ -160,13 +167,6 @@ const GamePlaying = () => {
               도망가기
             </Button>
           </CardContent>
-          <Button
-            onClick={() => {
-              return router.push("./gameresult");
-            }}
-          >
-            결과창보기
-          </Button>
         </Stack>
       </Card>
     </ThemeProvider>

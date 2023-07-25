@@ -1,13 +1,11 @@
 "use client";
 import { ThemeProvider } from "@emotion/react";
-import { Check, CheckBox } from "@mui/icons-material";
 import {
   Button,
   Card,
   CardContent,
   Checkbox,
   Stack,
-  FormGroup,
   FormControlLabel,
   createTheme,
   Typography,
@@ -22,7 +20,7 @@ const font = createTheme({
 });
 
 import { useRouter } from "next/navigation";
-
+import { main } from "@/components/public/Layout";
 type SpeedOption = "speed1" | "speed2" | "speed3";
 type MapOption = "map1" | "map2" | "map3";
 
@@ -35,9 +33,6 @@ const OptionSelect = () => {
   const [selectedMapOption, setSelectedMapOption] = useState<MapOption | null>(
     null
   );
-
-  console.log("Speed : " + selectedSpeedOption);
-  console.log("Map : " + selectedMapOption);
 
   const handleSpeedOptionChange = (option: SpeedOption) => {
     setSelectedSpeedOption((prevOption) =>
@@ -58,7 +53,7 @@ const OptionSelect = () => {
           sx={{
             width: "100%",
             height: "100vh",
-            backgroundColor: "#0EBEFF",
+            backgroundColor: main.main1,
             padding: 0,
             margin: 0,
           }}
@@ -118,7 +113,7 @@ const OptionSelect = () => {
                 height: "70vh",
                 border: "2px solid black",
                 alignItems: "center",
-                backgroundColor: "#0477DE",
+                backgroundColor: main.main3,
               }}
               id={"middle_big"}
             >
@@ -127,7 +122,7 @@ const OptionSelect = () => {
               <Stack
                 sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
                 style={{
-                  backgroundColor: "#0477DE",
+                  backgroundColor: main.main3,
                   padding: "10px 0px 0px 0px",
                 }}
                 id={"speedoption"}
@@ -210,7 +205,7 @@ const OptionSelect = () => {
               <Stack
                 sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
                 style={{
-                  backgroundColor: "#0477DE",
+                  backgroundColor: main.main3,
                   padding: "10px 0px 0px 0px",
                 }}
                 id={"mapoption"}
@@ -296,10 +291,15 @@ const OptionSelect = () => {
                   display: "flex",
                   justifyContent: "space-around",
                   alignItems: "center",
-                  backgroundColor: "#0477DE",
+                  backgroundColor: main.main3,
                 }}
               >
                 <Button
+                  disabled={
+                    selectedMapOption != null && selectedSpeedOption != null
+                      ? false
+                      : true
+                  }
                   style={{
                     width: "100%",
                     height: "100%",

@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import { useState } from "react";
+import { main } from "@/components/public/Layout";
 import React from "react";
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -155,7 +156,7 @@ const RedirMyProfile = () => {
               <Box sx={modalStyle} borderRadius={"10px"}>
                 <Card
                   sx={{
-                    backgroundColor: "#3478c5",
+                    backgroundColor: main.main4,
                     height: "170px",
                     margin: -1,
                   }}
@@ -174,7 +175,7 @@ const RedirMyProfile = () => {
                         margin: 1,
                         width: "100%",
                         height: "120px",
-                        backgroundColor: "#48a0ed",
+                        backgroundColor: main.main1,
                         overflow: "scroll",
                       }}
                     >
@@ -193,11 +194,6 @@ const RedirMyProfile = () => {
               </Box>
             </Modal>
 
-            {/* <Button
-              type="button"
-              sx={{ minWidth: "max-content" }}
-              variant="contained"
-            > */}
             <Card
               style={{
                 minWidth: "max-content",
@@ -215,8 +211,6 @@ const RedirMyProfile = () => {
               inputProps={{ "aria-label": "controlled" }}
               color="secondary"
             />
-
-            {/* </Button> */}
           </Stack>
         </Stack>
       </Card>

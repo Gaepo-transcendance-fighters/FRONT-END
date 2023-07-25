@@ -15,18 +15,9 @@ const font = createTheme({
   },
 });
 import { useRouter } from "next/navigation";
-
+import { main } from "@/components/public/Layout";
 const inwaiting = () => {
   const router = useRouter();
-
-  const ClickNomalGame = () => {
-    router.push("./optionselect");
-  };
-
-  const ClickRankGame = () => {
-    //임시로해놓겠습니다
-    router.push("./gameresult");
-  };
 
   const BackToMain = () => {
     router.push("/");
@@ -39,7 +30,7 @@ const inwaiting = () => {
           sx={{
             width: "100%",
             height: "100vh",
-            backgroundColor: "#0EBEFF",
+            backgroundColor: main.main1,
             padding: 0,
             margin: 0,
           }}
@@ -81,7 +72,7 @@ const inwaiting = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "#0477DE",
+                backgroundColor: main.main3,
               }}
             >
               <Typography sx={{ fontSize: "3rem" }}>

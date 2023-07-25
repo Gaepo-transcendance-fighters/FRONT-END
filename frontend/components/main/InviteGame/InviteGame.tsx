@@ -1,18 +1,7 @@
 "use client";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Menu,
-  MenuItem,
-  Modal,
-  Stack,
-  Typography,
-} from "@mui/material";
-import Image from "next/image";
+import { Box, Button, Card, CardContent, Modal } from "@mui/material";
 import { useState } from "react";
-
+import { main } from "@/components/public/Layout";
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -47,7 +36,7 @@ const InviteGame = () => {
             style={{
               width: "100%",
               height: "20%",
-              backgroundColor: "#2C70DD",
+              backgroundColor: main.main4,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -58,7 +47,7 @@ const InviteGame = () => {
               style={{
                 width: "100%",
                 height: "20%",
-                backgroundColor: "#2C70DD",
+                backgroundColor: main.main4,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",

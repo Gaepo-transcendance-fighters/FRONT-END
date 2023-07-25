@@ -6,8 +6,19 @@ import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
-import GameStartButton from "../gameStartButton/GameStartButton";
+import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
+
+export const main = {
+  main0: "#67DBFB",
+  main1: "#55B7EB",
+  main2: "#4292DA",
+  main3: "#2C70DD",
+  main4: "#265ECF",
+  main5: "#214C97",
+  main6: "#183C77",
+};
+
 const Layout = () => {
   useRequireAuth();
   return (
@@ -21,7 +32,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "#253F8A" }}>
+        <CardContent sx={{ height: "35vh", backgroundColor: main.main5 }}>
           <Myprofile />
           <InviteGame />;
         </CardContent>
@@ -37,7 +48,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "#0077DE" }}>
+        <CardContent sx={{ height: "35vh", backgroundColor: main.main2 }}>
           game start
           <GameStartButton />
         </CardContent>
