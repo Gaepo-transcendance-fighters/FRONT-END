@@ -158,6 +158,7 @@ const RedirMyProfile = () => {
               type="file"
               id="file_input"
               style={{ display: "none" }}
+              accept="image/png, image/jpg, image/jpeg"
               onChange={HandleFileUpload}
             />
 
