@@ -6,17 +6,33 @@ import {
   Card,
   CardContent,
   Stack,
+  Modal,
   createTheme,
   Typography,
 } from "@mui/material";
+
+import { useRouter } from "next/navigation";
+import { main } from "@/components/public/Layout";
+import { useState } from "react";
 
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
   },
 });
-import { useRouter } from "next/navigation";
-import { main } from "@/components/public/Layout";
+const modalStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  height: 150,
+  bgcolor: "#65d9f9",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const GamePlaying = () => {
   const router = useRouter();
   const ClickNomalGame = () => {
@@ -25,6 +41,18 @@ const GamePlaying = () => {
 
   const BackToMain = () => {
     router.push("/");
+  };
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const handleOpenModal_redir = () => {
+    setOpenModal(true);
+    setTimeout(() => {
+      router.push("./gameresult");
+    }, 2000);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   return (
@@ -141,6 +169,59 @@ const GamePlaying = () => {
             >
               Mode~~~ || Speed~~~ || Map~~
             </Card>
+            <Button variant="contained" onClick={handleOpenModal_redir}>
+              상대방 탈주시
+            </Button>
+            <Modal open={openModal}>
+              <Box sx={modalStyle} borderRadius={"10px"}>
+                <Card
+                  style={{
+                    width: "100%",
+                    height: "20%",
+                    backgroundColor: main.main4,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* 상단 안내메세지 */}
+                  <CardContent
+                    style={{
+                      width: "100%",
+                      height: "20%",
+                      backgroundColor: main.main4,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    안내메세지
+                  </CardContent>
+                </Card>
+                <Card
+                  style={{
+                    width: "100%",
+                    height: "90%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <CardContent
+                    style={{
+                      width: "100%",
+                      height: "40%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    상대방이탈주했습니다. 결과페이지로 이동합니다
+                  </CardContent>
+                </Card>
+              </Box>
+            </Modal>
           </CardContent>
           <CardContent
             style={{

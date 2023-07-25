@@ -42,8 +42,11 @@ const myProfileStyle = {
 
 const RedirMyProfile = () => {
   const [checked, setChecked] = React.useState(true);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
+    if (verified == true) setVerified(false);
+    else setVerified(true);
   };
 
   const OpenFileInput = () => {
@@ -57,6 +60,8 @@ const RedirMyProfile = () => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const [verified, setVerified] = useState<boolean>(false);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -115,16 +120,29 @@ const RedirMyProfile = () => {
               overflow: "hidden",
               textOverflow: "ellipsis",
             }}
-            style={{ fontSize: "30px" }}
+            style={{ fontSize: "3rem" }}
           >
             MyNickName
           </Typography>
 
           <CardContent style={{ width: "100%" }}>
-            <Typography>2차인증 여부 : Y/N</Typography>
+            {/* <Typography style={{ fontSize: "1.5rem" }}>
+              2차인증 여부 : Y/N
+            </Typography> */}
+            {verified == true ? (
+              <Typography style={{ fontSize: "1.5rem" }}>
+                2차인증 여부 : Y
+              </Typography>
+            ) : (
+              <Typography style={{ fontSize: "1.5rem" }}>
+                2차인증 여부 : N
+              </Typography>
+            )}
           </CardContent>
           <CardContent style={{ width: "100%" }}>
-            <Typography>Email : studentof42@42seoul.kr</Typography>
+            <Typography style={{ fontSize: "1.2rem" }}>
+              Email : studentof42@42seoul.kr
+            </Typography>
           </CardContent>
           <Stack direction={"row"} spacing={2} padding={"20px 0px 0px 2px"}>
             <Button
@@ -206,7 +224,7 @@ const RedirMyProfile = () => {
               <Typography color="white">2차인증 On/Off</Typography>
             </Card>
             <Switch
-              checked={checked}
+              checked={verified ? true : false}
               onChange={handleChange}
               inputProps={{ "aria-label": "controlled" }}
               color="secondary"

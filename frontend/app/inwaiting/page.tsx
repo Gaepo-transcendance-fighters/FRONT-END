@@ -2,6 +2,8 @@
 import { ThemeProvider } from "@emotion/react";
 import {
   Button,
+  Box,
+  Modal,
   Card,
   CardContent,
   Stack,
@@ -9,11 +11,27 @@ import {
   Typography,
 } from "@mui/material";
 
+import { useState } from "react";
+// import CircularProgress from "@mui/joy/CircularProgress";
+
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
   },
 });
+const modalStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  height: 150,
+  bgcolor: "#65d9f9",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 const inwaiting = () => {
@@ -21,6 +39,18 @@ const inwaiting = () => {
 
   const BackToMain = () => {
     router.push("/");
+  };
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const handleOpenModal_redir = () => {
+    setOpenModal(true);
+    setTimeout(() => {
+      router.push("./gameplaying");
+    }, 2000);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   return (
@@ -78,6 +108,60 @@ const inwaiting = () => {
               <Typography sx={{ fontSize: "3rem" }}>
                 상대방을 기다리고있습니다...
               </Typography>
+              <Button variant="contained" onClick={handleOpenModal_redir}>
+                큐가잡힌경우
+              </Button>
+              <Modal open={openModal}>
+                <Box sx={modalStyle} borderRadius={"10px"}>
+                  <Card
+                    style={{
+                      width: "100%",
+                      height: "20%",
+                      backgroundColor: main.main4,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {/* 상단 안내메세지 */}
+                    <CardContent
+                      style={{
+                        width: "100%",
+                        height: "20%",
+                        backgroundColor: main.main4,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      매칭되었습니다
+                    </CardContent>
+                  </Card>
+                  <Card
+                    style={{
+                      width: "100%",
+                      height: "90%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <CardContent
+                      style={{
+                        width: "100%",
+                        height: "40%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      잠시후 게임페이지로 이동합니다
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Modal>
+              {/* <CircularProgress /> */}
             </Card>
           </CardContent>
 
