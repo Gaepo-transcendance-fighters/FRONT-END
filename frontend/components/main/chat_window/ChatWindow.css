@@ -42,15 +42,29 @@
   color: white;
   text-shadow: 0px 0px 4px black;
 }
+
 .room_title_field_right {
   align-items: center;
   display: flex;
   margin-top: 4.5px;
 }
 
-.room_setting {
+.room_type {
+  padding: 8px;
+  margin-top: 2px;
   margin-left: 10px;
   margin-right: 7px;
+}
+
+.room_setting {
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.room_exit {
+  padding-right: 3px;
+  margin-left: 1px;
+  margin-right: 1px;
 }
 
 /* chatting field */
