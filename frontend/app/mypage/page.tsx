@@ -10,7 +10,7 @@ const font = createTheme({
 
 import { useRouter } from "next/navigation";
 import RedirMyProfile from "@/components/main/myprofile/RedirMyProfile";
-
+import { main } from "@/components/public/Layout";
 export default function PageRedir() {
   const router = useRouter();
 
@@ -24,7 +24,7 @@ export default function PageRedir() {
           sx={{
             width: "20vw",
             height: "100vh",
-            backgroundColor: "#163AA2",
+            backgroundColor: main.main3,
             padding: 0,
             margin: 0,
           }}
@@ -42,12 +42,12 @@ export default function PageRedir() {
           sx={{
             width: "60vw",
             height: "100vh",
-            backgroundColor: "#163AA2",
+            backgroundColor: main.main3,
             padding: 0,
             margin: 0,
           }}
         >
-          <CardContent sx={{ height: "50vh", backgroundColor: "#163AA2" }}>
+          <CardContent sx={{ height: "50vh", backgroundColor: main.main3 }}>
             <RedirMyProfile />
           </CardContent>
         </Stack>
@@ -56,7 +56,7 @@ export default function PageRedir() {
           sx={{
             width: "20vw",
             height: "100vh",
-            backgroundColor: "#163AA2",
+            backgroundColor: main.main3,
             padding: 0,
             margin: 0,
           }}

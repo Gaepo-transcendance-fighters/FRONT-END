@@ -15,7 +15,7 @@ const font = createTheme({
   },
 });
 import { useRouter } from "next/navigation";
-
+import { main } from "@/components/public/Layout";
 const GameResult = () => {
   const router = useRouter();
 
@@ -30,7 +30,7 @@ const GameResult = () => {
           sx={{
             width: "100%",
             height: "100vh",
-            backgroundColor: "#0EBEFF",
+            backgroundColor: main.main1,
             padding: 0,
             margin: 0,
           }}
@@ -67,7 +67,7 @@ const GameResult = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "#0477DE",
+                backgroundColor: main.main3,
               }}
             >
               <Card

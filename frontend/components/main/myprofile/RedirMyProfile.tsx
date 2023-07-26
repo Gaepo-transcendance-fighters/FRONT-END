@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Card,
   Box,
@@ -7,11 +8,12 @@ import {
   Stack,
   Typography,
   Input,
+  Switch,
 } from "@mui/material";
 
-import Image from "next/image";
 import { useState } from "react";
-
+import { main } from "@/components/public/Layout";
+import React from "react";
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -31,7 +33,7 @@ const myProfileStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 1000,
-  height: 550,
+  height: 700,
   bgcolor: "#65d9f9",
   border: "1px solid #000",
   boxShadow: 24,
@@ -39,6 +41,14 @@ const myProfileStyle = {
 };
 
 const RedirMyProfile = () => {
+  const [checked, setChecked] = React.useState(true);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+    if (verified == true) setVerified(false);
+    else setVerified(true);
+  };
+
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
@@ -50,6 +60,8 @@ const RedirMyProfile = () => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const [verified, setVerified] = useState<boolean>(false);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -79,34 +91,59 @@ const RedirMyProfile = () => {
         <Box
           sx={{
             borderRadius: "70%",
-            width: "max-content",
+            width: "250px",
+            height: "250px",
             overflow: "hidden",
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
           }}
           mx={5}
         >
-          <Image
+          <Avatar
             src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
-            alt="user img"
-            width={150}
-            height={150}
+            style={{
+              width: "90%",
+              height: "90%",
+              border: "4px solid #8CCAE5",
+            }}
           />
         </Box>
         <Stack
           sx={{
             width: "15vw",
           }}
-          spacing={1}
+          spacing={0.5}
         >
           <Typography
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
             }}
-            style={{ fontSize: "30px" }}
+            style={{ fontSize: "3rem" }}
           >
             MyNickName
           </Typography>
-          <Typography>2차인증 여부 : Y/N</Typography>
+
+          <CardContent style={{ width: "100%" }}>
+            {/* <Typography style={{ fontSize: "1.5rem" }}>
+              2차인증 여부 : Y/N
+            </Typography> */}
+            {verified == true ? (
+              <Typography style={{ fontSize: "1.5rem" }}>
+                2차인증 여부 : Y
+              </Typography>
+            ) : (
+              <Typography style={{ fontSize: "1.5rem" }}>
+                2차인증 여부 : N
+              </Typography>
+            )}
+          </CardContent>
+          <CardContent style={{ width: "100%" }}>
+            <Typography style={{ fontSize: "1.2rem" }}>
+              Email : studentof42@42seoul.kr
+            </Typography>
+          </CardContent>
           <Stack direction={"row"} spacing={2} padding={"20px 0px 0px 2px"}>
             <Button
               classes={"photo_button"}
@@ -121,6 +158,7 @@ const RedirMyProfile = () => {
               type="file"
               id="file_input"
               style={{ display: "none" }}
+              accept="image/png, image/jpg, image/jpeg"
               onChange={HandleFileUpload}
             />
 
@@ -137,7 +175,7 @@ const RedirMyProfile = () => {
               <Box sx={modalStyle} borderRadius={"10px"}>
                 <Card
                   sx={{
-                    backgroundColor: "#3478c5",
+                    backgroundColor: main.main4,
                     height: "170px",
                     margin: -1,
                   }}
@@ -156,7 +194,7 @@ const RedirMyProfile = () => {
                         margin: 1,
                         width: "100%",
                         height: "120px",
-                        backgroundColor: "#48a0ed",
+                        backgroundColor: main.main1,
                         overflow: "scroll",
                       }}
                     >
@@ -175,13 +213,23 @@ const RedirMyProfile = () => {
               </Box>
             </Modal>
 
-            <Button
-              type="button"
-              sx={{ minWidth: "max-content" }}
-              variant="contained"
+            <Card
+              style={{
+                minWidth: "max-content",
+                backgroundColor: "#1776D2",
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
             >
-              2차인증하기
-            </Button>
+              <Typography color="white">2차인증 On/Off</Typography>
+            </Card>
+            <Switch
+              checked={verified ? true : false}
+              onChange={handleChange}
+              inputProps={{ "aria-label": "controlled" }}
+              color="secondary"
+            />
           </Stack>
         </Stack>
       </Card>

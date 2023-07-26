@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-
+import { main } from "@/components/public/Layout";
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
@@ -44,7 +44,7 @@ const Myprofile = () => {
               textAlign: "center",
               alignItems: "center",
               margin: "0 auto",
-              backgroundColor: "#67dbfb",
+              backgroundColor: main.main1,
               border: "1px solid black",
             }}
           >

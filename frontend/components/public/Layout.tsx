@@ -1,12 +1,24 @@
 "use client";
 
-import { CardContent, Stack, Box } from "@mui/material";
+import { CardContent, Stack, Box, Button } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import GameStartButton from "../gameStartButton/GameStartButton";
 import Myprofile from "../main/myprofile/MyProfile";
+import GameStartButton from "../game/GameStartButton";
+import InviteGame from "../main/InviteGame/InviteGame";
+
+export const main = {
+  main0: "#67DBFB",
+  main1: "#55B7EB",
+  main2: "#4292DA",
+  main3: "#2C70DD",
+  main4: "#265ECF",
+  main5: "#214C97",
+  main6: "#183C77",
+};
 
 const Layout = () => {
   useRequireAuth();
@@ -21,8 +33,9 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "#253F8A" }}>
+        <CardContent sx={{ height: "35vh", backgroundColor: main.main5 }}>
           <Myprofile />
+          <InviteGame />;
         </CardContent>
         <FriendList />
       </Stack>
@@ -36,8 +49,9 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: "blue" }}>
+        <CardContent sx={{ height: "35vh", backgroundColor: main.main2 }}>
           game start
+          <GameStartButton />
         </CardContent>
         <ChatWindow />
       </Stack>
