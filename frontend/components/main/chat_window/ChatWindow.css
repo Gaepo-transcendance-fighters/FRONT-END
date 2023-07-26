@@ -42,6 +42,7 @@
   color: white;
   text-shadow: 0px 0px 4px black;
 }
+
 .room_title_field_right {
   align-items: center;
   display: flex;
@@ -49,10 +50,21 @@
 }
 
 .room_type {
-}
-.room_setting {
+  padding: 8px;
+  margin-top: 2px;
   margin-left: 10px;
   margin-right: 7px;
+}
+
+.room_setting {
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.room_exit {
+  padding-right: 3px;
+  margin-left: 1px;
+  margin-right: 1px;
 }
 
 /* chatting field */

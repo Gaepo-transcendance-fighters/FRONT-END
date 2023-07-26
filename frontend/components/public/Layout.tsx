@@ -3,8 +3,9 @@
 import { CardContent, Stack, Box } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
-import ChatWindow from "../chat_window/ChatWindow";
+import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import GameStartButton from "../gameStartButton/GameStartButton";
 import Myprofile from "../main/myprofile/MyProfile";
 
 const Layout = () => {
