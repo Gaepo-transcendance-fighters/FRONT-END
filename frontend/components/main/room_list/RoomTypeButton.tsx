@@ -6,9 +6,10 @@ import { IFriend } from "../friend_list/FriendList";
 
 export interface IChatRoom {
   channelIdx: number;
-  owner: string;
-  mems: Array<IFriend>;
+  // owner: string;
+  // mems: Array<IFriend>;
   // members: Array<string>;
+  owner : string;
   channelType: chatRoomType;
   password: string;
 }

@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { socket } from "../layout";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -25,6 +27,7 @@ const modalStyle = {
 
 const Login = () => {
   const { setIsLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
   const router = useRouter();
 
   const handleLogin = () => {
@@ -32,6 +35,16 @@ const Login = () => {
     setIsLoggedIn(true);
     router.push("/");
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      socket.emit("main_enter", "intra_id", (json) => {
+        setFriendList(json.friend);
+        setChannelList(json.channel);
+        setBlockList(json.blockList);
+      });
+    }
+  }, [isLoggedIn]);
 
   return (
     <Box sx={{ backgroundColor: "#6EC2F5", height: "100vh" }}>

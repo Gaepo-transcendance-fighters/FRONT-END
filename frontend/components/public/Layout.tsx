@@ -1,14 +1,15 @@
 "use client";
 
 import { CardContent, Stack, Box, Button } from "@mui/material";
-import FriendList from "../main/friend_list/FriendList";
+import FriendList, { IFriend } from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-import GameStartButton from "../gameStartButton/GameStartButton";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
+import { useState } from "react";
+import { IChatRoom } from "../main/room_list/RoomTypeButton";
 
 export const main = {
   main0: "#67DBFB",
@@ -21,7 +22,17 @@ export const main = {
 };
 
 const Layout = () => {
+  const [friendList, setFriendList] = useState<IFriend[]>([]);
+  const [chatRoomList, setChatRoomList] = useState<IChatRoom[]>([]);
+  const [blockList, setBlockList] = useState<IFriend[]>([]);
+  /*
+    owner,
+    channelIdx,
+    password : true / false
+  */
+
   useRequireAuth();
+
   return (
     <Box sx={{ display: "flex" }}>
       <Stack
@@ -65,9 +76,6 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        {/* <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
-          room member
-        </CardContent> */}
         <RoomList />
       </Stack>
     </Box>
