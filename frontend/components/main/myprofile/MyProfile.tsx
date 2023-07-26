@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
