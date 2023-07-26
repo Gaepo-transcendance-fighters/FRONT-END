@@ -52,6 +52,7 @@ export default function Rooms({
               setIsRight={setIsRight}
               setShowMembersList={setShowMembersList}
               isRight={isRight}
+              aRoom={aRoom}
             />
           );
         })}

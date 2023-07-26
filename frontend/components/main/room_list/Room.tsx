@@ -1,6 +1,6 @@
 import { IChatRoom } from "./RoomTypeButton";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ProtectedModal from "./ProtectedModal";
 
 export default function Room({
@@ -10,6 +10,7 @@ export default function Room({
   setIsRight,
   setShowMembersList,
   isRight,
+  aRoom,
 }: {
   room: IChatRoom;
   idx: number;
@@ -17,8 +18,9 @@ export default function Room({
   setIsRight: Dispatch<SetStateAction<boolean>>;
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
+  aRoom: IChatRoom | undefined;
 }) {
-  const [open2, setOpen2] = useState(false);
+  const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
 
   const leftPadding = (idx: number) => {
@@ -27,17 +29,19 @@ export default function Room({
     else return idx;
   };
 
-  const RoomClick = (room: IChatRoom) => {
-    setARoom(room);
-    room.password == "" ? setIsRight(true) : handleOpen2();
-    setShowMembersList(false);
+  const handleOpen = () => {
+    setOpen(true);
   };
 
-  const handleOpen2 = () => setOpen2(true);
-
-  const handleClose2 = () => {
-    setOpen2(false);
+  const handleClose = () => {
+    setOpen(false);
     setFail(false);
+    setShowMembersList(true);
+  }; // 올바른 비번
+  
+  const RoomClick = (room: IChatRoom) => {
+    room.password || aRoom === room ? null : setARoom(room);
+    room.password == "" ? setIsRight(true) : handleOpen();
   };
 
   return (
@@ -54,13 +58,14 @@ export default function Room({
         </div>
       </button>
       <ProtectedModal
-        open2={open2}
-        handleClose2={handleClose2}
+        open={open}
+        handleClose={handleClose}
         isRight={isRight}
         setIsRight={setIsRight}
         room={room}
         fail={fail}
         setFail={setFail}
+        setARoom={setARoom}
       />
     </>
   );
