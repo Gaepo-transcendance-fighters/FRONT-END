@@ -70,7 +70,7 @@ const ChatField = () => {
   return (
     <Box
       sx={{
-        backgroundColor: main.main5,
+        backgroundColor: main.background,
         height: "40vh",
         borderRadius: "5px",
         listStyleType: "none",

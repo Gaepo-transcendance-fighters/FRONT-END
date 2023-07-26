@@ -6,4 +6,5 @@ export const main = {
   main4: "#265ECF",
   main5: "#214C97",
   main6: "#183C77",
+  background: "#4292da",
 };
