@@ -136,7 +136,9 @@ export default function MemberModal({
         </Card>
         <br />
         <Card sx={{ backgroundColor: "#3478c5" }}>
-          <CardContent sx={{ paddingBottom: 0 }}>전적</CardContent>
+          <CardContent sx={{ paddingBottom: 0 }}>
+            <Typography>전적</Typography>
+          </CardContent>
           <Stack direction={"row"}>
             <Card
               sx={{
@@ -153,7 +155,9 @@ export default function MemberModal({
                   "&:last-child": { paddingBottom: "16px" },
                 }}
               >
-                <Typography margin={1}>랭크(포인트)</Typography>
+                <Typography margin={1} minWidth={"max-content"}>
+                  랭크(포인트)
+                </Typography>
                 <Typography margin={1}>승률</Typography>
               </CardContent>
             </Card>
@@ -184,7 +188,9 @@ export default function MemberModal({
             height: "170px",
           }}
         >
-          <CardContent sx={{ paddingBottom: 0 }}>전적 기록</CardContent>
+          <CardContent sx={{ paddingBottom: 0 }}>
+            <Typography>전적 기록</Typography>
+          </CardContent>
           <Stack direction={"row"}>
             <Card
               sx={{
@@ -205,17 +211,17 @@ export default function MemberModal({
                   <CardContent
                     sx={{ "&:last-child": { paddingBottom: "16px" } }}
                   >
-                    WIN
+                    <Typography>WIN</Typography>
                   </CardContent>
                   <CardContent
                     sx={{ "&:last-child": { paddingBottom: "16px" } }}
                   >
-                    hoslim VS jujeon
+                    <Typography>hoslim VS jujeon</Typography>
                   </CardContent>
                   <CardContent
                     sx={{ "&:last-child": { paddingBottom: "16px" } }}
                   >
-                    5 : 3
+                    <Typography>5 : 3</Typography>
                   </CardContent>
                 </Stack>
               </Card>

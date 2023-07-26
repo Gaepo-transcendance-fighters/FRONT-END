@@ -22,7 +22,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh" }}>
+        <CardContent sx={{ height: "35vh", padding: 1 }}>
           <Myprofile />
         </CardContent>
         <FriendList />
@@ -46,14 +46,10 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          // backgroundColor: "#3171dd",
           padding: 0,
           margin: 0,
         }}
       >
-        {/* <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
-          room member
-        </CardContent> */}
         <RoomList />
       </Stack>
     </Box>

@@ -97,22 +97,54 @@ const mockBlockList = [
   },
 ];
 
+const selectedButton = {
+  backgroundColor: main.main1,
+  color: "white",
+  "&:hover": {
+    backgroundColor: main.main1,
+  },
+  "&.Mui-selected, &.Mui-selected:hover": {
+    backgroundColor: main.main1,
+  },
+  borderRadius: "10px",
+  py: 0,
+  px: 2,
+  flex: 1,
+};
+
+const unselectedButton = {
+  backgroundColor: main.main5,
+  color: "white",
+  "&:hover": {
+    backgroundColor: main.main5,
+  },
+  "&.Mui-selected, &.Mui-selected:hover": {
+    backgroundColor: main.main5,
+  },
+  borderRadius: "10px",
+  py: 0,
+  px: 2,
+  flex: 1,
+};
+
 const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
 
   const showList = select ? mockBlockList : mockFriendList;
 
   return (
-    <Box
+    <Card
       sx={{
-        height: "61vh",
+        height: "60vh",
+        borderRadius: "10px",
+        margin: 1,
+        backgroundColor: main.main2,
       }}
     >
       <Stack sx={{ padding: "16px" }}>
         <Box
           sx={{
             backgroundColor: main.main5,
-            padding: "7px",
             borderRadius: "10px",
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -132,42 +164,43 @@ const FriendList = () => {
             {!select ? "Friend List" : "Block List"}
           </Typography>
         </Box>
+        <Stack
+          direction={"row"}
+          sx={{ marginTop: 1, height: "max-content", display: "flex" }}
+          spacing={2}
+        >
+          <ToggleButton
+            value="show"
+            onChange={() => setSelect(false)}
+            sx={!select ? selectedButton : unselectedButton}
+          >
+            Friend
+          </ToggleButton>
+
+          <ToggleButton
+            value="show"
+            onChange={() => setSelect(true)}
+            sx={select ? selectedButton : unselectedButton}
+          >
+            Block
+          </ToggleButton>
+        </Stack>
         <Card
           sx={{
             my: "7px",
             backgroundColor: main.main5,
             overflow: "scroll",
-            height: "48vh",
+            height: "45vh",
             padding: "10px",
             borderRadius: "10px",
           }}
         >
-          <Stack width={"max-content"}>
-            <ToggleButton
-              value="show"
-              selected={select}
-              onChange={() => setSelect(!select)}
-              sx={{
-                backgroundColor: main.main1,
-                color: "black",
-                padding: 0,
-                "&:hover": {
-                  backgroundColor: main.main1,
-                },
-                "&.Mui-selected, &.Mui-selected:hover": {
-                  backgroundColor: main.main2,
-                },
-              }}
-            >
-              {select ? "Friend" : "Block"}
-            </ToggleButton>
-          </Stack>
           {showList.map((friend, idx) => (
             <Friend key={idx} prop={friend} />
           ))}
         </Card>
       </Stack>
-    </Box>
+    </Card>
   );
 };
 

@@ -8,10 +8,9 @@
 /* room title field */
 
 .room_title_field {
-  background-color: #5290d3;
+  background-color: #4292da;
   border-radius: 5px;
-  margin: 2% 2% 2% 2%;
-
+  margin: 1% 2% 2% 2%;
   display: flex;
   justify-content: space-between;
   height: 44px;
@@ -48,8 +47,6 @@
   margin-top: 4.5px;
 }
 
-.room_type {
-}
 .room_setting {
   margin-left: 10px;
   margin-right: 7px;
@@ -58,7 +55,7 @@
 /* chatting field */
 
 .chat_field {
-  background-color: #3272d2;
+  background-color: #2c70dd;
   height: 83.5%;
   border-radius: 5px;
   list-style-type: none;
@@ -76,7 +73,7 @@
 /* bottom field */
 
 .bottom_field {
-  background-color: #4174d3;
+  background-color: #265ecf;
   height: 11%;
   /* width: 55vw; */
   display: flex;
@@ -87,8 +84,9 @@
   border-radius: 5px;
   min-width: 260px;
 }
+
 .input_field {
-  background-color: #1e4ca9;
+  background-color: #214c97;
   height: 5%;
   width: 45vw;
   margin: 8px;

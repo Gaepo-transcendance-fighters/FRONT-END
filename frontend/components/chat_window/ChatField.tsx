@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import "./ChatWindow.css";
+import { main } from "@/font/color";
 
 export interface IChat {
   name: string;
@@ -69,7 +70,7 @@ const ChatField = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#3272D2",
+        backgroundColor: main.main5,
         height: "40vh",
         borderRadius: "5px",
         listStyleType: "none",

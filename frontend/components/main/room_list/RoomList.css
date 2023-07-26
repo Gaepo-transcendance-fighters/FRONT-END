@@ -15,6 +15,7 @@
   color: white;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: "crazy";
 }
 
 .typebutton {
@@ -27,6 +28,7 @@
   font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: "crazy";
 }
 .typebutton:disabled {
   background-color: #7b8aa9;
@@ -49,7 +51,7 @@
 .list {
   background-color: #1c478e;
   border-radius: 10px;
-  height: 83vh;
+  height: 81vh;
   bottom: 0;
   padding: 7px 11px;
   padding-right: 0px;
@@ -90,6 +92,7 @@
 }
 
 .item {
+  font-family: "crazy";
   display: flex;
   align-items: center;
 
@@ -97,7 +100,7 @@
   border-radius: 10px;
   height: 50px;
   border: 0px;
-  margin: 3px auto;
+  margin: 8px auto;
   width: 100%;
   color: black;
   font-size: 18px;
@@ -112,6 +115,7 @@
   width: 17%;
   margin: auto;
   font-size: 16px;
+  font-family: "crazy";
   vertical-align: middle;
   color: rgb(255, 221, 0);
 }
@@ -129,7 +133,6 @@
   border-radius: 10px;
   height: 50px;
   border: 0px;
-  margin: 3px auto;
   width: 100%;
   color: #67dbfb;
   font-size: 24px;

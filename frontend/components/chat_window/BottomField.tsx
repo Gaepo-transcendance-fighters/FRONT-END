@@ -3,6 +3,7 @@ import TextField from "./TextField";
 import "./ChatWindow.css";
 import { Box } from "@mui/material";
 import { useState } from "react";
+import { main } from "@/font/color";
 
 const BottomField = () => {
   const [msg, setMsg] = useState<string>("");
@@ -11,7 +12,7 @@ const BottomField = () => {
     <Box
       sx={{
         marginBottom: 0,
-        backgroundColor: "#4174D3",
+        backgroundColor: main.main2,
         // height: "11%",
         display: "flex",
         justifyContent: "center",

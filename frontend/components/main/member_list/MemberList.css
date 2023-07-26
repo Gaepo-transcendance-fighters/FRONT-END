@@ -1,10 +1,10 @@
-<<<<<<< HEAD:frontend/components/main/chat_participants_list/ChatPtcptsList.css
-.pltitle {
-  background-color: #1c478e;
-=======
+@font-face {
+  font-family: "crazy";
+  src: url("../../../font/neodgm.ttf") format("truetype");
+}
+
 .memactivate {
   height: 37vh;
-  background-color: rgb(22, 181, 238);
 }
 .memdeactivate {
   height: 0;
@@ -12,24 +12,19 @@
 }
 
 .memtitle {
-  background-color: rgb(14, 123, 200);
->>>>>>> e59db96c29fc629c6357bc88320e102505f7d1b6:frontend/components/main/member_list/MemberList.css
+  background-color: #1c478e;
   text-align: center;
   padding: 5px;
   font-size: 20px;
+  font-family: "crazy";
   border-radius: 10px;
   color: white;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-<<<<<<< HEAD:frontend/components/main/chat_participants_list/ChatPtcptsList.css
-.pllist {
-  background-color: #1c478e;
-=======
 
 .memlist {
-  background-color: rgb(29, 89, 185);
->>>>>>> e59db96c29fc629c6357bc88320e102505f7d1b6:frontend/components/main/member_list/MemberList.css
+  background-color: #1c478e;
   border-radius: 10px;
   height: 28vh;
   bottom: 0;
@@ -54,19 +49,17 @@
 .membtn {
   display: flex;
   align-items: center;
-  /* background-color: rgb(24, 175, 255); */
+  background-color: #67dbfb;
   border-radius: 10px;
   height: 63px;
   width: 100%;
   border: 0px;
   color: white;
-  margin: 3px auto;
+  margin: 8px auto;
   overflow: hidden;
 }
 
 .memimg {
-  background-color: magenta;
-  /* 체크용 다 되면 지우기 */
   border-radius: 10px;
   overflow: hidden;
   width: 23%;
@@ -76,6 +69,7 @@
 
 .memname {
   width: 55%;
+  font-family: "crazy";
   text-align: center;
   font-size: 16px;
   padding: 7px;

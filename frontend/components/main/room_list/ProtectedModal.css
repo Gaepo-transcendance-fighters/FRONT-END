@@ -1,5 +1,10 @@
+@font-face {
+  font-family: "crazy";
+  src: url("../../../font/neodgm.ttf") format("truetype");
+}
+
 .prfontneo {
-  font-family: "neodgm";
+  font-family: "crazy";
 }
 
 .prlock {
@@ -39,12 +44,13 @@
 }
 
 .prsubmitbutton {
-  background-color: rgb(13, 111, 255);
+  background-color: #2253b8;
   border-radius: 7px;
   height: 33px;
   width: 77px;
   border: 0px;
   color: white;
+  font-family: "crazy";
   font-size: 17px;
   margin-right: 17px;
   float: right;
