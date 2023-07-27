@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react'
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export interface IChat {
 	name: string;
@@ -90,7 +90,8 @@ const ChatField = () => {
 							color: 'white',
 							padding: 0,
 							}}>
-								{value.name + ": " + value.message}
+								{/* {value.name + ": " + value.message} */}
+								{<Typography variant="h6" >{value.name + ": " + value.message}</Typography>}
 						</li>
           </ul>
         );

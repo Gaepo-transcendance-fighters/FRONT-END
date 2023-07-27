@@ -61,7 +61,7 @@ const RoomTitleField = ({setFunction}: {setFunction:Dispatch<SetStateAction<bool
 		<div className="room_title_field">
 			<div className='room_title_field_left'>
 				<Stack/>
-				<div className='room_name'>{mockChatRoomList[0].roomName}</div>
+				<div className='room_name'>{<Typography variant="h4">{mockChatRoomList[0].roomName}</Typography>}</div>
 			</div>
 			<div className='room_title_field_right'>
 				<div className='room_type'>
