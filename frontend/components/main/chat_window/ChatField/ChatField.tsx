@@ -1,6 +1,7 @@
+"use client";
+
 import { useEffect, useState } from 'react'
 import { Box } from "@mui/material";
-import '../ChatWindow.css'
 
 export interface IChat {
 	name: string;
@@ -83,7 +84,14 @@ const ChatField = () => {
             key={i}
             style={{ margin: "1% 0% 1% 0%", padding: "2% 2% 0.5% 2%" }}
           >
-            <li className="message_box">{value.name + ": " + value.message}</li>
+            <li style={{
+							listStyleType: 'none', 
+							margin: '0px 0 0 0',
+							color: 'white',
+							padding: 0,
+							}}>
+								{value.name + ": " + value.message}
+						</li>
           </ul>
         );
       })}

@@ -1,6 +1,5 @@
 "use client";
 
-import "./ChatWindow.css";
 import BottomField from "./BottomField/BottomField";
 import ChatField from "./ChatField/ChatField";
 import RoomTitleField from "./RoomTitleField/RoomTitleField";

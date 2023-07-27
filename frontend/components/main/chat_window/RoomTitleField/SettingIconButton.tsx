@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from 'react';
 import IconButton from '@mui/material/IconButton';
 import { useState,forwardRef } from 'react';

@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from 'react';
 import FormControl, { useFormControl } from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -15,7 +17,17 @@ export default function UseFormControl() {
   return (
     <Box component="form" noValidate autoComplete="off">
       <FormControl>
-        <OutlinedInput className="input_field" onChange={changeMsg} placeholder="Please enter message" />
+        <OutlinedInput style={{
+          backgroundColor: '#1e4ca9',
+          height: '5%',
+          width: '45vw',
+          margin: '8px',
+          color: 'white',
+          marginTop: '2%',
+        }} 
+        onChange={changeMsg} 
+        placeholder="Please enter message" 
+        />
       </FormControl>
     </Box>
   );

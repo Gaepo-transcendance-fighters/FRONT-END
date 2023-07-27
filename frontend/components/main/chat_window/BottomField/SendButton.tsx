@@ -1,12 +1,20 @@
+"use client";
 
 import { Button } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
-import '../ChatWindow.css'
 
 const SendButton = () => {
 	
 	return (
-		<Button className='send_button' variant="contained">
+		<Button style={{
+			width: '8.5vw',
+			justifyContent: 'center',
+			alignItems: 'center',
+			verticalAlign: 'middle',
+			margin: '2.5% 0 2.5% 0'
+		}} 
+		variant="contained"
+		>
 		Send
 		</Button>
 	)

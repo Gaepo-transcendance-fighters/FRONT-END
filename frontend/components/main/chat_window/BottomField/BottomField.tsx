@@ -1,6 +1,7 @@
+"use client";
+
 import SendButton from './SendButton'
 import TextField from './TextField'
-import '../ChatWindow.css'
 import { Box } from "@mui/material";
 import { useState } from 'react'
 

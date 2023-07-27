@@ -1,9 +1,10 @@
+"use client";
 
 import Stack from '../Stack'
 import Typography from '@mui/material/Typography'
 import VpnKeyTwoToneIcon from '@mui/icons-material/VpnKeyTwoTone';
 import SettingsIcon from '@mui/icons-material/Settings';
-import '../ChatWindow.css'
+import './RoomTitleField.css'
 import { Box, Modal, Button, IconButton, } from "@mui/material";
 import SettingIconButton from './SettingIconButton'
 import { useState } from 'react';
