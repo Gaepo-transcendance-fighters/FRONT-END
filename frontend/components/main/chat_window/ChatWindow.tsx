@@ -11,12 +11,13 @@ const ChatWindow = () => {
 
   return (
     <Box sx={{ margin: "0", padding: "0", height: "60vh", minWidth: "300px" }}>
-      {isInRoom ? 
-      <>
-        <RoomTitleField setFunction={setIsInRoom} />
-        <ChatField />
-        <BottomField />
-      </> : null}
+      {isInRoom ? (
+        <>
+          <RoomTitleField setFunction={setIsInRoom} />
+          <ChatField />
+          <BottomField />
+        </>
+      ) : null}
     </Box>
   );
 };

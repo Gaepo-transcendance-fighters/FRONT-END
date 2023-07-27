@@ -1,73 +1,73 @@
 "use client";
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 
 export interface IChat {
-	name: string;
-	message: string;
+  name: string;
+  message: string;
 }
 
-const mockMessageHistories:IChat[] = [
-		{
-			name: "jujeon",
-			message: "1 hello there",
-		},
-		{
-			name: "jujeon",
-			message: "2 dear bear",
-		},
-		{
-			name: "jujeon",
-			message: "3 I got there",
-		},
-		{
-			name: "jujeon",
-			message: "4 ft_transcendence asdkfjasdfklsadfijcj sdlkf l sdaif jisdf ljksdf ljk asd;kfadsk end",
-		},
-		{
-			name: "jujeon",
-			message: "5 ft_transcendence",
-		},
-		{
-			name: "jujeon",
-			message: "6 ft_transcendence",
-		},
-		{
-			name: "jujeon",
-			message: "7 ft_transcendence",
-		},
-		{
-			name: "jujeon",
-			message: "8 ft_transcendence",
-		},
-		{
-			name: "jujeon",
-			message: "9 ft_transcendence",
-		},
-		{
-			name: "jujeon",
-			message: "10 ft_transcendence",
-		},
-		{
-			name: "jujeon",
-			message: "11 ft_transcendence",
-		},
-		{
-			name: "jujeon",
-			message: "12 ende",
-		}
-]
+const mockMessageHistories: IChat[] = [
+  {
+    name: "jujeon",
+    message: "1 hello there",
+  },
+  {
+    name: "jujeon",
+    message: "2 dear bear",
+  },
+  {
+    name: "jujeon",
+    message: "3 I got there",
+  },
+  {
+    name: "jujeon",
+    message:
+      "4 ft_transcendence asdkfjasdfklsadfijcj sdlkf l sdaif jisdf ljksdf ljk asd;kfadsk end",
+  },
+  {
+    name: "jujeon",
+    message: "5 ft_transcendence",
+  },
+  {
+    name: "jujeon",
+    message: "6 ft_transcendence",
+  },
+  {
+    name: "jujeon",
+    message: "7 ft_transcendence",
+  },
+  {
+    name: "jujeon",
+    message: "8 ft_transcendence",
+  },
+  {
+    name: "jujeon",
+    message: "9 ft_transcendence",
+  },
+  {
+    name: "jujeon",
+    message: "10 ft_transcendence",
+  },
+  {
+    name: "jujeon",
+    message: "11 ft_transcendence",
+  },
+  {
+    name: "jujeon",
+    message: "12 ende",
+  },
+];
 
 const ChatField = () => {
-	
-	const [msgHistories, setMsgHistories] = useState<IChat[]>([]);
-	
-	useEffect(()=> {
-		setMsgHistories(mockMessageHistories);
-	}, [])
+  const [msgHistories, setMsgHistories] = useState<IChat[]>([]);
 
-	return (
+  useEffect(() => {
+    setMsgHistories(mockMessageHistories);
+  }, []);
+
+  return (
     <Box
       sx={{
         backgroundColor: "#3272D2",
@@ -84,15 +84,21 @@ const ChatField = () => {
             key={i}
             style={{ margin: "1% 0% 1% 0%", padding: "2% 2% 0.5% 2%" }}
           >
-            <li style={{
-							listStyleType: 'none', 
-							margin: '0px 0 0 0',
-							color: 'white',
-							padding: 0,
-							}}>
-								{/* {value.name + ": " + value.message} */}
-								{<Typography variant="h6" >{value.name + ": " + value.message}</Typography>}
-						</li>
+            <li
+              style={{
+                listStyleType: "none",
+                margin: "0px 0 0 0",
+                color: "white",
+                padding: 0,
+              }}
+            >
+              {/* {value.name + ": " + value.message} */}
+              {
+                <Typography variant="h6">
+                  {value.name + ": " + value.message}
+                </Typography>
+              }
+            </li>
           </ul>
         );
       })}
@@ -100,4 +106,4 @@ const ChatField = () => {
   );
 };
 
-export default ChatField
+export default ChatField;
