@@ -8,6 +8,7 @@ export interface IChatRoom {
   channelIdx: number;
   // owner: string;
   // mems: Array<IFriend>;
+  mems: Array<{ name: string, isOnline: boolean, imgUrl: string }>;
   // members: Array<string>;
   owner : string;
   channelType: chatRoomType;
@@ -110,9 +111,11 @@ export const mockChatRoomList: IChatRoom[] = [
 export default function RoomTypeButton({
   showMembersList,
   setShowMembersList,
+  chatRoomList,
 }: {
   showMembersList: boolean;
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
+  chatRoomList: IChatRoom[];
 }) {
   const [nonDmrooms, setNonDmRooms] = useState<IChatRoom[]>([]);
   const [dmRooms, setDmRooms] = useState<IChatRoom[]>([]);
@@ -175,7 +178,8 @@ export default function RoomTypeButton({
         channelType={disabled}
         showMembersList={showMembersList}
         setShowMembersList={setShowMembersList}
-      />
+        chatRoomList={chatRoomList}
+        />
     </>
   );
 }

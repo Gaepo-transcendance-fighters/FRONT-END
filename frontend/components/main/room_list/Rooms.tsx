@@ -13,11 +13,13 @@ export default function Rooms({
   channelType,
   showMembersList,
   setShowMembersList,
+  chatRoomList,
 }: {
   roomsProp: IChatRoom[];
   channelType: boolean;
   showMembersList: boolean;
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
+  chatRoomList: IChatRoom[];
 }) {
   const [isRight, setIsRight] = useState(false);
   const [aRoom, setARoom] = useState<IChatRoom>();

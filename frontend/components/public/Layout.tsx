@@ -24,28 +24,29 @@ export const main = {
 };
 
 const Layout = () => {
-  const { isLoggedIn } = useAuth();
-
   const [friendList, setFriendList] = useState<IFriend[]>([]);
   const [chatRoomList, setChatRoomList] = useState<IChatRoom[]>([]);
   const [blockList, setBlockList] = useState<IFriend[]>([]);
+  
+  const { isLoggedIn } = useAuth();
 
   /*
     owner,
     channelIdx,
     password : true / false
   */
+
   useRequireAuth();
 
   useEffect(() => {
     if (isLoggedIn) {
       socket.emit("main_enter", "intra_id", (json) => {
         setFriendList(json.friend);
-        setChannelList(json.channel);
+        setChatRoomList(json.channel);
         setBlockList(json.blockList);
       });
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn]); // 이거 string일수도있다고 하심
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -90,7 +91,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <RoomList />
+        <RoomList chatRoomList={chatRoomList}/>
       </Stack>
     </Box>
   );

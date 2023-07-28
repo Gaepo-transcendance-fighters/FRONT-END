@@ -4,8 +4,9 @@ import { useState } from "react";
 import { CardContent } from "@mui/material";
 import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
+import { IChatRoom } from "./RoomTypeButton";
 
-export default function RoomList() {
+export default function RoomList({chatRoomList} : {chatRoomList: IChatRoom[]}) {
   const [showMembersList, setShowMembersList] = useState(false);
   return (
     <>
@@ -19,6 +20,7 @@ export default function RoomList() {
         <RoomTypeButton
           showMembersList={showMembersList}
           setShowMembersList={setShowMembersList}
+          chatRoomList={chatRoomList}
         />
       </CardContent>
     </>

@@ -7,6 +7,8 @@ import {
   MouseEvent,
   Dispatch,
   SetStateAction,
+  LegacyRef,
+  useEffect,
 } from "react";
 import "./ProtectedModal.css";
 import { IChatRoom } from "./RoomTypeButton";
@@ -55,10 +57,15 @@ export default function ProtectedModal({
   setARoom: Dispatch<SetStateAction<IChatRoom | undefined>>;
 }) {
   const pwRef = useRef("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     pwRef.current = e.target.value;
   };
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     setFail(false);
@@ -98,6 +105,8 @@ export default function ProtectedModal({
               type="password"
               placeholder="password"
               onChange={onChange}
+              ref={inputRef}
+              autoFocus={true}
             ></input>
             <button className="prsubmitbutton" onClick={onClick}>
               submit
