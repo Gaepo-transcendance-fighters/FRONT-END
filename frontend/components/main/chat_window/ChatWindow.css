@@ -1,0 +1,126 @@
+.chat_window {
+  margin: 0;
+  padding: 0;
+  height: 55vh;
+  min-width: 300px;
+}
+
+/* room title field */
+
+.room_title_field {
+  background-color: #4292da;
+  border-radius: 5px;
+  margin-top: 0;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 1%;
+
+  display: flex;
+  justify-content: space-between;
+  height: 44px;
+}
+
+.room_title_field_left {
+  display: flex;
+  align-items: center;
+}
+
+.stack_box {
+  margin: 2%;
+  margin-right: 2%;
+}
+.room_id {
+  vertical-align: middle;
+  color: #f2f070;
+  text-shadow:
+    -1px 0px black,
+    0px 1px black,
+    1px 0px black,
+    0px -1px black;
+}
+
+.room_name {
+  font-size: x-large;
+  width: 40vw;
+  color: white;
+  text-shadow: 0px 0px 4px black;
+}
+
+.room_title_field_right {
+  align-items: center;
+  display: flex;
+  margin-top: 4.5px;
+}
+
+.room_type {
+  padding: 8px;
+  margin-top: 2px;
+  margin-left: 10px;
+  margin-right: 7px;
+}
+
+.room_setting {
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.room_exit {
+  padding-right: 3px;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+/* chatting field */
+
+.chat_field {
+  background-color: #2c70dd;
+  height: 83.5%;
+  border-radius: 5px;
+  list-style-type: none;
+  overflow-y: scroll;
+  margin: 0% 2% 2% 2%;
+}
+.message_box {
+  /* listStyleType:"none" */
+  list-style-type: none;
+  margin: 0px 0 0 0;
+  color: white;
+  padding: 0;
+}
+
+/* bottom field */
+
+.bottom_field {
+  background-color: #265ecf;
+  height: 11%;
+  /* width: 55vw; */
+  display: flex;
+  justify-content: center;
+  /* margin-top: 0.5%; */
+  /* margin-bottom: 2%; */
+  margin: 0.5% 2% 2% 2%;
+  border-radius: 5px;
+  min-width: 260px;
+}
+
+.input_field {
+  background-color: #214c97;
+  height: 5%;
+  width: 45vw;
+  margin: 8px;
+  color: white;
+  margin-top: 2%;
+}
+.message_box {
+  /* listStyleType:"none" */
+  list-style-type: none;
+  margin-top: 0px;
+  color: white;
+}
+.send_button {
+  width: 8.5vw;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  margin: 2.5% 0 2.5% 0;
+}

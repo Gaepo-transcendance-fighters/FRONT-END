@@ -3,6 +3,7 @@
 import { ToggleButton, Card, Typography, Box, Stack } from "@mui/material";
 import Friend from "./Friend";
 import { useState } from "react";
+import { main } from "@/font/color";
 
 export interface IFriend {
   name: string;
@@ -96,74 +97,110 @@ const mockBlockList = [
   },
 ];
 
+const selectedButton = {
+  backgroundColor: main.main1,
+  color: "white",
+  "&:hover": {
+    backgroundColor: main.main1,
+  },
+  "&.Mui-selected, &.Mui-selected:hover": {
+    backgroundColor: main.main1,
+  },
+  borderRadius: "10px",
+  py: 0,
+  px: 2,
+  flex: 1,
+};
+
+const unselectedButton = {
+  backgroundColor: main.main5,
+  color: "white",
+  "&:hover": {
+    backgroundColor: main.main5,
+  },
+  "&.Mui-selected, &.Mui-selected:hover": {
+    backgroundColor: main.main5,
+  },
+  borderRadius: "10px",
+  py: 0,
+  px: 2,
+  flex: 1,
+};
+
 const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
 
   const showList = select ? mockBlockList : mockFriendList;
 
   return (
-    <>
-      <Box
-        sx={{
-          height: "61vh",
-          backgroundColor: "#3478c5",
-          mx: 1,
-        }}
-      >
+    <Card
+      sx={{
+        height: "60vh",
+        borderRadius: "10px",
+        margin: 1,
+        backgroundColor: main.main2,
+      }}
+    >
+      <Stack sx={{ padding: "16px" }}>
         <Box
           sx={{
-            backgroundColor: "#3356b9",
-            margin: "10px",
-            borderRadius: "5px",
+            backgroundColor: main.main5,
+            borderRadius: "10px",
             overflow: "hidden",
             textOverflow: "ellipsis",
           }}
         >
           <Typography
             color={"#ffffff"}
-            fontSize={"large"}
             align="center"
             sx={{
+              width: "100%",
+              fontSize: "21px",
               verticalAlign: "middle",
+              margin: 0,
+              padding: 0,
             }}
           >
-            친구 리스트
+            {!select ? "Friend List" : "Block List"}
           </Typography>
         </Box>
+        <Stack
+          direction={"row"}
+          sx={{ marginTop: 1, height: "max-content", display: "flex" }}
+          spacing={2}
+        >
+          <ToggleButton
+            value="show"
+            onChange={() => setSelect(false)}
+            sx={!select ? selectedButton : unselectedButton}
+          >
+            Friend
+          </ToggleButton>
+
+          <ToggleButton
+            value="show"
+            onChange={() => setSelect(true)}
+            sx={select ? selectedButton : unselectedButton}
+          >
+            Block
+          </ToggleButton>
+        </Stack>
         <Card
           sx={{
-            backgroundColor: "#253f8a",
+            my: "7px",
+            backgroundColor: main.main5,
             overflow: "scroll",
-            height: "48vh",
+            height: "45vh",
             padding: "10px",
+            borderRadius: "10px",
           }}
         >
-          <Stack width={"max-content"}>
-            <ToggleButton
-              value="show"
-              selected={select}
-              onChange={() => setSelect(!select)}
-              sx={{
-                backgroundColor: "#48a0ed",
-                color: "black",
-                padding: 0,
-                "&:hover": {
-                  backgroundColor: "#48a0ed",
-                },
-                "&.Mui-selected, &.Mui-selected:hover": {
-                  backgroundColor: "#3478c5",
-                },
-              }}
-            >
-              {select ? "Block" : "Friend"}
-            </ToggleButton>
-          </Stack>
           {showList.map((friend, idx) => (
             <Friend key={idx} prop={friend} />
           ))}
         </Card>
-      </Box>
-    </>
+      </Stack>
+    </Card>
   );
 };
 

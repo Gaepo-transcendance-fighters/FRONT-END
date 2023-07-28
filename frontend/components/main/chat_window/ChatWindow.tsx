@@ -3,6 +3,7 @@
 import BottomField from "./BottomField/BottomField";
 import ChatField from "./ChatField/ChatField";
 import RoomTitleField from "./RoomTitleField/RoomTitleField";
+import LobbyWindow from "./LobbyWindow";
 import { Box } from "@mui/material";
 import { useState } from "react";
 
@@ -17,7 +18,9 @@ const ChatWindow = () => {
           <ChatField />
           <BottomField />
         </>
-      ) : null}
+      ) : (
+        <LobbyWindow />
+      )}
     </Box>
   );
 };
