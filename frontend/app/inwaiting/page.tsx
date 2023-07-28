@@ -43,7 +43,6 @@ const inwaiting = () => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const handleOpenModal_redir = () => {
-    setOpenModal(true);
     setTimeout(() => {
       // router.push("./gameplaying");
       router.push("./optionselect");

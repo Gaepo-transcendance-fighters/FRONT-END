@@ -22,6 +22,7 @@ const font = createTheme({
 
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
+import { count } from "console";
 type SpeedOption = "speed1" | "speed2" | "speed3";
 type MapOption = "map1" | "map2" | "map3";
 
@@ -34,7 +35,7 @@ const OptionSelect = () => {
   const [selectedMapOption, setSelectedMapOption] = useState<MapOption | null>(
     "map2"
   );
-  const [countdown, setCountdown] = useState<number>(11);
+  const [countdown, setCountdown] = useState<number>(3);
 
   const handleSpeedOptionChange = (option: SpeedOption) => {
     setSelectedSpeedOption((prevOption) =>
@@ -49,12 +50,21 @@ const OptionSelect = () => {
   };
 
   useEffect(() => {
-    countdown > 0 && setTimeout(() => setCountdown(countdown - 1), 1100);
+    countdown > 0 && setTimeout(() => setCountdown(countdown - 1), 1000);
+    // 나중에 이거 풀면됨
+    // if (countdown == 0) cntRedir();
   }, [countdown]);
 
   setTimeout(() => {
     router.push("./gameplaying");
   }, 1000000);
+
+  const cntRedir = () => {
+    // setOpenModal(true);
+    setTimeout(() => {
+      router.push("./gameplaying");
+    }, 300);
+  };
 
   return (
     <ThemeProvider theme={font}>
@@ -163,7 +173,13 @@ const OptionSelect = () => {
                 >
                   {/* 속도체크박스 */}
                   <FormControlLabel
-                    disabled={selectedSpeedOption === "speed1" ? true : false}
+                    disabled={
+                      selectedSpeedOption === "speed1"
+                        ? true
+                        : false || countdown == 0
+                        ? true
+                        : false
+                    }
                     control={
                       <Checkbox
                         checked={selectedSpeedOption === "speed1"}
@@ -174,7 +190,13 @@ const OptionSelect = () => {
                     label="Slow"
                   />
                   <FormControlLabel
-                    disabled={selectedSpeedOption === "speed2" ? true : false}
+                    disabled={
+                      selectedSpeedOption === "speed2"
+                        ? true
+                        : false || countdown == 0
+                        ? true
+                        : false
+                    }
                     control={
                       <Checkbox
                         checked={selectedSpeedOption === "speed2"}
@@ -185,7 +207,13 @@ const OptionSelect = () => {
                     label="Normal"
                   />
                   <FormControlLabel
-                    disabled={selectedSpeedOption === "speed3" ? true : false}
+                    disabled={
+                      selectedSpeedOption === "speed3"
+                        ? true
+                        : false || countdown == 0
+                        ? true
+                        : false
+                    }
                     control={
                       <Checkbox
                         checked={selectedSpeedOption === "speed3"}
@@ -234,7 +262,13 @@ const OptionSelect = () => {
                 >
                   {/* 맵옵션 버튼 들어갈 자리 */}
                   <FormControlLabel
-                    disabled={selectedMapOption === "map1" ? true : false}
+                    disabled={
+                      selectedMapOption === "map1"
+                        ? true
+                        : false || countdown == 0
+                        ? true
+                        : false
+                    }
                     control={
                       <Checkbox
                         checked={selectedMapOption === "map1"}
@@ -245,7 +279,13 @@ const OptionSelect = () => {
                     label="Map1"
                   />
                   <FormControlLabel
-                    disabled={selectedMapOption === "map2" ? true : false}
+                    disabled={
+                      selectedMapOption === "map2"
+                        ? true
+                        : false || countdown == 0
+                        ? true
+                        : false
+                    }
                     control={
                       <Checkbox
                         checked={selectedMapOption === "map2"}
@@ -256,7 +296,13 @@ const OptionSelect = () => {
                     label="Map2"
                   />
                   <FormControlLabel
-                    disabled={selectedMapOption === "map3" ? true : false}
+                    disabled={
+                      selectedMapOption === "map3"
+                        ? true
+                        : false || countdown == 0
+                        ? true
+                        : false
+                    }
                     control={
                       <Checkbox
                         checked={selectedMapOption === "map3"}
@@ -280,29 +326,46 @@ const OptionSelect = () => {
                   backgroundColor: main.main3,
                 }}
               >
-                <Button
-                  disabled={
-                    selectedMapOption != null && selectedSpeedOption != null
-                      ? false
-                      : true
-                  }
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    border: "5px solid RED",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "2rem",
-                    backgroundColor: "#F8C800",
-                  }}
-                  onClick={() => {
-                    return router.push("./gameplaying");
-                  }}
-                >
-                  <h1> {countdown}</h1>
-                  Get Ready!
-                </Button>
+                {countdown == 0 ? (
+                  <>
+                    <Card
+                      style={{
+                        width: "100%",
+                        height: "90%",
+                        border: "5px solid RED",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "2rem",
+                        backgroundColor: "#F8C800",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "2rem" }}>
+                        {" "}
+                        GET READY!{" "}
+                      </Typography>
+                    </Card>
+                  </>
+                ) : (
+                  <>
+                    <Card
+                      style={{
+                        width: "100%",
+                        height: "90%",
+                        border: "5px solid #265ECF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "2rem",
+                        backgroundColor: main.main0,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "2rem" }}>
+                        {countdown}
+                      </Typography>
+                    </Card>
+                  </>
+                )}
               </Card>
             </Card>
           </CardContent>
