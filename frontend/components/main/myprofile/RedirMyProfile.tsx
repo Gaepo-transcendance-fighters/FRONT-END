@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { main } from "@/components/public/Layout";
 import React from "react";
+
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -32,7 +33,7 @@ const myProfileStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 1000,
+  width: "100%",
   height: 700,
   bgcolor: "#65d9f9",
   border: "1px solid #000",
@@ -60,7 +61,6 @@ const RedirMyProfile = () => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const [verified, setVerified] = useState<boolean>(false);
 
   const handleOpenModal = () => {
@@ -86,12 +86,14 @@ const RedirMyProfile = () => {
           backgroundColor: "#48a0ed",
           display: "flex",
           padding: 3,
+          minWidth: "max-content",
         }}
       >
         <Box
           sx={{
             borderRadius: "70%",
             width: "250px",
+            // minWidth: "max-content",
             height: "250px",
             overflow: "hidden",
             display: "flex",
@@ -126,9 +128,6 @@ const RedirMyProfile = () => {
           </Typography>
 
           <CardContent style={{ width: "100%" }}>
-            {/* <Typography style={{ fontSize: "1.5rem" }}>
-              2차인증 여부 : Y/N
-            </Typography> */}
             {verified == true ? (
               <Typography style={{ fontSize: "1.5rem" }}>
                 2차인증 여부 : Y

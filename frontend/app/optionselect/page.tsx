@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
@@ -28,11 +28,12 @@ const OptionSelect = () => {
   const router = useRouter();
 
   const [selectedSpeedOption, setSelectedSpeedOption] =
-    useState<SpeedOption | null>(null);
+    useState<SpeedOption | null>("speed2");
 
   const [selectedMapOption, setSelectedMapOption] = useState<MapOption | null>(
-    null
+    "map2"
   );
+  const [countdown, setCountdown] = useState<number>(11);
 
   const handleSpeedOptionChange = (option: SpeedOption) => {
     setSelectedSpeedOption((prevOption) =>
@@ -45,6 +46,14 @@ const OptionSelect = () => {
       prevOption === option ? null : option
     );
   };
+
+  useEffect(() => {
+    countdown > 0 && setTimeout(() => setCountdown(countdown - 1), 1100);
+  }, [countdown]);
+
+  setTimeout(() => {
+    router.push("./gameplaying");
+  }, 1000000);
 
   return (
     <ThemeProvider theme={font}>
@@ -311,9 +320,10 @@ const OptionSelect = () => {
                     backgroundColor: "#F8C800",
                   }}
                   onClick={() => {
-                    return router.push("./inwaiting");
+                    return router.push("./gameplaying");
                   }}
                 >
+                  <h1> {countdown}</h1>
                   Get Ready!
                 </Button>
               </Card>

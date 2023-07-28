@@ -45,7 +45,8 @@ const inwaiting = () => {
   const handleOpenModal_redir = () => {
     setOpenModal(true);
     setTimeout(() => {
-      router.push("./gameplaying");
+      // router.push("./gameplaying");
+      router.push("./optionselect");
     }, 2000);
   };
 
@@ -156,7 +157,7 @@ const inwaiting = () => {
                         alignItems: "center",
                       }}
                     >
-                      잠시후 게임페이지로 이동합니다
+                      잠시후 옵션 선택으로 이동합니다.
                     </CardContent>
                   </Card>
                 </Box>
