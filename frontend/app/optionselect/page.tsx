@@ -1,4 +1,5 @@
 "use client";
+
 import { ThemeProvider } from "@emotion/react";
 import {
   Button,
@@ -76,7 +77,7 @@ const OptionSelect = () => {
           >
             <Button
               style={{
-                width: "12%",
+                width: "max-content",
                 height: "3vh",
                 border: "2px solid black",
                 display: "flex",
@@ -162,11 +163,7 @@ const OptionSelect = () => {
                 >
                   {/* 속도체크박스 */}
                   <FormControlLabel
-                    disabled={
-                      selectedSpeedOption && selectedSpeedOption !== "speed1"
-                        ? true
-                        : false
-                    }
+                    disabled={selectedSpeedOption === "speed1" ? true : false}
                     control={
                       <Checkbox
                         checked={selectedSpeedOption === "speed1"}
@@ -177,11 +174,7 @@ const OptionSelect = () => {
                     label="Slow"
                   />
                   <FormControlLabel
-                    disabled={
-                      selectedSpeedOption && selectedSpeedOption !== "speed2"
-                        ? true
-                        : false
-                    }
+                    disabled={selectedSpeedOption === "speed2" ? true : false}
                     control={
                       <Checkbox
                         checked={selectedSpeedOption === "speed2"}
@@ -192,11 +185,7 @@ const OptionSelect = () => {
                     label="Normal"
                   />
                   <FormControlLabel
-                    disabled={
-                      selectedSpeedOption && selectedSpeedOption !== "speed3"
-                        ? true
-                        : false
-                    }
+                    disabled={selectedSpeedOption === "speed3" ? true : false}
                     control={
                       <Checkbox
                         checked={selectedSpeedOption === "speed3"}
@@ -245,11 +234,7 @@ const OptionSelect = () => {
                 >
                   {/* 맵옵션 버튼 들어갈 자리 */}
                   <FormControlLabel
-                    disabled={
-                      selectedMapOption && selectedMapOption !== "map1"
-                        ? true
-                        : false
-                    }
+                    disabled={selectedMapOption === "map1" ? true : false}
                     control={
                       <Checkbox
                         checked={selectedMapOption === "map1"}
@@ -260,11 +245,7 @@ const OptionSelect = () => {
                     label="Map1"
                   />
                   <FormControlLabel
-                    disabled={
-                      selectedMapOption && selectedMapOption !== "map2"
-                        ? true
-                        : false
-                    }
+                    disabled={selectedMapOption === "map2" ? true : false}
                     control={
                       <Checkbox
                         checked={selectedMapOption === "map2"}
@@ -275,11 +256,7 @@ const OptionSelect = () => {
                     label="Map2"
                   />
                   <FormControlLabel
-                    disabled={
-                      selectedMapOption && selectedMapOption !== "map3"
-                        ? true
-                        : false
-                    }
+                    disabled={selectedMapOption === "map3" ? true : false}
                     control={
                       <Checkbox
                         checked={selectedMapOption === "map3"}
