@@ -36,9 +36,9 @@ export default function Room({
   const handleClose = () => {
     setOpen(false);
     setFail(false);
-    setShowMembersList(true);
+    aRoom ? setShowMembersList(true) : null;
   }; // 올바른 비번
-  
+
   const RoomClick = (room: IChatRoom) => {
     room.password || aRoom === room ? null : setARoom(room);
     room.password == "" ? setIsRight(true) : handleOpen();

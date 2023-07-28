@@ -8,8 +8,10 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IChatRoom } from "../main/room_list/RoomTypeButton";
+import { useAuth } from "@/context/AuthContext";
+import { socket } from "@/app/layout";
 
 export const main = {
   main0: "#67DBFB",
@@ -22,16 +24,28 @@ export const main = {
 };
 
 const Layout = () => {
+  const { isLoggedIn } = useAuth();
+
   const [friendList, setFriendList] = useState<IFriend[]>([]);
   const [chatRoomList, setChatRoomList] = useState<IChatRoom[]>([]);
   const [blockList, setBlockList] = useState<IFriend[]>([]);
+
   /*
     owner,
     channelIdx,
     password : true / false
   */
-
   useRequireAuth();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      socket.emit("main_enter", "intra_id", (json) => {
+        setFriendList(json.friend);
+        setChannelList(json.channel);
+        setBlockList(json.blockList);
+      });
+    }
+  }, [isLoggedIn]);
 
   return (
     <Box sx={{ display: "flex" }}>
