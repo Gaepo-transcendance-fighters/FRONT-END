@@ -9,6 +9,7 @@ import {
   SetStateAction,
   LegacyRef,
   useEffect,
+  KeyboardEvent,
 } from "react";
 import "./ProtectedModal.css";
 import { IChatRoom } from "./RoomTypeButton";
@@ -57,19 +58,15 @@ export default function ProtectedModal({
   setARoom: Dispatch<SetStateAction<IChatRoom | undefined>>;
 }) {
   const pwRef = useRef("");
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     pwRef.current = e.target.value;
   };
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setFail(false);
+    console.log(e);
     e.preventDefault();
+    setFail(false);
     if (pwRef.current == room.password) {
       setIsRight(true);
       handleClose();
@@ -80,6 +77,22 @@ export default function ProtectedModal({
       setFail(true);
     }
     pwRef.current = "";
+  };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === "Enter") {
+      setFail(false);
+      if (pwRef.current == room.password) {
+        setIsRight(true);
+        handleClose();
+        setFail(false);
+        setARoom(room);
+      } else {
+        setIsRight(false);
+        setFail(true);
+      }
+      pwRef.current = "";
+    }
   };
 
   return (
@@ -105,8 +118,8 @@ export default function ProtectedModal({
               type="password"
               placeholder="password"
               onChange={onChange}
-              ref={inputRef}
               autoFocus={true}
+              onKeyDown={onKeyDown}
             ></input>
             <button className="prsubmitbutton" onClick={onClick}>
               submit

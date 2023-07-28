@@ -11,7 +11,7 @@ import InviteGame from "../main/InviteGame/InviteGame";
 import { useState, useEffect } from "react";
 import { IChatRoom } from "../main/room_list/RoomTypeButton";
 import { useAuth } from "@/context/AuthContext";
-import { socket } from "@/app/layout";
+// import { socket } from "@/app/layout";
 
 export const main = {
   main0: "#67DBFB",
@@ -27,7 +27,7 @@ const Layout = () => {
   const [friendList, setFriendList] = useState<IFriend[]>([]);
   const [chatRoomList, setChatRoomList] = useState<IChatRoom[]>([]);
   const [blockList, setBlockList] = useState<IFriend[]>([]);
-  
+
   const { isLoggedIn } = useAuth();
 
   /*
@@ -36,17 +36,26 @@ const Layout = () => {
     password : true / false
   */
 
+  // useEffect(() => {
+  //   const MainEnter = (json) => {
+  //     setFriendList(json.friend);
+  //     setChatRoomList(json.channel);
+  //     setBlockList(json.blockList);
+  //   }
+  //   socket.on("main_enter", MainEnter, json);
+
+  //   return () => {
+  //     socket.off("main_enter", MainEnter, json);
+  //   }
+  // }, []);
+
   useRequireAuth();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      socket.emit("main_enter", "intra_id", (json) => {
-        setFriendList(json.friend);
-        setChatRoomList(json.channel);
-        setBlockList(json.blockList);
-      });
-    }
-  }, [isLoggedIn]); // 이거 string일수도있다고 하심
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     socket.emit("main_enter", "intra_id", 상태코드);
+  //   }
+  // }, []); // 이거 string일수도있다고 하심
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -91,7 +100,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <RoomList chatRoomList={chatRoomList}/>
+        <RoomList chatRoomList={chatRoomList} />
       </Stack>
     </Box>
   );
