@@ -10,7 +10,10 @@
 .room_title_field {
   background-color: #4292da;
   border-radius: 5px;
-  margin: 1% 2% 2% 2%;
+  margin-top: 0;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 1%;
 
   display: flex;
   justify-content: space-between;

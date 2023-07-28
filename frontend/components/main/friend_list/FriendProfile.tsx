@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { IFriend } from "./FriendList";
 import Image from "next/image";
+import InviteGame from "../InviteGame/InviteGame";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -101,13 +102,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 상태: {prop.isOnline ? loginOn : loginOff}
               </Typography>
               <Stack direction={"row"} spacing={2}>
-                <Button
-                  type="button"
-                  sx={{ minWidth: "max-content" }}
-                  variant="contained"
-                >
-                  친선전
-                </Button>
+                <InviteGame />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}

@@ -27,16 +27,21 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          // backgroundColor: main.main1,
           padding: 0,
           margin: 0,
         }}
       >
         <CardContent
-          sx={{ height: "35vh", backgroundColor: main.main5, padding: 1 }}
+          sx={{
+            height: "35vh",
+            ml: 1,
+            mr: 1,
+            mt: 1,
+            backgroundColor: "#4292DA",
+            borderRadius: "10px",
+          }}
         >
           <Myprofile />
-          <InviteGame />;
         </CardContent>
         <FriendList />
       </Stack>
@@ -49,8 +54,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: main.main2 }}>
-          game start
+        <CardContent sx={{ height: "37vh" }}>
           <GameStartButton />
         </CardContent>
         <ChatWindow />
