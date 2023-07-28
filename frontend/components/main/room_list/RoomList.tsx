@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { CardContent } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
 import { IChatRoom } from "./RoomTypeButton";
+import { main } from "@/font/color";
 
 export default function RoomList({chatRoomList} : {chatRoomList: IChatRoom[]}) {
   const [showMembersList, setShowMembersList] = useState(false);

@@ -27,8 +27,13 @@ const InviteGame = () => {
 
   return (
     <>
-      <Button type="button" onClick={handleOpenModal}>
-        더보기
+      <Button
+        type="button"
+        sx={{ minWidth: "max-content" }}
+        variant="contained"
+        onClick={handleOpenModal}
+      >
+        친선전
       </Button>
       <Modal open={openModal}>
         <Box sx={modalStyle} borderRadius={"10px"}>

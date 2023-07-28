@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import {
   Box,
@@ -7,9 +8,11 @@ import {
   Card,
   CardContent,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { main } from "@/font/color";
 
 const modalStyle = {
@@ -24,12 +27,18 @@ const modalStyle = {
   boxShadow: 24,
   p: 4,
 };
+const Auth = () => {
+  const [value, setValue] = useState("");
 
-const Login = () => {
+  const { setIsLoggedIn } = useAuth();
   const router = useRouter();
 
   const handleLogin = () => {
-    router.push("/login/auth");
+    // const res = await()
+    if (!value) return alert("Please enter your nickname");
+    localStorage.setItem("loggedIn", "true");
+    setIsLoggedIn(true);
+    router.push("/");
   };
 
   return (
@@ -44,13 +53,19 @@ const Login = () => {
           }}
         >
           <CardContent>
-            <Image
-              src="/CrazyPong.png"
-              alt="logo for crazypong"
-              width={300}
-              height={200}
-            />
+            <Typography sx={{ color: "white" }} fontSize={"larger"}>
+              Enter your nickname!
+            </Typography>
           </CardContent>
+          <TextField
+            placeholder="nickname"
+            sx={{ backgroundColor: "white" }}
+            value={value}
+            onChange={(e) => {
+              setValue(e.currentTarget.value);
+            }}
+          />
+
           <CardContent
             sx={{
               display: "flex",
@@ -61,10 +76,7 @@ const Login = () => {
             <Button
               variant="contained"
               size="large"
-              sx={{
-                backgroundColor: main.main3,
-                width: "max-content",
-              }}
+              sx={{ backgroundColor: main.main3, width: "max-content" }}
               onClick={handleLogin}
             >
               <Typography sx={{ color: "white" }}>Login</Typography>
@@ -76,4 +88,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Auth;

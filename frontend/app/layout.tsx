@@ -32,7 +32,18 @@ export default function RootLayout({
     <ThemeProvider theme={font}>
       <AuthProvider>
         <html lang="en">
-          <body className={inter.className}>{children}</body>
+          <body className={inter.className}>
+            <div
+              style={{
+                backgroundImage: `url("/background.png")`,
+                width: "100%",
+                backgroundRepeat: "repeat",
+                height: "100vh",
+              }}
+            >
+              {children}
+            </div>
+          </body>
         </html>
       </AuthProvider>
     </ThemeProvider>
