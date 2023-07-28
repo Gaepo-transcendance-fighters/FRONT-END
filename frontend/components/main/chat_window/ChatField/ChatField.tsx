@@ -75,7 +75,7 @@ const ChatField = () => {
         borderRadius: "5px",
         listStyleType: "none",
         overflowY: "scroll",
-        margin: "0% 2% 2% 2%",
+        margin: "0% 2% 1% 2%",
       }}
     >
       {msgHistories.map((value, i) => {
