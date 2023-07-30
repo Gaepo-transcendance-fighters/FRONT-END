@@ -14,6 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useState } from "react";
+import PingPong from "@/components/game/ingame/PingPong";
 
 const font = createTheme({
   typography: {
@@ -95,10 +96,11 @@ const GamePlaying = () => {
               <Typography sx={{ fontSize: "3rem" }}>100 : 105</Typography>
             </Card>
           </CardContent>
-          <CardContent>
+
+          <CardContent sx={{ transform: "translateX(3%)" }}>
             <Card
               style={{
-                width: "100%",
+                width: "max-content",
                 height: "65vh",
                 border: "2px solid black",
                 display: "flex",
@@ -109,7 +111,9 @@ const GamePlaying = () => {
             >
               <Card
                 style={{
-                  width: "10%",
+                  width: "max-content",
+                  padding: "20px",
+                  margin: "30px",
                   height: "15%",
                   border: "2px solid black",
                   display: "flex",
@@ -119,21 +123,12 @@ const GamePlaying = () => {
               >
                 Player 1
               </Card>
+              <PingPong />
               <Card
                 style={{
-                  width: "70%",
-                  height: "80%",
-                  border: "2px solid black",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
-                게임올라갈부분
-              </Card>
-              <Card
-                style={{
-                  width: "10%",
+                  width: "max-content",
+                  padding: "20px",
+                  margin: "30px",
                   height: "15%",
                   border: "2px solid black",
                   display: "flex",
