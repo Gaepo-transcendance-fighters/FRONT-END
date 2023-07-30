@@ -33,12 +33,28 @@ const Auth = () => {
   const { setIsLoggedIn } = useAuth();
   const router = useRouter();
 
-  const handleLogin = () => {
-    // const res = await()
+  const handleLogin = async () => {
     if (!value) return alert("Please enter your nickname");
-    localStorage.setItem("loggedIn", "true");
-    setIsLoggedIn(true);
-    router.push("/");
+
+    const res = await fetch("serverurl", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        nickname: value,
+      }),
+    })
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem("loggedIn", "true");
+        setIsLoggedIn(true);
+        return router.push("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        return alert("Wrong nickname... Please enter again");
+      });
   };
 
   return (

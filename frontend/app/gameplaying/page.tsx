@@ -13,7 +13,7 @@ import {
 
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const font = createTheme({
   typography: {
@@ -35,6 +35,11 @@ const modalStyle = {
 
 const GamePlaying = () => {
   const router = useRouter();
+  const [myScore, setMyScore] = useState(0);
+  const [enemyScore, setEnemyScore] = useState(0);
+
+  useEffect(() => {}, []);
+
   const ClickNomalGame = () => {
     router.push("./optionselect");
   };
@@ -92,7 +97,9 @@ const GamePlaying = () => {
                 border: "2px solid black",
               }}
             >
-              <Typography sx={{ fontSize: "3rem" }}>100 : 105</Typography>
+              <Typography sx={{ fontSize: "3rem" }}>
+                {myScore} : {enemyScore}
+              </Typography>
             </Card>
           </CardContent>
           <CardContent>
