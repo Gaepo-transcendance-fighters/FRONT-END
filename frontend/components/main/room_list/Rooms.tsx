@@ -3,7 +3,6 @@
 import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { createPortal } from "react-dom";
 import "@/components/main/room_list/RoomList.css";
-import { IChatRoom } from "./RoomTypeButton";
 import MemberList from "../member_list/MemberList";
 import CreateRoomButton from "./CreateRoomButton";
 import Room from "./Room";
@@ -14,16 +13,14 @@ export default function Rooms({
   channelType,
   showMembersList,
   setShowMembersList,
-  chatRoomList,
 }: {
   roomsProp: IChatRoom0[];
   channelType: boolean;
   showMembersList: boolean;
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
-  chatRoomList: IChatRoom0[];
 }) {
   const [isRight, setIsRight] = useState(false);
-  const [aRoom, setARoom] = useState<IChatRoom>();
+  const [aRoom, setARoom] = useState<IChatRoom0>();
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
     null
   );

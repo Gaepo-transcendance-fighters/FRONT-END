@@ -9,7 +9,6 @@ import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
 import { useState, useEffect } from "react";
-import { IChatRoom, chatRoomType } from "../main/room_list/RoomTypeButton";
 import { useAuth } from "@/context/AuthContext";
 import { socket } from "@/app/layout";
 
@@ -22,7 +21,7 @@ export const main = {
   main5: "#214C97",
   main6: "#183C77",
 };
-/*// emit - client
+/*
 {
 	friendList[]? {
 		friend {
@@ -61,9 +60,9 @@ export const main = {
 }
 */
 export enum Mode {
-  PRIVATE = 'private',
-  PUBLIC = 'public',
-  PROTECTED = 'protected'
+  PRIVATE = "private",
+  PUBLIC = "public",
+  PROTECTED = "protected",
 }
 
 export interface IChatRoom0 {
@@ -127,7 +126,8 @@ const Layout = () => {
   // }, []);
   useEffect(() => {
     setChatRoomList(mockChatRoomList0);
-  },[]);
+  }, []);
+
   useRequireAuth();
 
   // useEffect(() => {
@@ -183,7 +183,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <RoomList chatRoomList={chatRoomList} />
+        <RoomList />
       </Stack>
     </Box>
   );
