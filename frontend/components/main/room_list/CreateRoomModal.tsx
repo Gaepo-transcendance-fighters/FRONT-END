@@ -30,9 +30,43 @@ export default function CreateRoomModal({
     setValue("");
     setOpen(false);
   };
-  useEffect(() => {
+  //   channelIdx: number;
+  //   owner: string;
+  //   channelType: chatRoomType;
+
+  // useEffect(() => {
+  //   const ChatCreateRoom = (json) => {
+  //     let tmp: IChatRoom0;
+  //     tmp.channelIdx = json.channelIdx;
+  //     tmp.owner = json.owner;
+  //     tmp.channelType = json.password
+  //       ? chatRoomType.protected
+  //       : chatRoomType.public;
+  //     setChatRoomList((prev) => [...prev, tmp]);
+  //   };
+  //   socket.on("main_enter", ChatCreateRoom, json);
+
+  //   return () => {
+  //     socket.off("main_enter", ChatCreateRoom, json);
+  //   };
+  // }, []);
+  const onClick = () => {
+    // socket.emit("chat_create_room", { password: value }, 상태코드);
+    // if (정상상태코드) {
+    //   setValue("");
+    //   setOpen(false);
+    // }
     
-  }, []);
+  };
+  /*
+  {
+  channel :{
+    channelIdx,
+    owner,
+    password : true / false
+  }
+}
+*/
   return (
     <>
       <Modal
@@ -72,7 +106,7 @@ export default function CreateRoomModal({
               <Button
                 variant="contained"
                 sx={{ margin: "auto" }}
-                onClick={handleClose}
+                onClick={onClick}
               >
                 방 생성
               </Button>
