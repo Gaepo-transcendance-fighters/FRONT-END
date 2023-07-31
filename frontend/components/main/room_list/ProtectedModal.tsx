@@ -17,7 +17,7 @@ import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 
 const box = {
-  // position: "absolute" as "absolute",
+  position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -52,7 +52,7 @@ export default function ProtectedModal({
   handleClose: () => void;
   isRight: boolean;
   setIsRight: Dispatch<SetStateAction<boolean>>;
-  room: IChatRoom;
+  room: IChatRoom0;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
   setARoom: Dispatch<SetStateAction<IChatRoom | undefined>>;

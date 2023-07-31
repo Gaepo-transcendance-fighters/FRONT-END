@@ -14,7 +14,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
 
 const modalStyle = {
-  // position: "absolute" as "absolute",
+  position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",

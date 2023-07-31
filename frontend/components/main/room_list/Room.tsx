@@ -1,7 +1,8 @@
-import { IChatRoom } from "./RoomTypeButton";
+import { IChatRoom, chatRoomType } from "./RoomTypeButton";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ProtectedModal from "./ProtectedModal";
+import { IChatRoom0 } from "@/components/public/Layout";
 
 export default function Room({
   room,
@@ -12,7 +13,7 @@ export default function Room({
   isRight,
   aRoom,
 }: {
-  room: IChatRoom;
+  room: IChatRoom0;
   idx: number;
   setARoom: Dispatch<SetStateAction<IChatRoom | undefined>>;
   setIsRight: Dispatch<SetStateAction<boolean>>;
@@ -43,14 +44,15 @@ export default function Room({
     room.password || aRoom === room ? null : setARoom(room);
     room.password == "" ? setIsRight(true) : handleOpen();
   };
-
+  console.log(room);
   return (
     <>
-      <button key={idx} className="item" onClick={() => RoomClick(room)}>
+      {/* <button key={idx} className="item" onClick={() => RoomClick(room)}> */}
+      <button key={idx} className="item">
         <div className="roomidx">{leftPadding(room.channelIdx)}</div>
         <div className="owner">{room.owner}'s</div>
         <div className="lock">
-          {room.password ? (
+          {room.channelType === chatRoomType.protected ? (
             <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
           ) : (
             ""

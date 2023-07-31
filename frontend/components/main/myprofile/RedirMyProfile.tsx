@@ -15,7 +15,7 @@ import { useState } from "react";
 import { main } from "@/components/public/Layout";
 import React from "react";
 const modalStyle = {
-  // position: "absolute" as "absolute",
+  position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -28,7 +28,7 @@ const modalStyle = {
 };
 
 const myProfileStyle = {
-  // position: "absolute" as "absolute",
+  position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",

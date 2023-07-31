@@ -6,8 +6,9 @@ import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
 import { IChatRoom } from "./RoomTypeButton";
 import { main } from "@/font/color";
+import { IChatRoom0 } from "@/components/public/Layout";
 
-export default function RoomList({chatRoomList} : {chatRoomList: IChatRoom[]}) {
+export default function RoomList({chatRoomList} : {chatRoomList: IChatRoom0[]}) {
   const [showMembersList, setShowMembersList] = useState(false);
   return (
     <>
