@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
@@ -30,6 +30,9 @@ export default function CreateRoomModal({
     setValue("");
     setOpen(false);
   };
+  useEffect(() => {
+    
+  }, []);
   return (
     <>
       <Modal
