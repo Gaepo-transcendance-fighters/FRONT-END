@@ -32,17 +32,11 @@ export default function CreateRoomModal({
   };
   //   channelIdx: number;
   //   owner: string;
-  //   channelType: chatRoomType;
+  //   mode: chatRoomType;
 
   // useEffect(() => {
   //   const ChatCreateRoom = (json) => {
-  //     let tmp: IChatRoom0;
-  //     tmp.channelIdx = json.channelIdx;
-  //     tmp.owner = json.owner;
-  //     tmp.channelType = json.password
-  //       ? chatRoomType.protected
-  //       : chatRoomType.public;
-  //     setChatRoomList((prev) => [...prev, tmp]);
+  //     setChatRoomList((prev) => [...prev, json.channel]);
   //   };
   //   socket.on("main_enter", ChatCreateRoom, json);
 
@@ -53,20 +47,11 @@ export default function CreateRoomModal({
   const onClick = () => {
     // socket.emit("chat_create_room", { password: value }, 상태코드);
     // if (정상상태코드) {
-    //   setValue("");
-    //   setOpen(false);
+    // setValue("");
+    // setOpen(false);
     // }
-    
   };
-  /*
-  {
-  channel :{
-    channelIdx,
-    owner,
-    password : true / false
-  }
-}
-*/
+
   return (
     <>
       <Modal
