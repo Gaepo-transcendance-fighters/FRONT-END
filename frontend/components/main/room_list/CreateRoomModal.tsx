@@ -6,7 +6,7 @@ import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 
 const style = {
-  position: "absolute" as "absolute",
+  // position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",

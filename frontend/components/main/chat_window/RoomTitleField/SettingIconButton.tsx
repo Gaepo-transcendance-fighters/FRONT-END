@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+// import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import { useState, forwardRef } from "react";
 import Stack from "@mui/material/Stack";
@@ -18,7 +18,7 @@ const Bar = forwardRef((props: any, ref: any) => (
 ));
 
 const style = {
-  position: "absolute" as "absolute",
+  // position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",

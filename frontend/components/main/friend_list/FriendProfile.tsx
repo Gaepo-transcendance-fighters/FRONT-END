@@ -16,7 +16,7 @@ import Image from "next/image";
 import InviteGame from "../InviteGame/InviteGame";
 
 const modalStyle = {
-  position: "absolute" as "absolute",
+  // position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",

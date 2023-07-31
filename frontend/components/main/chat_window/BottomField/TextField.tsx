@@ -1,16 +1,16 @@
 "use client";
 
-import * as React from "react";
+// import * as React from "react";
 import FormControl, { useFormControl } from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Box from "@mui/material/Box";
 import FormHelperText from "@mui/material/FormHelperText";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 
 export default function UseFormControl() {
   const [msg, setMsg] = useState<string>("");
 
-  const changeMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const changeMsg = (event: ChangeEvent<HTMLInputElement>) => {
     setMsg(event.target.value);
   };
 

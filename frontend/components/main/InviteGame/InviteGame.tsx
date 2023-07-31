@@ -3,7 +3,7 @@ import { Box, Button, Card, CardContent, Modal } from "@mui/material";
 import { useState } from "react";
 import { main } from "@/components/public/Layout";
 const modalStyle = {
-  position: "absolute" as "absolute",
+  // position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
