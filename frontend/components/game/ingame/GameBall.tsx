@@ -10,7 +10,7 @@ const GameBall = ({ x, y }: { x: number; y: number }) => {
       style={{
         position: "absolute",
         transform: `translate(${x}px, ${y}px)`,
-        transition: "transform 150ms linear",
+        transition: "transform 50ms linear",
       }}
     />
   );

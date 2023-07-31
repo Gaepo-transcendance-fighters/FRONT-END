@@ -17,14 +17,14 @@ interface IBall {
 }
 
 const PingPong = () => {
-  let ballSpeed = 2;
-  let directionX = 1;
-  let directionY = -1;
+  let ballSpeed = 4;
 
   const [ready, setReady] = useState(true);
   const [myPaddle, setMyPaddle] = useState<IPaddle>({ x: -470, y: 0 });
   const [enemyPaddle, setEnemyPaddle] = useState<IPaddle>({ x: 470, y: 0 });
   const [ball, setBall] = useState<IBall>({ x: 0, y: 0 });
+  const [direction, setDirection] = useState({ x: 1, y: 1 });
+  const ballRef = useRef<IBall>({ x: 0, y: 0 });
 
   const handlePaddle = useCallback(
     (e: KeyboardEvent) => {
@@ -50,22 +50,21 @@ const PingPong = () => {
   );
 
   const ballMove = useCallback(() => {
-    if (ball.y < -250) directionY = 1;
-    if (ball.y > 250) directionY = -1;
-    if (ball.x >= 500 || ball.x <= -500) directionX = -directionX;
+    const newLocation = {
+      x: ball.x + direction.x * ballSpeed,
+      y: ball.y + direction.y * ballSpeed,
+    };
 
-    const newBallX = ball.x + ballSpeed * directionX;
-    const newBallY = ball.y + ballSpeed * directionY;
+    if (newLocation.x <= -500 || newLocation.x > 500)
+      setDirection((prev) => ({ x: -prev.x, y: prev.y }));
+    if (newLocation.y <= -250 || newLocation.y >= 250)
+      setDirection((prev) => ({ x: prev.x, y: -prev.y }));
 
-    setBall({ x: newBallX, y: newBallY });
-  }, [ball.x, ball.y, directionX, directionY]);
+    setBall(newLocation);
+    requestAnimationFrame(ballMove);
+  }, [ball]);
 
-  const animate = () => {
-    ballMove();
-    requestAnimationFrame(animate);
-  };
-
-  // requestAnimationFrame(animate);
+  requestAnimationFrame(ballMove);
 
   useEffect(() => {
     window.addEventListener("keydown", handlePaddle);
