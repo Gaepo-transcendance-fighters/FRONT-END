@@ -24,7 +24,7 @@ const GameStartButton = () => {
           padding: "40px 60px",
           borderRadius: "15px",
           border: "10px solid",
-          backgroundColor: "WHITE",
+          backgroundColor: "white",
         }}
       >
         <Image

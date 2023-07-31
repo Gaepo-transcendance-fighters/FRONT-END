@@ -1,5 +1,13 @@
+.flactivate {
+  height: 35vh;
+}
+.fldeactivate {
+  height: 0;
+  padding: 0;
+}
+
 .chatroomlist {
-  background-color: rgb(39, 87, 192);
+  background-color: #1c478e;
   text-align: center;
   padding: 7px;
   font-size: 21px;
@@ -7,10 +15,11 @@
   color: white;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: "crazy";
 }
 
 .typebutton {
-  background-color: #214aa4;
+  background-color: #1c478e;
   border-radius: 10px;
   height: 33px;
   border: 0px;
@@ -19,6 +28,7 @@
   font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: "crazy";
 }
 .typebutton:disabled {
   background-color: #7b8aa9;
@@ -39,9 +49,9 @@
 }
 
 .list {
-  background-color: #1c408f;
+  background-color: #1c478e;
   border-radius: 10px;
-  height: 83vh;
+  height: 81vh;
   bottom: 0;
   padding: 7px 11px;
   padding-right: 0px;
@@ -82,16 +92,17 @@
 }
 
 .item {
+  font-family: "crazy";
   display: flex;
   align-items: center;
 
-  background-color: rgb(103 219 251);
+  background-color: #67dbfb;
   border-radius: 10px;
   height: 50px;
   border: 0px;
-  margin: 3px auto;
+  margin: 8px auto;
   width: 100%;
-  color: white;
+  color: black;
   font-size: 18px;
   padding-left: 10px;
   padding-right: 10px;
@@ -104,6 +115,7 @@
   width: 17%;
   margin: auto;
   font-size: 16px;
+  font-family: "crazy";
   vertical-align: middle;
   color: rgb(255, 221, 0);
 }
@@ -121,7 +133,6 @@
   border-radius: 10px;
   height: 50px;
   border: 0px;
-  margin: 3px auto;
   width: 100%;
   color: #67dbfb;
   font-size: 24px;

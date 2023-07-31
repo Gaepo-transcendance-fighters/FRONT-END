@@ -27,14 +27,21 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          backgroundColor: "#3478c5",
           padding: 0,
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: main.main5 }}>
+        <CardContent
+          sx={{
+            height: "35vh",
+            ml: 1,
+            mr: 1,
+            mt: 1,
+            backgroundColor: "#4292DA",
+            borderRadius: "10px",
+          }}
+        >
           <Myprofile />
-          <InviteGame />;
         </CardContent>
         <FriendList />
       </Stack>
@@ -43,13 +50,11 @@ const Layout = () => {
         sx={{
           width: "60vw",
           height: "100vh",
-          backgroundColor: "#6EC2F5",
           padding: 0,
           margin: 0,
         }}
       >
-        <CardContent sx={{ height: "35vh", backgroundColor: main.main2 }}>
-          game start
+        <CardContent sx={{ height: "37vh" }}>
           <GameStartButton />
         </CardContent>
         <ChatWindow />
@@ -59,14 +64,10 @@ const Layout = () => {
         sx={{
           width: "20vw",
           height: "100vh",
-          backgroundColor: "#3171dd",
           padding: 0,
           margin: 0,
         }}
       >
-        {/* <CardContent sx={{ height: "35vh", backgroundColor: "purple" }}>
-          room member
-        </CardContent> */}
         <RoomList />
       </Stack>
     </Box>

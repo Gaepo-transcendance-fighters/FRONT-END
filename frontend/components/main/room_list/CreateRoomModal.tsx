@@ -11,7 +11,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "400px",
-  bgcolor: "#67dcfb",
+  bgcolor: "#67DBFB",
   borderRadius: "10px",
   border: "2px solid #000",
   boxShadow: 24,
@@ -39,11 +39,11 @@ export default function CreateRoomModal({
         aria-describedby="create-non-dm-room-modal"
       >
         <Box sx={style}>
-          <Card sx={{ margin: 1, backgroundColor: "#50aef8" }}>
+          <Card sx={{ margin: 1, backgroundColor: "#55B7EB" }}>
             <Box margin={1}>
               <Typography>방 생성 하기</Typography>
             </Box>
-            <Card sx={{ margin: 1, backgroundColor: "#3b85d8" }}>
+            <Card sx={{ margin: 1, backgroundColor: "#4292DA" }}>
               <Stack margin={1}>
                 <Typography>방 제목: </Typography>
               </Stack>

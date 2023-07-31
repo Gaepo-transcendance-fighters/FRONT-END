@@ -1,3 +1,4 @@
+import { main } from "@/font/color";
 import {
   Avatar,
   Button,
@@ -7,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { main } from "@/components/public/Layout";
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
@@ -23,7 +23,7 @@ const Myprofile = () => {
 
   return (
     <ThemeProvider theme={font}>
-      <div>
+      <div style={{ padding: 10 }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Avatar
             src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
@@ -64,7 +64,6 @@ const Myprofile = () => {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
             type="button"
-            // onClick={handleOpenModal}
             onClick={RedirMyprofile}
             style={{
               backgroundColor: "WHITE",

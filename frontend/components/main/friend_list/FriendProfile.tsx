@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { IFriend } from "./FriendList";
 import Image from "next/image";
+import InviteGame from "../InviteGame/InviteGame";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -56,7 +57,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   return (
     <>
       <Button type="button" onClick={handleOpenModal}>
-        더보기
+        <Typography>더보기</Typography>
       </Button>
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box sx={modalStyle} borderRadius={"10px"}>
@@ -101,13 +102,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 상태: {prop.isOnline ? loginOn : loginOff}
               </Typography>
               <Stack direction={"row"} spacing={2}>
-                <Button
-                  type="button"
-                  sx={{ minWidth: "max-content" }}
-                  variant="contained"
-                >
-                  친선전
-                </Button>
+                <InviteGame />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
@@ -140,7 +135,9 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
           </Card>
           <br />
           <Card sx={{ backgroundColor: "#3478c5" }}>
-            <CardContent sx={{ paddingBottom: 0 }}>전적</CardContent>
+            <CardContent sx={{ paddingBottom: 0 }}>
+              <Typography>전적</Typography>
+            </CardContent>
             <Stack direction={"row"}>
               <Card
                 sx={{
@@ -190,7 +187,9 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
               height: "170px",
             }}
           >
-            <CardContent sx={{ paddingBottom: 0 }}>전적 기록</CardContent>
+            <CardContent sx={{ paddingBottom: 0 }}>
+              <Typography>전적 기록</Typography>
+            </CardContent>
             <Stack direction={"row"}>
               <Card
                 sx={{
@@ -211,17 +210,17 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                     <CardContent
                       sx={{ "&:last-child": { paddingBottom: "16px" } }}
                     >
-                      WIN
+                      <Typography>WIN</Typography>
                     </CardContent>
                     <CardContent
                       sx={{ "&:last-child": { paddingBottom: "16px" } }}
                     >
-                      hoslim VS jujeon
+                      <Typography>hoslim VS jujeon</Typography>
                     </CardContent>
                     <CardContent
                       sx={{ "&:last-child": { paddingBottom: "16px" } }}
                     >
-                      5 : 3
+                      <Typography>5 : 3</Typography>
                     </CardContent>
                   </Stack>
                 </Card>
