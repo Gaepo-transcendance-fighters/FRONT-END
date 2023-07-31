@@ -8,13 +8,7 @@ import {
 } from "@/components/public/Layout";
 import { useRoom } from "@/context/RoomContext";
 
-export default function RoomTypeButton({
-  showMembersList,
-  setShowMembersList,
-}: {
-  showMembersList: boolean;
-  setShowMembersList: Dispatch<SetStateAction<boolean>>;
-}) {
+export default function RoomTypeButton() {
   const [nonDmrooms, setNonDmRooms] = useState<IChatRoom0[]>([]);
   const [dmRooms, setDmRooms] = useState<IChatRoom0[]>([]);
   const [disabled, setDisabled] = useState(true);
@@ -75,8 +69,6 @@ export default function RoomTypeButton({
       <Rooms
         roomsProp={disabled ? nonDmrooms : dmRooms}
         channelType={disabled}
-        showMembersList={showMembersList}
-        setShowMembersList={setShowMembersList}
       />
     </>
   );

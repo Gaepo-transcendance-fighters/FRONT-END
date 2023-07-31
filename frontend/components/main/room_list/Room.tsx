@@ -2,13 +2,13 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ProtectedModal from "./ProtectedModal";
 import { IChatRoom0, Mode } from "@/components/public/Layout";
+import { useRoom } from "@/context/RoomContext";
 
 export default function Room({
   room,
   idx,
   setARoom,
   setIsRight,
-  setShowMembersList,
   isRight,
   aRoom,
 }: {
@@ -16,13 +16,13 @@ export default function Room({
   idx: number;
   setARoom: Dispatch<SetStateAction<IChatRoom0 | undefined>>;
   setIsRight: Dispatch<SetStateAction<boolean>>;
-  setShowMembersList: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
   aRoom: IChatRoom0 | undefined;
 }) {
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
-
+  const { setIsOpen } = useRoom();
+  
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
     else if (idx < 100) return "0" + idx.toString();
@@ -36,7 +36,7 @@ export default function Room({
   const handleClose = () => {
     setOpen(false);
     setFail(false);
-    aRoom ? setShowMembersList(true) : null;
+    aRoom ? setIsOpen(true) : null;
   }; // 올바른 비번
 
   // const RoomClick = (room: IChatRoom0) => {
