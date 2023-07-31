@@ -60,43 +60,48 @@ export const main = {
 	}
 }
 */
-/* channelType : */
+export enum Mode {
+  PRIVATE = 'private',
+  PUBLIC = 'public',
+  PROTECTED = 'protected'
+}
+
 export interface IChatRoom0 {
   channelIdx: number;
   owner: string;
-  channelType: chatRoomType;
+  mode: Mode;
 }
 
 export const mockChatRoomList0: IChatRoom0[] = [
   {
     channelIdx: 0,
     owner: "jeekim",
-    channelType: chatRoomType.public,
+    mode: Mode.PUBLIC,
   },
   {
     channelIdx: 1,
     owner: "jaekim",
-    channelType: chatRoomType.public,
+    mode: Mode.PROTECTED,
   },
   {
     channelIdx: 2,
     owner: "0123456789",
-    channelType: chatRoomType.protected,
+    mode: Mode.PROTECTED,
   },
   {
     channelIdx: 3,
     owner: "bbbbbbbbbb",
-    channelType: chatRoomType.public,
+    mode: Mode.PUBLIC,
   },
   {
     channelIdx: 4,
     owner: "0123456789",
-    channelType: chatRoomType.public,
+    mode: Mode.PUBLIC,
   },
   {
     channelIdx: 5,
     owner: "zzzzzzzzzz",
-    channelType: chatRoomType.protected,
+    mode: Mode.PROTECTED,
   },
 ];
 

@@ -2,7 +2,7 @@ import { IChatRoom, chatRoomType } from "./RoomTypeButton";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ProtectedModal from "./ProtectedModal";
-import { IChatRoom0 } from "@/components/public/Layout";
+import { IChatRoom0, Mode } from "@/components/public/Layout";
 
 export default function Room({
   room,
@@ -52,7 +52,7 @@ export default function Room({
         <div className="roomidx">{leftPadding(room.channelIdx)}</div>
         <div className="owner">{room.owner}'s</div>
         <div className="lock">
-          {room.channelType === chatRoomType.protected ? (
+          {room.mode === Mode.PROTECTED ? (
             <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
           ) : (
             ""
