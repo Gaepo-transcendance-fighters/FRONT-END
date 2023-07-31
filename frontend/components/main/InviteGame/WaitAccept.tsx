@@ -17,7 +17,7 @@ const modalStyle = {
   p: 4,
 };
 
-const InviteGame = () => {
+const WaitAccept = () => {
   const router = useRouter();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -37,7 +37,7 @@ const InviteGame = () => {
         variant="contained"
         onClick={handleOpenModal}
       >
-        친선전승낙모달
+        친선전
       </Button>
       <Modal open={openModal}>
         <Box sx={modalStyle} borderRadius={"10px"}>
@@ -62,7 +62,7 @@ const InviteGame = () => {
                 alignItems: "center",
               }}
             >
-              게임초대
+              승낙대기
             </CardContent>
           </Card>
           <Card
@@ -84,7 +84,7 @@ const InviteGame = () => {
                 alignItems: "center",
               }}
             >
-              Silee 님께서 친선전 경기를 요청하셨습니다.
+              Silee 님께 친선전 경기를 요청하였습니다.
             </CardContent>
             <CardContent
               style={{
@@ -99,23 +99,7 @@ const InviteGame = () => {
             >
               <Button
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "#49EC62",
-                  border: "1px solid black",
-                }}
-                onClick={() => {
-                  router.push("./optionselect");
-                }}
-              >
-                수락
-              </Button>
-              <Button
-                style={{
-                  width: "100%",
+                  width: "50%",
                   height: "100%",
                   display: "flex",
                   justifyContent: "center",
@@ -125,7 +109,7 @@ const InviteGame = () => {
                 }}
                 onClick={handleCloseModal}
               >
-                거절
+                취소
               </Button>
             </CardContent>
           </Card>
@@ -135,7 +119,7 @@ const InviteGame = () => {
   );
 };
 
-export default InviteGame;
+export default WaitAccept;
 
 // display: "flex",
 // alignItems: "center",

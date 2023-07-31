@@ -8,7 +8,7 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
-
+import WaitAccept from "../main/InviteGame/WaitAccept";
 export const main = {
   main0: "#67DBFB",
   main1: "#55B7EB",
@@ -42,6 +42,9 @@ const Layout = () => {
           }}
         >
           <Myprofile />
+          {/* <Myprofile Img={소켓으로받아온 imguri링크} Nickname={소켓으로받아온 닉네임}/> */}
+          <InviteGame />
+          <WaitAccept />
         </CardContent>
         <FriendList />
       </Stack>

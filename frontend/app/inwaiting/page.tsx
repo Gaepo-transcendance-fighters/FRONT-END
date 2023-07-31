@@ -32,20 +32,29 @@ const modalStyle = {
   p: 4,
 };
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { main } from "@/components/public/Layout";
 const inwaiting = () => {
   const router = useRouter();
 
+  const searchParams = useSearchParams();
+  const mode = searchParams.get("mode");
+
+  console.log(mode);
   const BackToMain = () => {
     router.push("/");
   };
 
   const [openModal, setOpenModal] = useState<boolean>(false);
+
   const handleOpenModal_redir = () => {
+    setOpenModal(true);
     setTimeout(() => {
-      // router.push("./gameplaying");
-      router.push("./optionselect");
+      {
+        mode == "Rank"
+          ? router.push("./gameplaying")
+          : router.push("./optionselect");
+      }
     }, 2000);
   };
 
@@ -137,31 +146,61 @@ const inwaiting = () => {
                       매칭되었습니다
                     </CardContent>
                   </Card>
-                  <Card
-                    style={{
-                      width: "100%",
-                      height: "90%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <CardContent
-                      style={{
-                        width: "100%",
-                        height: "40%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      잠시후 옵션 선택으로 이동합니다.
-                    </CardContent>
-                  </Card>
+                  {mode == "Rank" ? (
+                    <>
+                      {" "}
+                      <Card
+                        style={{
+                          width: "100%",
+                          height: "90%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <CardContent
+                          style={{
+                            width: "100%",
+                            height: "40%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          잠시후 게임화면으로 이동합니다.
+                        </CardContent>
+                      </Card>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <Card
+                        style={{
+                          width: "100%",
+                          height: "90%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <CardContent
+                          style={{
+                            width: "100%",
+                            height: "40%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          잠시후 옵션 선택으로 이동합니다.
+                        </CardContent>
+                      </Card>
+                    </>
+                  )}
                 </Box>
               </Modal>
-              {/* <CircularProgress /> */}
             </Card>
           </CardContent>
 

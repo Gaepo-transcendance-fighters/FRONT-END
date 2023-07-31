@@ -12,8 +12,9 @@ import {
 } from "@mui/material";
 
 import { main } from "@/components/public/Layout";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useCallback } from "react";
+
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
@@ -35,15 +36,25 @@ const infomodalStyle = {
 
 const Game = () => {
   const router = useRouter();
+  const searchparams = useSearchParams();
+
+  const createQuery = useCallback(
+    (mode: string) => {
+      const params = new URLSearchParams(searchparams.toString());
+      params.set("mode", mode);
+
+      return params.toString();
+    },
+    [searchparams]
+  );
 
   const ClickNomalGame = () => {
-    // router.push("./optionselect");
-    router.push("./inwaiting");
+    router.push("./inwaiting" + "?" + createQuery("Normal"));
   };
 
   const ClickRankGame = () => {
-    //임시로해놓겠습니다
-    router.push("./gameresult");
+    router.push("./inwaiting");
+    router.push("./inwaiting" + "?" + createQuery("Rank"));
   };
 
   const BackToMain = () => {

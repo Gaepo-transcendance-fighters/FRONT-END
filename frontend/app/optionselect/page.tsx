@@ -52,7 +52,7 @@ const OptionSelect = () => {
   useEffect(() => {
     countdown > 0 && setTimeout(() => setCountdown(countdown - 1), 1000);
     // 나중에 이거 풀면됨
-    // if (countdown == 0) cntRedir();
+    if (countdown == 0) cntRedir();
   }, [countdown]);
 
   setTimeout(() => {
