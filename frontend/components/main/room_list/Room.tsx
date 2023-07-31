@@ -1,4 +1,3 @@
-import { IChatRoom, chatRoomType } from "./RoomTypeButton";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ProtectedModal from "./ProtectedModal";
@@ -15,11 +14,11 @@ export default function Room({
 }: {
   room: IChatRoom0;
   idx: number;
-  setARoom: Dispatch<SetStateAction<IChatRoom | undefined>>;
+  setARoom: Dispatch<SetStateAction<IChatRoom0 | undefined>>;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
-  aRoom: IChatRoom | undefined;
+  aRoom: IChatRoom0 | undefined;
 }) {
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
@@ -40,11 +39,11 @@ export default function Room({
     aRoom ? setShowMembersList(true) : null;
   }; // 올바른 비번
 
-  const RoomClick = (room: IChatRoom) => {
-    room.password || aRoom === room ? null : setARoom(room);
-    room.password == "" ? setIsRight(true) : handleOpen();
-  };
-  console.log(room);
+  // const RoomClick = (room: IChatRoom0) => {
+  //   room.password || aRoom === room ? null : setARoom(room);
+  //   room.password == "" ? setIsRight(true) : handleOpen();
+  // };
+
   return (
     <>
       {/* <button key={idx} className="item" onClick={() => RoomClick(room)}> */}

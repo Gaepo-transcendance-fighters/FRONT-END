@@ -2,7 +2,11 @@
 
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import Rooms from "./Rooms";
-import { IChatRoom0, Mode, mockChatRoomList0 } from "@/components/public/Layout";
+import {
+  IChatRoom0,
+  Mode,
+} from "@/components/public/Layout";
+import { useRoom } from "@/context/RoomContext";
 
 export default function RoomTypeButton({
   showMembersList,
@@ -14,9 +18,10 @@ export default function RoomTypeButton({
   const [nonDmrooms, setNonDmRooms] = useState<IChatRoom0[]>([]);
   const [dmRooms, setDmRooms] = useState<IChatRoom0[]>([]);
   const [disabled, setDisabled] = useState(true);
+  const { rooms } = useRoom();
 
   const DivideRoom = () => {
-    mockChatRoomList0.map((room) => {
+    rooms.map((room) => {
       if (room.mode != Mode.PRIVATE) {
         setNonDmRooms((prev) => {
           return [...prev, room];
@@ -31,7 +36,7 @@ export default function RoomTypeButton({
 
   useEffect(() => {
     DivideRoom();
-  }, []);
+  }, [rooms]);
 
   const OnClick = (isNotDm: boolean) => {
     setNonDmRooms([]);
@@ -72,7 +77,7 @@ export default function RoomTypeButton({
         channelType={disabled}
         showMembersList={showMembersList}
         setShowMembersList={setShowMembersList}
-        />
+      />
     </>
   );
 }

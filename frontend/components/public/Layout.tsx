@@ -10,7 +10,8 @@ import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { socket } from "@/app/layout";
+import { useRoom } from "@/context/RoomContext";
+// import { socket } from "@/app/layout";
 
 export const main = {
   main0: "#67DBFB",
@@ -105,12 +106,12 @@ export const mockChatRoomList0: IChatRoom0[] = [
 ];
 
 const Layout = () => {
-  const [friendList, setFriendList] = useState<IFriend[]>([]);
-  const [chatRoomList, setChatRoomList] = useState<IChatRoom0[]>([]);
-  const [blockList, setBlockList] = useState<IFriend[]>([]);
+  // const [friendList, setFriendList] = useState<IFriend[]>([]);
+  // const [chatRoomList, setChatRoomList] = useState<IChatRoom0[]>([]);
+  // const [blockList, setBlockList] = useState<IFriend[]>([]);
 
-  const { isLoggedIn } = useAuth();
-
+  // const { isLoggedIn } = useAuth();
+  const { setRooms, rooms } = useRoom();
   // useEffect(() => {
   //   const MainEnter = (json) => {
   //     setFriendList(json.friendList); //
@@ -124,10 +125,11 @@ const Layout = () => {
   //     socket.off("main_enter", MainEnter, json);
   //   };
   // }, []);
-  useEffect(() => {
-    setChatRoomList(mockChatRoomList0);
-  }, []);
 
+  useEffect(() => {
+    setRooms(mockChatRoomList0);
+  }, []);
+  
   useRequireAuth();
 
   // useEffect(() => {

@@ -12,9 +12,9 @@ import {
   KeyboardEvent,
 } from "react";
 import "./ProtectedModal.css";
-import { IChatRoom } from "./RoomTypeButton";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
+import { IChatRoom0 } from "@/components/public/Layout";
 
 const box = {
   position: "absolute" as "absolute",
@@ -55,7 +55,7 @@ export default function ProtectedModal({
   room: IChatRoom0;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
-  setARoom: Dispatch<SetStateAction<IChatRoom | undefined>>;
+  setARoom: Dispatch<SetStateAction<IChatRoom0 | undefined>>;
 }) {
   const pwRef = useRef("");
 
@@ -64,7 +64,6 @@ export default function ProtectedModal({
   };
 
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
-    console.log(e);
     e.preventDefault();
     setFail(false);
     if (pwRef.current == room.password) {
