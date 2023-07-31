@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Card, CardContent } from "@mui/material";
 import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
-import { IChatRoom } from "./RoomTypeButton";
-import { main } from "@/font/color";
+// import { IChatRoom } from "./RoomTypeButton";
+// import { main } from "@/font/color";
 import { IChatRoom0 } from "@/components/public/Layout";
 
 export default function RoomList({chatRoomList} : {chatRoomList: IChatRoom0[]}) {

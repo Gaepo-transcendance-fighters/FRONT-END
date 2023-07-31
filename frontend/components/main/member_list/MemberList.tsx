@@ -3,7 +3,7 @@
 import "@/components/main/room_list/RoomList.css";
 import Title from "../room_list/Title";
 import Members from "./Members";
-import { IChatRoom } from "../room_list/RoomTypeButton";
+import { IChatRoom0 } from "@/components/public/Layout";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import "@/components/main/member_list/MemberList.css";
 
@@ -13,7 +13,7 @@ export default function MemberList({
   isRight,
   showMembersList,
 }: {
-  aRoom: IChatRoom | undefined;
+  aRoom: IChatRoom0 | undefined;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
   showMembersList: boolean;

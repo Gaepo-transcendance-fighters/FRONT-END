@@ -1,10 +1,10 @@
 "use client";
 
 import Member from "./Member";
-import { IChatRoom } from "../room_list/RoomTypeButton";
+import { IChatRoom0 } from "@/components/public/Layout";
 import "@/components/main/member_list/MemberList.css";
 
-export default function Members({ aRoom }: { aRoom: IChatRoom | undefined }) {
+export default function Members({ aRoom }: { aRoom: IChatRoom0 | undefined }) {
   return (
     <div className="memlist">
       <div>

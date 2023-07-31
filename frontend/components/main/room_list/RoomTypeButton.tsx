@@ -3,24 +3,24 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import Rooms from "./Rooms";
 import { IFriend } from "../friend_list/FriendList";
-import { IChatRoom0, mockChatRoomList0 } from "@/components/public/Layout";
+import { IChatRoom0, Mode, mockChatRoomList0 } from "@/components/public/Layout";
 
-export interface IChatRoom {
-  channelIdx: number;
-  // owner: string;
-  // mems: Array<IFriend>;
-  mems: Array<{ name: string, isOnline: boolean, imgUrl: string }>;
-  // members: Array<string>;
-  owner : string;
-  channelType: chatRoomType;
-  password: string;
-}
+// export interface IChatRoom {
+//   channelIdx: number;
+//   // owner: string;
+//   // mems: Array<IFriend>;
+//   mems: Array<{ name: string, isOnline: boolean, imgUrl: string }>;
+//   // members: Array<string>;
+//   owner : string;
+//   channelType: chatRoomType;
+//   password: string;
+// }
 
-export enum chatRoomType {
-  public,
-  protected,
-  dm
-}
+// export enum chatRoomType {
+//   public,
+//   protected,
+//   dm
+// }
 
 export enum permissonType {
   normal,
@@ -125,7 +125,7 @@ export default function RoomTypeButton({
 
   const DivideRoom = () => {
     mockChatRoomList0.map((room) => {
-      if (room.channelType != chatRoomType.dm) {
+      if (room.mode != Mode.PRIVATE) {
         setNonDmRooms((prev) => {
           return [...prev, room];
         });

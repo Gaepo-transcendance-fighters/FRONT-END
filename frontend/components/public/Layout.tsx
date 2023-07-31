@@ -9,7 +9,7 @@ import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
 import { useState, useEffect } from "react";
-import { IChatRoom, chatRoomType } from "../main/room_list/RoomTypeButton";
+// import { IChatRoom, chatRoomType } from "../main/room_list/RoomTypeButton";
 import { useAuth } from "@/context/AuthContext";
 import { socket } from "@/app/layout";
 
@@ -61,9 +61,15 @@ export const main = {
 }
 */
 export enum Mode {
-  PRIVATE = 'private',
-  PUBLIC = 'public',
-  PROTECTED = 'protected'
+  PRIVATE = "private",
+  PUBLIC = "public",
+  PROTECTED = "protected",
+}
+
+export enum Permission {
+  OWNER = "owner",
+  ADMIN = "admin",
+  MEMBER = "member",
 }
 
 export interface IChatRoom0 {
@@ -71,6 +77,30 @@ export interface IChatRoom0 {
   owner: string;
   mode: Mode;
 }
+
+export interface IMember {
+  nickname : string;
+  imgUri : string;
+  permission: Permission;
+}
+
+export const mockMemberList0: IMember[] = [
+  {
+    nickname : "jaekim",
+    imgUri : "/seal.png",
+    permission: Permission.OWNER
+  },
+  {
+    nickname : "haryu",
+    imgUri : "/seal.png",
+    permission: Permission.ADMIN
+  },
+  {
+    nickname : "wochae",
+    imgUri : "/seal.png",
+    permission: Permission.MEMBER
+  },
+];
 
 export const mockChatRoomList0: IChatRoom0[] = [
   {
@@ -127,7 +157,7 @@ const Layout = () => {
   // }, []);
   useEffect(() => {
     setChatRoomList(mockChatRoomList0);
-  },[]);
+  }, []);
   useRequireAuth();
 
   // useEffect(() => {

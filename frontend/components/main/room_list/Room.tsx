@@ -1,8 +1,8 @@
-import { IChatRoom, chatRoomType } from "./RoomTypeButton";
+// import { IChatRoom, chatRoomType } from "./RoomTypeButton";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ProtectedModal from "./ProtectedModal";
-import { IChatRoom0, Mode } from "@/components/public/Layout";
+import { IChatRoom0, IMember, Mode } from "@/components/public/Layout";
 
 export default function Room({
   room,
@@ -15,14 +15,15 @@ export default function Room({
 }: {
   room: IChatRoom0;
   idx: number;
-  setARoom: Dispatch<SetStateAction<IChatRoom | undefined>>;
+  setARoom: Dispatch<SetStateAction<IChatRoom0 | undefined>>;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
-  aRoom: IChatRoom | undefined;
+  aRoom: IChatRoom0 | undefined;
 }) {
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
+  const [memberList, setMemberList] = useState<IMember[]>([]);
 
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
@@ -40,15 +41,43 @@ export default function Room({
     aRoom ? setShowMembersList(true) : null;
   }; // 올바른 비번
 
-  const RoomClick = (room: IChatRoom) => {
-    room.password || aRoom === room ? null : setARoom(room);
-    room.password == "" ? setIsRight(true) : handleOpen();
+  /*
+  {
+    member[] {
+      member {
+        nickname : string, 
+        imgUri : string,
+        permission : enum
+      },
+      ...
+    },
+    channelIdx : number
+  }*/
+  // useEffect(() => {
+  //   const ChatEnter = (json) => {
+  //     setMemberList(json.member);
+  //     //channelIdx 저장. > 이 데이터 주전님이 써야함
+  //   };
+  //   socket.on("chat_enter", ChatEnter, json);
+
+  //   return () => {
+  //     socket.off("chat_enter", ChatEnter, json);
+  //   };
+  // }, []);
+  const RoomClick = (room: IChatRoom0) => {
+    // room.password || aRoom === room ? null : setARoom(room);
+    // room.password == "" ? setIsRight(true) : handleOpen();
+    socket.emit("chat_enter", { roomId: room.channelIdx }, 상태코드);
+    if (정상상태코드) {
+      room.mode === Mode.PROTECTED || aRoom === room ? null : setARoom(room);
+      room.mode !== Mode.PROTECTED ? setIsRight(true) : handleOpen();
+    }
   };
+
   console.log(room);
   return (
     <>
-      {/* <button key={idx} className="item" onClick={() => RoomClick(room)}> */}
-      <button key={idx} className="item">
+      <button key={idx} className="item" onClick={() => RoomClick(room)}>
         <div className="roomidx">{leftPadding(room.channelIdx)}</div>
         <div className="owner">{room.owner}'s</div>
         <div className="lock">
