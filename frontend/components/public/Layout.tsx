@@ -1,13 +1,17 @@
 "use client";
 
 import { CardContent, Stack, Box, Button } from "@mui/material";
-import FriendList from "../main/friend_list/FriendList";
+import FriendList, { IFriend } from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
+import { useState, useEffect } from "react";
+import { IChatRoom, chatRoomType } from "../main/room_list/RoomTypeButton";
+import { useAuth } from "@/context/AuthContext";
+import { socket } from "@/app/layout";
 
 export const main = {
   main0: "#67DBFB",
@@ -18,9 +22,115 @@ export const main = {
   main5: "#214C97",
   main6: "#183C77",
 };
+/*// emit - client
+{
+	friendList[]? {
+		friend {
+			friendNickname? : string,
+			isOnline : boolean,
+    },
+    ...
+  }
+  channelList[]? {
+    channel {
+      owner : string,
+      channelIdx : number,
+      mode : enum
+    },
+    ...
+  }
+  dmList[]? {
+    dmChannel {
+      targetNickname : string,
+      targetIdx : number,
+    },
+    ...
+  }
+  blockList[]?{
+    blockedPerson {
+      targetNickname : string,
+      targetIdx : number,
+    },
+    ...
+  },
+  userObject {
+	  imgUri : string,
+	  myNickname : string,
+    userIdx : number,
+	}
+}
+*/
+/* channelType : */
+export interface IChatRoom0 {
+  channelIdx: number;
+  owner: string;
+  channelType: chatRoomType;
+}
+
+export const mockChatRoomList0: IChatRoom0[] = [
+  {
+    channelIdx: 0,
+    owner: "jeekim",
+    channelType: chatRoomType.public,
+  },
+  {
+    channelIdx: 1,
+    owner: "jaekim",
+    channelType: chatRoomType.public,
+  },
+  {
+    channelIdx: 2,
+    owner: "0123456789",
+    channelType: chatRoomType.protected,
+  },
+  {
+    channelIdx: 3,
+    owner: "bbbbbbbbbb",
+    channelType: chatRoomType.public,
+  },
+  {
+    channelIdx: 4,
+    owner: "0123456789",
+    channelType: chatRoomType.public,
+  },
+  {
+    channelIdx: 5,
+    owner: "zzzzzzzzzz",
+    channelType: chatRoomType.protected,
+  },
+];
 
 const Layout = () => {
+  const [friendList, setFriendList] = useState<IFriend[]>([]);
+  const [chatRoomList, setChatRoomList] = useState<IChatRoom0[]>([]);
+  const [blockList, setBlockList] = useState<IFriend[]>([]);
+
+  const { isLoggedIn } = useAuth();
+
+  // useEffect(() => {
+  //   const MainEnter = (json) => {
+  //     setFriendList(json.friendList); //
+  //     setChatRoomList(json.channelList);
+  //     setBlockList(json.blockList); //
+  //     setUser(json.userObject); //
+  //   };
+  //   socket.on("main_enter", MainEnter, json);
+
+  //   return () => {
+  //     socket.off("main_enter", MainEnter, json);
+  //   };
+  // }, []);
+  useEffect(() => {
+    setChatRoomList(mockChatRoomList0);
+  },[]);
   useRequireAuth();
+
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     socket.emit("main_enter", "intra_id", 상태코드);
+  //   }
+  // }, []); // 이거 string일수도있다고 하심
+
   return (
     <Box sx={{ display: "flex" }}>
       <Stack
@@ -68,7 +178,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <RoomList />
+        <RoomList chatRoomList={chatRoomList} />
       </Stack>
     </Box>
   );

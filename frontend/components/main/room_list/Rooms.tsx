@@ -7,17 +7,20 @@ import { IChatRoom } from "./RoomTypeButton";
 import MemberList from "../member_list/MemberList";
 import CreateRoomButton from "./CreateRoomButton";
 import Room from "./Room";
+import { IChatRoom0 } from "@/components/public/Layout";
 
 export default function Rooms({
   roomsProp,
   channelType,
   showMembersList,
   setShowMembersList,
+  chatRoomList,
 }: {
-  roomsProp: IChatRoom[];
+  roomsProp: IChatRoom0[];
   channelType: boolean;
   showMembersList: boolean;
   setShowMembersList: Dispatch<SetStateAction<boolean>>;
+  chatRoomList: IChatRoom0[];
 }) {
   const [isRight, setIsRight] = useState(false);
   const [aRoom, setARoom] = useState<IChatRoom>();
@@ -37,7 +40,6 @@ export default function Rooms({
       setPortalContainer(null);
     };
   }, []);
-
   return (
     <>
       <div className={!showMembersList ? "list" : "roomclicked"}>
