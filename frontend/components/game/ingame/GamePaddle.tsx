@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useRef } from "react";
 
 const GamePaddle = ({ x, y }: { x: number; y: number }) => {
   return (
@@ -7,10 +7,11 @@ const GamePaddle = ({ x, y }: { x: number; y: number }) => {
       component={"div"}
       sx={{
         position: "absolute",
-        width: "50px",
-        height: "120px",
+        width: "20px",
+        height: "100px",
         backgroundColor: "grey",
         transform: `translate(${x}px, ${y}px)`,
+        transition: "transform 150ms linear",
       }}
     ></Box>
   );

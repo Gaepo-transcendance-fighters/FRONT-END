@@ -12,7 +12,16 @@ const GameBoard = () => {
         justifyContent: "space-around",
         alignItems: "center",
       }}
-    ></Card>
+    >
+      <div
+        style={{
+          borderLeftWidth: "3px",
+          borderLeftStyle: "dashed",
+          borderLeftColor: "grey",
+          height: "500px",
+        }}
+      ></div>
+    </Card>
   );
 };
 

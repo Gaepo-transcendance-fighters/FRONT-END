@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
+import Pong from "@/components/game/ingame/PingPongCanvas";
 
 const font = createTheme({
   typography: {
@@ -101,7 +102,7 @@ const GamePlaying = () => {
             <Card
               style={{
                 width: "max-content",
-                height: "65vh",
+                height: "max-content",
                 border: "2px solid black",
                 display: "flex",
                 justifyContent: "space-around",
@@ -124,6 +125,7 @@ const GamePlaying = () => {
                 Player 1
               </Card>
               <PingPong />
+              {/* <Pong /> */}
               <Card
                 style={{
                   width: "max-content",
