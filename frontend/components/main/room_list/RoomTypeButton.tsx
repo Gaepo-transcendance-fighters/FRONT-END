@@ -2,10 +2,7 @@
 
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import Rooms from "./Rooms";
-import {
-  IChatRoom0,
-  Mode,
-} from "@/components/public/Layout";
+import { IChatRoom0, Mode } from "@/components/public/Layout";
 import { useRoom } from "@/context/RoomContext";
 
 export default function RoomTypeButton() {

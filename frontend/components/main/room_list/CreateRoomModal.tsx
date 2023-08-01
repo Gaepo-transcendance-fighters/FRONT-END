@@ -4,6 +4,9 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
+import { useRoom } from "@/context/RoomContext";
+import { IChatRoom0, Mode } from "@/components/public/Layout";
+import { IChat } from "../chat_window/ChatField/ChatField";
 
 const style = {
   position: "absolute" as "absolute",
@@ -26,13 +29,19 @@ export default function CreateRoomModal({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [value, setValue] = useState("");
+  const { rooms, setRooms } = useRoom();
+  const [newRoom, setNewRoom] = useState<IChatRoom0>(rooms[0]);
+
   const handleClose = () => {
     setValue("");
     setOpen(false);
   };
-  //   channelIdx: number;
-  //   owner: string;
-  //   mode: chatRoomType;
+
+  /*
+     channelIdx: number;
+     owner: string;
+     mode: chatRoomType;
+     */
 
   // useEffect(() => {
   //   const ChatCreateRoom = (json) => {
@@ -45,12 +54,28 @@ export default function CreateRoomModal({
   //   };
   // }, []);
   const onClick = () => {
-    // socket.emit("chat_create_room", { password: value }, 상태코드);
+    // socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
     // if (정상상태코드) {
     // setValue("");
     // setOpen(false);
     // }
+
+    setNewRoom({
+      channelIdx: 0,
+      owner: "jeeekimmm",
+      mode: Mode.PUBLIC,
+    });
+
+    // newRoom ? console.log("newRoom", newRoom) : null;
+    
+    setValue("");
+    setOpen(false);
   };
+
+  // useEffect(() => {
+  //   newRoom ? setRooms((prev) => [...prev, newRoom]) : null;
+  // }, [newRoom]);
+  // console.log("onClick rooms", rooms);
 
   return (
     <>

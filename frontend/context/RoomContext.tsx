@@ -4,6 +4,8 @@ import {
   useContext,
   useEffect,
   useState,
+  Dispatch,
+  SetStateAction
 } from "react";
 
 enum Mode {
@@ -20,7 +22,7 @@ interface IChatRoom0 {
 
 interface RoomContextData {
   rooms: IChatRoom0[];
-  setRooms: (value: IChatRoom0[]) => void;
+  setRooms: Dispatch<SetStateAction<IChatRoom0[]>>;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }

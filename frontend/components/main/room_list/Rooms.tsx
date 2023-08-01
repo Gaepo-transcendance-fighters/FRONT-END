@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import "@/components/main/room_list/RoomList.css";
 import MemberList from "../member_list/MemberList";
