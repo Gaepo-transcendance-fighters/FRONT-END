@@ -9,8 +9,8 @@ import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
 import { useState, useEffect } from "react";
-import { IChatRoom, chatRoomType } from "../main/room_list/RoomTypeButton";
 import { useAuth } from "@/context/AuthContext";
+import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/layout";
 
 export const main = {
@@ -22,48 +22,11 @@ export const main = {
   main5: "#214C97",
   main6: "#183C77",
 };
-/*// emit - client
-{
-	friendList[]? {
-		friend {
-			friendNickname? : string,
-			isOnline : boolean,
-    },
-    ...
-  }
-  channelList[]? {
-    channel {
-      owner : string,
-      channelIdx : number,
-      mode : enum
-    },
-    ...
-  }
-  dmList[]? {
-    dmChannel {
-      targetNickname : string,
-      targetIdx : number,
-    },
-    ...
-  }
-  blockList[]?{
-    blockedPerson {
-      targetNickname : string,
-      targetIdx : number,
-    },
-    ...
-  },
-  userObject {
-	  imgUri : string,
-	  myNickname : string,
-    userIdx : number,
-	}
-}
-*/
+
 export enum Mode {
-  PRIVATE = 'private',
-  PUBLIC = 'public',
-  PROTECTED = 'protected'
+  PRIVATE = "private",
+  PUBLIC = "public",
+  PROTECTED = "protected",
 }
 
 export interface IChatRoom0 {
@@ -106,35 +69,33 @@ export const mockChatRoomList0: IChatRoom0[] = [
 ];
 
 const Layout = () => {
-  const [friendList, setFriendList] = useState<IFriend[]>([]);
-  const [chatRoomList, setChatRoomList] = useState<IChatRoom0[]>([]);
-  const [blockList, setBlockList] = useState<IFriend[]>([]);
-
   const { isLoggedIn } = useAuth();
+  const { setRooms } = useRoom();
 
-  // useEffect(() => {
-  //   const MainEnter = (json) => {
-  //     setFriendList(json.friendList); //
-  //     setChatRoomList(json.channelList);
-  //     setBlockList(json.blockList); //
-  //     setUser(json.userObject); //
-  //   };
-  //   socket.on("main_enter", MainEnter, json);
-
-  //   return () => {
-  //     socket.off("main_enter", MainEnter, json);
-  //   };
-  // }, []);
   useEffect(() => {
-    setChatRoomList(mockChatRoomList0);
-  },[]);
+    const MainEnter = (json) => {
+      setRooms(json.channelList);
+    };
+    socket.on("main_enter", MainEnter, json);
+
+    return () => {
+      socket.off("main_enter", MainEnter, json);
+    };
+  }, []);
+
   useRequireAuth();
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      socket.emit("main_enter", "intra_id", 상태코드);
+    }
+  }, [isLoggedIn]);
+
+  // socket.io로 mock data 받았다고 가정했을때.
   // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     socket.emit("main_enter", "intra_id", 상태코드);
-  //   }
-  // }, []); // 이거 string일수도있다고 하심
+  //   setRooms(mockChatRoomList0);
+  // }, []);
+  // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -183,7 +144,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        <RoomList chatRoomList={chatRoomList} />
+        <RoomList />
       </Stack>
     </Box>
   );
