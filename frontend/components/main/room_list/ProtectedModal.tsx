@@ -7,8 +7,6 @@ import {
   MouseEvent,
   Dispatch,
   SetStateAction,
-  LegacyRef,
-  useEffect,
   KeyboardEvent,
 } from "react";
 import "./ProtectedModal.css";
