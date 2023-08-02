@@ -61,6 +61,8 @@ const Auth = () => {
     const code = searchParam.get("code");
     if (!code) return;
     console.log(code);
+    setIsLoggedIn(true);
+    router.push("/");
     // postCode(code);
   }, []);
 
