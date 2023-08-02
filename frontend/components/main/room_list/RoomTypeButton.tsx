@@ -66,6 +66,7 @@ export default function RoomTypeButton() {
       <Rooms
         roomsProp={disabled ? nonDmrooms : dmRooms}
         channelType={disabled}
+        setNonDmRooms={setNonDmRooms}
       />
     </>
   );

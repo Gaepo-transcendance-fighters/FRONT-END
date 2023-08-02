@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import "@/components/main/room_list/RoomList.css";
 import MemberList from "../member_list/MemberList";
@@ -12,9 +12,11 @@ import { useRoom } from "@/context/RoomContext";
 export default function Rooms({
   roomsProp,
   channelType,
+  setNonDmRooms,
 }: {
   roomsProp: IChatRoom0[];
   channelType: boolean;
+  setNonDmRooms: Dispatch<SetStateAction<IChatRoom0[]>>;
 }) {
   const [isRight, setIsRight] = useState(false);
   const [aRoom, setARoom] = useState<IChatRoom0>();
@@ -38,7 +40,9 @@ export default function Rooms({
   return (
     <>
       <div className={!isOpen ? "list" : "roomclicked"}>
-        <CreateRoomButton channelType={channelType} />
+        <CreateRoomButton channelType={channelType}
+              setNonDmRooms={setNonDmRooms}
+              />
         {roomsProp.map((room, idx) => {
           return (
             <Room

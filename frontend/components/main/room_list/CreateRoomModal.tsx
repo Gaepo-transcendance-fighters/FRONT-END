@@ -24,9 +24,11 @@ const style = {
 export default function CreateRoomModal({
   open,
   setOpen,
+  setNonDmRooms,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  setNonDmRooms: Dispatch<SetStateAction<IChatRoom0[]>>;
 }) {
   const [value, setValue] = useState("");
   const { rooms, setRooms } = useRoom();
@@ -53,21 +55,29 @@ export default function CreateRoomModal({
   //     socket.off("main_enter", ChatCreateRoom, json);
   //   };
   // }, []);
-  const onClick = () => {
+  const OnClick = () => {
     // socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
     // if (정상상태코드) {
     // setValue("");
     // setOpen(false);
     // }
 
-    setNewRoom({
-      channelIdx: 0,
-      owner: "jeeekimmm",
-      mode: Mode.PUBLIC,
-    });
+    // setNewRoom({
+    //   channelIdx: 0,
+    //   owner: "jeeekimmm",
+    //   mode: Mode.PUBLIC,
+    // });
 
     // newRoom ? console.log("newRoom", newRoom) : null;
-    
+    setNonDmRooms([]);
+    setRooms((prev) => [
+      ...prev,
+      {
+        channelIdx: 0,
+        owner: "jeeekimmm",
+        mode: Mode.PUBLIC,
+      },
+    ]);
     setValue("");
     setOpen(false);
   };
@@ -116,7 +126,7 @@ export default function CreateRoomModal({
               <Button
                 variant="contained"
                 sx={{ margin: "auto" }}
-                onClick={onClick}
+                onClick={OnClick}
               >
                 방 생성
               </Button>
