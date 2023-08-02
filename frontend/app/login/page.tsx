@@ -30,24 +30,24 @@ const Login = () => {
   const router = useRouter();
   const [url, setUrl] = useState("");
 
-  const handleLogin = async () => {
-    // console.log(url);
-    // window.location.href = url;
+  const handleLogin = () => {
+    console.log(url);
+    window.location.href = url;
 
-    await fetch("http://10.19.208.53:4000/auth", {
-      method: "GET",
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          // localStorage.setItem("loggedIn", "true");
-          // setIsLoggedIn(true);
-          return router.push("/");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        return alert(`[Error] ${error}`);
-      });
+    // await fetch("http://10.19.208.53:4000/auth", {
+    //   method: "GET",
+    // })
+    //   .then((res) => {
+    //     if (res.status === 200) {
+    //       // localStorage.setItem("loggedIn", "true");
+    //       // setIsLoggedIn(true);
+    //       return router.push("/");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     return alert(`[Error] ${error}`);
+    //   });
   };
 
   useEffect(() => {

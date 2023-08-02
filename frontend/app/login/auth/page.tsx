@@ -34,33 +34,34 @@ const Auth = () => {
   const { setIsLoggedIn } = useAuth();
   const router = useRouter();
 
-  const postCode = async (code: string) => {
-    await fetch("http://10.19.208.53:3000/auth", {
-      method: "GET",
-      // headers: {
-      //   "Content-type": "application/json",
-      // },
-      // body: JSON.stringify({
-      //   code: code,
-      // }),
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem("loggedIn", "true");
-          setIsLoggedIn(true);
-          return router.push("/");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        return alert(`[Error] ${error}`);
-      });
-  };
+  // const postCode = async (code: string) => {
+  //   await fetch("http://10.19.208.53:3000/auth", {
+  //     method: "POST",
+  //     // headers: {
+  //     //   "Content-type": "application/json",
+  //     // },
+  //     // body: JSON.stringify({
+  //     //   code: code,
+  //     // }),
+  //   })
+  //     .then((res) => {
+  //       if (res.status === 200) {
+  //         localStorage.setItem("loggedIn", "true");
+  //         setIsLoggedIn(true);
+  //         return router.push("/");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       return alert(`[Error] ${error}`);
+  //     });
+  // };
 
   useEffect(() => {
     const code = searchParam.get("code");
     if (!code) return;
-    postCode(code);
+    console.log(code);
+    // postCode(code);
   }, []);
 
   return (
@@ -68,6 +69,9 @@ const Auth = () => {
       <Card sx={modalStyle}>
         <CircularProgress sx={{ color: "white" }} />
         <Typography sx={{ color: "white" }}>Loading...</Typography>
+        <Typography sx={{ color: "white" }}>
+          {searchParam.get("code")}
+        </Typography>
       </Card>
     </Box>
   );
