@@ -37,6 +37,7 @@ export default function Rooms({
       setPortalContainer(null);
     };
   }, []);
+  
   return (
     <>
       <div className={!isOpen ? "list" : "roomclicked"}>
