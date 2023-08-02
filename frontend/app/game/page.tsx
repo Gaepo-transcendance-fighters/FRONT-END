@@ -14,6 +14,7 @@ import {
 import { main } from "@/components/public/Layout";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useGame } from "@/context/GameContext";
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
@@ -35,13 +36,16 @@ const infomodalStyle = {
 
 const Game = () => {
   const router = useRouter();
+  const { state, dispatch } = useGame();
 
   const ClickNomalGame = () => {
+    dispatch({ type: "SET_GAME_MODE", value: "normal" });
     router.push("./optionselect");
   };
 
   const ClickRankGame = () => {
     //임시로해놓겠습니다
+    dispatch({ type: "SET_GAME_MODE", value: "rank" });
     router.push("./gameresult");
   };
 

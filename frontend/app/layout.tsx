@@ -6,6 +6,7 @@ import "@/app/style.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { GameProvider } from "@/context/GameContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,20 +29,22 @@ export default function RootLayout({
   return (
     <ThemeProvider theme={font}>
       <AuthProvider>
-        <html lang="en">
-          <body className={inter.className}>
-            <div
-              style={{
-                backgroundImage: `url("/background.png")`,
-                width: "100%",
-                backgroundRepeat: "repeat",
-                height: "100vh",
-              }}
-            >
-              {children}
-            </div>
-          </body>
-        </html>
+        <GameProvider>
+          <html lang="en">
+            <body className={inter.className}>
+              <div
+                style={{
+                  backgroundImage: `url("/background.png")`,
+                  width: "100%",
+                  backgroundRepeat: "repeat",
+                  height: "100vh",
+                }}
+              >
+                {children}
+              </div>
+            </body>
+          </html>
+        </GameProvider>
       </AuthProvider>
     </ThemeProvider>
   );

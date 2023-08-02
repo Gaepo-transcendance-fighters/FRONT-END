@@ -1,4 +1,5 @@
 "use client";
+
 import { ThemeProvider } from "@emotion/react";
 import {
   Button,
@@ -16,12 +17,22 @@ const font = createTheme({
 });
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
+import { useGame } from "@/context/GameContext";
+import { useEffect } from "react";
 const GameResult = () => {
+  const { state, dispatch } = useGame();
+
   const router = useRouter();
 
   const BackToMain = () => {
     router.push("/");
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch({ type: "SCORE_RESET" });
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={font}>
@@ -100,7 +111,9 @@ const GameResult = () => {
                     </Typography>
                   </Card>
                   <Card>
-                    <Typography sx={{ fontSize: "2rem" }}>100</Typography>
+                    <Typography sx={{ fontSize: "2rem" }}>
+                      {state.aScore}
+                    </Typography>
                   </Card>
                   <Card
                     sx={{ minWidth: "max-content" }}
@@ -165,7 +178,9 @@ const GameResult = () => {
                     </Typography>
                   </Card>
                   <Card>
-                    <Typography sx={{ fontSize: "2rem" }}>70</Typography>
+                    <Typography sx={{ fontSize: "2rem" }}>
+                      {state.bScore}
+                    </Typography>
                   </Card>
                   <Card
                     sx={{ minWidth: "max-content" }}

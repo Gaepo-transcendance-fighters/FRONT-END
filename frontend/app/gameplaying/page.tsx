@@ -16,6 +16,7 @@ import { main } from "@/components/public/Layout";
 import { useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
 import Pong from "@/components/game/ingame/PingPongCanvas";
+import { useGame } from "@/context/GameContext";
 
 const font = createTheme({
   typography: {
@@ -37,6 +38,8 @@ const modalStyle = {
 
 const GamePlaying = () => {
   const router = useRouter();
+  const { state, dispatch } = useGame();
+
   const ClickNomalGame = () => {
     router.push("./optionselect");
   };
@@ -94,7 +97,9 @@ const GamePlaying = () => {
                 border: "2px solid black",
               }}
             >
-              <Typography sx={{ fontSize: "3rem" }}>100 : 105</Typography>
+              <Typography sx={{ fontSize: "3rem" }}>
+                {state.aScore} : {state.bScore}
+              </Typography>
             </Card>
           </CardContent>
 
@@ -164,7 +169,8 @@ const GamePlaying = () => {
                 backgroundColor: "#05BEFF",
               }}
             >
-              Mode~~~ || Speed~~~ || Map~~
+              Mode: {state.gameMode} || Speed: {state.ballSpeedOption} || Map:{" "}
+              {state.mapType}
             </Card>
             <Button variant="contained" onClick={handleOpenModal_redir}>
               상대방 탈주시
