@@ -58,14 +58,16 @@ export default function CreateRoomModal({
     // }
 
     setNonDmRooms([]);
-    setRooms((prev) => [
-      ...prev,
-      {
-        channelIdx: 0,
-        owner: "jeeekimmm",
-        mode: Mode.PUBLIC,
-      },
-    ]);
+    setRooms({
+      type: "create-room",
+      payload: [
+        {
+          channelIdx: 0,
+          owner: "jeeekimmm",
+          mode: Mode.PUBLIC,
+        },
+      ] as IChatRoom0[],
+    });
     setValue("");
     setOpen(false);
   };

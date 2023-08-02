@@ -6,9 +6,7 @@ import {
   useEffect,
   useState,
   Dispatch,
-  SetStateAction,
   useReducer,
-  Reducer,
 } from "react";
 
 enum Mode {
@@ -49,17 +47,16 @@ type actionType = {
 const RoomsReducer = (state: IChatRoom0[], action: actionType) => {
   state;
   switch (action.type) {
-    case "main-enter-0":
+    case "main-enter":
       return action.payload;
+    case "create-room":
+      return [...state, action.payload[0]];
     default:
       return state;
   }
 };
 
-type tmp = { type: string; payload: number };
-
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
-  // const [rooms, setRooms] = useState<IChatRoom0[]>([]);
   const [rooms, setRooms] = useReducer(RoomsReducer, []);
   const [isOpen, setIsOpen] = useState(false);
 
