@@ -15,7 +15,7 @@ type GameAction =
   | { type: "SET_MAP_TYPE"; value: string }
   | { type: "A_SCORE"; value: number }
   | { type: "B_SCORE"; value: number }
-  | { type: "SCORE_RESET" };
+  | { type: "SCORE_RESET"; value: GameContextData };
 
 const initialState: GameContextData = {
   gameMode: "",
@@ -24,6 +24,16 @@ const initialState: GameContextData = {
   aScore: 0,
   bScore: 0,
 };
+
+export function resetGameContextData(): GameContextData {
+  return {
+    gameMode: "",
+    ballSpeedOption: 6,
+    mapType: "map2",
+    aScore: 0,
+    bScore: 0,
+  };
+}
 
 function gameReducer(state: GameContextData, action: GameAction) {
   const router = useRouter();
@@ -49,7 +59,7 @@ function gameReducer(state: GameContextData, action: GameAction) {
       return { ...state, bScore: action.value + 1 };
     }
     case "SCORE_RESET":
-      return { ...state, aScose: 0, bScore: 0 };
+      return action.value;
 
     default:
       return state;

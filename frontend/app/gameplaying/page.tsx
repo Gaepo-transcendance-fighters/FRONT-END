@@ -13,10 +13,10 @@ import {
 
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
 import Pong from "@/components/game/ingame/PingPongCanvas";
-import { useGame } from "@/context/GameContext";
+import { resetGameContextData, useGame } from "@/context/GameContext";
 
 const font = createTheme({
   typography: {
@@ -39,6 +39,7 @@ const modalStyle = {
 const GamePlaying = () => {
   const router = useRouter();
   const { state, dispatch } = useGame();
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const ClickNomalGame = () => {
     router.push("./optionselect");
@@ -46,9 +47,9 @@ const GamePlaying = () => {
 
   const BackToMain = () => {
     router.push("/");
+    dispatch({ type: "SCORE_RESET", value: resetGameContextData() });
   };
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const handleOpenModal_redir = () => {
     setOpenModal(true);
     setTimeout(() => {
@@ -59,6 +60,10 @@ const GamePlaying = () => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
+  useEffect(() => {
+    dispatch({ type: "SCORE_RESET", value: resetGameContextData() });
+  }, []);
 
   return (
     <ThemeProvider theme={font}>

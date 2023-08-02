@@ -76,7 +76,7 @@ const PingPong = () => {
     )
       setDirection((prev) => ({ x: -prev.x, y: prev.y }));
     else if (
-      newLocation.x > enemyPaddle.x &&
+      newLocation.x > enemyPaddle.x - 20 &&
       newLocation.x < enemyPaddle.x + 20 &&
       newLocation.y > enemyPaddle.y - 50 &&
       newLocation.y < enemyPaddle.y + 50

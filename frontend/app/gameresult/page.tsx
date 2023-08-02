@@ -19,20 +19,19 @@ import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useGame } from "@/context/GameContext";
 import { useEffect } from "react";
+import { resetGameContextData } from "@/context/GameContext";
+
 const GameResult = () => {
   const { state, dispatch } = useGame();
 
   const router = useRouter();
 
   const BackToMain = () => {
+    dispatch({ type: "SCORE_RESET", value: resetGameContextData() });
     router.push("/");
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch({ type: "SCORE_RESET" });
-    };
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <ThemeProvider theme={font}>
