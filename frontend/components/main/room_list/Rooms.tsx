@@ -40,9 +40,10 @@ export default function Rooms({
   return (
     <>
       <div className={!isOpen ? "list" : "roomclicked"}>
-        <CreateRoomButton channelType={channelType}
-              setNonDmRooms={setNonDmRooms}
-              />
+        <CreateRoomButton
+          channelType={channelType}
+          setNonDmRooms={setNonDmRooms}
+        />
         {roomsProp.map((room, idx) => {
           return (
             <Room

@@ -19,7 +19,11 @@ export default function CreateRoomButton({
           <button className="add" onClick={handleOpen}>
             +
           </button>
-          <CreateRoomModal open={open} setOpen={setOpen} setNonDmRooms={setNonDmRooms}/>
+          <CreateRoomModal
+            open={open}
+            setOpen={setOpen}
+            setNonDmRooms={setNonDmRooms}
+          />
         </>
       ) : (
         ""
