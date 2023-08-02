@@ -7,12 +7,13 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 
 const modalStyle = {
@@ -28,77 +29,45 @@ const modalStyle = {
   p: 4,
 };
 const Auth = () => {
-  const [value, setValue] = useState("");
+  const searchParam = useSearchParams();
 
   const { setIsLoggedIn } = useAuth();
   const router = useRouter();
 
-  const handleLogin = async () => {
-    if (!value) return alert("Please enter your nickname");
-
-    const res = await fetch("serverurl", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        nickname: value,
-      }),
+  const postCode = async (code: string) => {
+    await fetch("http://10.19.208.53:3000/auth", {
+      method: "GET",
+      // headers: {
+      //   "Content-type": "application/json",
+      // },
+      // body: JSON.stringify({
+      //   code: code,
+      // }),
     })
       .then((res) => {
-        console.log(res);
-        localStorage.setItem("loggedIn", "true");
-        setIsLoggedIn(true);
-        return router.push("/");
+        if (res.status === 200) {
+          localStorage.setItem("loggedIn", "true");
+          setIsLoggedIn(true);
+          return router.push("/");
+        }
       })
       .catch((error) => {
         console.log(error);
-        return alert("Wrong nickname... Please enter again");
+        return alert(`[Error] ${error}`);
       });
   };
+
+  useEffect(() => {
+    const code = searchParam.get("code");
+    if (!code) return;
+    postCode(code);
+  }, []);
 
   return (
     <Box>
       <Card sx={modalStyle}>
-        <Stack
-          sx={{
-            position: "absolute",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <CardContent>
-            <Typography sx={{ color: "white" }} fontSize={"larger"}>
-              Enter your nickname!
-            </Typography>
-          </CardContent>
-          <TextField
-            placeholder="nickname"
-            sx={{ backgroundColor: "white" }}
-            value={value}
-            onChange={(e) => {
-              setValue(e.currentTarget.value);
-            }}
-          />
-
-          <CardContent
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              variant="contained"
-              size="large"
-              sx={{ backgroundColor: main.main3, width: "max-content" }}
-              onClick={handleLogin}
-            >
-              <Typography sx={{ color: "white" }}>Login</Typography>
-            </Button>
-          </CardContent>
-        </Stack>
+        <CircularProgress sx={{ color: "white" }} />
+        <Typography sx={{ color: "white" }}>Loading...</Typography>
       </Card>
     </Box>
   );

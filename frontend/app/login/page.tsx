@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { main } from "@/font/color";
+import { useEffect, useState } from "react";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -27,10 +28,31 @@ const modalStyle = {
 
 const Login = () => {
   const router = useRouter();
+  const [url, setUrl] = useState("");
 
-  const handleLogin = () => {
-    router.push("/login/auth");
+  const handleLogin = async () => {
+    // console.log(url);
+    // window.location.href = url;
+
+    await fetch("http://10.19.208.53:4000/auth", {
+      method: "GET",
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          // localStorage.setItem("loggedIn", "true");
+          // setIsLoggedIn(true);
+          return router.push("/");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return alert(`[Error] ${error}`);
+      });
   };
+
+  useEffect(() => {
+    setUrl(process.env.NEXT_PUBLIC_REDIRECTURL!);
+  }, []);
 
   return (
     <Box>
