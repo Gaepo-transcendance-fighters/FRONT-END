@@ -59,7 +59,7 @@ export const mockChatRoomList0: IChatRoom0[] = [
   {
     channelIdx: 4,
     owner: "0123456789",
-    mode: Mode.PUBLIC,
+    mode: Mode.PROTECTED,
   },
   {
     channelIdx: 5,
@@ -93,7 +93,8 @@ const Layout = () => {
 
   // socket.io로 mock data 받았다고 가정했을때.
   useEffect(() => {
-    setRooms(mockChatRoomList0);
+    // setRooms(mockChatRoomList0);
+    setRooms({ type: "main-enter-0", payload: mockChatRoomList0 });
   }, []);
   // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 

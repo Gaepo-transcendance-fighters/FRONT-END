@@ -1,3 +1,4 @@
+import { KeyboardReturnSharp } from "@mui/icons-material";
 import {
   ReactNode,
   createContext,
@@ -5,7 +6,9 @@ import {
   useEffect,
   useState,
   Dispatch,
-  SetStateAction
+  SetStateAction,
+  useReducer,
+  Reducer,
 } from "react";
 
 enum Mode {
@@ -22,7 +25,7 @@ interface IChatRoom0 {
 
 interface RoomContextData {
   rooms: IChatRoom0[];
-  setRooms: Dispatch<SetStateAction<IChatRoom0[]>>;
+  setRooms: Dispatch<actionType>;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }
@@ -38,8 +41,26 @@ export const useRoom = () => {
   return useContext(RoomContext);
 };
 
+type actionType = {
+  type: string;
+  payload: IChatRoom0[];
+};
+
+const RoomsReducer = (state: IChatRoom0[], action: actionType) => {
+  state;
+  switch (action.type) {
+    case "main-enter-0":
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+type tmp = { type: string; payload: number };
+
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
-  const [rooms, setRooms] = useState<IChatRoom0[]>([]);
+  // const [rooms, setRooms] = useState<IChatRoom0[]>([]);
+  const [rooms, setRooms] = useReducer(RoomsReducer, []);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {}, []);
