@@ -1,9 +1,16 @@
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  MouseEvent,
+} from "react";
 import ProtectedModal from "./ProtectedModal";
 import { IChatRoom0, IMember, Mode } from "@/components/public/Layout";
 import { useRoom } from "@/context/RoomContext";
 import { mockMemberList0 } from "@/components/public/Layout";
+import { Menu, MenuItem } from "@mui/material";
 
 export default function Room({
   room,
@@ -24,6 +31,15 @@ export default function Room({
   const [fail, setFail] = useState<boolean>(false);
   const [memberList, setMemberList] = useState<IMember[]>([]);
   const { setIsOpen } = useRoom();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleOpenMenu = (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
@@ -74,10 +90,6 @@ export default function Room({
     // }
     // room.mode !== Mode.PROTECTED ? setMemberList(mockMemberList0) : null;
   };
-  const RightClick = (e: any) => {
-    e.preventDefault();
-    console.log("mouse right click!", e.type);
-  };
 
   return (
     <>
@@ -85,7 +97,7 @@ export default function Room({
         key={idx}
         className="item"
         onClick={() => RoomClick(room)}
-        onContextMenu={(e) => RightClick(e)}
+        onContextMenu={(e) => handleOpenMenu(e)}
       >
         <div className="roomidx">{leftPadding(room.channelIdx)}</div>
         <div className="owner">{room.owner}'s</div>
@@ -97,6 +109,15 @@ export default function Room({
           )}
         </div>
       </button>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+      >
+        <MenuItem>Add</MenuItem>
+        <MenuItem>Delete</MenuItem>
+        <MenuItem>Block</MenuItem>
+      </Menu>
       <ProtectedModal
         open={open}
         handleClose={handleClose}
