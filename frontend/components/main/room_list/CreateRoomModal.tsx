@@ -5,7 +5,7 @@ import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom0, Mode } from "@/components/public/Layout";
+import { Mode } from "@/context/RoomContext";
 
 const style = {
   position: "absolute" as "absolute",
@@ -28,7 +28,7 @@ export default function CreateRoomModal({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [value, setValue] = useState("");
-  const { dispatch } = useRoom();
+  const { roomDispatch } = useRoom();
 
   const handleClose = () => {
     setValue("");
@@ -37,7 +37,7 @@ export default function CreateRoomModal({
 
   // useEffect(() => {
   //   const ChatCreateRoom = (json) => {
-  //     setRooms((prev) => [...prev, json.channel]);
+  // roomDispatch({ type: "ADD_ROOM", value: json.channel });
   //   };
   //   socket.on("main_enter", ChatCreateRoom, json);
 
@@ -49,13 +49,11 @@ export default function CreateRoomModal({
   const OnClick = () => {
     //   socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
     //   if (정상상태코드) {
-    //   setNonDmRooms({ type: "empty-nondmroom", payload: [] });
     //   setValue("");
     //   setOpen(false);
     //   }
     // /* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
-    // dispatch({ type: "SET_NON_ROOMS", value: [] });
-    dispatch({
+    roomDispatch({
       type: "ADD_ROOM",
       value: {
         channelIdx: 0,
@@ -63,16 +61,6 @@ export default function CreateRoomModal({
         mode: Mode.PUBLIC,
       },
     });
-    // setRooms({
-    //   type: "create-room",
-    //   payload: [
-    //     {
-    //       channelIdx: 0,
-    //       owner: "jeeekimmm",
-    //       mode: Mode.PUBLIC,
-    //     },
-    //   ] as IChatRoom0[],
-    // });
     setValue("");
     setOpen(false);
     // */

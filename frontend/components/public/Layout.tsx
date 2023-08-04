@@ -29,7 +29,7 @@ const Layout = () => {
 
   // useEffect(() => {
   //   const MainEnter = (json) => {
-  //     setRooms(json.channelList);
+  // roomDispatch({ type: "SET_NON_ROOMS", value: json.channelList });
   //   };
   //   socket.on("main_enter", MainEnter, json);
 

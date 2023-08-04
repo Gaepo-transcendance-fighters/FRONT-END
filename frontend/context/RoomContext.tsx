@@ -6,7 +6,7 @@ import {
   useReducer,
 } from "react";
 
-enum Mode {
+export enum Mode {
   PRIVATE = "private",
   PUBLIC = "public",
   PROTECTED = "protected",
@@ -18,13 +18,13 @@ export enum Permission {
   MEMBER = "member",
 }
 
-interface IMember {
+export interface IMember {
   nickname: string;
   imgUri: string;
   permission: Permission;
 }
 
-interface IChatRoom0 {
+export interface IChatRoom0 {
   channelIdx: number;
   owner: string;
   mode: Mode;
@@ -94,7 +94,7 @@ type RoomAction =
   | { type: "SET_DM"; value: IChatRoom0[] }
   | { type: "SET_NON_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
-  | { type: "SET_CURRENTROOMMEMBER"; value: IMember[] }
+  | { type: "SET_CURMEMBER"; value: IMember[] }
   | { type: "SET_ISOPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom0 };
 
@@ -116,7 +116,7 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
       return { ...roomState, nonDmRooms: action.value };
     case "SET_CURRENTROOM":
       return { ...roomState, currentRoom: action.value };
-    case "SET_CURRENTROOMMEMBER":
+    case "SET_CURMEMBER":
       return { ...roomState, currentRoomMember: action.value };
     case "ADD_ROOM":
       return {

@@ -12,7 +12,8 @@ import {
 import "./ProtectedModal.css";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
-import { IChatRoom0 } from "@/components/public/Layout";
+import { useRoom } from "@/context/RoomContext";
+import { IChatRoom0 } from "@/context/RoomContext";
 
 const box = {
   position: "absolute" as "absolute",
@@ -43,7 +44,6 @@ export default function ProtectedModal({
   setIsRight,
   room,
   setFail,
-  setARoom,
   fail,
 }: {
   open: boolean;
@@ -53,9 +53,9 @@ export default function ProtectedModal({
   room: IChatRoom0;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
-  setARoom: Dispatch<SetStateAction<IChatRoom0 | undefined>>;
 }) {
   const pwRef = useRef("");
+  const { roomDispatch } = useRoom();
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     pwRef.current = e.target.value;
@@ -68,7 +68,7 @@ export default function ProtectedModal({
       setIsRight(true);
       handleClose();
       setFail(false);
-      setARoom(room);
+      roomDispatch({ type: "SET_CURRENTROOM", value: room });
     } else {
       setIsRight(false);
       setFail(true);
@@ -83,7 +83,7 @@ export default function ProtectedModal({
         setIsRight(true);
         handleClose();
         setFail(false);
-        setARoom(room);
+        roomDispatch({ type: "SET_CURRENTROOM", value: room });
       } else {
         setIsRight(false);
         setFail(true);

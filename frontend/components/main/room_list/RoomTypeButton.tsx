@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Rooms from "./Rooms";
 import { useRoom } from "@/context/RoomContext";
 
 export default function RoomTypeButton() {
-  const { roomState, dispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
   const [disabled, setDisabled] = useState(true);
 
   const OnClick = (isNotDm: boolean) => {
-    // dispatch({ type: "SET_NON_ROOMS", value: [] });
-    dispatch({ type: "SET_DM", value: [] });
+    // roomDispatch({ type: "SET_NON_ROOMS", value: [] });
+    // roomDispatch({ type: "SET_DM", value: [] });
 
     setDisabled(isNotDm);
   };
@@ -42,7 +42,7 @@ export default function RoomTypeButton() {
         </button>
       </div>
       <Rooms
-        roomsProp={disabled ? roomState.rooms : roomState.DM}
+        currentRoomList={disabled ? roomState.nonDmRooms : roomState.dmRooms}
         channelType={disabled}
       />
     </>

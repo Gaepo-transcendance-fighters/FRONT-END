@@ -7,31 +7,25 @@ import {
   MouseEvent,
 } from "react";
 import ProtectedModal from "./ProtectedModal";
-import { IChatRoom0, IMember, Mode } from "@/components/public/Layout";
-import { useRoom } from "@/context/RoomContext";
-import { mockMemberList0 } from "@/components/public/Layout";
+import { mockMemberList0, useRoom } from "@/context/RoomContext";
 import { Menu, MenuItem } from "@mui/material";
+import { IChatRoom0, Mode } from "@/context/RoomContext";
 
 export default function Room({
   room,
   idx,
-  setARoom,
   setIsRight,
   isRight,
-  aRoom,
 }: {
   room: IChatRoom0;
   idx: number;
-  setARoom: Dispatch<SetStateAction<IChatRoom0 | undefined>>;
   setIsRight: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
-  aRoom: IChatRoom0 | undefined;
 }) {
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
-  const [memberList, setMemberList] = useState<IMember[]>([]);
-  const { roomState, dispatch } = useRoom();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { roomState, roomDispatch } = useRoom();
   const handleOpenMenu = (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
@@ -56,7 +50,9 @@ export default function Room({
   const handleClose = () => {
     setOpen(false);
     setFail(false);
-    aRoom ? dispatch({type : "SET_ISOPEN", value : true}) : null;
+    roomState.currentRoom
+      ? roomDispatch({ type: "SET_ISOPEN", value: true })
+      : null;
   }; // 올바른 비번
 
   /*
@@ -71,9 +67,10 @@ export default function Room({
     },
     channelIdx : number
   }*/
+
   // useEffect(() => {
   //   const ChatEnter = (json) => {
-  //     setMemberList(json.member);
+  //     json.member ? roomDispatch({ type: "SET_CURMEMBER", value: json.member }) : null;
   //     //channelIdx 저장. > 이 데이터 주전님이 써야함
   //   };
   //   socket.on("chat_enter", ChatEnter, json);
@@ -90,10 +87,9 @@ export default function Room({
     //   room.mode === Mode.PROTECTED || aRoom === room ? null : setARoom(room);
     //   room.mode !== Mode.PROTECTED ? setIsRight(true) : handleOpen();
     // }
-    if (room.mode !== Mode.PROTECTED)
-    {
-      dispatch({type : "SET_CURRENTROOMMEMBER", value : mockMemberList0});
-      dispatch({type : "SET_ISOPEN", value : true});
+    if (room.mode !== Mode.PROTECTED) {
+      roomDispatch({ type: "SET_CURMEMBER", value: mockMemberList0 });
+      roomDispatch({ type: "SET_ISOPEN", value: true });
     }
   };
 
@@ -133,7 +129,6 @@ export default function Room({
         room={room}
         fail={fail}
         setFail={setFail}
-        setARoom={setARoom}
       />
     </>
   );

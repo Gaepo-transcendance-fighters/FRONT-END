@@ -1,11 +1,9 @@
 "use client";
 
 import Member from "./Member";
-import { IChatRoom0 } from "@/components/public/Layout";
 import "@/components/main/member_list/MemberList.css";
 import { useRoom } from "@/context/RoomContext";
 
-// export default function Members({ aRoom }: { aRoom: IChatRoom0 | undefined }) {
 export default function Members() {
   const { roomState } = useRoom();
   return (
