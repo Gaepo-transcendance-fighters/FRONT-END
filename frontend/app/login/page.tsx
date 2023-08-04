@@ -36,21 +36,21 @@ const Login = () => {
   const handleLogin = async () => {
     console.log(url);
 
-    try {
-      await axios("http://10.19.208.53:4000/auth/login", {
-        method: "GET",
-      }).then((res) => {
+    await axios("http://10.19.208.53:4000/auth/login", {
+      method: "GET",
+    })
+      .then((res) => {
         if (res.status === 302) {
           const userData = res.data;
           console.log(userData);
-          localStorage.setItem("loggedIn", "true");
-          dispatch({ type: "LOGIN", value: true });
+          // localStorage.setItem("loggedIn", "true");
+          // dispatch({ type: "LOGIN", value: true });
           return router.push("/");
         }
+      })
+      .catch((e) => {
+        console.log("[Error]", e);
       });
-    } catch (e) {
-      console.log("[Error]", e);
-    }
   };
 
   useEffect(() => {
