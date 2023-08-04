@@ -126,7 +126,6 @@ const Layout = () => {
   // socket.io로 mock data 받았다고 가정했을때.
   useEffect(() => {
     dispatch({ type: "SET_ROOMS", value: mockChatRoomList0 });
-    console.log(roomState.rooms);
   }, []);
   // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 

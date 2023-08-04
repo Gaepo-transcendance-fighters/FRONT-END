@@ -9,7 +9,7 @@ export default function RoomTypeButton() {
   const [disabled, setDisabled] = useState(true);
 
   const OnClick = (isNotDm: boolean) => {
-    dispatch({ type: "SET_ROOMS", value: [] });
+    // dispatch({ type: "SET_ROOMS", value: [] });
     dispatch({ type: "SET_DM", value: [] });
 
     setDisabled(isNotDm);

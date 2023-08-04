@@ -39,7 +39,8 @@ type RoomAction =
   | { type: "SET_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
   | { type: "SET_CURRENTROOMMEMBER"; value: IMember[] }
-  | { type: "SET_ISOPEN"; value: boolean };
+  | { type: "SET_ISOPEN"; value: boolean }
+  | { type: "ADD_ROOM"; value: IChatRoom0 };
 
 const initialState: RoomContextData = {
   DM: [],
@@ -61,6 +62,11 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
       return { ...roomState, currentRoom: action.value };
     case "SET_CURRENTROOMMEMBER":
       return { ...roomState, currentRoomMember: action.value };
+    case "ADD_ROOM":
+      return {
+        ...roomState,
+        rooms: [...roomState.rooms, action.value],
+      };
     default:
       return roomState;
   }

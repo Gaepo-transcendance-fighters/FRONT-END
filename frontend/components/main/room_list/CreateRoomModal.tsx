@@ -28,7 +28,7 @@ export default function CreateRoomModal({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [value, setValue] = useState("");
-  const { setRooms, setNonDmRooms } = useRoom();
+  const { dispatch } = useRoom();
 
   const handleClose = () => {
     setValue("");
@@ -47,24 +47,32 @@ export default function CreateRoomModal({
   // }, []);
 
   const OnClick = () => {
-  //   socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
-  //   if (정상상태코드) {
-  //   setNonDmRooms({ type: "empty-nondmroom", payload: [] });
-  //   setValue("");
-  //   setOpen(false);
-  //   }
-// /* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
-    setNonDmRooms({ type: "empty-nondmroom", payload: [] });
-    setRooms({
-      type: "create-room",
-      payload: [
-        {
-          channelIdx: 0,
-          owner: "jeeekimmm",
-          mode: Mode.PUBLIC,
-        },
-      ] as IChatRoom0[],
+    //   socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
+    //   if (정상상태코드) {
+    //   setNonDmRooms({ type: "empty-nondmroom", payload: [] });
+    //   setValue("");
+    //   setOpen(false);
+    //   }
+    // /* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
+    // dispatch({ type: "SET_ROOMS", value: [] });
+    dispatch({
+      type: "ADD_ROOM",
+      value: {
+        channelIdx: 0,
+        owner: "jeeekimmm",
+        mode: Mode.PUBLIC,
+      },
     });
+    // setRooms({
+    //   type: "create-room",
+    //   payload: [
+    //     {
+    //       channelIdx: 0,
+    //       owner: "jeeekimmm",
+    //       mode: Mode.PUBLIC,
+    //     },
+    //   ] as IChatRoom0[],
+    // });
     setValue("");
     setOpen(false);
     // */
