@@ -8,7 +8,7 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 // import { socket } from "@/app/layout";
@@ -83,7 +83,7 @@ const Layout = () => {
   //   };
   // }, []);
 
-  // useRequireAuth();
+  useRequireAuth();
 
   // useEffect(() => {
   //   if (isLoggedIn) {
