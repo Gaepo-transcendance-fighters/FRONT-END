@@ -12,11 +12,9 @@ import { useRoom } from "@/context/RoomContext";
 export default function Rooms({
   roomsProp,
   channelType,
-  setNonDmRooms,
 }: {
   roomsProp: IChatRoom0[];
   channelType: boolean;
-  setNonDmRooms: Dispatch<SetStateAction<IChatRoom0[]>>;
 }) {
   const [isRight, setIsRight] = useState(false);
   const [aRoom, setARoom] = useState<IChatRoom0>();
@@ -37,14 +35,11 @@ export default function Rooms({
       setPortalContainer(null);
     };
   }, []);
-  
+
   return (
     <>
       <div className={!isOpen ? "list" : "roomclicked"}>
-        <CreateRoomButton
-          channelType={channelType}
-          setNonDmRooms={setNonDmRooms}
-        />
+        <CreateRoomButton channelType={channelType} />
         {roomsProp.map((room, idx) => {
           return (
             <Room

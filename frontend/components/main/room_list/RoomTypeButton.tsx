@@ -1,22 +1,26 @@
 "use client";
 
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import {
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+  useReducer,
+} from "react";
 import Rooms from "./Rooms";
 import { IChatRoom0, Mode } from "@/components/public/Layout";
 import { useRoom } from "@/context/RoomContext";
 
 export default function RoomTypeButton() {
-  const [nonDmrooms, setNonDmRooms] = useState<IChatRoom0[]>([]);
   const [dmRooms, setDmRooms] = useState<IChatRoom0[]>([]);
+  const { nonDmRooms, setNonDmRooms } = useRoom();
   const [disabled, setDisabled] = useState(true);
   const { rooms } = useRoom();
 
   const DivideRoom = () => {
     rooms.map((room) => {
       if (room.mode != Mode.PRIVATE) {
-        setNonDmRooms((prev) => {
-          return [...prev, room];
-        });
+        setNonDmRooms({ type: "divide-room", payload: [room] });
       } else {
         setDmRooms((prev) => {
           return [...prev, room];
@@ -30,7 +34,7 @@ export default function RoomTypeButton() {
   }, [rooms]);
 
   const OnClick = (isNotDm: boolean) => {
-    setNonDmRooms([]);
+    setNonDmRooms({ type: "empty-nondmroom", payload: [] });
     setDmRooms([]);
     DivideRoom();
 
@@ -64,9 +68,8 @@ export default function RoomTypeButton() {
         </button>
       </div>
       <Rooms
-        roomsProp={disabled ? nonDmrooms : dmRooms}
+        roomsProp={disabled ? nonDmRooms : dmRooms}
         channelType={disabled}
-        setNonDmRooms={setNonDmRooms}
       />
     </>
   );
