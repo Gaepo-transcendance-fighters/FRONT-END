@@ -7,6 +7,7 @@ import { useRoom } from "@/context/RoomContext";
 
 export default function RoomList() {
   const { isOpen } = useRoom();
+
   return (
     <>
       <CardContent

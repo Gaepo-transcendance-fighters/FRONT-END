@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ProtectedModal from "./ProtectedModal";
 import { IChatRoom0, IMember, Mode } from "@/components/public/Layout";
 import { useRoom } from "@/context/RoomContext";
+import { mockMemberList0 } from "@/components/public/Layout";
 
 export default function Room({
   room,
@@ -66,12 +67,14 @@ export default function Room({
   const RoomClick = (room: IChatRoom0) => {
     // room.password || aRoom === room ? null : setARoom(room);
     // room.password == "" ? setIsRight(true) : handleOpen();
-    socket.emit("chat_enter", { roomId: room.channelIdx }, 상태코드);
-    if (정상상태코드) {
-      room.mode === Mode.PROTECTED || aRoom === room ? null : setARoom(room);
-      room.mode !== Mode.PROTECTED ? setIsRight(true) : handleOpen();
-    }
+    // socket.emit("chat_enter", { roomId: room.channelIdx }, 상태코드);
+    // if (정상상태코드) {
+    //   room.mode === Mode.PROTECTED || aRoom === room ? null : setARoom(room);
+    //   room.mode !== Mode.PROTECTED ? setIsRight(true) : handleOpen();
+    // }
+    room.mode !== Mode.PROTECTED ? setMemberList(mockMemberList0) : null;
   };
+  console.log("Room : ", memberList);
 
   console.log(room);
   return (

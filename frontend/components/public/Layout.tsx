@@ -42,26 +42,26 @@ export interface IChatRoom0 {
 }
 
 export interface IMember {
-  nickname : string;
-  imgUri : string;
+  nickname: string;
+  imgUri: string;
   permission: Permission;
 }
 
 export const mockMemberList0: IMember[] = [
   {
-    nickname : "jaekim",
-    imgUri : "/seal.png",
-    permission: Permission.OWNER
+    nickname: "jaekim",
+    imgUri: "/seal.png",
+    permission: Permission.OWNER,
   },
   {
-    nickname : "haryu",
-    imgUri : "/seal.png",
-    permission: Permission.ADMIN
+    nickname: "haryu",
+    imgUri: "/seal.png",
+    permission: Permission.ADMIN,
   },
   {
-    nickname : "wochae",
-    imgUri : "/seal.png",
-    permission: Permission.MEMBER
+    nickname: "wochae",
+    imgUri: "/seal.png",
+    permission: Permission.MEMBER,
   },
 ];
 

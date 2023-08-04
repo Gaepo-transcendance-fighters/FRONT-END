@@ -3,9 +3,6 @@
 import {
   useEffect,
   useState,
-  Dispatch,
-  SetStateAction,
-  useReducer,
 } from "react";
 import Rooms from "./Rooms";
 import { IChatRoom0, Mode } from "@/components/public/Layout";
@@ -13,9 +10,8 @@ import { useRoom } from "@/context/RoomContext";
 
 export default function RoomTypeButton() {
   const [dmRooms, setDmRooms] = useState<IChatRoom0[]>([]);
-  const { nonDmRooms, setNonDmRooms } = useRoom();
+  const { nonDmRooms, setNonDmRooms, rooms } = useRoom();
   const [disabled, setDisabled] = useState(true);
-  const { rooms } = useRoom();
 
   const DivideRoom = () => {
     rooms.map((room) => {
