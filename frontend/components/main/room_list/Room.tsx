@@ -82,15 +82,18 @@ export default function Room({
   const RoomClick = (room: IChatRoom0) => {
     // room.password || aRoom === room ? null : setARoom(room);
     // room.password == "" ? setIsRight(true) : handleOpen();
-    // socket.emit("chat_enter", { roomId: room.channelIdx }, 상태코드);
-    // if (정상상태코드) {
-    //   room.mode === Mode.PROTECTED || aRoom === room ? null : setARoom(room);
-    //   room.mode !== Mode.PROTECTED ? setIsRight(true) : handleOpen();
-    // }
+    socket.emit("chat_enter", { roomId: room.channelIdx }, 상태코드);
+    if (정상상태코드) {
+      room.mode === Mode.PROTECTED || roomState.currentRoom === room ? null : roomDispatch({type : "SET_CURRENTROOM", value : room});
+      room.mode !== Mode.PROTECTED ? setIsRight(true) : handleOpen(); // 코드 정리할수있을것같음
+      // room.mode !== Mode.PROTECTED ? setIsRight(true) : handleOpen(); // 코드 정리할수있을것같음
+    }
+    /*
     if (room.mode !== Mode.PROTECTED) {
       roomDispatch({ type: "SET_CURMEMBER", value: mockMemberList0 });
       roomDispatch({ type: "SET_ISOPEN", value: true });
     }
+    */
   };
 
   return (
