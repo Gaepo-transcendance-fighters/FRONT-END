@@ -24,7 +24,7 @@ export default function Room({
   const [fail, setFail] = useState<boolean>(false);
   const [memberList, setMemberList] = useState<IMember[]>([]);
   const { setIsOpen } = useRoom();
-  
+
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
     else if (idx < 100) return "0" + idx.toString();
@@ -72,14 +72,21 @@ export default function Room({
     //   room.mode === Mode.PROTECTED || aRoom === room ? null : setARoom(room);
     //   room.mode !== Mode.PROTECTED ? setIsRight(true) : handleOpen();
     // }
-    room.mode !== Mode.PROTECTED ? setMemberList(mockMemberList0) : null;
+    // room.mode !== Mode.PROTECTED ? setMemberList(mockMemberList0) : null;
   };
-  console.log("Room : ", memberList);
+  const RightClick = (e : any) => {
+    // e.prevent.default();
+    console.log("mouse right click!", e.type);
+  };
 
-  console.log(room);
   return (
     <>
-      <button key={idx} className="item" onClick={() => RoomClick(room)}>
+      <button
+        key={idx}
+        className="item"
+        onClick={() => RoomClick(room)}
+        onContextMenu={(e) => RightClick(e)}
+      >
         <div className="roomidx">{leftPadding(room.channelIdx)}</div>
         <div className="owner">{room.owner}'s</div>
         <div className="lock">
