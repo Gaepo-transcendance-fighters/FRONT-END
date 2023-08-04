@@ -11,7 +11,7 @@ import InviteGame from "../main/InviteGame/InviteGame";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { mockChatRoomList0, useRoom } from "@/context/RoomContext";
-import { socket } from "@/app/layout";
+// import { socket } from "@/app/layout";
 
 export const main = {
   main0: "#67DBFB",
@@ -27,26 +27,26 @@ const Layout = () => {
   const { state } = useAuth();
   const { roomState, roomDispatch } = useRoom();
 
-  useEffect(() => {
-    const MainEnter = (json: any) => {
-      roomDispatch({ type: "SET_NON_ROOMS", value: json.channel });
-    };
-    socket.on("main_enter", MainEnter);
+  // useEffect(() => {
+  //   const MainEnter = (json: any) => {
+  //     roomDispatch({ type: "SET_NON_ROOMS", value: json.channel });
+  //   };
+  //   socket.on("main_enter", MainEnter);
 
-    return () => {
-      socket.off("main_enter", MainEnter);
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("main_enter", MainEnter);
+  //   };
+  // }, []);
 
   useRequireAuth();
 
-  useEffect(() => {
-    if (state.isLoggedIn) {
-      socket.emit("main_enter", "intra_id", (status_code: number) => {
-        console.log(status_code);
-      });
-    }
-  }, [state.isLoggedIn]);
+  // useEffect(() => {
+  //   if (state.isLoggedIn) {
+  //     socket.emit("main_enter", "intra_id", (status_code: number) => {
+  //       console.log(status_code);
+  //     });
+  //   }
+  // }, [state.isLoggedIn]);
 
   // socket.io로 mock data 받았다고 가정했을때.
   useEffect(() => {
