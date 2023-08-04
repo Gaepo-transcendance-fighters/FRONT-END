@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { main } from "@/components/public/Layout";
 import React from "react";
+import Scroll from "./Scroll";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -274,9 +275,10 @@ const RedirMyProfile = () => {
             </CardContent>
           </Card>
         </Stack>
+        ex
       </Card>
       <br />
-      <Card
+      {/* <Card
         sx={{
           backgroundColor: "#3478c5",
           height: "170px",
@@ -313,7 +315,7 @@ const RedirMyProfile = () => {
             </Card>
           </Card>
         </Stack>
-      </Card>
+      </Card> */}
     </Box>
   );
 };

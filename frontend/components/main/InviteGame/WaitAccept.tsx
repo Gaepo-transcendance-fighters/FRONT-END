@@ -85,6 +85,7 @@ const WaitAccept = () => {
               }}
             >
               Silee 님께 친선전 경기를 요청하였습니다.
+              {/* 추후 optionSelect로 라우팅 시키는거 필요. */}
             </CardContent>
             <CardContent
               style={{

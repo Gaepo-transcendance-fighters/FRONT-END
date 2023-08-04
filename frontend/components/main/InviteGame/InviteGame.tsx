@@ -37,7 +37,7 @@ const InviteGame = () => {
         variant="contained"
         onClick={handleOpenModal}
       >
-        친선전승낙모달
+        친선전승락모달
       </Button>
       <Modal open={openModal}>
         <Box sx={modalStyle} borderRadius={"10px"}>
