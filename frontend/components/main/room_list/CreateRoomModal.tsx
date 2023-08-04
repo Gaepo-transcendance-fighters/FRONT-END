@@ -35,25 +35,25 @@ export default function CreateRoomModal({
     setOpen(false);
   };
 
-  // useEffect(() => {
-  //   const ChatCreateRoom = (json) => {
-  //     setRooms((prev) => [...prev, json.channel]);
-  //   };
-  //   socket.on("main_enter", ChatCreateRoom, json);
+  useEffect(() => {
+    const ChatCreateRoom = (json) => {
+      setRooms((prev) => [...prev, json.channel]);
+    };
+    socket.on("main_enter", ChatCreateRoom, json);
 
-  //   return () => {
-  //     socket.off("main_enter", ChatCreateRoom, json);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("main_enter", ChatCreateRoom, json);
+    };
+  }, []);
 
   const OnClick = () => {
-    // socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
-    // if (정상상태코드) {
-    // setNonDmRooms({ type: "empty-nondmroom", payload: [] });
-    // setValue("");
-    // setOpen(false);
-    // }
-
+    socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
+    if (정상상태코드) {
+    setNonDmRooms({ type: "empty-nondmroom", payload: [] });
+    setValue("");
+    setOpen(false);
+    }
+/* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
     setNonDmRooms({ type: "empty-nondmroom", payload: [] });
     setRooms({
       type: "create-room",
@@ -67,6 +67,7 @@ export default function CreateRoomModal({
     });
     setValue("");
     setOpen(false);
+    */
   };
 
   return (
