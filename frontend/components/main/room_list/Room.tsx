@@ -8,7 +8,6 @@ import {
 } from "react";
 import ProtectedModal from "./ProtectedModal";
 import { mockMemberList0, useRoom } from "@/context/RoomContext";
-import { Menu, MenuItem } from "@mui/material";
 import { IChatRoom0, Mode } from "@/context/RoomContext";
 
 export default function Room({
@@ -24,19 +23,8 @@ export default function Room({
 }) {
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { roomState, roomDispatch } = useRoom();
-  const handleOpenMenu = (
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-  ) => {
-    e.preventDefault();
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
+  
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
     else if (idx < 100) return "0" + idx.toString();
@@ -88,7 +76,6 @@ export default function Room({
         key={idx}
         className="item"
         onClick={() => RoomClick(room)}
-        onContextMenu={(e) => handleOpenMenu(e)}
       >
         <div className="roomidx">{leftPadding(room.channelIdx)}</div>
         <div className="owner">{room.owner}'s</div>
@@ -100,16 +87,7 @@ export default function Room({
           )}
         </div>
       </button>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-      >
-        <MenuItem>Set Admin</MenuItem>
-        <MenuItem>Mute</MenuItem>
-        <MenuItem>Kick</MenuItem>
-        <MenuItem>Ban</MenuItem>
-      </Menu>
+      
       <ProtectedModal
         open={open}
         handleClose={handleClose}
