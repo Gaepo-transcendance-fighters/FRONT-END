@@ -32,7 +32,9 @@ export default function Room({
   const [memberList, setMemberList] = useState<IMember[]>([]);
   const { setIsOpen } = useRoom();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleOpenMenu = (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleOpenMenu = (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
     e.preventDefault();
     setAnchorEl(e.currentTarget);
   };
@@ -114,9 +116,10 @@ export default function Room({
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
       >
-        <MenuItem>Add</MenuItem>
-        <MenuItem>Delete</MenuItem>
-        <MenuItem>Block</MenuItem>
+        <MenuItem>Set Admin</MenuItem>
+        <MenuItem>Mute</MenuItem>
+        <MenuItem>Kick</MenuItem>
+        <MenuItem>Ban</MenuItem>
       </Menu>
       <ProtectedModal
         open={open}
