@@ -90,7 +90,11 @@ export default function Room({
     //   room.mode === Mode.PROTECTED || aRoom === room ? null : setARoom(room);
     //   room.mode !== Mode.PROTECTED ? setIsRight(true) : handleOpen();
     // }
-    // room.mode !== Mode.PROTECTED ? setMemberList(mockMemberList0) : null;
+    if (room.mode !== Mode.PROTECTED)
+    {
+      dispatch({type : "SET_CURRENTROOMMEMBER", value : mockMemberList0});
+      dispatch({type : "SET_ISOPEN", value : true});
+    }
   };
 
   return (

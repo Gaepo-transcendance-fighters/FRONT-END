@@ -58,7 +58,7 @@ export default function Rooms({
         portalContainer &&
         createPortal(
           <MemberList
-            aRoom={aRoom}
+            // aRoom={aRoom}
             isRight={isRight}
             setIsRight={setIsRight}
           />,
