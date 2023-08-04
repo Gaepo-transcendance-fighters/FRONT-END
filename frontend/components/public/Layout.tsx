@@ -8,7 +8,7 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 // import { socket } from "@/app/layout";
@@ -22,6 +22,14 @@ export const main = {
   main5: "#214C97",
   main6: "#183C77",
 };
+
+
+export enum Permission {
+  OWNER = "owner",
+  ADMIN = "admin",
+  MEMBER = "member",
+}
+
 
 export enum Mode {
   PRIVATE = "private",
@@ -98,6 +106,7 @@ export const mockChatRoomList0: IChatRoom0[] = [
   },
 ];
 
+
 const Layout = () => {
   const { isLoggedIn } = useAuth();
   const { setRooms } = useRoom();
@@ -113,7 +122,7 @@ const Layout = () => {
   //   };
   // }, []);
 
-  // useRequireAuth();
+  useRequireAuth();
 
   // useEffect(() => {
   //   if (isLoggedIn) {
