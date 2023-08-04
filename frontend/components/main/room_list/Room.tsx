@@ -74,8 +74,8 @@ export default function Room({
     // }
     // room.mode !== Mode.PROTECTED ? setMemberList(mockMemberList0) : null;
   };
-  const RightClick = (e : any) => {
-    // e.prevent.default();
+  const RightClick = (e: any) => {
+    e.preventDefault();
     console.log("mouse right click!", e.type);
   };
 
