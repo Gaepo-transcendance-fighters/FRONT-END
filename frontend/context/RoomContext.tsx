@@ -1,4 +1,5 @@
 import { Permission } from "@/components/public/Layout";
+
 import {
   ReactNode,
   createContext,
@@ -75,6 +76,27 @@ const RoomContext = createContext<{
 
 export const useRoom = () => {
   return useContext(RoomContext);
+};
+
+type actionType = {
+  type: string;
+  payload: IChatRoom0[];
+};
+
+const RoomReducer = (state: IChatRoom0[], action: actionType) => {
+  state;
+  switch (action.type) {
+    case "main-enter":
+      return action.payload;
+    case "create-room":
+      return [...state, action.payload[0]];
+    case "empty-nondmroom":
+      return action.payload;
+    case "divide-room":
+      return [...state, action.payload[0]];
+    default:
+      return state;
+  }
 };
 
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
