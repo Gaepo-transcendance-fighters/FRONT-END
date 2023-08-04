@@ -19,6 +19,12 @@ export const main = {
   main6: "#183C77",
 };
 
+export enum Permission {
+  OWNER = "owner",
+  ADMIN = "admin",
+  MEMBER = "member",
+}
+
 const Layout = () => {
   useRequireAuth();
   return (
