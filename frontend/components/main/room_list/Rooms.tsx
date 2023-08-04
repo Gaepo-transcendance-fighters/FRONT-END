@@ -38,7 +38,7 @@ export default function Rooms({
     <>
       <div className={!roomState.isOpen ? "list" : "roomclicked"}>
         <CreateRoomButton channelType={channelType} />
-        {currentRoomList.map((room, idx) => {
+        {currentRoomList?.map((room, idx) => {
           return (
             <Room
               key={idx}
