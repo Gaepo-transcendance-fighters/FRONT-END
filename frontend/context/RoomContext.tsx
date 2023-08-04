@@ -63,7 +63,6 @@ export const mockChatRoomList0: IChatRoom0[] = [
   },
 ];
 
-
 export const mockMemberList0: IMember[] = [
   {
     nickname: "jaekim",

@@ -41,15 +41,15 @@ const box2 = {
 export default function ProtectedModal({
   open,
   handleClose,
-  setIsRight,
+  // setIsRight,
   room,
   setFail,
   fail,
 }: {
   open: boolean;
   handleClose: () => void;
-  isRight: boolean;
-  setIsRight: Dispatch<SetStateAction<boolean>>;
+  // isRight: boolean;
+  // setIsRight: Dispatch<SetStateAction<boolean>>;
   room: IChatRoom0;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
@@ -65,12 +65,12 @@ export default function ProtectedModal({
     e.preventDefault();
     setFail(false);
     if (pwRef.current == room.password) {
-      setIsRight(true);
+      // setIsRight(true);
       handleClose();
       setFail(false);
       roomDispatch({ type: "SET_CURRENTROOM", value: room });
     } else {
-      setIsRight(false);
+      // setIsRight(false);
       setFail(true);
     }
     pwRef.current = "";
@@ -80,12 +80,12 @@ export default function ProtectedModal({
     if (e.code === "Enter") {
       setFail(false);
       if (pwRef.current == room.password) {
-        setIsRight(true);
+        // setIsRight(true);
         handleClose();
         setFail(false);
         roomDispatch({ type: "SET_CURRENTROOM", value: room });
       } else {
-        setIsRight(false);
+        // setIsRight(false);
         setFail(true);
       }
       pwRef.current = "";

@@ -15,7 +15,7 @@ export default function Rooms({
   currentRoomList: IChatRoom0[];
   channelType: boolean;
 }) {
-  const [isRight, setIsRight] = useState(false);
+  // const [isRight, setIsRight] = useState(false);
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
     null
   );
@@ -44,8 +44,8 @@ export default function Rooms({
               key={idx}
               room={room}
               idx={idx}
-              setIsRight={setIsRight}
-              isRight={isRight}
+              // setIsRight={setIsRight}
+              // isRight={isRight}
             />
           );
         })}
@@ -53,7 +53,8 @@ export default function Rooms({
       {roomState.isOpen &&
         portalContainer &&
         createPortal(
-          <MemberList isRight={isRight} setIsRight={setIsRight} />,
+          <MemberList />,
+          // <MemberList isRight={isRight} setIsRight={setIsRight} />,
           portalContainer
         )}
     </>
