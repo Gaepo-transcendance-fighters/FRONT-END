@@ -1,29 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent } from "@mui/material";
+import { CardContent } from "@mui/material";
 import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
-// import { IChatRoom } from "./RoomTypeButton";
-// import { main } from "@/font/color";
-import { IChatRoom0 } from "@/components/public/Layout";
+import { useRoom } from "@/context/RoomContext";
 
-export default function RoomList({chatRoomList} : {chatRoomList: IChatRoom0[]}) {
-  const [showMembersList, setShowMembersList] = useState(false);
+export default function RoomList() {
+  const { isOpen } = useRoom();
   return (
     <>
       <CardContent
         id="portal"
         sx={{ pb: 0 }}
-        className={showMembersList ? "memactivate" : "memdeactivate"}
+        className={isOpen ? "memactivate" : "memdeactivate"}
       ></CardContent>
       <CardContent sx={{ "&:last-child": { pb: 0 } }}>
         <Title title={"chatroomlist"} text={"Chat Room List"} />
-        <RoomTypeButton
-          showMembersList={showMembersList}
-          setShowMembersList={setShowMembersList}
-          chatRoomList={chatRoomList}
-        />
+        <RoomTypeButton />
       </CardContent>
     </>
   );
