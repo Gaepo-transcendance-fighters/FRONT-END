@@ -8,10 +8,10 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
-import { socket } from "@/app/layout";
+// import { socket } from "@/app/layout";
 
 export const main = {
   main0: "#67DBFB",
@@ -59,7 +59,7 @@ export const mockChatRoomList0: IChatRoom0[] = [
   {
     channelIdx: 4,
     owner: "0123456789",
-    mode: Mode.PUBLIC,
+    mode: Mode.PROTECTED,
   },
   {
     channelIdx: 5,
@@ -72,29 +72,29 @@ const Layout = () => {
   const { isLoggedIn } = useAuth();
   const { setRooms } = useRoom();
 
-  useEffect(() => {
-    const MainEnter = (json) => {
-      setRooms(json.channelList);
-    };
-    socket.on("main_enter", MainEnter, json);
+  // useEffect(() => {
+  //   const MainEnter = (json) => {
+  //     setRooms(json.channelList);
+  //   };
+  //   socket.on("main_enter", MainEnter, json);
 
-    return () => {
-      socket.off("main_enter", MainEnter, json);
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("main_enter", MainEnter, json);
+  //   };
+  // }, []);
 
   useRequireAuth();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      socket.emit("main_enter", "intra_id", 상태코드);
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     socket.emit("main_enter", "intra_id", 상태코드);
+  //   }
+  // }, [isLoggedIn]);
 
   // socket.io로 mock data 받았다고 가정했을때.
-  // useEffect(() => {
-  //   setRooms(mockChatRoomList0);
-  // }, []);
+  useEffect(() => {
+    setRooms({ type: "main-enter", payload: mockChatRoomList0 });
+  }, []);
   // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 
   return (

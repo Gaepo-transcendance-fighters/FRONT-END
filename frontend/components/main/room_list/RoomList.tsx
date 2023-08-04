@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { CardContent } from "@mui/material";
 import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
@@ -17,8 +16,7 @@ export default function RoomList() {
       ></CardContent>
       <CardContent sx={{ "&:last-child": { pb: 0 } }}>
         <Title title={"chatroomlist"} text={"Chat Room List"} />
-        <RoomTypeButton
-        />
+        <RoomTypeButton />
       </CardContent>
     </>
   );

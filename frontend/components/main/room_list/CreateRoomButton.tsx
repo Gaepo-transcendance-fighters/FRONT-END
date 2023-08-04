@@ -1,11 +1,5 @@
-import { forwardRef, useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import CreateRoomModal from "./CreateRoomModal";
-
-export const HoldRef = forwardRef((props: any, ref: any) => (
-  <span {...props} ref={ref}>
-    {props.children}
-  </span>
-));
 
 export default function CreateRoomButton({
   channelType,
