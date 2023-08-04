@@ -30,17 +30,10 @@ export enum Permission {
   MEMBER = "member",
 }
 
-
 export enum Mode {
   PRIVATE = "private",
   PUBLIC = "public",
   PROTECTED = "protected",
-}
-
-export enum Permission {
-  OWNER = "owner",
-  ADMIN = "admin",
-  MEMBER = "member",
 }
 
 export interface IChatRoom0 {
@@ -108,8 +101,8 @@ export const mockChatRoomList0: IChatRoom0[] = [
 
 
 const Layout = () => {
-  const { isLoggedIn } = useAuth();
-  const { setRooms } = useRoom();
+  const { state } = useAuth();
+  const { roomState, dispatch } = useRoom();
 
   // useEffect(() => {
   //   const MainEnter = (json) => {
@@ -125,14 +118,15 @@ const Layout = () => {
   useRequireAuth();
 
   // useEffect(() => {
-  //   if (isLoggedIn) {
+  //   if (state.isLoggedIn) {
   //     socket.emit("main_enter", "intra_id", 상태코드);
   //   }
-  // }, [isLoggedIn]);
+  // }, [state.isLoggedIn]);
 
   // socket.io로 mock data 받았다고 가정했을때.
   useEffect(() => {
-    setRooms({ type: "main-enter", payload: mockChatRoomList0 });
+    dispatch({ type: "SET_ROOMS", value: mockChatRoomList0 });
+    console.log(roomState.rooms);
   }, []);
   // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 

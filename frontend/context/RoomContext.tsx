@@ -49,28 +49,28 @@ const initialState: RoomContextData = {
   isOpen: false,
 };
 
-const RoomReducer = (state: RoomContextData, action: RoomAction) => {
+const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
   switch (action.type) {
     case "SET_ISOPEN":
-      return { ...state, isOpen: action.value };
+      return { ...roomState, isOpen: action.value };
     case "SET_DM":
-      return { ...state, DM: action.value };
+      return { ...roomState, DM: action.value };
     case "SET_ROOMS":
-      return { ...state, rooms: action.value };
+      return { ...roomState, rooms: action.value };
     case "SET_CURRENTROOM":
-      return { ...state, currentRoom: action.value };
+      return { ...roomState, currentRoom: action.value };
     case "SET_CURRENTROOMMEMBER":
-      return { ...state, currentRoomMember: action.value };
+      return { ...roomState, currentRoomMember: action.value };
     default:
-      return state;
+      return roomState;
   }
 };
 
 const RoomContext = createContext<{
-  state: RoomContextData;
+  roomState: RoomContextData;
   dispatch: React.Dispatch<RoomAction>;
 }>({
-  state: initialState,
+  roomState: initialState,
   dispatch: () => {},
 });
 
@@ -83,29 +83,29 @@ type actionType = {
   payload: IChatRoom0[];
 };
 
-const RoomReducer = (state: IChatRoom0[], action: actionType) => {
-  state;
-  switch (action.type) {
-    case "main-enter":
-      return action.payload;
-    case "create-room":
-      return [...state, action.payload[0]];
-    case "empty-nondmroom":
-      return action.payload;
-    case "divide-room":
-      return [...state, action.payload[0]];
-    default:
-      return state;
-  }
-};
+// const RoomReducer = (roomState: IChatRoom0[], action: actionType) => {
+//   roomState;
+//   switch (action.type) {
+//     case "main-enter":
+//       return action.payload;
+//     case "create-room":
+//       return [...roomState, action.payload[0]];
+//     case "empty-nondmroom":
+//       return action.payload;
+//     case "divide-room":
+//       return [...roomState, action.payload[0]];
+//     default:
+//       return roomState;
+//   }
+// };
 
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(RoomReducer, initialState);
+  const [roomState, dispatch] = useReducer(RoomReducer, initialState);
 
   useEffect(() => {}, []);
 
   return (
-    <RoomContext.Provider value={{ state, dispatch }}>
+    <RoomContext.Provider value={{ roomState, dispatch }}>
       {children}
     </RoomContext.Provider>
   );

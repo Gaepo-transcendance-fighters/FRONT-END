@@ -30,7 +30,7 @@ export default function Room({
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
   const [memberList, setMemberList] = useState<IMember[]>([]);
-  const { setIsOpen } = useRoom();
+  const { roomState, dispatch } = useRoom();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleOpenMenu = (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
@@ -56,7 +56,7 @@ export default function Room({
   const handleClose = () => {
     setOpen(false);
     setFail(false);
-    aRoom ? setIsOpen(true) : null;
+    aRoom ? dispatch({type : "SET_ISOPEN", value : true}) : null;
   }; // 올바른 비번
 
   /*
