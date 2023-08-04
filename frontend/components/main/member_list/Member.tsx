@@ -19,7 +19,7 @@ export default function Member({
   const handleOpenModal = () => {
     setOpenModal(true);
   };
-
+  
   return (
     <>
       <div key={idx} className="membtn" onClick={handleOpenModal}>

@@ -1,5 +1,3 @@
-import { Permission } from "@/components/public/Layout";
-
 import {
   ReactNode,
   createContext,
@@ -14,6 +12,12 @@ enum Mode {
   PROTECTED = "protected",
 }
 
+export enum Permission {
+  OWNER = "owner",
+  ADMIN = "admin",
+  MEMBER = "member",
+}
+
 interface IMember {
   nickname: string;
   imgUri: string;
@@ -26,9 +30,61 @@ interface IChatRoom0 {
   mode: Mode;
 }
 
+export const mockChatRoomList0: IChatRoom0[] = [
+  {
+    channelIdx: 0,
+    owner: "jeekim",
+    mode: Mode.PUBLIC,
+  },
+  {
+    channelIdx: 1,
+    owner: "jaekim",
+    mode: Mode.PROTECTED,
+  },
+  {
+    channelIdx: 2,
+    owner: "0123456789",
+    mode: Mode.PROTECTED,
+  },
+  {
+    channelIdx: 3,
+    owner: "bbbbbbbbbb",
+    mode: Mode.PUBLIC,
+  },
+  {
+    channelIdx: 4,
+    owner: "0123456789",
+    mode: Mode.PROTECTED,
+  },
+  {
+    channelIdx: 5,
+    owner: "zzzzzzzzzz",
+    mode: Mode.PROTECTED,
+  },
+];
+
+
+export const mockMemberList0: IMember[] = [
+  {
+    nickname: "jaekim",
+    imgUri: "/seal.png",
+    permission: Permission.OWNER,
+  },
+  {
+    nickname: "haryu",
+    imgUri: "/seal.png",
+    permission: Permission.ADMIN,
+  },
+  {
+    nickname: "wochae",
+    imgUri: "/seal.png",
+    permission: Permission.MEMBER,
+  },
+];
+
 interface RoomContextData {
-  DM: IChatRoom0[];
-  rooms: IChatRoom0[];
+  dmRooms: IChatRoom0[];
+  nonDmRooms: IChatRoom0[];
   currentRoom: IChatRoom0 | null;
   currentRoomMember: IMember[];
   isOpen: boolean;
@@ -36,15 +92,15 @@ interface RoomContextData {
 
 type RoomAction =
   | { type: "SET_DM"; value: IChatRoom0[] }
-  | { type: "SET_ROOMS"; value: IChatRoom0[] }
+  | { type: "SET_NON_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
   | { type: "SET_CURRENTROOMMEMBER"; value: IMember[] }
   | { type: "SET_ISOPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom0 };
 
 const initialState: RoomContextData = {
-  DM: [],
-  rooms: [],
+  dmRooms: [],
+  nonDmRooms: [],
   currentRoom: null,
   currentRoomMember: [],
   isOpen: false,
@@ -55,9 +111,9 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
     case "SET_ISOPEN":
       return { ...roomState, isOpen: action.value };
     case "SET_DM":
-      return { ...roomState, DM: action.value };
-    case "SET_ROOMS":
-      return { ...roomState, rooms: action.value };
+      return { ...roomState, dmRooms: action.value };
+    case "SET_NON_ROOMS":
+      return { ...roomState, nonDmRooms: action.value };
     case "SET_CURRENTROOM":
       return { ...roomState, currentRoom: action.value };
     case "SET_CURRENTROOMMEMBER":
@@ -65,7 +121,7 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
     case "ADD_ROOM":
       return {
         ...roomState,
-        rooms: [...roomState.rooms, action.value],
+        nonDmRooms: [...roomState.nonDmRooms, action.value],
       };
     default:
       return roomState;
@@ -74,10 +130,10 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
 
 const RoomContext = createContext<{
   roomState: RoomContextData;
-  dispatch: React.Dispatch<RoomAction>;
+  roomDispatch: React.Dispatch<RoomAction>;
 }>({
   roomState: initialState,
-  dispatch: () => {},
+  roomDispatch: () => {},
 });
 
 export const useRoom = () => {
@@ -106,12 +162,12 @@ type actionType = {
 // };
 
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
-  const [roomState, dispatch] = useReducer(RoomReducer, initialState);
+  const [roomState, roomDispatch] = useReducer(RoomReducer, initialState);
 
   useEffect(() => {}, []);
 
   return (
-    <RoomContext.Provider value={{ roomState, dispatch }}>
+    <RoomContext.Provider value={{ roomState, roomDispatch }}>
       {children}
     </RoomContext.Provider>
   );

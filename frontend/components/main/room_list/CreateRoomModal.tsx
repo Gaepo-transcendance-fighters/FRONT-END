@@ -54,7 +54,7 @@ export default function CreateRoomModal({
     //   setOpen(false);
     //   }
     // /* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
-    // dispatch({ type: "SET_ROOMS", value: [] });
+    // dispatch({ type: "SET_NON_ROOMS", value: [] });
     dispatch({
       type: "ADD_ROOM",
       value: {
