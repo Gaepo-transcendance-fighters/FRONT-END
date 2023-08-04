@@ -12,6 +12,8 @@ import {
 import { useRouter } from "next/navigation";
 import { main } from "@/font/color";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -28,26 +30,27 @@ const modalStyle = {
 
 const Login = () => {
   const router = useRouter();
+  const { state, dispatch } = useAuth();
   const [url, setUrl] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     console.log(url);
-    window.location.href = url;
 
-    // await fetch("http://10.19.208.53:4000/auth", {
-    //   method: "GET",
-    // })
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       // localStorage.setItem("loggedIn", "true");
-    //       // setIsLoggedIn(true);
-    //       return router.push("/");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     return alert(`[Error] ${error}`);
-    //   });
+    try {
+      await axios("http://10.19.208.53:4000/auth/login", {
+        method: "GET",
+      }).then((res) => {
+        if (res.status === 302) {
+          const userData = res.data;
+          console.log(userData);
+          localStorage.setItem("loggedIn", "true");
+          dispatch({ type: "LOGIN", value: true });
+          return router.push("/");
+        }
+      });
+    } catch (e) {
+      console.log("[Error]", e);
+    }
   };
 
   useEffect(() => {

@@ -3,17 +3,50 @@ import {
   createContext,
   useContext,
   useEffect,
-  useState,
+  useReducer,
 } from "react";
 
 interface AuthContextData {
   isLoggedIn: boolean;
-  setIsLoggedIn: (value: boolean) => void;
+  id: number;
+  nickname: string;
+  imgUrl: string;
 }
 
-const AuthContext = createContext<AuthContextData>({
+type AuthAction =
+  | { type: "LOGIN"; value: boolean }
+  | { type: "SET_ID"; value: number }
+  | { type: "SET_NICKNAME"; value: string }
+  | { type: "SET_IMGURL"; value: string };
+
+const initialState: AuthContextData = {
   isLoggedIn: false,
-  setIsLoggedIn: () => {},
+  id: 0,
+  nickname: "",
+  imgUrl: "",
+};
+
+const AuthReducer = (state: AuthContextData, action: AuthAction) => {
+  switch (action.type) {
+    case "LOGIN":
+      return { ...state, isLoggedIn: action.value };
+    case "SET_ID":
+      return { ...state, id: action.value };
+    case "SET_IMGURL":
+      return { ...state, imgUrl: action.value };
+    case "SET_NICKNAME":
+      return { ...state, nickname: action.value };
+    default:
+      return state;
+  }
+};
+
+const AuthContext = createContext<{
+  state: AuthContextData;
+  dispatch: React.Dispatch<AuthAction>;
+}>({
+  state: initialState,
+  dispatch: () => {},
 });
 
 export const useAuth = () => {
@@ -21,20 +54,18 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("loggedIn");
 
     if (loggedIn === "true") {
-      setIsLoggedIn(true);
+      dispatch({ type: "LOGIN", value: true });
     }
   }, []);
 
-  // if (!isLoggedIn) return <div></div>;
-
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AuthContext.Provider value={{ state, dispatch }}>
       {children}
     </AuthContext.Provider>
   );
