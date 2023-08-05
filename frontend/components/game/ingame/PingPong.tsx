@@ -2,23 +2,32 @@
 
 import GameBoard from "./GameBoard";
 import GamePaddle from "./GamePaddle";
-import { useCallback, useEffect, useState, useRef, useContext } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import GameBall from "./GameBall";
 import { useGame } from "@/context/GameContext";
 
-interface IPaddle {
+interface ICor {
   x: number;
   y: number;
 }
 
-interface IBall {
-  x: number;
-  y: number;
-}
+interface IPaddle extends ICor {}
+
+interface IBall extends ICor {}
+
+const startDirection: ICor[] = [
+  { x: 1, y: 1 },
+  { x: 1, y: 2 },
+  { x: 2, y: 1 },
+  { x: -1, y: 1 },
+  { x: -1, y: 2 },
+  { x: -2, y: 1 },
+];
 
 const PingPong = () => {
   const { state, dispatch } = useGame();
-
+  const router = useRouter();
   const requireAnimationRef = useRef(0);
 
   const [ready, setReady] = useState(false);
@@ -50,14 +59,31 @@ const PingPong = () => {
     [myPaddle.y]
   );
 
+  const randomDirection = () => {
+    const randomNumber = Math.floor(Math.random() * 6);
+    console.log(randomNumber);
+    console.log(startDirection[randomNumber]);
+    const newDirection = startDirection[randomNumber];
+    setDirection((prev) => {
+      return { ...prev, x: newDirection.x, y: newDirection.y };
+    });
+  };
+
   const resetBall = () => {
     setBall((prev) => {
       return { ...prev, x: 0, y: 0 };
     });
   };
 
+  const resetDerection = () => {
+    setDirection((prev) => {
+      return { ...prev, x: 1, y: 1 };
+    });
+  };
+
   const gameStart = () => {
     setTimeout(() => {
+      randomDirection();
       setReady(true);
     }, 2000);
   };
@@ -71,17 +97,31 @@ const PingPong = () => {
     if (
       newLocation.x > myPaddle.x &&
       newLocation.x < myPaddle.x + 20 &&
+      newLocation.y > myPaddle.y - 20 &&
+      newLocation.y < myPaddle.y + 20
+    )
+      setDirection((prev) => ({ x: -prev.x, y: 1 }));
+    else if (
+      newLocation.x > enemyPaddle.x - 20 &&
+      newLocation.x < enemyPaddle.x &&
+      newLocation.y > enemyPaddle.y - 20 &&
+      newLocation.y < enemyPaddle.y + 20
+    )
+      setDirection((prev) => ({ x: -prev.x, y: 1 }));
+    else if (
+      newLocation.x > myPaddle.x &&
+      newLocation.x < myPaddle.x + 20 &&
       newLocation.y > myPaddle.y - 50 &&
       newLocation.y < myPaddle.y + 50
     )
-      setDirection((prev) => ({ x: -prev.x, y: prev.y }));
+      setDirection((prev) => ({ x: -prev.x, y: 2 }));
     else if (
       newLocation.x > enemyPaddle.x - 20 &&
-      newLocation.x < enemyPaddle.x + 20 &&
+      newLocation.x < enemyPaddle.x &&
       newLocation.y > enemyPaddle.y - 50 &&
       newLocation.y < enemyPaddle.y + 50
     )
-      setDirection((prev) => ({ x: -prev.x, y: prev.y }));
+      setDirection((prev) => ({ x: -prev.x, y: 2 }));
 
     if (newLocation.y <= -250 || newLocation.y >= 250)
       setDirection((prev) => ({ x: prev.x, y: -prev.y }));
@@ -89,22 +129,30 @@ const PingPong = () => {
     if (newLocation.x <= -500) {
       dispatch({ type: "B_SCORE", value: state.bScore });
       resetBall();
+      resetDerection();
       setReady(false);
       return;
     }
     if (newLocation.x > 500) {
       dispatch({ type: "A_SCORE", value: state.aScore });
       resetBall();
+      resetDerection();
       setReady(false);
       return;
     }
-
     setBall(newLocation);
     requireAnimationRef.current = requestAnimationFrame(ballMove);
   }, [ball]);
 
   useEffect(() => {
+    if (state.aScore === 5 || state.bScore === 5) {
+      router.push("/gameresult");
+    }
+  }, [state.aScore, state.bScore]);
+
+  useEffect(() => {
     if (!ready) return gameStart();
+
     window.addEventListener("keydown", handlePaddle);
 
     requireAnimationRef.current = requestAnimationFrame(ballMove);

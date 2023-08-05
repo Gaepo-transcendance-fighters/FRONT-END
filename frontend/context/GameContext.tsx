@@ -1,4 +1,3 @@
-import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useReducer, ReactNode } from "react";
 
 interface GameContextData {
@@ -7,20 +6,23 @@ interface GameContextData {
   mapType: string;
   aScore: number;
   bScore: number;
+  latency: number;
 }
 
 type GameAction =
   | { type: "SET_GAME_MODE"; value: string }
   | { type: "SET_BALL_SPEED_OPTION"; value: string }
   | { type: "SET_MAP_TYPE"; value: string }
+  | { type: "SET_LATENCY"; value: number }
   | { type: "A_SCORE"; value: number }
   | { type: "B_SCORE"; value: number }
   | { type: "SCORE_RESET"; value: GameContextData };
 
 const initialState: GameContextData = {
   gameMode: "",
-  ballSpeedOption: 6,
+  ballSpeedOption: 3,
   mapType: "map2",
+  latency: 0,
   aScore: 0,
   bScore: 0,
 };
@@ -28,36 +30,34 @@ const initialState: GameContextData = {
 export function resetGameContextData(): GameContextData {
   return {
     gameMode: "",
-    ballSpeedOption: 6,
+    ballSpeedOption: 3,
     mapType: "map2",
+    latency: 0,
     aScore: 0,
     bScore: 0,
   };
 }
 
 function gameReducer(state: GameContextData, action: GameAction) {
-  const router = useRouter();
   switch (action.type) {
     case "SET_GAME_MODE": {
       return { ...state, gameMode: action.value };
     }
     case "SET_BALL_SPEED_OPTION": {
-      if (action.value === "speed1") return { ...state, ballSpeedOption: 4 };
+      if (action.value === "speed1") return { ...state, ballSpeedOption: 2 };
       else if (action.value === "speed2")
-        return { ...state, ballSpeedOption: 6 };
+        return { ...state, ballSpeedOption: 3 };
       else if (action.value === "speed3")
-        return { ...state, ballSpeedOption: 8 };
+        return { ...state, ballSpeedOption: 4 };
     }
     case "SET_MAP_TYPE":
       return { ...state, mapType: action.value };
-    case "A_SCORE": {
-      if (state.aScore + 1 === 5) router.push("/gameresult");
+    case "SET_LATENCY":
+      return { ...state, latency: action.value };
+    case "A_SCORE":
       return { ...state, aScore: action.value + 1 };
-    }
-    case "B_SCORE": {
-      if (state.bScore + 1 === 5) router.push("/gameresult");
+    case "B_SCORE":
       return { ...state, bScore: action.value + 1 };
-    }
     case "SCORE_RESET":
       return action.value;
 
