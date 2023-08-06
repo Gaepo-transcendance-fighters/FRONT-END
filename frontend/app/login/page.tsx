@@ -30,27 +30,10 @@ const modalStyle = {
 
 const Login = () => {
   const router = useRouter();
-  const { state, dispatch } = useAuth();
   const [url, setUrl] = useState("");
 
-  const handleLogin = async () => {
-    console.log(url);
-
-    await axios("http://10.19.208.53:4000/auth/login", {
-      method: "GET",
-    })
-      .then((res) => {
-        if (res.status === 302) {
-          const userData = res.data;
-          console.log(userData);
-          // localStorage.setItem("loggedIn", "true");
-          // dispatch({ type: "LOGIN", value: true });
-          return router.push("/");
-        }
-      })
-      .catch((e) => {
-        console.log("[Error]", e);
-      });
+  const handleLogin = () => {
+    router.push(url);
   };
 
   useEffect(() => {

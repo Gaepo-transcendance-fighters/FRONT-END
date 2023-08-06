@@ -30,40 +30,36 @@ const modalStyle = {
 };
 const Auth = () => {
   const searchParam = useSearchParams();
-
-  const { setIsLoggedIn } = useAuth();
   const router = useRouter();
 
-  // const postCode = async (code: string) => {
-  //   await fetch("http://10.19.208.53:3000/auth", {
-  //     method: "POST",
-  //     // headers: {
-  //     //   "Content-type": "application/json",
-  //     // },
-  //     // body: JSON.stringify({
-  //     //   code: code,
-  //     // }),
-  //   })
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         localStorage.setItem("loggedIn", "true");
-  //         setIsLoggedIn(true);
-  //         return router.push("/");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       return alert(`[Error] ${error}`);
-  //     });
-  // };
+  const postCode = async (code: string) => {
+    await fetch("http://10.19.208.53:3000/auth", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        code: code,
+      }),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          localStorage.setItem("loggedIn", "true");
+          return router.push("/");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return alert(`[Error] ${error}`);
+      });
+  };
 
   useEffect(() => {
     const code = searchParam.get("code");
     if (!code) return;
     console.log(code);
-    setIsLoggedIn(true);
-    router.push("/");
-    // postCode(code);
+
+    postCode(code);
   }, []);
 
   return (
