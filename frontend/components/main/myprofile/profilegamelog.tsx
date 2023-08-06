@@ -19,7 +19,7 @@ interface ChatMessage {
   msg: string;
 }
 
-const Chats = () => {
+const profilegamelog = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
 
@@ -121,4 +121,4 @@ const Chats = () => {
   );
 };
 
-export default Chats;
+export default profilegamelog;
