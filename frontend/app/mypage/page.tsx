@@ -39,7 +39,7 @@ const myProfileStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "70vw",
+  width: "75vw",
   height: "80%",
   bgcolor: "#65d9f9",
   border: "1px solid #000",
@@ -52,6 +52,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useState } from "react";
 import { get } from "https";
+import Profilegamelog from "@/components/main/myprofile/profilegamelog";
 
 export default function PageRedir() {
   // async function GetData() {
@@ -91,11 +92,11 @@ export default function PageRedir() {
 
   const [checked, setChecked] = useState(true);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    if (verified == true) setVerified(false);
-    else setVerified(true);
-  };
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setChecked(event.target.checked);
+  //   if (verified == true) setVerified(false);
+  //   else setVerified(true);
+  // };
 
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
@@ -148,6 +149,7 @@ export default function PageRedir() {
             </Button>
           </Stack>
 
+          {/* 중앙에 위치한 파트 */}
           <Stack
             sx={{
               width: "80%",
@@ -158,254 +160,297 @@ export default function PageRedir() {
             }}
           >
             {/* <RedirMyProfile /> */}
+            {/* 중앙에 위치한 스택에 올리는 메인 카드 */}
             <Card sx={myProfileStyle}>
-              <Card
-                sx={{
-                  backgroundColor: "#48a0ed",
+              <Stack
+                style={{
+                  width: "100%",
+                  height: "100%",
                   display: "flex",
-                  padding: 3,
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-around",
                 }}
               >
-                {/* 아바타박스 */}
-                <Box
-                  sx={{
-                    borderRadius: "70%",
-                    width: "250px",
-                    // minWidth: "max-content",
-                    height: "250px",
-                    overflow: "hidden",
-                    display: "flex",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                  }}
-                  mx={5}
-                >
-                  <Avatar
-                    src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
-                    style={{
-                      width: "90%",
-                      height: "90%",
-                      border: "4px solid #8CCAE5",
-                    }}
-                  />
-                </Box>
                 <Stack
-                  sx={{
-                    width: "15vw",
+                  style={{
+                    width: "50%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+
+                    backgroundColor: main.main8,
                   }}
-                  spacing={0.5}
                 >
-                  <Typography
+                  <Card
                     sx={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
+                      backgroundColor: main.main7,
+                      flexDirection: "row",
+                      // backgroundColor: "RED",
+                      display: "flex",
+                      padding: 3,
                     }}
-                    style={{ fontSize: "3rem" }}
+                    style={{ border: "1px solid black" }}
                   >
-                    MyNickName
-                  </Typography>
-
-                  <CardContent style={{ width: "100%" }}>
-                    {verified == true ? (
-                      <Typography style={{ fontSize: "1.5rem" }}>
-                        2차인증 여부 : Y
-                      </Typography>
-                    ) : (
-                      <Typography style={{ fontSize: "1.5rem" }}>
-                        2차인증 여부 : N
-                      </Typography>
-                    )}
-                  </CardContent>
-                  <CardContent style={{ width: "100%" }}>
-                    <Typography style={{ fontSize: "1.2rem" }}>
-                      Email : studentof42@42seoul.kr
-                    </Typography>
-                  </CardContent>
-                  <Stack
-                    direction={"row"}
-                    spacing={2}
-                    padding={"20px 0px 0px 2px"}
-                  >
-                    <Button
-                      onClick={OpenFileInput}
-                      sx={{ minWidth: "max-content" }}
-                      variant="contained"
-                    >
-                      사진변경
-                    </Button>
-
-                    <input
-                      type="file"
-                      id="file_input"
-                      style={{ display: "none" }}
-                      accept="image/png, image/jpg, image/jpeg"
-                      onChange={HandleFileUpload}
-                    />
-
-                    <Button
-                      type="button"
-                      sx={{ minWidth: "max-content" }}
-                      variant="contained"
-                      onClick={handleOpenModal}
-                    >
-                      닉네임변경
-                    </Button>
-
-                    <Modal open={openModal} onClose={handleCloseModal}>
-                      <Box sx={modalStyle} borderRadius={"10px"}>
-                        <Card
-                          sx={{
-                            backgroundColor: main.main4,
-                            height: "170px",
-                            margin: -1,
-                          }}
-                        >
-                          <CardContent
-                            sx={{ paddingBottom: 0, textAlign: "center" }}
-                          >
-                            변경할 닉네임을 입력하세요
-                          </CardContent>
-                          <Stack direction={"row"}>
-                            <Card
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                              }}
-                              sx={{
-                                margin: 1,
-                                width: "100%",
-                                height: "120px",
-                                backgroundColor: main.main1,
-                                overflow: "scroll",
-                              }}
-                            >
-                              <Input type="text" sx={{ width: "40%" }}></Input>
-                              <Button
-                                style={{
-                                  border: "0.1px solid black",
-                                  backgroundColor: "lightGray",
-                                }}
-                              >
-                                입력
-                              </Button>
-                            </Card>
-                          </Stack>
-                        </Card>
-                      </Box>
-                    </Modal>
-
-                    <Card
-                      style={{
-                        minWidth: "max-content",
-                        backgroundColor: "#1776D2",
+                    {/* 아바타박스 */}
+                    <Box
+                      sx={{
+                        borderRadius: "70%",
+                        width: "30%",
+                        height: "100%",
+                        overflow: "hidden",
                         display: "flex",
                         justifyContent: "space-around",
                         alignItems: "center",
                       }}
+                      mx={5}
                     >
-                      <Typography color="white">2차인증 On/Off</Typography>
-                    </Card>
+                      <Avatar
+                        src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
+                        style={{
+                          width: "100%",
+                          height: "75%",
+                          border: "4px solid #8CCAE5",
+                        }}
+                      />
+                    </Box>
+                    {/* 중간에 있는 텍스트 */}
+                    <Stack
+                      sx={{
+                        width: "20vw",
+                      }}
+                      spacing={0.5}
+                    >
+                      <Typography
+                        sx={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        style={{ fontSize: "3rem" }}
+                      >
+                        MyNickName
+                      </Typography>
 
-                    <Switch
-                      checked={verified ? true : false}
-                      onChange={handleChange}
-                      inputProps={{ "aria-label": "controlled" }}
-                      color="secondary"
-                    />
-                  </Stack>
-                </Stack>
-              </Card>
-              <br />
-              {/* 전적 */}
-              <Card sx={{ backgroundColor: "#3478c5" }}>
-                <CardContent sx={{ paddingBottom: 0 }}>전적</CardContent>
-                <Stack direction={"row"}>
-                  <Card
-                    sx={{
-                      margin: 1,
-                      marginRight: 0,
-                      width: "30%",
-                      height: "max-content",
-                    }}
-                  >
-                    <CardContent
-                      sx={{
-                        backgroundColor: "#48a0ed",
-                        height: "100%",
-                        "&:last-child": { paddingBottom: "16px" },
-                      }}
-                    >
-                      <Typography margin={1}>랭크(포인트)</Typography>
-                      <Typography margin={1}>승률</Typography>
-                    </CardContent>
-                  </Card>
-                  <Card
-                    sx={{
-                      margin: 1,
-                      width: "70%",
-                      height: "max-content",
-                    }}
-                  >
-                    <CardContent
-                      sx={{
-                        backgroundColor: "#48a0ed",
-                        height: "100%",
-                        "&:last-child": { paddingBottom: "16px" },
-                      }}
-                    >
-                      <Typography margin={1}>3000</Typography>
-                      <Typography margin={1}>0%</Typography>
-                    </CardContent>
-                  </Card>
-                </Stack>
-              </Card>
-              <br />
-              {/* 전적기록 */}
-              <Card
-                sx={{
-                  backgroundColor: "#3478c5",
-                  height: "170px",
-                }}
-              >
-                <CardContent sx={{ paddingBottom: 0 }}>전적 기록</CardContent>
-                <Stack direction={"row"}>
-                  <Card
-                    sx={{
-                      margin: 1,
-                      width: "100%",
-                      height: "120px",
-                      backgroundColor: "#48a0ed",
-                      overflow: "scroll",
-                    }}
-                  >
-                    <Card
-                      sx={{
-                        backgroundColor: "#86d8f7",
-                        margin: 1,
-                      }}
-                    >
-                      <Stack direction={"row"}>
-                        <CardContent
-                          sx={{ "&:last-child": { paddingBottom: "16px" } }}
+                      <CardContent style={{ width: "100%" }}>
+                        {verified == true ? (
+                          <Typography style={{ fontSize: "1.5rem" }}>
+                            2차인증 여부 : Y
+                          </Typography>
+                        ) : (
+                          <Typography style={{ fontSize: "1.5rem" }}>
+                            2차인증 여부 : N
+                          </Typography>
+                        )}
+                      </CardContent>
+                      <CardContent style={{ width: "100%" }}>
+                        <Typography style={{ fontSize: "1.2rem" }}>
+                          Email : studentof42@42seoul.kr
+                        </Typography>
+                      </CardContent>
+                      {/* 버튼관련 스택 */}
+                      <Stack
+                        direction={"row"}
+                        spacing={2}
+                        padding={"20px 0px 0px 2px"}
+                      >
+                        <Button
+                          onClick={OpenFileInput}
+                          // sx={{ minWidth: "max-content" }}
+                          style={{ width: "30%" }}
+                          variant="contained"
                         >
-                          WIN
-                        </CardContent>
-                        <CardContent
-                          sx={{ "&:last-child": { paddingBottom: "16px" } }}
+                          사진변경
+                        </Button>
+                        <input
+                          type="file"
+                          id="file_input"
+                          style={{ display: "none" }}
+                          accept="image/png, image/jpg, image/jpeg"
+                          onChange={HandleFileUpload}
+                        />
+                        <Button
+                          type="button"
+                          style={{ width: "35%" }}
+                          variant="contained"
+                          onClick={handleOpenModal}
                         >
-                          hoslim VS jujeon
-                        </CardContent>
-                        <CardContent
-                          sx={{ "&:last-child": { paddingBottom: "16px" } }}
+                          닉네임변경
+                        </Button>
+                        <Modal open={openModal} onClose={handleCloseModal}>
+                          <Box sx={modalStyle} borderRadius={"10px"}>
+                            <Card
+                              sx={{
+                                backgroundColor: main.main4,
+                                height: "170px",
+                                margin: -1,
+                              }}
+                            >
+                              <CardContent
+                                sx={{ paddingBottom: 0, textAlign: "center" }}
+                              >
+                                변경할 닉네임을 입력하세요
+                              </CardContent>
+                              <Stack direction={"row"}>
+                                <Card
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                  sx={{
+                                    margin: 1,
+                                    width: "100%",
+                                    height: "120px",
+                                    backgroundColor: main.main1,
+                                    overflow: "scroll",
+                                  }}
+                                >
+                                  <Input
+                                    type="text"
+                                    sx={{ width: "40%" }}
+                                  ></Input>
+                                  <Button
+                                    style={{
+                                      border: "0.1px solid black",
+                                      backgroundColor: "lightGray",
+                                    }}
+                                  >
+                                    입력
+                                  </Button>
+                                </Card>
+                              </Stack>
+                            </Card>
+                          </Box>
+                        </Modal>
+                        <Button
+                          type="button"
+                          style={{ width: "50%" }}
+                          variant="contained"
+                          onClick={() => {
+                            if (verified == true) setVerified(false);
+                            else setVerified(true);
+                          }}
                         >
-                          5 : 3
-                        </CardContent>
+                          {verified == true ? (
+                            <>2차인증 비활성화</>
+                          ) : (
+                            <>2차인증 활성화</>
+                          )}
+                        </Button>
                       </Stack>
-                    </Card>
+                    </Stack>
+                  </Card>
+                  <br />
+                  <Card
+                    sx={{ backgroundColor: main.main7 }}
+                    style={{ width: "100%", border: "1px solid black" }}
+                  >
+                    <CardContent sx={{ paddingBottom: 0 }}>전적</CardContent>
+                    <Stack direction={"row"}>
+                      <Card
+                        sx={{
+                          margin: 1,
+                          marginRight: 0,
+                          width: "30%",
+                          height: "max-content",
+                        }}
+                      >
+                        <CardContent
+                          sx={{
+                            backgroundColor: main.main3,
+                            height: "100%",
+                            "&:last-child": { paddingBottom: "16px" },
+                          }}
+                        >
+                          <Typography margin={1}>랭크(포인트)</Typography>
+                          <Typography margin={1}>승률</Typography>
+                        </CardContent>
+                      </Card>
+                      <Card
+                        sx={{
+                          margin: 1,
+                          width: "70%",
+                          height: "max-content",
+                        }}
+                      >
+                        <CardContent
+                          sx={{
+                            backgroundColor: main.main3,
+                            height: "100%",
+                            "&:last-child": { paddingBottom: "16px" },
+                          }}
+                        >
+                          <Typography margin={1}>3000</Typography>
+                          <Typography margin={1}>0%</Typography>
+                        </CardContent>
+                      </Card>
+                    </Stack>
+                  </Card>
+                  <br />
+                </Stack>
+                {/* 전적기록파트 */}
+                <Stack
+                  style={{
+                    width: "45%",
+                    height: "100%",
+                    backgroundColor: main.main7,
+                    border: "1px solid black",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <br />
+                  <Card
+                    sx={{
+                      // backgroundColor: "RED",
+                      // backgroundColor: "#3478c5",
+                      backgroundColor: main.main3,
+                      height: "95%",
+                      width: "95%",
+                      overflowY: "scroll",
+                    }}
+                    id="logs"
+                  >
+                    <Box
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Card
+                        sx={{ paddingBottom: 0 }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "60%",
+                          height: "30%",
+                          backgroundColor: main.main7,
+                          border: "2px solid black",
+                        }}
+                      >
+                        <Typography style={{ fontSize: "2rem" }}>
+                          전적 기록
+                        </Typography>
+                      </Card>
+                    </Box>
+                    <br />
+                    <Box
+                      sx={{
+                        listStyleType: "none",
+                        overflowY: "scroll",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <Profilegamelog />
+                    </Box>
                   </Card>
                 </Stack>
-              </Card>
+              </Stack>
             </Card>
           </Stack>
 

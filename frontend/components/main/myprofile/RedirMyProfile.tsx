@@ -14,7 +14,6 @@ import {
 import { useState } from "react";
 import { main } from "@/components/public/Layout";
 import React from "react";
-import Scroll from "./Scroll";
 
 const modalStyle = {
   position: "absolute" as "absolute",

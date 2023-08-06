@@ -17,6 +17,8 @@ export const main = {
   main4: "#265ECF",
   main5: "#214C97",
   main6: "#183C77",
+  main7: "#48a0ed",
+  main8: "#64D9F9",
 };
 
 const Layout = () => {
