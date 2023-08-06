@@ -10,8 +10,9 @@ import {
   createTheme,
   Typography,
 } from "@mui/material";
+import io from "socket.io-client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 const font = createTheme({
   typography: {
@@ -21,8 +22,19 @@ const font = createTheme({
 
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
+
+type GameMode = "friend" | "normal" | "rank";
 type SpeedOption = "speed1" | "speed2" | "speed3";
 type MapOption = "map1" | "map2" | "map3";
+
+interface IOption {
+  gameType: GameMode; // friend, normal, rank
+  userIdx: number;
+  speed: SpeedOption; // normal, fast, faster
+  mapNumber: MapOption; // 0, 1, 2
+}
+
+export const socket = io("http://localhost:4000/game");
 
 const OptionSelect = () => {
   const router = useRouter();
@@ -45,6 +57,17 @@ const OptionSelect = () => {
       prevOption === option ? null : option
     );
   };
+
+  useEffect(() => {
+    const checkOption = (value: IOption) => {
+      console.log(value);
+    };
+    socket.on("game_option", checkOption);
+
+    return () => {
+      socket.off("game_option", checkOption);
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={font}>

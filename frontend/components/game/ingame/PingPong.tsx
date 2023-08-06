@@ -61,8 +61,6 @@ const PingPong = () => {
 
   const randomDirection = () => {
     const randomNumber = Math.floor(Math.random() * 6);
-    console.log(randomNumber);
-    console.log(startDirection[randomNumber]);
     const newDirection = startDirection[randomNumber];
     setDirection((prev) => {
       return { ...prev, x: newDirection.x, y: newDirection.y };
@@ -85,7 +83,7 @@ const PingPong = () => {
     setTimeout(() => {
       randomDirection();
       setReady(true);
-    }, 2000);
+    }, 2000 + state.latency);
   };
 
   const ballMove = useCallback(() => {
@@ -143,6 +141,8 @@ const PingPong = () => {
     setBall(newLocation);
     requireAnimationRef.current = requestAnimationFrame(ballMove);
   }, [ball]);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (state.aScore === 5 || state.bScore === 5) {

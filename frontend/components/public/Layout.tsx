@@ -7,6 +7,7 @@ import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
+import io from "socket.io-client";
 import InviteGame from "../main/InviteGame/InviteGame";
 
 export const main = {
