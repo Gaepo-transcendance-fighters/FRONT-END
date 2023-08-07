@@ -33,7 +33,7 @@ const Auth = () => {
   const router = useRouter();
 
   const postCode = async (code: string) => {
-    await fetch("http://10.19.208.53:3000/auth", {
+    await fetch("http://localhost:4000/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -54,6 +54,17 @@ const Auth = () => {
       });
   };
 
+  const logout = async () => {
+    await fetch("http://localhost:4000/logout", {
+      method: "POST",
+    }).then((res) => {
+      if (res.status === 200) {
+        localStorage.setItem("loggedIn", "false");
+        return router.push("/login");
+      }
+    });
+  };
+
   useEffect(() => {
     const code = searchParam.get("code");
     if (!code) return;
@@ -64,6 +75,7 @@ const Auth = () => {
 
   return (
     <Box>
+      <button onClick={logout}>로그아웃</button>
       <Card sx={modalStyle}>
         <CircularProgress sx={{ color: "white" }} />
         <Typography sx={{ color: "white" }}>Loading...</Typography>

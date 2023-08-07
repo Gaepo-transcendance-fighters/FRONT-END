@@ -21,12 +21,12 @@ export const main = {
 };
 
 const Layout = () => {
-  const { isLoggedIn } = useAuth();
+  const { state } = useAuth();
   useRequireAuth();
 
   return (
     <>
-      {!isLoggedIn ? (
+      {!state.isLoggedIn ? (
         <div></div>
       ) : (
         <Box sx={{ display: "flex" }}>
