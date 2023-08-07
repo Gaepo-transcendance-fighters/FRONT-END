@@ -47,7 +47,7 @@ export default function CreateRoomModal({
   // }, []);
 
   const OnClick = () => {
-    //   socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
+    //   socket.emit("chat_create_room", { password: value }, 상태코드);
     //   if (정상상태코드) {
     //   setValue("");
     //   setOpen(false);
