@@ -39,15 +39,15 @@ export default function CreateRoomModal({
   //   const ChatCreateRoom = (json) => {
   // roomDispatch({ type: "ADD_ROOM", value: json.channel });
   //   };
-  //   socket.on("main_enter", ChatCreateRoom, json);
+  //   socket.on("main_enter", ChatCreateRoom);
 
   //   return () => {
-  //     socket.off("main_enter", ChatCreateRoom, json);
+  //     socket.off("main_enter", ChatCreateRoom);
   //   };
   // }, []);
 
   const OnClick = () => {
-    //   socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
+    //   socket.emit("chat_create_room", { password: value }, 상태코드);
     //   if (정상상태코드) {
     //   setValue("");
     //   setOpen(false);
