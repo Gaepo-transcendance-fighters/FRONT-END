@@ -1,11 +1,10 @@
-import { KeyboardReturnSharp } from "@mui/icons-material";
+import { Permission } from "@/components/public/Layout";
+
 import {
   ReactNode,
   createContext,
   useContext,
   useEffect,
-  useState,
-  Dispatch,
   useReducer,
 } from "react";
 
@@ -15,6 +14,12 @@ enum Mode {
   PROTECTED = "protected",
 }
 
+interface IMember {
+  nickname: string;
+  imgUri: string;
+  permission: Permission;
+}
+
 interface IChatRoom0 {
   channelIdx: number;
   owner: string;
@@ -22,59 +27,64 @@ interface IChatRoom0 {
 }
 
 interface RoomContextData {
+  DM: IChatRoom0[];
   rooms: IChatRoom0[];
-  setRooms: Dispatch<actionType>;
-  nonDmRooms: IChatRoom0[];
-  setNonDmRooms: Dispatch<actionType>;
+  currentRoom: IChatRoom0 | null;
+  currentRoomMember: IMember[];
   isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
 }
 
-const RoomContext = createContext<RoomContextData>({
+type RoomAction =
+  | { type: "SET_DM"; value: IChatRoom0[] }
+  | { type: "SET_ROOMS"; value: IChatRoom0[] }
+  | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
+  | { type: "SET_CURRENTROOMMEMBER"; value: IMember[] }
+  | { type: "SET_ISOPEN"; value: boolean };
+
+const initialState: RoomContextData = {
+  DM: [],
   rooms: [],
-  setRooms: () => {},
-  nonDmRooms: [],
-  setNonDmRooms: () => {},
+  currentRoom: null,
+  currentRoomMember: [],
   isOpen: false,
-  setIsOpen: () => {},
+};
+
+const RoomReducer = (state: RoomContextData, action: RoomAction) => {
+  switch (action.type) {
+    case "SET_ISOPEN":
+      return { ...state, isOpen: action.value };
+    case "SET_DM":
+      return { ...state, DM: action.value };
+    case "SET_ROOMS":
+      return { ...state, rooms: action.value };
+    case "SET_CURRENTROOM":
+      return { ...state, currentRoom: action.value };
+    case "SET_CURRENTROOMMEMBER":
+      return { ...state, currentRoomMember: action.value };
+    default:
+      return state;
+  }
+};
+
+const RoomContext = createContext<{
+  roomState: RoomContextData;
+  roomDispatch: React.Dispatch<RoomAction>;
+}>({
+  roomState: initialState,
+  roomDispatch: () => {},
 });
 
 export const useRoom = () => {
   return useContext(RoomContext);
 };
 
-type actionType = {
-  type: string;
-  payload: IChatRoom0[];
-};
-
-const RoomReducer = (state: IChatRoom0[], action: actionType) => {
-  state;
-  switch (action.type) {
-    case "main-enter":
-      return action.payload;
-    case "create-room":
-      return [...state, action.payload[0]];
-    case "empty-nondmroom":
-      return action.payload;
-    case "divide-room":
-      return [...state, action.payload[0]];
-    default:
-      return state;
-  }
-};
-
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
-  const [rooms, setRooms] = useReducer(RoomReducer, []);
-  const [nonDmRooms, setNonDmRooms] = useReducer(RoomReducer, []);
-  const [isOpen, setIsOpen] = useState(false);
+  const [roomState, roomDispatch] = useReducer(RoomReducer, initialState);
 
   useEffect(() => {}, []);
 
   return (
-    <RoomContext.Provider
-      value={{ rooms, setRooms, isOpen, setIsOpen, nonDmRooms, setNonDmRooms }}
-    >
+    <RoomContext.Provider value={{ roomState, roomDispatch }}>
       {children}
     </RoomContext.Provider>
   );
