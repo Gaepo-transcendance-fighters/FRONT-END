@@ -8,6 +8,7 @@ import {
   Dispatch,
   SetStateAction,
   KeyboardEvent,
+  MutableRefObject,
 } from "react";
 import "./ProtectedModal.css";
 import { Box, Typography } from "@mui/material";
@@ -41,20 +42,20 @@ const box2 = {
 export default function ProtectedModal({
   open,
   handleClose,
-  // setIsRight,
   room,
   setFail,
   fail,
+  statusCode,
+  pwRef,
 }: {
   open: boolean;
   handleClose: () => void;
-  // isRight: boolean;
-  // setIsRight: Dispatch<SetStateAction<boolean>>;
   room: IChatRoom0;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
+  statusCode: MutableRefObject<number>;
+  pwRef: MutableRefObject<string>;
 }) {
-  const pwRef = useRef("");
   const { roomDispatch } = useRoom();
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,30 +65,26 @@ export default function ProtectedModal({
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setFail(false);
-    if (pwRef.current == room.password) {
-      // setIsRight(true);
-      handleClose();
-      setFail(false);
-      roomDispatch({ type: "SET_CURRENTROOM", value: room });
-    } else {
-      // setIsRight(false);
-      setFail(true);
-    }
+    // if (statusCode가 정상코드) {
+    // handleClose();
+    // setFail(false);
+    // roomDispatch({ type: "SET_CURRENTROOM", value: room });
+    // } else {
+    // setFail(true);
+    // }
     pwRef.current = "";
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       setFail(false);
-      if (pwRef.current == room.password) {
-        // setIsRight(true);
-        handleClose();
-        setFail(false);
-        roomDispatch({ type: "SET_CURRENTROOM", value: room });
-      } else {
-        // setIsRight(false);
-        setFail(true);
-      }
+      // if (statusCode가 정상코드) {
+      // handleClose();
+      // setFail(false);
+      // roomDispatch({ type: "SET_CURRENTROOM", value: room });
+      // } else {
+      // setFail(true);
+      // }
       pwRef.current = "";
     }
   };

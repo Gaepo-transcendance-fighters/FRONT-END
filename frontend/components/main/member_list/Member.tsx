@@ -23,7 +23,7 @@ export default function Member({
   };
 
   const handleOpenMenu = (
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+    e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
     setAnchorEl(e.currentTarget);
