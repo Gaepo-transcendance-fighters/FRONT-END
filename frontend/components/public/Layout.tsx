@@ -10,7 +10,7 @@ import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useRoom } from "@/context/RoomContext";
+import { mockChatRoomList0, useRoom } from "@/context/RoomContext";
 // import { socket } from "@/app/layout";
 
 export const main = {
@@ -23,86 +23,34 @@ export const main = {
   main6: "#183C77",
 };
 
-
-export enum Permission {
-  OWNER = "owner",
-  ADMIN = "admin",
-  MEMBER = "member",
-}
-
-
-export enum Mode {
-  PRIVATE = "private",
-  PUBLIC = "public",
-  PROTECTED = "protected",
-}
-
-export interface IChatRoom0 {
-  channelIdx: number;
-  owner: string;
-  mode: Mode;
-}
-
-export const mockChatRoomList0: IChatRoom0[] = [
-  {
-    channelIdx: 0,
-    owner: "jeekim",
-    mode: Mode.PUBLIC,
-  },
-  {
-    channelIdx: 1,
-    owner: "jaekim",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 2,
-    owner: "0123456789",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 3,
-    owner: "bbbbbbbbbb",
-    mode: Mode.PUBLIC,
-  },
-  {
-    channelIdx: 4,
-    owner: "0123456789",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 5,
-    owner: "zzzzzzzzzz",
-    mode: Mode.PROTECTED,
-  },
-];
-
-
 const Layout = () => {
-  const { isLoggedIn } = useAuth();
-  const { setRooms } = useRoom();
+  const { state } = useAuth();
+  const { roomState, roomDispatch } = useRoom();
 
   // useEffect(() => {
-  //   const MainEnter = (json) => {
-  //     setRooms(json.channelList);
+  //   const MainEnter = (json: any) => {
+  //     roomDispatch({ type: "SET_NON_ROOMS", value: json.channel });
   //   };
-  //   socket.on("main_enter", MainEnter, json);
+  //   socket.on("main_enter", MainEnter);
 
   //   return () => {
-  //     socket.off("main_enter", MainEnter, json);
+  //     socket.off("main_enter", MainEnter);
   //   };
   // }, []);
 
   useRequireAuth();
 
   // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     socket.emit("main_enter", "intra_id", 상태코드);
+  //   if (state.isLoggedIn) {
+  //     socket.emit("main_enter", "intra_id", (status_code: number) => {
+  //       console.log(status_code);
+  //     });
   //   }
-  // }, [isLoggedIn]);
+  // }, [state.isLoggedIn]);
 
   // socket.io로 mock data 받았다고 가정했을때.
   useEffect(() => {
-    setRooms({ type: "main-enter", payload: mockChatRoomList0 });
+    roomDispatch({ type: "SET_NON_ROOMS", value: mockChatRoomList0 });
   }, []);
   // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 

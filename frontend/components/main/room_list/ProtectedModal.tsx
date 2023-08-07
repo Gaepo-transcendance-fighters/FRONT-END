@@ -8,11 +8,13 @@ import {
   Dispatch,
   SetStateAction,
   KeyboardEvent,
+  MutableRefObject,
 } from "react";
 import "./ProtectedModal.css";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
-import { IChatRoom0 } from "@/components/public/Layout";
+import { useRoom } from "@/context/RoomContext";
+import { IChatRoom0 } from "@/context/RoomContext";
 
 const box = {
   position: "absolute" as "absolute",
@@ -40,22 +42,21 @@ const box2 = {
 export default function ProtectedModal({
   open,
   handleClose,
-  setIsRight,
   room,
   setFail,
-  setARoom,
   fail,
+  statusCode,
+  pwRef,
 }: {
   open: boolean;
   handleClose: () => void;
-  isRight: boolean;
-  setIsRight: Dispatch<SetStateAction<boolean>>;
   room: IChatRoom0;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
-  setARoom: Dispatch<SetStateAction<IChatRoom0 | undefined>>;
+  statusCode: MutableRefObject<number>;
+  pwRef: MutableRefObject<string>;
 }) {
-  const pwRef = useRef("");
+  const { roomDispatch } = useRoom();
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     pwRef.current = e.target.value;
@@ -64,30 +65,26 @@ export default function ProtectedModal({
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setFail(false);
-    if (pwRef.current == room.password) {
-      setIsRight(true);
-      handleClose();
-      setFail(false);
-      setARoom(room);
-    } else {
-      setIsRight(false);
-      setFail(true);
-    }
+    // if (statusCode가 정상코드) {
+    // handleClose();
+    // setFail(false);
+    // roomDispatch({ type: "SET_CURRENTROOM", value: room });
+    // } else {
+    // setFail(true);
+    // }
     pwRef.current = "";
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       setFail(false);
-      if (pwRef.current == room.password) {
-        setIsRight(true);
-        handleClose();
-        setFail(false);
-        setARoom(room);
-      } else {
-        setIsRight(false);
-        setFail(true);
-      }
+      // if (statusCode가 정상코드) {
+      // handleClose();
+      // setFail(false);
+      // roomDispatch({ type: "SET_CURRENTROOM", value: room });
+      // } else {
+      // setFail(true);
+      // }
       pwRef.current = "";
     }
   };
