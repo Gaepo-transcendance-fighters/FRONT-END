@@ -23,6 +23,14 @@ export const main = {
   main6: "#183C77",
 };
 
+
+export enum Permission {
+  OWNER = "owner",
+  ADMIN = "admin",
+  MEMBER = "member",
+}
+
+
 export enum Mode {
   PRIVATE = "private",
   PUBLIC = "public",
@@ -67,6 +75,7 @@ export const mockChatRoomList0: IChatRoom0[] = [
     mode: Mode.PROTECTED,
   },
 ];
+
 
 const Layout = () => {
   const { isLoggedIn } = useAuth();
