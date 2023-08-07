@@ -29,20 +29,20 @@ export default function RoomTypeButton() {
 	    }
 }
 */
-  useEffect(() => {
-    const ChatGetRoomList = (json: any) => {
-      roomDispatch({ type: "SET_NON_ROOMS", value: json.channelList });
-    };
-    socket.on("chat_get_roomlist", ChatGetRoomList);
+  // useEffect(() => {
+  //   const ChatGetRoomList = (json: any) => {
+  //     roomDispatch({ type: "SET_NON_ROOMS", value: json.channelList });
+  //   };
+  //   socket.on("chat_get_roomlist", ChatGetRoomList);
 
-    return () => {
-      socket.off("chat_get_roomlist", ChatGetRoomList);
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("chat_get_roomlist", ChatGetRoomList);
+  //   };
+  // }, []);
 
   // useEffect(() => {
   //   const ChatGetDmRoomList = (json: any) => {
-  //     roomDispatch({ type: "SET_NON_ROOMS", value: json.dmList });
+  //     roomDispatch({ type: "SET_DM_ROOMS", value: json.dmList });
   //   };
   //   socket.on("chat_get_DMlist", ChatGetDmRoomList);
 
@@ -50,20 +50,22 @@ export default function RoomTypeButton() {
   //     socket.off("chat_get_DMlist", ChatGetDmRoomList);
   //   };
   // }, []);
-  //TODO : dm 관련 인터페이스 만들기
 
   const OnClick = (isNotDm: boolean) => {
     setDisabled(isNotDm);
   };
 
   const NonDmBtnClick = () => {
-    socket.emit("chat_get_roomlist", (status_code: number) => {
-      console.log(status_code);
-    });
+    // socket.emit("chat_get_roomlist", (status_code: number) => {
+    //   console.log(status_code);
+    // });
     OnClick(true);
   };
 
   const DmBtnClick = () => {
+    // socket.emit("chat_get_DMlist", {userNickname : string,userIdx : number}, (status_code: number) => {
+    //   console.log(status_code);
+    // });
     OnClick(false);
   };
 

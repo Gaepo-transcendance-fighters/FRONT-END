@@ -24,6 +24,11 @@ export interface IMember {
   permission: Permission;
 }
 
+export interface IDmRoom {
+  targetNickname: string;
+  targetIdx: number;
+}
+
 export interface IChatRoom0 {
   channelIdx: number;
   owner: string;
@@ -82,7 +87,7 @@ export const mockMemberList0: IMember[] = [
 ];
 
 interface RoomContextData {
-  dmRooms: IChatRoom0[];
+  dmRooms: IDmRoom[];
   nonDmRooms: IChatRoom0[];
   currentRoom: IChatRoom0 | null;
   currentRoomMember: IMember[];
@@ -90,7 +95,7 @@ interface RoomContextData {
 }
 
 type RoomAction =
-  | { type: "SET_DM"; value: IChatRoom0[] }
+  | { type: "SET_DM_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_NON_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
   | { type: "SET_CUR_MEM"; value: IMember[] }
@@ -109,7 +114,7 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
   switch (action.type) {
     case "SET_ISOPEN":
       return { ...roomState, isOpen: action.value };
-    case "SET_DM":
+    case "SET_DM_ROOMS":
       return { ...roomState, dmRooms: action.value };
     case "SET_NON_ROOMS":
       return { ...roomState, nonDmRooms: action.value };
