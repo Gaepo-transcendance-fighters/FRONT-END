@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import StarRoundedIcon from '@mui/icons-material/StarRounded';
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import "@/components/main/member_list/MemberList.css";
 import { useState, MouseEvent } from "react";
 import MemberModal from "./MemberModal";
@@ -46,9 +47,12 @@ export default function Member({
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
-          {person.permission === Permission.OWNER ? <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} /> : null}
-          {person.permission === Permission.ADMIN ? <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} /> : null}
-          
+          {person.permission === Permission.OWNER ? (
+            <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
+          ) : null}
+          {person.permission === Permission.ADMIN ? (
+            <StarOutlineRoundedIcon sx={{ height: "15px", color: "yellow" }} />
+          ) : null}
         </div>
       </div>
       <Menu
