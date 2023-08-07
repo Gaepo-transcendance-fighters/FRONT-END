@@ -11,7 +11,7 @@ import InviteGame from "../main/InviteGame/InviteGame";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
-// import { socket } from "@/app/layout";
+import { socket } from "@/app/layout";
 
 export const main = {
   main0: "#67DBFB",
@@ -68,28 +68,44 @@ export const mockChatRoomList0: IChatRoom0[] = [
   },
 ];
 
+interface IFriend {
+  friendNickname: string;
+  isOnline: boolean;
+}
+
+interface IBlock {
+  targetNickname: string;
+  targetIdx: number;
+}
+
+interface IMaindata {
+  channelList: IChatRoom0[];
+  friendList: IFriend[];
+  blockList: IBlock[];
+}
+
 const Layout = () => {
   const { isLoggedIn } = useAuth();
   const { setRooms } = useRoom();
 
-  // useEffect(() => {
-  //   const MainEnter = (json) => {
-  //     setRooms(json.channelList);
-  //   };
-  //   socket.on("main_enter", MainEnter, json);
+  useEffect(() => {
+    const MainEnter = (json: IMaindata) => {
+      setRooms(json.channelList);
+    };
+    socket.on("main_enter", MainEnter, json);
 
-  //   return () => {
-  //     socket.off("main_enter", MainEnter, json);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("main_enter", MainEnter, json);
+    };
+  }, []);
 
   useRequireAuth();
 
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     socket.emit("main_enter", "intra_id", 상태코드);
-  //   }
-  // }, [isLoggedIn]);
+  useEffect(() => {
+    if (isLoggedIn) {
+      socket.emit("main_enter", "intra_id", 상태코드);
+    }
+  }, [isLoggedIn]);
 
   // socket.io로 mock data 받았다고 가정했을때.
   useEffect(() => {
