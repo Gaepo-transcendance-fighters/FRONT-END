@@ -29,21 +29,21 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
       : null;
   };
 
-  useEffect(() => {
-    const ChatEnter = (json) => {
-      roomDispatch({ type: "SET_CUR_MEM", value: json.member });
-      //channelIdx 안보내줘도 될듯?
-    };
-    socket.on("chat_enter", ChatEnter);
+  // useEffect(() => {
+  //   const ChatEnter = (json) => {
+  //     roomDispatch({ type: "SET_CUR_MEM", value: json.member });
+  //     //channelIdx 안보내줘도 될듯?
+  //   };
+  //   socket.on("chat_enter", ChatEnter);
 
-    return () => {
-      socket.off("chat_enter", ChatEnter);
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("chat_enter", ChatEnter);
+  //   };
+  // }, []);
 
   const RoomClick = (room: IChatRoom0) => {
-    socket.emit("chat_enter", { roomId: room.channelIdx, password? : pwRef.current }, (statusCode) => {
-      if (statusCode가 정상) {
+    // socket.emit("chat_enter", { roomId: room.channelIdx, password? : pwRef.current }, (statusCode) => {
+    //   if (statusCode가 정상) {
     if (room.mode === Mode.PROTECTED) handleOpen();
     else {
       if (roomState.currentRoom !== room) {
@@ -52,8 +52,8 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
       }
       roomDispatch({ type: "SET_ISOPEN", value: true });
     }
-      }
-    });
+    //   }
+    // });
   };
 
   /*
