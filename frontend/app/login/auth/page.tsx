@@ -33,19 +33,23 @@ const Auth = () => {
   const router = useRouter();
 
   const postCode = async (code: string) => {
-    await fetch("http://localhost:4000/auth", {
+    await fetch("http://localhost:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
       },
       body: JSON.stringify({
         code: code,
       }),
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.status === 200) {
           localStorage.setItem("loggedIn", "true");
-          return router.push("/");
+          const code = res.headers.get("code")!;
+          localStorage.setItem("authorization", code);
+          console.log("로그인 성공 code: ", code);
+          return router.push(`/login/auth?token=${code}`);
         }
       })
       .catch((error) => {
