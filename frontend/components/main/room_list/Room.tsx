@@ -1,8 +1,9 @@
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useEffect, useState, useRef } from "react";
 import ProtectedModal from "./ProtectedModal";
-import { mockMemberList0, useRoom } from "@/context/RoomContext";
+import { useRoom } from "@/context/RoomContext";
 import { IChatRoom0, Mode } from "@/context/RoomContext";
+import { socket } from "@/app/layout";
 
 export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -42,7 +43,7 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   // }, []);
 
   const RoomClick = (room: IChatRoom0) => {
-    // socket.emit("chat_enter", { roomId: room.channelIdx, password? : pwRef.current }, (statusCode) => {
+    socket.emit("chat_enter", { userNickname : "intra_id", userIdx : 3, channelIdx: room.channelIdx, password? : pwRef.current }, (statusCode : number) => {
     //   if (statusCode가 정상) {
     if (room.mode === Mode.PROTECTED) handleOpen();
     else {
