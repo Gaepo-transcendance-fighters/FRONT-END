@@ -24,11 +24,6 @@ export interface IMember {
   permission: Permission;
 }
 
-// export interface IDmRoom {
-//   targetNickname: string;
-//   targetIdx: number;
-// }
-
 export interface IChatRoom0 {
   owner: string;
   channelIdx: number;
@@ -88,7 +83,6 @@ export const mockMemberList0: IMember[] = [
 
 interface RoomContextData {
   dmRooms: IChatRoom0[];
-  // dmRooms: IDmRoom[];
   nonDmRooms: IChatRoom0[];
   currentRoom: IChatRoom0 | null;
   currentRoomMember: IMember[];
@@ -97,7 +91,6 @@ interface RoomContextData {
 
 type RoomAction =
   | { type: "SET_DM_ROOMS"; value: IChatRoom0[] }
-  // | { type: "SET_DM_ROOMS"; value: IDmRoom[] }
   | { type: "SET_NON_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
   | { type: "SET_CUR_MEM"; value: IMember[] }
@@ -145,27 +138,6 @@ const RoomContext = createContext<{
 export const useRoom = () => {
   return useContext(RoomContext);
 };
-
-type actionType = {
-  type: string;
-  payload: IChatRoom0[];
-};
-
-// const RoomReducer = (roomState: IChatRoom0[], action: actionType) => {
-//   roomState;
-//   switch (action.type) {
-//     case "main-enter":
-//       return action.payload;
-//     case "create-room":
-//       return [...roomState, action.payload[0]];
-//     case "empty-nondmroom":
-//       return action.payload;
-//     case "divide-room":
-//       return [...roomState, action.payload[0]];
-//     default:
-//       return roomState;
-//   }
-// };
 
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
   const [roomState, roomDispatch] = useReducer(RoomReducer, initialState);

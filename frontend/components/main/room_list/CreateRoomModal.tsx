@@ -5,9 +5,7 @@ import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { IChatRoom0, useRoom } from "@/context/RoomContext";
-import { Mode } from "@/context/RoomContext";
 import { socket } from "@/app/layout";
-import { useSearchParams } from "react-router-dom";
 
 const style = {
   position: "absolute" as "absolute",
@@ -30,8 +28,7 @@ export default function CreateRoomModal({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [value, setValue] = useState("");
-  const { roomState, roomDispatch } = useRoom();
-  // const [searchParams, setSearchParams] = useSearchParams();
+  const { roomDispatch } = useRoom();
 
   const handleClose = () => {
     setValue("");
@@ -52,45 +49,11 @@ export default function CreateRoomModal({
     };
   }, []);
 
-  //userId=?
-
   const OnClick = () => {
-    // const userIdValue = "3";
-    socket.emit("BR_chat_create_room", { password: value }, (res: any) => {
-      // console.log("res : ", res);
-    });
+    socket.emit("BR_chat_create_room", { password: value }, (res: any) => {});
     //TODO : dto 정하는게 어떨까... < 추천
     // 일단은 이렇게. dto는 나중에
-
-    console.log("roomState : ", roomState.nonDmRooms);
-
-    // setValue("");
-    // setOpen(false);
-    // URL에 userId 추가
-    // setSearchParams({ userId: userIdValue });
-    // if (정상상태코드) {
-    // setValue("");
-    // setOpen(false);
-    // }
-    // socket.emit("chat_create_room", { password: value }, 상태코드);
-    // if (정상상태코드) {
-    // setValue("");
-    // setOpen(false);
-    // }
-    // /* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
-    // roomDispatch({
-    //   type: "ADD_ROOM",
-    //   value: {
-    //     channelIdx: 0,
-    //     owner: "jeeekimmm",
-    //     mode: Mode.PUBLIC,
-    //   },
-    // });
-    // */
   };
-
-  // const userId = searchParams.get("userId");
-  // console.log("userId : ", userId);
 
   return (
     <>
