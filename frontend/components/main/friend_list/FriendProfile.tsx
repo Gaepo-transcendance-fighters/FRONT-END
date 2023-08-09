@@ -97,7 +97,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                   textOverflow: "ellipsis",
                 }}
               >
-                닉네임: {prop.name}
+                닉네임: {prop.friendNickname}
               </Typography>
               <Typography>
                 상태: {prop.isOnline ? loginOn : loginOff}

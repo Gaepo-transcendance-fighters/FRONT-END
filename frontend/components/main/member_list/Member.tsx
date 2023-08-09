@@ -26,7 +26,7 @@ export default function Member({
         <div className="memimg">
           <Image src="/seal.png" alt="profile" width={53} height={53} />
         </div>
-        <div className="memname">{person.name}</div>
+        <div className="memname">{person.friendNickname}</div>
         <div className="memicon">
           <StarIcon sx={{ height: "15px", color: "yellow" }} />
         </div>

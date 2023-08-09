@@ -21,8 +21,8 @@ export default function Room({
 }) {
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
-  const { setIsOpen } = useRoom();
-  
+  const { roomState, roomDispatch } = useRoom();
+
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
     else if (idx < 100) return "0" + idx.toString();
@@ -36,7 +36,7 @@ export default function Room({
   const handleClose = () => {
     setOpen(false);
     setFail(false);
-    aRoom ? setIsOpen(true) : null;
+    aRoom ? roomDispatch({ type: "SET_ISOPEN", value: true }) : null;
   }; // 올바른 비번
 
   // const RoomClick = (room: IChatRoom0) => {

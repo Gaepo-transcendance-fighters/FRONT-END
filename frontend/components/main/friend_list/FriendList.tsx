@@ -2,100 +2,19 @@
 
 import { ToggleButton, Card, Typography, Box, Stack } from "@mui/material";
 import Friend from "./Friend";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { main } from "@/font/color";
+import { useFriend } from "@/context/FriendContext";
 
 export interface IFriend {
-  name: string;
+  friendNickname: string;
   isOnline: boolean;
-  imgUrl: string;
 }
 
-const mockFriendList: IFriend[] = [
-  {
-    name: "hoslim",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "jeekim",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "jaekim",
-    isOnline: false,
-    imgUrl: "",
-  },
-  {
-    name: "hoslimhoslim1231231231231231231231231",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "hoslim",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "jeekim",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "jaekim",
-    isOnline: false,
-    imgUrl: "",
-  },
-  {
-    name: "hoslimhoslim1231231231231231231231231",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "hoslim",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "jeekim",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "jaekim",
-    isOnline: false,
-    imgUrl: "",
-  },
-  {
-    name: "hoslimhoslim1231231231231231231231231",
-    isOnline: true,
-    imgUrl: "",
-  },
-];
-
-const mockBlockList = [
-  {
-    name: "hoslim",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "hoslim",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "hoslim",
-    isOnline: true,
-    imgUrl: "",
-  },
-  {
-    name: "hoslim",
-    isOnline: true,
-    imgUrl: "",
-  },
-];
+export interface IBlock {
+  targetNickname: string;
+  targetIdx: number;
+}
 
 const selectedButton = {
   backgroundColor: main.main1,
@@ -127,10 +46,23 @@ const unselectedButton = {
   flex: 1,
 };
 
+interface IUserProp {
+  friendNickname: string;
+  isOnline: boolean;
+  targetNickname?: string;
+  targetIdx?: number;
+}
+
 const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
+  const [showlist, setShowlist] = useState<IFriend[] | IBlock[]>([]);
+  const { friendState } = useFriend();
 
-  const showList = select ? mockBlockList : mockFriendList;
+  useEffect(() => {
+    const cur = select ? friendState.blockList : friendState.friendList;
+    console.log(cur);
+    setShowlist(cur);
+  }, [friendState.friendList, friendState.blockList, select]);
 
   return (
     <Card
@@ -195,9 +127,11 @@ const FriendList = () => {
             borderRadius: "10px",
           }}
         >
-          {showList.map((friend, idx) => (
-            <Friend key={idx} prop={friend} />
-          ))}
+          {showlist
+            ? showlist.map((user, idx) => (
+                <Friend key={idx} prop={user as IUserProp} />
+              ))
+            : []}
         </Card>
       </Stack>
     </Card>

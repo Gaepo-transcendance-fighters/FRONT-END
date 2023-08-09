@@ -67,45 +67,24 @@ const RoomReducer = (state: RoomContextData, action: RoomAction) => {
 };
 
 const RoomContext = createContext<{
-  state: RoomContextData;
-  dispatch: React.Dispatch<RoomAction>;
+  roomState: RoomContextData;
+  roomDispatch: React.Dispatch<RoomAction>;
 }>({
-  state: initialState,
-  dispatch: () => {},
+  roomState: initialState,
+  roomDispatch: () => {},
 });
 
 export const useRoom = () => {
   return useContext(RoomContext);
 };
 
-type actionType = {
-  type: string;
-  payload: IChatRoom0[];
-};
-
-const RoomReducer = (state: IChatRoom0[], action: actionType) => {
-  state;
-  switch (action.type) {
-    case "main-enter":
-      return action.payload;
-    case "create-room":
-      return [...state, action.payload[0]];
-    case "empty-nondmroom":
-      return action.payload;
-    case "divide-room":
-      return [...state, action.payload[0]];
-    default:
-      return state;
-  }
-};
-
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(RoomReducer, initialState);
+  const [roomState, roomDispatch] = useReducer(RoomReducer, initialState);
 
   useEffect(() => {}, []);
 
   return (
-    <RoomContext.Provider value={{ state, dispatch }}>
+    <RoomContext.Provider value={{ roomState, roomDispatch }}>
       {children}
     </RoomContext.Provider>
   );
