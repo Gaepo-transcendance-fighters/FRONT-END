@@ -17,14 +17,14 @@ export default function MemberList({
   setIsRight: Dispatch<SetStateAction<boolean>>;
   isRight: boolean;
 }) {
-  const { isOpen } = useRoom();
+  const { roomState } = useRoom();
 
   useEffect(() => {
     isRight ? setIsRight(false) : null;
   }, [isRight]);
   return (
     <>
-      {isOpen ? (
+      {roomState.isOpen ? (
         <>
           <Title title={"memtitle"} text={"Members List"} />
           <Members aRoom={aRoom} />

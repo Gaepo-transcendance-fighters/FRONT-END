@@ -64,7 +64,7 @@ export default function ProtectedModal({
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setFail(false);
-    if (pwRef.current == room.password) {
+    if (pwRef.current === room.mode) {
       setIsRight(true);
       handleClose();
       setFail(false);
@@ -79,7 +79,7 @@ export default function ProtectedModal({
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       setFail(false);
-      if (pwRef.current == room.password) {
+      if (pwRef.current === room.mode) {
         setIsRight(true);
         handleClose();
         setFail(false);

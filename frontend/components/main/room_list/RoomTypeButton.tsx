@@ -13,14 +13,13 @@ import { useRoom } from "@/context/RoomContext";
 
 export default function RoomTypeButton() {
   const [dmRooms, setDmRooms] = useState<IChatRoom0[]>([]);
-  const { nonDmRooms, setNonDmRooms } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
   const [disabled, setDisabled] = useState(true);
-  const { rooms } = useRoom();
 
   const DivideRoom = () => {
-    rooms.map((room) => {
+    roomState.rooms.map((room) => {
       if (room.mode != Mode.PRIVATE) {
-        setNonDmRooms({ type: "divide-room", payload: [room] });
+        roomDispatch({ type: "SET_ROOMS", value: [room] });
       } else {
         setDmRooms((prev) => {
           return [...prev, room];
@@ -31,10 +30,10 @@ export default function RoomTypeButton() {
 
   useEffect(() => {
     DivideRoom();
-  }, [rooms]);
+  }, [roomState.rooms]);
 
   const OnClick = (isNotDm: boolean) => {
-    setNonDmRooms({ type: "empty-nondmroom", payload: [] });
+    roomDispatch({ type: "SET_ROOMS", value: [] });
     setDmRooms([]);
     DivideRoom();
 
@@ -68,7 +67,7 @@ export default function RoomTypeButton() {
         </button>
       </div>
       <Rooms
-        roomsProp={disabled ? nonDmRooms : dmRooms}
+        roomsProp={disabled ? roomState.rooms : dmRooms}
         channelType={disabled}
       />
     </>
