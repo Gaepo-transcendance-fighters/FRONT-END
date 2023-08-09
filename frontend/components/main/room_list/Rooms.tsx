@@ -21,10 +21,10 @@ export default function Rooms({
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
     null
   );
-  const { isOpen, setIsOpen } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
 
   useEffect(() => {
-    isRight ? setIsOpen(true) : null;
+    isRight ? roomDispatch({ type: "SET_ISOPEN", value: true }) : null;
   }, [isRight]);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function Rooms({
 
   return (
     <>
-      <div className={!isOpen ? "list" : "roomclicked"}>
+      <div className={!roomState.isOpen ? "list" : "roomclicked"}>
         <CreateRoomButton channelType={channelType} />
         {roomsProp.map((room, idx) => {
           return (
@@ -54,7 +54,7 @@ export default function Rooms({
           );
         })}
       </div>
-      {isOpen &&
+      {roomState.isOpen &&
         portalContainer &&
         createPortal(
           <MemberList

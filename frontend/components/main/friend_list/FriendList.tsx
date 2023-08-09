@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useFriend } from "@/context/FriendContext";
 
-interface IFriend {
+export interface IFriend {
   friendNickname: string;
   isOnline: boolean;
 }
 
-interface IBlock {
+export interface IBlock {
   targetNickname: string;
   targetIdx: number;
 }
