@@ -34,27 +34,18 @@ export default function Rooms({
       setPortalContainer(null);
     };
   }, []);
-
+  console.log("currentRoomList : ", currentRoomList);
   return (
     <>
       <div className={!roomState.isOpen ? "list" : "roomclicked"}>
         <CreateRoomButton channelType={channelType} />
         {currentRoomList?.map((room, idx) => {
-          return (
-            <Room
-              key={idx}
-              room={room}
-              idx={idx}
-            />
-          );
+          return <Room key={idx} room={room} idx={idx} />;
         })}
       </div>
       {roomState.isOpen &&
         portalContainer &&
-        createPortal(
-          <MemberList />,
-          portalContainer
-        )}
+        createPortal(<MemberList />, portalContainer)}
     </>
   );
 }

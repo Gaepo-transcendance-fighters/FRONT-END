@@ -30,7 +30,7 @@ export default function CreateRoomModal({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [value, setValue] = useState("");
-  const { roomDispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
   // const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClose = () => {
@@ -40,8 +40,10 @@ export default function CreateRoomModal({
 
   useEffect(() => {
     const ChatCreateRoom = (json: any) => {
-      console.log("hi");
-      // roomDispatch({ type: "ADD_ROOM", value: json.channel });
+      console.log("ChatCreateRoom : ", json);
+      roomDispatch({ type: "ADD_ROOM", value: json.channel });
+      setValue("");
+      setOpen(false);
     };
     socket.on("BR_chat_create_room", ChatCreateRoom);
 
@@ -49,13 +51,19 @@ export default function CreateRoomModal({
       socket.off("BR_chat_create_room", ChatCreateRoom);
     };
   }, []);
-  //userId=?
 
+  //userId=?
+  
   const OnClick = () => {
     // const userIdValue = "3";
     socket.emit("BR_chat_create_room", { password: value }, (res: any) => {
-      console.log("res : ", res);
+      // console.log("res : ", res);
     });
+    //TODO : dto 정하는게 어떨까... < 추천
+    // 일단은 이렇게. dto는 나중에
+    
+    console.log("roomState : ", roomState.nonDmRooms);
+
     // setValue("");
     // setOpen(false);
     // URL에 userId 추가
@@ -78,8 +86,6 @@ export default function CreateRoomModal({
     //     mode: Mode.PUBLIC,
     //   },
     // });
-    setValue("");
-    setOpen(false);
     // */
   };
 

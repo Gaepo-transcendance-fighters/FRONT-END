@@ -64,17 +64,22 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
 
   return (
     <>
-      <button key={idx} className="item" onClick={() => RoomClick(room)}>
-        <div className="roomidx">{leftPadding(room.channelIdx)}</div>
-        <div className="owner">{room.owner}'s</div>
-        <div className="lock">
-          {room.mode === Mode.PROTECTED ? (
-            <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
-          ) : (
-            ""
-          )}
-        </div>
-      </button>
+      {room ? (
+        <>
+          <button key={idx} className="item" onClick={() => RoomClick(room)}>
+            <div className="roomidx">{leftPadding(room.channelIdx)}</div>
+            {/* <div className="roomidx">{leftPadding(room.channelIdx)}</div> */}
+            <div className="owner">{room.owner}'s</div>
+            <div className="lock">
+              {room.mode === Mode.PROTECTED ? (
+                <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
+              ) : (
+                ""
+              )}
+            </div>
+          </button>
+        </>
+      ) : null}
       <ProtectedModal
         open={open}
         handleClose={handleClose}
