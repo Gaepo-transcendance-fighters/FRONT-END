@@ -40,7 +40,6 @@ const inwaiting = () => {
   const searchParams = useSearchParams();
   const mode = searchParams.get("mode");
 
-  console.log(mode);
   const BackToMain = () => {
     router.push("/");
   };

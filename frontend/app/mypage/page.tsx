@@ -88,7 +88,7 @@ export default function PageRedir() {
 
   const searchParams = useSearchParams();
   const nickname = searchParams.toString();
-  console.log(nickname);
+  // console.log(nickname);
 
   const [checked, setChecked] = useState(true);
 
@@ -104,7 +104,6 @@ export default function PageRedir() {
 
   const HandleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const filelist = event.target.files;
-    console.log(filelist);
   };
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -255,8 +254,9 @@ export default function PageRedir() {
                       >
                         <Button
                           onClick={OpenFileInput}
-                          // sx={{ minWidth: "max-content" }}
-                          style={{ width: "30%" }}
+                          style={{
+                            minWidth: "max-content",
+                          }}
                           variant="contained"
                         >
                           사진변경
@@ -270,7 +270,9 @@ export default function PageRedir() {
                         />
                         <Button
                           type="button"
-                          style={{ width: "35%" }}
+                          style={{
+                            minWidth: "max-content",
+                          }}
                           variant="contained"
                           onClick={handleOpenModal}
                         >
@@ -324,7 +326,9 @@ export default function PageRedir() {
                         </Modal>
                         <Button
                           type="button"
-                          style={{ width: "50%" }}
+                          style={{
+                            minWidth: "max-content",
+                          }}
                           variant="contained"
                           onClick={() => {
                             if (verified == true) setVerified(false);

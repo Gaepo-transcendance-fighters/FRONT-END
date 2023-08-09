@@ -55,7 +55,6 @@ const RedirMyProfile = () => {
 
   const HandleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const filelist = event.target.files;
-    // console.log(filelist);
   };
 
   const [openModal, setOpenModal] = useState<boolean>(false);

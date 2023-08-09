@@ -55,10 +55,6 @@ const OptionSelect = () => {
     if (countdown == 0) cntRedir();
   }, [countdown]);
 
-  setTimeout(() => {
-    router.push("./gameplaying");
-  }, 1000000);
-
   const cntRedir = () => {
     // setOpenModal(true);
     setTimeout(() => {
