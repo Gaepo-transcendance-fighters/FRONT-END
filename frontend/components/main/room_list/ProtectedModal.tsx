@@ -7,11 +7,12 @@ import {
   MouseEvent,
   Dispatch,
   SetStateAction,
+  KeyboardEvent,
 } from "react";
 import "./ProtectedModal.css";
-import { IChatRoom } from "./RoomTypeButton";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
+import { IChatRoom0 } from "@/components/public/Layout";
 
 const box = {
   position: "absolute" as "absolute",
@@ -49,10 +50,10 @@ export default function ProtectedModal({
   handleClose: () => void;
   isRight: boolean;
   setIsRight: Dispatch<SetStateAction<boolean>>;
-  room: IChatRoom;
+  room: IChatRoom0;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
-  setARoom: Dispatch<SetStateAction<IChatRoom | undefined>>;
+  setARoom: Dispatch<SetStateAction<IChatRoom0 | undefined>>;
 }) {
   const pwRef = useRef("");
 
@@ -61,8 +62,8 @@ export default function ProtectedModal({
   };
 
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setFail(false);
     e.preventDefault();
+    setFail(false);
     if (pwRef.current == room.password) {
       setIsRight(true);
       handleClose();
@@ -73,6 +74,22 @@ export default function ProtectedModal({
       setFail(true);
     }
     pwRef.current = "";
+  };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === "Enter") {
+      setFail(false);
+      if (pwRef.current == room.password) {
+        setIsRight(true);
+        handleClose();
+        setFail(false);
+        setARoom(room);
+      } else {
+        setIsRight(false);
+        setFail(true);
+      }
+      pwRef.current = "";
+    }
   };
 
   return (
@@ -98,6 +115,8 @@ export default function ProtectedModal({
               type="password"
               placeholder="password"
               onChange={onChange}
+              autoFocus={true}
+              onKeyDown={onKeyDown}
             ></input>
             <button className="prsubmitbutton" onClick={onClick}>
               submit
