@@ -49,11 +49,11 @@ export default function CreateRoomModal({
   const OnClick = () => {
     socket.emit("chat_create_room", { password: value }, 상태코드); // 보내주는거?
     if (정상상태코드) {
-    setNonDmRooms({ type: "empty-nondmroom", payload: [] });
-    setValue("");
-    setOpen(false);
+      setNonDmRooms({ type: "empty-nondmroom", payload: [] });
+      setValue("");
+      setOpen(false);
     }
-/* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
+    /* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
     setNonDmRooms({ type: "empty-nondmroom", payload: [] });
     setRooms({
       type: "create-room",
