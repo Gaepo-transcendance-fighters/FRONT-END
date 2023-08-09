@@ -30,8 +30,8 @@ export interface IMember {
 // }
 
 export interface IChatRoom0 {
-  channelIdx: number;
   owner: string;
+  channelIdx: number;
   mode: Mode;
 }
 

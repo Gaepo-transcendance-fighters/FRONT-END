@@ -4,7 +4,7 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
-import { useRoom } from "@/context/RoomContext";
+import { IChatRoom0, useRoom } from "@/context/RoomContext";
 import { Mode } from "@/context/RoomContext";
 import { socket } from "@/app/layout";
 import { useSearchParams } from "react-router-dom";
@@ -41,7 +41,7 @@ export default function CreateRoomModal({
   useEffect(() => {
     const ChatCreateRoom = (json: any) => {
       console.log("ChatCreateRoom : ", json);
-      roomDispatch({ type: "ADD_ROOM", value: json.channel });
+      roomDispatch({ type: "ADD_ROOM", value: json as IChatRoom0 });
       setValue("");
       setOpen(false);
     };
@@ -53,7 +53,7 @@ export default function CreateRoomModal({
   }, []);
 
   //userId=?
-  
+
   const OnClick = () => {
     // const userIdValue = "3";
     socket.emit("BR_chat_create_room", { password: value }, (res: any) => {
@@ -61,7 +61,7 @@ export default function CreateRoomModal({
     });
     //TODO : dto 정하는게 어떨까... < 추천
     // 일단은 이렇게. dto는 나중에
-    
+
     console.log("roomState : ", roomState.nonDmRooms);
 
     // setValue("");

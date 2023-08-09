@@ -56,6 +56,7 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
     // });
   };
 
+  console.log("Room : ", room);
   /*
   protected > handleopen()
   !protected > aroom=room > roomDispatch({ type: "SET_ISOPEN" ...)
