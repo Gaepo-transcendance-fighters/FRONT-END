@@ -1,25 +1,13 @@
 "use client";
-import { ThemeProvider } from "@emotion/react";
 
 import {
-  Avatar,
   Button,
   Card,
   createTheme,
   Box,
   CardContent,
   Modal,
-  Stack,
-  Typography,
-  Input,
-  Switch,
 } from "@mui/material";
-
-const font = createTheme({
-  typography: {
-    fontFamily: "neodgm",
-  },
-});
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -47,17 +35,19 @@ const myProfileStyle = {
   p: 4,
 };
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { main } from "@/type/type";
-import React, { useEffect, useState, ChangeEvent } from "react";
-import MyGameLog from "@/components/main/myprofile/MyGameLog";
-import { useUser } from "@/context/UserContext";
-import axios from "axios";
-import { CssOutlined, ViewAgenda } from "@mui/icons-material";
+import React, { useState, useRef } from "react";
+import { LocalGasStationRounded } from "@mui/icons-material";
 
 export default function SecondAuth() {
-  const [verified, setVerified] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const [verified, setVerified] = useState<string | null>(
+    localStorage.getItem("check2Auth")
+  );
+
+  //값을 서버에서 받아오므로, useRef는 받아온 값으로 변경되어야할것.
+  //useState로 초기값 설정해주고, 바뀐값을 전달만해줌?
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -68,9 +58,13 @@ export default function SecondAuth() {
   };
 
   const onChangeSecondAuth = async () => {
-    if (verified == false) setVerified(true);
-    else if (verified == true) setVerified(false);
-    setOpenModal(true);
+    if (verified === "true") {
+      setVerified("false");
+      localStorage.setItem("check2Auth", "false");
+    } else if (verified === "false") {
+      setVerified("true");
+      localStorage.setItem("check2Auth", "true");
+    }
 
     // try {
     //   const response = await axios({
@@ -81,18 +75,18 @@ export default function SecondAuth() {
     //     },
     //     data: JSON.stringify({
     //       // userNickName: userData?.nickname,
-    //       check2Auth: verified,
+    //       check2Auth: verifiedied,
     //     }),
     //   });
     // } catch (error) {
     //   console.log("2차인증 시 에러발생");
     // }
-    handleCloseModal;
+
+    location.reload();
+    // setOpenModal(false);
+    // console.log();
   };
 
-  {
-    console.log(verified);
-  }
   return (
     <Button
       type="button"
@@ -100,105 +94,101 @@ export default function SecondAuth() {
         minWidth: "max-content",
       }}
       variant="contained"
-      onClick={onChangeSecondAuth}
+      onClick={handleOpenModal}
     >
-      {verified == true ? (
-        <>2차인증 비활성화</>
-      ) : (
-        <>
-          2차인증 활성화
-          <Modal open={openModal} onClose={handleCloseModal}>
-            <Box sx={modalStyle} borderRadius={"10px"}>
-              <Card
+      2차인증
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <Box sx={modalStyle} borderRadius={"10px"}>
+          <Card
+            style={{
+              width: "100%",
+              height: "20%",
+              backgroundColor: main.main4,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* 상단 안내메세지 */}
+            <CardContent
+              style={{
+                width: "100%",
+                height: "20%",
+                backgroundColor: main.main4,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              2차인증 확인
+            </CardContent>
+          </Card>
+          <Card
+            style={{
+              width: "100%",
+              height: "90%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <CardContent
+              style={{
+                width: "100%",
+                height: "20%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              2차인증을 활성화 시, 다음 로그인부터 적용됩니다.
+              <br />
+              (버튼 클릭 시 메인화면으로 돌아갑니다)
+            </CardContent>
+            <CardContent
+              style={{
+                width: "60%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+              sx={{ display: "flex", gap: "20%", flexDirection: "row" }}
+            >
+              <Button
                 style={{
                   width: "100%",
-                  height: "20%",
-                  backgroundColor: main.main4,
+                  height: "100%",
                   display: "flex",
-                  alignItems: "center",
                   justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#49EC62",
+                  border: "1px solid black",
                 }}
+                onClick={onChangeSecondAuth}
               >
-                {/* 상단 안내메세지 */}
-                <CardContent
-                  style={{
-                    width: "100%",
-                    height: "20%",
-                    backgroundColor: main.main4,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  2차인증 확인
-                </CardContent>
-              </Card>
-              <Card
+                활성화
+              </Button>
+              <Button
                 style={{
                   width: "100%",
-                  height: "90%",
+                  height: "100%",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  flexDirection: "column",
+                  backgroundColor: "#FF6364",
+                  border: "1px solid black",
                 }}
+                onClick={onChangeSecondAuth}
               >
-                <CardContent
-                  style={{
-                    width: "100%",
-                    height: "20%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  2차인증을 활성화 시, 다음 로그인부터 적용됩니다.
-                </CardContent>
-                <CardContent
-                  style={{
-                    width: "60%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                  sx={{ display: "flex", gap: "20%", flexDirection: "row" }}
-                >
-                  <Button
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "#49EC62",
-                      border: "1px solid black",
-                    }}
-                    onClick={onChangeSecondAuth}
-                  >
-                    확인
-                  </Button>
-                  <Button
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "#FF6364",
-                      border: "1px solid black",
-                    }}
-                    onClick={handleCloseModal}
-                  >
-                    거절
-                  </Button>
-                </CardContent>
-              </Card>
-            </Box>
-          </Modal>
-        </>
-      )}
+                비활성화
+              </Button>
+            </CardContent>
+          </Card>
+        </Box>
+      </Modal>
     </Button>
   );
 }

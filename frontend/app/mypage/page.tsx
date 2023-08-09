@@ -78,8 +78,11 @@ export default function PageRedir() {
     email: "",
   });
 
-  // const [openModal, setOpenModal] = useState<boolean>(false);
-  const [verified, setVerified] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
+  const [verified, setVerified] = useState<string | null>(
+    localStorage.getItem("check2Auth")
+  );
   const [inputName, setInputName] = useState<string>("");
 
   const [reload, setReload] = useState<boolean>(false);
@@ -176,8 +179,7 @@ export default function PageRedir() {
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
         console.log("Sucess");
-        // handleCloseModal();
-        nicknameModal.close;
+        handleCloseModal();
       }
     } catch (error) {
       console.log("닉네임 변경중 문제가 발생");
@@ -185,108 +187,13 @@ export default function PageRedir() {
     setReload((curr) => !curr);
   };
 
-  const onChangeSecondAuth = async () => {
-    if (verified == true) setVerified(false);
-    else setVerified(true);
-
-    // try {
-    //   const response = await axios({
-    //     method: "PATCH",
-    //     url: "http://localhost:4000/users/profile/:my_nickname",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     data: JSON.stringify({
-    //       // userNickName: userData?.nickname,
-    //       check2Auth: verified,
-    //     }),
-    //   });
-    // } catch (error) {
-    //   console.log("2차인증 시 에러발생");
-    // }
+  const handleOpenModal = () => {
+    setOpenModal(true);
   };
 
-  const SecondAuthModal = () => {
-    if (verified == true) setVerified(false);
-    else setVerified(true);
-    console.log("@@@");
-    {
-      // handleOpenModal();
-      authModal.open;
-
-      <>
-        {/* <Modal open={openModal} onClose={handleCloseModal}> */}
-        <Modal open={authModal.isOpen} onClose={authModal.close}>
-          <Box
-            sx={{
-              position: "absolute" as "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 100,
-              height: 150,
-              bgcolor: "#65d9f9",
-              border: "2px solid #000",
-              boxShadow: 24,
-              p: 4,
-            }}
-            borderRadius={"10px"}
-          >
-            <Card
-              sx={{
-                backgroundColor: main.main4,
-                height: "170px",
-                margin: -1,
-              }}
-            >
-              <Stack direction={"row"}>
-                <Card
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  sx={{
-                    margin: 1,
-                    width: "100%",
-                    height: "120px",
-                    backgroundColor: main.main1,
-                    overflow: "scroll",
-                  }}
-                >
-                  asdasdasd
-                </Card>
-              </Stack>
-            </Card>
-          </Box>
-        </Modal>
-      </>;
-    }
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
-
-  const [openModal, setOpenModal] = useState<Modals>({
-    nickNameModal: false,
-    authModal: false,
-  });
-
-  const getModalHanlder = (modalName: ModalNames) => {
-    return {
-      isOpen: openModal[modalName],
-      open: () => setOpenModal((state) => ({ ...state, [modalName]: true })),
-      close: () => setOpenModal((state) => ({ ...state, [modalName]: false })),
-    };
-  };
-
-  const nicknameModal = getModalHanlder("nickNameModal");
-  const authModal = getModalHanlder("authModal");
-
-  // const handleOpenModal = (modalname) => {
-  //   setOpenModal(true);
-  // };
-
-  // const handleCloseModal = () => {
-  //   setOpenModal(false);
-  // };
 
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, "");
@@ -411,7 +318,7 @@ export default function PageRedir() {
                       </Typography>
 
                       <CardContent style={{ width: "100%" }}>
-                        {verified == true ? (
+                        {verified === "true" ? (
                           <Typography style={{ fontSize: "1.5rem" }}>
                             2차인증 여부 : Y
                           </Typography>
@@ -461,15 +368,11 @@ export default function PageRedir() {
                             minWidth: "max-content",
                           }}
                           variant="contained"
-                          onClick={nicknameModal.open}
+                          onClick={handleOpenModal}
                         >
                           닉네임변경
                         </Button>
-                        {/* <Modal open={openModal} onClose={handleCloseModal}> */}
-                        <Modal
-                          open={nicknameModal.isOpen}
-                          onClose={nicknameModal.close}
-                        >
+                        <Modal open={openModal} onClose={handleCloseModal}>
                           <Box sx={modalStyle} borderRadius={"10px"}>
                             <Card
                               sx={{
