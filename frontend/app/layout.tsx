@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { RoomProvider } from "@/context/RoomContext";
 import { io } from "socket.io-client";
+import { FriendProvide } from "@/context/FriendContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,20 +37,22 @@ export default function RootLayout({
     <ThemeProvider theme={font}>
       <AuthProvider>
         <RoomProvider>
-          <html lang="en">
-            <body className={inter.className}>
-              <div
-                style={{
-                  backgroundImage: `url("/background.png")`,
-                  width: "100%",
-                  backgroundRepeat: "repeat",
-                  height: "100vh",
-                }}
-              >
-                {children}
-              </div>
-            </body>
-          </html>
+          <FriendProvide>
+            <html lang="en">
+              <body className={inter.className}>
+                <div
+                  style={{
+                    backgroundImage: `url("/background.png")`,
+                    width: "100%",
+                    backgroundRepeat: "repeat",
+                    height: "100vh",
+                  }}
+                >
+                  {children}
+                </div>
+              </body>
+            </html>
+          </FriendProvide>
         </RoomProvider>
       </AuthProvider>
     </ThemeProvider>

@@ -27,11 +27,11 @@ export default function CreateRoomModal({
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string | null>();
   const { roomDispatch } = useRoom();
 
   const handleClose = () => {
-    setValue("");
+    setValue(null);
     setOpen(false);
   };
 
@@ -39,7 +39,7 @@ export default function CreateRoomModal({
     const ChatCreateRoom = (json: any) => {
       console.log("ChatCreateRoom : ", json);
       roomDispatch({ type: "ADD_ROOM", value: json as IChatRoom0 });
-      setValue("");
+      setValue(null);
       setOpen(false);
     };
     socket.on("BR_chat_create_room", ChatCreateRoom);
@@ -48,12 +48,16 @@ export default function CreateRoomModal({
       socket.off("BR_chat_create_room", ChatCreateRoom);
     };
   }, []);
+  //userId=?
 
   const OnClick = () => {
     socket.emit("BR_chat_create_room", { password: value }, (res: any) => {});
     //TODO : dto 정하는게 어떨까... < 추천
     // 일단은 이렇게. dto는 나중에
   };
+
+  // const userId = searchParams.get("userId");
+  // console.log("userId : ", userId);
 
   return (
     <>

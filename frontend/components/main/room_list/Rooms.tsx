@@ -34,7 +34,7 @@ export default function Rooms({
       setPortalContainer(null);
     };
   }, []);
-  console.log("currentRoomList : ", currentRoomList);
+
   return (
     <>
       <div className={!roomState.isOpen ? "list" : "roomclicked"}>

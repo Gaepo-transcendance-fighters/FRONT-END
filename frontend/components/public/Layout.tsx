@@ -1,7 +1,7 @@
 "use client";
 
 import { CardContent, Stack, Box, Button } from "@mui/material";
-import FriendList, { IFriend } from "../main/friend_list/FriendList";
+import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
@@ -10,8 +10,9 @@ import GameStartButton from "../game/GameStartButton";
 import InviteGame from "../main/InviteGame/InviteGame";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { mockChatRoomList0, useRoom } from "@/context/RoomContext";
+import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/layout";
+import { useFriend } from "@/context/FriendContext";
 
 export const main = {
   main0: "#67DBFB",
@@ -23,35 +24,81 @@ export const main = {
   main6: "#183C77",
 };
 
+export enum Permission {
+  OWNER = "owner",
+  ADMIN = "admin",
+  MEMBER = "member",
+}
+
+export enum Mode {
+  PRIVATE = "private",
+  PUBLIC = "public",
+  PROTECTED = "protected",
+}
+
+export interface IChatRoom0 {
+  channelIdx: number;
+  owner: string;
+  mode: Mode;
+}
+
+interface IFriend {
+  friendNickname: string;
+  isOnline: boolean;
+}
+
+interface IBlock {
+  targetNickname: string;
+  targetIdx: number;
+}
+
+interface IMaindata {
+  channelList: IChatRoom0[];
+  friendList: IFriend[];
+  blockList: IBlock[];
+}
+
 const Layout = () => {
   const { state } = useAuth();
-  const { roomState, roomDispatch } = useRoom();
+  const { roomDispatch } = useRoom();
+  const { friendState, friendDispatch } = useFriend();
 
-  // useEffect(() => {
-  //   const MainEnter = (json: any) => {
-  //     roomDispatch({ type: "SET_NON_ROOMS", value: json.channel });
-  //   };
-  //   socket.on("main_enter", MainEnter);
+  useEffect(() => {
+    const MainEnter = (data: IMaindata) => {
+      console.log("fetch", data);
+      roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+      friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+      friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+    };
+    socket.on("main_enter", MainEnter);
 
-  //   return () => {
-  //     socket.off("main_enter", MainEnter);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("main_enter", MainEnter);
+    };
+  }, []);
 
   useRequireAuth();
 
+  useEffect(() => {
+    if (state.isLoggedIn) {
+      socket.emit("main_enter", { intra: "jaekim" }, (data: IMaindata) => {
+        console.log(data);
+        roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+        friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+        friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+      });
+    }
+  }, [state.isLoggedIn]);
   // useEffect(() => {
-  //   if (state.isLoggedIn) {
-  //     socket.emit("main_enter", "intra_id", (status_code: number) => {
-  //       console.log(status_code);
-  //     });
+  //   if (isLoggedIn) {
+  //     socket.emit("main_enter", "intra_id", 상태코드);
   //   }
-  // }, [state.isLoggedIn]);
+  // }, [isLoggedIn]);
 
   // socket.io로 mock data 받았다고 가정했을때.
-  useEffect(() => {
-    roomDispatch({ type: "SET_NON_ROOMS", value: mockChatRoomList0 });
-  }, []);
+  // useEffect(() => {
+  //   setRooms({ type: "main-enter", payload: mockChatRoomList0 });
+  // }, []);
   // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 
   return (

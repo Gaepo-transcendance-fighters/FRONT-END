@@ -63,7 +63,7 @@ export default function RoomTypeButton() {
   };
 
   const DmBtnClick = () => {
-    // socket.emit("chat_get_DMlist", {userNickname : string,userIdx : number}, (status_code: number) => {
+    // socket.emit("chat_get_DMlist", {userNickname : string, userIdx : number}, (status_code: number) => {
     //   console.log(status_code);
     // });
     OnClick(false);

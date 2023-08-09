@@ -14,6 +14,7 @@ export default function RoomList() {
         id="portal"
         sx={{ pb: 0 }}
         className={roomState.isOpen ? "memactivate" : "memdeactivate"}
+        className={roomState.isOpen ? "memactivate" : "memdeactivate"}
       ></CardContent>
       <CardContent sx={{ "&:last-child": { pb: 0 } }}>
         <Title title={"chatroomlist"} text={"Chat Room List"} />
