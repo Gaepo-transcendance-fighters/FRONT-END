@@ -1,6 +1,5 @@
 "use client";
 
-import { ThemeProvider } from "@emotion/react";
 import {
   Button,
   Card,
@@ -11,9 +10,11 @@ import {
   createTheme,
   Typography,
 } from "@mui/material";
+import io from "socket.io-client";
 
 import React from "react";
 import { useState, useEffect } from "react";
+
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
@@ -22,9 +23,19 @@ const font = createTheme({
 
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
-import { count } from "console";
+
+type GameMode = "friend" | "normal" | "rank";
 type SpeedOption = "speed1" | "speed2" | "speed3";
 type MapOption = "map1" | "map2" | "map3";
+
+interface IOption {
+  gameType: GameMode; // friend, normal, rank
+  userIdx: number;
+  speed: SpeedOption; // normal, fast, faster
+  mapNumber: MapOption; // 0, 1, 2
+}
+
+export const socket = io("http://localhost:4000/game");
 
 const OptionSelect = () => {
   const router = useRouter();
@@ -49,21 +60,22 @@ const OptionSelect = () => {
     );
   };
 
-  useEffect(() => {
+ useEffect(() => {
     countdown > 0 && setTimeout(() => setCountdown(countdown - 1), 1000);
     // 나중에 이거 풀면됨
     if (countdown == 0) cntRedir();
   }, [countdown]);
 
   const cntRedir = () => {
-    // setOpenModal(true);
+    dispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
+    dispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
+
     setTimeout(() => {
-      router.push("./gameplaying");
+      router.push("./inwaiting");
     }, 300);
   };
-
+  
   return (
-    <ThemeProvider theme={font}>
       <Card sx={{ display: "flex" }}>
         <Stack
           sx={{
@@ -367,7 +379,6 @@ const OptionSelect = () => {
           </CardContent>
         </Stack>
       </Card>
-    </ThemeProvider>
   );
 };
 

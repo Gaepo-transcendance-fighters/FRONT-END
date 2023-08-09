@@ -12,14 +12,10 @@ import {
 } from "@mui/material";
 
 import { main } from "@/components/public/Layout";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useCallback } from "react";
 
-const font = createTheme({
-  typography: {
-    fontFamily: "neodgm",
-  },
-});
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useGame } from "@/context/GameContext";
 
 const infomodalStyle = {
   position: "absolute" as "absolute",
@@ -36,25 +32,16 @@ const infomodalStyle = {
 
 const Game = () => {
   const router = useRouter();
-  const searchparams = useSearchParams();
-
-  const createQuery = useCallback(
-    (mode: string) => {
-      const params = new URLSearchParams(searchparams.toString());
-      params.set("mode", mode);
-
-      return params.toString();
-    },
-    [searchparams]
-  );
+  const { state, dispatch } = useGame();
 
   const ClickNomalGame = () => {
-    router.push("./inwaiting" + "?" + createQuery("Normal"));
+    dispatch({ type: "SET_GAME_MODE", value: "normal" });
+    router.push("./optionselect");
   };
 
   const ClickRankGame = () => {
-    router.push("./inwaiting");
-    router.push("./inwaiting" + "?" + createQuery("Rank"));
+    dispatch({ type: "SET_GAME_MODE", value: "rank" });
+    router.push("./gameresult");
   };
 
   const BackToMain = () => {
@@ -70,7 +57,7 @@ const Game = () => {
     setOpenModal(false);
   };
   return (
-    <ThemeProvider theme={font}>
+
       <Card sx={{ display: "flex" }}>
         <Stack
           sx={{
@@ -334,7 +321,7 @@ const Game = () => {
           </CardContent>
         </Stack>
       </Card>
-    </ThemeProvider>
+
   );
 };
 export default Game;

@@ -1,18 +1,8 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
-import Image from "next/image";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Box, Card, CircularProgress, Typography } from "@mui/material";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { main } from "@/font/color";
 
 const modalStyle = {
@@ -28,61 +18,63 @@ const modalStyle = {
   p: 4,
 };
 const Auth = () => {
-  const [value, setValue] = useState("");
-
-  const { state, dispatch } = useAuth();
+  const searchParam = useSearchParams();
   const router = useRouter();
 
-  const handleLogin = () => {
-    // const res = await()
-    if (!value) return alert("Please enter your nickname");
-    localStorage.setItem("loggedIn", "true");
-    dispatch({ type: "LOGIN", value: true });
-    router.push("/");
+  const postCode = async (code: string) => {
+    await fetch("http://localhost:4000/login/auth", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
+      },
+      body: JSON.stringify({
+        code: code,
+      }),
+    })
+      .then(async (res) => {
+        if (res.status === 200) {
+          localStorage.setItem("loggedIn", "true");
+          const code = res.headers.get("code")!;
+          localStorage.setItem("authorization", code);
+          console.log("로그인 성공 code: ", code);
+          return router.push(`/login/auth?token=${code}`);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return alert(`[Error] ${error}`);
+      });
   };
+
+  const logout = async () => {
+    await fetch("http://localhost:4000/logout", {
+      method: "POST",
+    }).then((res) => {
+      if (res.status === 200) {
+        localStorage.setItem("loggedIn", "false");
+        return router.push("/login");
+      }
+    });
+  };
+
+  useEffect(() => {
+    const code = searchParam.get("code");
+    if (!code) return;
+    console.log(code);
+
+    postCode(code);
+  }, []);
 
   return (
     <Box>
+      <button onClick={logout}>로그아웃</button>
       <Card sx={modalStyle}>
-        <Stack
-          sx={{
-            position: "absolute",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <CardContent>
-            <Typography sx={{ color: "white" }} fontSize={"larger"}>
-              Enter your nickname!
-            </Typography>
-          </CardContent>
-          <TextField
-            placeholder="nickname"
-            sx={{ backgroundColor: "white" }}
-            value={value}
-            onChange={(e) => {
-              setValue(e.currentTarget.value);
-            }}
-          />
-
-          <CardContent
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              variant="contained"
-              size="large"
-              sx={{ backgroundColor: main.main3, width: "max-content" }}
-              onClick={handleLogin}
-            >
-              <Typography sx={{ color: "white" }}>Login</Typography>
-            </Button>
-          </CardContent>
-        </Stack>
+        <CircularProgress sx={{ color: "white" }} />
+        <Typography sx={{ color: "white" }}>Loading...</Typography>
+        <Typography sx={{ color: "white" }}>
+          {searchParam.get("code")}
+        </Typography>
       </Card>
     </Box>
   );
