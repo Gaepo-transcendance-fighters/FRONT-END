@@ -9,11 +9,7 @@ import "@/components/main/member_list/MemberList.css";
 import { useRoom } from "@/context/RoomContext";
 
 export default function MemberList({
-  // setIsRight,
-  // isRight,
 }: {
-  // setIsRight: Dispatch<SetStateAction<boolean>>;
-  // isRight: boolean;
 }) {
   const { roomState } = useRoom();
 

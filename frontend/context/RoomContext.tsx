@@ -30,57 +30,6 @@ export interface IChatRoom0 {
   mode: Mode;
 }
 
-export const mockChatRoomList0: IChatRoom0[] = [
-  {
-    channelIdx: 0,
-    owner: "jeekim",
-    mode: Mode.PUBLIC,
-  },
-  {
-    channelIdx: 1,
-    owner: "jaekim",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 2,
-    owner: "0123456789",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 3,
-    owner: "bbbbbbbbbb",
-    mode: Mode.PUBLIC,
-  },
-  {
-    channelIdx: 4,
-    owner: "0123456789",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 5,
-    owner: "zzzzzzzzzz",
-    mode: Mode.PROTECTED,
-  },
-];
-
-export const mockMemberList0: IMember[] = [
-  {
-    nickname: "jaekim",
-    imgUri: "/seal.png",
-    permission: Permission.OWNER,
-  },
-  {
-    nickname: "haryu",
-    imgUri: "/seal.png",
-    permission: Permission.ADMIN,
-  },
-  {
-    nickname: "wochae",
-    imgUri: "/seal.png",
-    permission: Permission.MEMBER,
-  },
-];
-
 interface RoomContextData {
   dmRooms: IChatRoom0[];
   nonDmRooms: IChatRoom0[];

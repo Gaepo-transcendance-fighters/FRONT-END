@@ -5,8 +5,9 @@ import StarIcon from "@mui/icons-material/Star";
 import "@/components/main/member_list/MemberList.css";
 import { useState, MouseEvent } from "react";
 import MemberModal from "./MemberModal";
-import { IMember } from "@/context/RoomContext";
+import { IMember, useRoom } from "@/context/RoomContext";
 import { Menu, MenuItem } from "@mui/material";
+import { Mode } from "@/components/public/Layout";
 
 export default function Member({
   idx,
@@ -17,6 +18,7 @@ export default function Member({
 }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { roomState } = useRoom();
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -39,7 +41,7 @@ export default function Member({
         key={idx}
         className="membtn"
         onClick={handleOpenModal}
-        onContextMenu={(e) => handleOpenMenu(e)}
+        onContextMenu={roomState.currentRoom?.mode !== Mode.PRIVATE ? (e) => handleOpenMenu(e) : undefined}
       >
         <div className="memimg">
           <Image src="/seal.png" alt="profile" width={53} height={53} />
