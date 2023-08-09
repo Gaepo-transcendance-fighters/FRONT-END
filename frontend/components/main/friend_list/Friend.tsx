@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, Typography, Stack, Tooltip } from "@mui/material";
-import { IFriend } from "./FriendList";
 import Image from "next/image";
 import FriendProfile from "./FriendProfile";
 import { main } from "@/font/color";
@@ -12,12 +11,34 @@ const loginOff = (
   <Image src="/logoff.png" alt="offline" width={10} height={10} />
 );
 
-const Friend = ({ prop }: { prop: IFriend }) => {
+interface IFriend {
+  friendNickname: string;
+  isOnline: boolean;
+}
+
+interface IBlock {
+  targetNickname: string;
+  targetIdx: number;
+}
+
+interface IUserProp {
+  friendNickname: string;
+  isOnline: boolean;
+  targetNickname?: string;
+  targetIdx?: number;
+}
+
+const Friend = ({ prop }: { prop: IUserProp }) => {
   return (
     <>
       <Card sx={{ margin: 1, backgroundColor: main.main0 }}>
         <Stack direction={"row"} justifyContent={"space-between"}>
-          <Tooltip title={prop.name} arrow>
+          <Tooltip
+            title={
+              !prop.targetNickname ? prop.friendNickname : prop.targetNickname
+            }
+            arrow
+          >
             <Typography
               margin={1}
               sx={{
@@ -25,7 +46,7 @@ const Friend = ({ prop }: { prop: IFriend }) => {
                 textOverflow: "ellipsis",
               }}
             >
-              {prop.name}
+              {!prop.targetNickname ? prop.friendNickname : prop.targetNickname}
             </Typography>
           </Tooltip>
           <Stack direction={"row"} alignItems={"center"}>

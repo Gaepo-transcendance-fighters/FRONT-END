@@ -3,7 +3,6 @@
 import "./ChatWindow.css";
 import BottomField from "./BottomField";
 import ChatField from "./ChatField";
-import RoomTitleField from "./RoomTitleField";
 import { Box } from "@mui/material";
 import { main } from "@/font/color";
 
@@ -19,7 +18,6 @@ const ChatWindow = () => {
         borderRadius: "10px",
       }}
     >
-      <RoomTitleField />
       <ChatField />
       <BottomField />
     </Box>

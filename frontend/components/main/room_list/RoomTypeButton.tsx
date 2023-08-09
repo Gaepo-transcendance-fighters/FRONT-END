@@ -1,128 +1,25 @@
 "use client";
 
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import {
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+  useReducer,
+} from "react";
 import Rooms from "./Rooms";
-import { IFriend } from "../friend_list/FriendList";
+import { IChatRoom0, Mode } from "@/components/public/Layout";
+import { useRoom } from "@/context/RoomContext";
 
-export interface IChatRoom {
-  channelIdx: number;
-  owner: string;
-  mems: Array<IFriend>;
-  // members: Array<string>;
-  channelType: chatRoomType;
-  password: string;
-}
-
-export enum chatRoomType {
-  dm,
-  nonDm,
-}
-
-export enum permissonType {
-  normal,
-  owner,
-  admin,
-  ban,
-}
-
-export const mockChatRoomList: IChatRoom[] = [
-  {
-    channelIdx: 0,
-    owner: "hoslim",
-    mems: [{ name: "hoslim", isOnline: true, imgUrl: "" }],
-    channelType: chatRoomType.dm,
-    password: "",
-  },
-  {
-    channelIdx: 0,
-    owner: "jeekim",
-    mems: [{ name: "jeekim", isOnline: true, imgUrl: "" }],
-    channelType: chatRoomType.nonDm,
-    password: "0000",
-  },
-  {
-    channelIdx: 1,
-    owner: "jaekim",
-    mems: [
-      { name: "jaekim", isOnline: true, imgUrl: "" },
-      { name: "haryu", isOnline: false, imgUrl: "" },
-      { name: "wochae", isOnline: true, imgUrl: "" },
-      { name: "jaekim", isOnline: true, imgUrl: "" },
-      { name: "haryu", isOnline: false, imgUrl: "" },
-      { name: "wochae", isOnline: true, imgUrl: "" },
-    ],
-    channelType: chatRoomType.nonDm,
-    password: "0000",
-  },
-  {
-    channelIdx: 2,
-    owner: "0123456789",
-    mems: [
-      { name: "0123456789", isOnline: false, imgUrl: "" },
-      { name: "cccccccccc", isOnline: true, imgUrl: "" },
-    ],
-    channelType: chatRoomType.nonDm,
-    password: "",
-  },
-  {
-    channelIdx: 1,
-    owner: "aaaaaaaaaa",
-    mems: [
-      { name: "aaaaaaaaaa", isOnline: false, imgUrl: "" },
-      { name: "2hoslim", isOnline: true, imgUrl: "" },
-    ],
-    channelType: chatRoomType.dm,
-    password: "",
-  },
-  {
-    channelIdx: 3,
-    owner: "bbbbbbbbbb",
-    mems: [
-      { name: "bbbbbbbbbb", isOnline: false, imgUrl: "" },
-      { name: "2jeekim", isOnline: false, imgUrl: "" },
-    ],
-    channelType: chatRoomType.nonDm,
-    password: "0000",
-  },
-  {
-    channelIdx: 4,
-    owner: "0123456789",
-    mems: [
-      { name: "2jaekim", isOnline: false, imgUrl: "" },
-      { name: "haryu", isOnline: false, imgUrl: "" },
-    ],
-    channelType: chatRoomType.nonDm,
-    password: "0000",
-  },
-  {
-    channelIdx: 5,
-    owner: "zzzzzzzzzz",
-    mems: [
-      { name: "zzzzzzzzzz", isOnline: true, imgUrl: "" },
-      { name: "2hoslimh", isOnline: false, imgUrl: "" },
-    ],
-    channelType: chatRoomType.nonDm,
-    password: "",
-  },
-];
-
-export default function RoomTypeButton({
-  showMembersList,
-  setShowMembersList,
-}: {
-  showMembersList: boolean;
-  setShowMembersList: Dispatch<SetStateAction<boolean>>;
-}) {
-  const [nonDmrooms, setNonDmRooms] = useState<IChatRoom[]>([]);
-  const [dmRooms, setDmRooms] = useState<IChatRoom[]>([]);
+export default function RoomTypeButton() {
+  const [dmRooms, setDmRooms] = useState<IChatRoom0[]>([]);
+  const { roomState, roomDispatch } = useRoom();
   const [disabled, setDisabled] = useState(true);
 
   const DivideRoom = () => {
-    mockChatRoomList.map((room) => {
-      if (room.channelType != chatRoomType.dm) {
-        setNonDmRooms((prev) => {
-          return [...prev, room];
-        });
+    roomState.rooms.map((room) => {
+      if (room.mode != Mode.PRIVATE) {
+        roomDispatch({ type: "SET_ROOMS", value: [room] });
       } else {
         setDmRooms((prev) => {
           return [...prev, room];
@@ -133,10 +30,10 @@ export default function RoomTypeButton({
 
   useEffect(() => {
     DivideRoom();
-  }, []);
+  }, [roomState.rooms]);
 
   const OnClick = (isNotDm: boolean) => {
-    setNonDmRooms([]);
+    roomDispatch({ type: "SET_ROOMS", value: [] });
     setDmRooms([]);
     DivideRoom();
 
@@ -170,10 +67,8 @@ export default function RoomTypeButton({
         </button>
       </div>
       <Rooms
-        roomsProp={disabled ? nonDmrooms : dmRooms}
+        roomsProp={disabled ? roomState.rooms : dmRooms}
         channelType={disabled}
-        showMembersList={showMembersList}
-        setShowMembersList={setShowMembersList}
       />
     </>
   );
