@@ -42,39 +42,6 @@ export interface IChatRoom0 {
   mode: Mode;
 }
 
-export const mockChatRoomList0: IChatRoom0[] = [
-  {
-    channelIdx: 0,
-    owner: "jeekim",
-    mode: Mode.PUBLIC,
-  },
-  {
-    channelIdx: 1,
-    owner: "jaekim",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 2,
-    owner: "0123456789",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 3,
-    owner: "bbbbbbbbbb",
-    mode: Mode.PUBLIC,
-  },
-  {
-    channelIdx: 4,
-    owner: "0123456789",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 5,
-    owner: "zzzzzzzzzz",
-    mode: Mode.PROTECTED,
-  },
-];
-
 interface IFriend {
   friendNickname: string;
   isOnline: boolean;
@@ -92,7 +59,7 @@ interface IMaindata {
 }
 
 const Layout = () => {
-  const { isLoggedIn } = useAuth();
+  const { state } = useAuth();
   const { roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
 
@@ -113,14 +80,14 @@ const Layout = () => {
   useRequireAuth();
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (state.isLoggedIn) {
       socket.emit("main_enter", "intra_id", (data: IMaindata) => {
         roomDispatch({ type: "SET_ROOMS", value: data.channel });
         friendDispatch({ type: "SET_FRIENDLIST", value: data.friend });
         friendDispatch({ type: "SET_BLOCKLIST", value: data.block });
       });
     }
-  }, [isLoggedIn]);
+  }, [state.isLoggedIn]);
 
   // socket.io로 mock data 받았다고 가정했을때.
   // useEffect(() => {
