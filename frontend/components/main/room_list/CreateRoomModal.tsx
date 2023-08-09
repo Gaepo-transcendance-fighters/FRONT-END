@@ -6,6 +6,8 @@ import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { useRoom } from "@/context/RoomContext";
 import { Mode } from "@/context/RoomContext";
+import { socket } from "@/app/layout";
+import { useSearchParams } from "react-router-dom";
 
 const style = {
   position: "absolute" as "absolute",
@@ -29,42 +31,60 @@ export default function CreateRoomModal({
 }) {
   const [value, setValue] = useState("");
   const { roomDispatch } = useRoom();
+  // const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClose = () => {
     setValue("");
     setOpen(false);
   };
 
-  // useEffect(() => {
-  //   const ChatCreateRoom = (json) => {
-  // roomDispatch({ type: "ADD_ROOM", value: json.channel });
-  //   };
-  //   socket.on("main_enter", ChatCreateRoom);
+  useEffect(() => {
+    const ChatCreateRoom = (json: any) => {
+      console.log("hi");
+      // roomDispatch({ type: "ADD_ROOM", value: json.channel });
+    };
+    socket.on("BR_chat_create_room", ChatCreateRoom);
 
-  //   return () => {
-  //     socket.off("main_enter", ChatCreateRoom);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("BR_chat_create_room", ChatCreateRoom);
+    };
+  }, []);
+  //userId=?
 
   const OnClick = () => {
-    //   socket.emit("chat_create_room", { password: value }, 상태코드);
-    //   if (정상상태코드) {
-    //   setValue("");
-    //   setOpen(false);
-    //   }
-    // /* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
-    roomDispatch({
-      type: "ADD_ROOM",
-      value: {
-        channelIdx: 0,
-        owner: "jeeekimmm",
-        mode: Mode.PUBLIC,
-      },
+    // const userIdValue = "3";
+    socket.emit("BR_chat_create_room", { password: value }, (res: any) => {
+      console.log("res : ", res);
     });
+    // setValue("");
+    // setOpen(false);
+    // URL에 userId 추가
+    // setSearchParams({ userId: userIdValue });
+    // if (정상상태코드) {
+    // setValue("");
+    // setOpen(false);
+    // }
+    // socket.emit("chat_create_room", { password: value }, 상태코드);
+    // if (정상상태코드) {
+    // setValue("");
+    // setOpen(false);
+    // }
+    // /* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
+    // roomDispatch({
+    //   type: "ADD_ROOM",
+    //   value: {
+    //     channelIdx: 0,
+    //     owner: "jeeekimmm",
+    //     mode: Mode.PUBLIC,
+    //   },
+    // });
     setValue("");
     setOpen(false);
     // */
   };
+
+  // const userId = searchParams.get("userId");
+  // console.log("userId : ", userId);
 
   return (
     <>

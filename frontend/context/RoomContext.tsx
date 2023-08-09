@@ -24,10 +24,10 @@ export interface IMember {
   permission: Permission;
 }
 
-export interface IDmRoom {
-  targetNickname: string;
-  targetIdx: number;
-}
+// export interface IDmRoom {
+//   targetNickname: string;
+//   targetIdx: number;
+// }
 
 export interface IChatRoom0 {
   channelIdx: number;
@@ -87,7 +87,8 @@ export const mockMemberList0: IMember[] = [
 ];
 
 interface RoomContextData {
-  dmRooms: IDmRoom[];
+  dmRooms: IChatRoom0[];
+  // dmRooms: IDmRoom[];
   nonDmRooms: IChatRoom0[];
   currentRoom: IChatRoom0 | null;
   currentRoomMember: IMember[];
@@ -96,6 +97,7 @@ interface RoomContextData {
 
 type RoomAction =
   | { type: "SET_DM_ROOMS"; value: IChatRoom0[] }
+  // | { type: "SET_DM_ROOMS"; value: IDmRoom[] }
   | { type: "SET_NON_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
   | { type: "SET_CUR_MEM"; value: IMember[] }

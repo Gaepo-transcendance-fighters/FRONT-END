@@ -11,7 +11,7 @@ import InviteGame from "../main/InviteGame/InviteGame";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { mockChatRoomList0, useRoom } from "@/context/RoomContext";
-// import { socket } from "@/app/layout";
+import { socket } from "@/app/layout";
 
 export const main = {
   main0: "#67DBFB",
