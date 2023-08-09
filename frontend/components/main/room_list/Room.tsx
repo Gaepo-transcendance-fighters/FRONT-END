@@ -56,31 +56,21 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
     // });
   };
 
-  console.log("Room : ", room);
-  /*
-  protected > handleopen()
-  !protected > aroom=room > roomDispatch({ type: "SET_ISOPEN" ...)
-             > aroom!=room > roomDispatch({type : "SET_CURRENTROOM" ...)   roomDispatch({ type: "SET_ISOPEN" ...)
-  */
-
   return (
     <>
-      {room ? (
-        <>
-          <button key={idx} className="item" onClick={() => RoomClick(room)}>
-            <div className="roomidx">{leftPadding(room.channelIdx)}</div>
-            {/* <div className="roomidx">{leftPadding(room.channelIdx)}</div> */}
-            <div className="owner">{room.owner}'s</div>
-            <div className="lock">
-              {room.mode === Mode.PROTECTED ? (
-                <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
-              ) : (
-                ""
-              )}
-            </div>
-          </button>
-        </>
-      ) : null}
+      <>
+        <button key={idx} className="item" onClick={() => RoomClick(room)}>
+          <div className="roomidx">{leftPadding(room.channelIdx)}</div>
+          <div className="owner">{room.owner}'s</div>
+          <div className="lock">
+            {room.mode === Mode.PROTECTED ? (
+              <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
+            ) : (
+              ""
+            )}
+          </div>
+        </button>
+      </>
       <ProtectedModal
         open={open}
         handleClose={handleClose}

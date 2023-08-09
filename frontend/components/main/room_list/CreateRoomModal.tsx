@@ -27,19 +27,18 @@ export default function CreateRoomModal({
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [value, setValue] = useState<string | null>();
+  const [value, setValue] = useState("");
   const { roomDispatch } = useRoom();
 
   const handleClose = () => {
-    setValue(null);
+    setValue("");
     setOpen(false);
   };
 
   useEffect(() => {
     const ChatCreateRoom = (json: any) => {
-      console.log("ChatCreateRoom : ", json);
       roomDispatch({ type: "ADD_ROOM", value: json as IChatRoom0 });
-      setValue(null);
+      setValue("");
       setOpen(false);
     };
     socket.on("BR_chat_create_room", ChatCreateRoom);
@@ -55,9 +54,6 @@ export default function CreateRoomModal({
     //TODO : dto 정하는게 어떨까... < 추천
     // 일단은 이렇게. dto는 나중에
   };
-
-  // const userId = searchParams.get("userId");
-  // console.log("userId : ", userId);
 
   return (
     <>
