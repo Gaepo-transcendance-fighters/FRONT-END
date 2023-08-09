@@ -1,5 +1,3 @@
-import { Permission } from "@/components/public/Layout";
-
 import {
   ReactNode,
   createContext,
@@ -8,61 +6,73 @@ import {
   useReducer,
 } from "react";
 
-enum Mode {
+export enum Mode {
   PRIVATE = "private",
   PUBLIC = "public",
   PROTECTED = "protected",
 }
 
-interface IMember {
+export enum Permission {
+  OWNER = "owner",
+  ADMIN = "admin",
+  MEMBER = "member",
+}
+
+export interface IMember {
   nickname: string;
   imgUri: string;
   permission: Permission;
 }
 
-interface IChatRoom0 {
-  channelIdx: number;
+export interface IChatRoom0 {
   owner: string;
+  channelIdx: number;
   mode: Mode;
 }
 
 interface RoomContextData {
-  DM: IChatRoom0[];
-  rooms: IChatRoom0[];
+  dmRooms: IChatRoom0[];
+  nonDmRooms: IChatRoom0[];
   currentRoom: IChatRoom0 | null;
   currentRoomMember: IMember[];
   isOpen: boolean;
 }
 
 type RoomAction =
-  | { type: "SET_DM"; value: IChatRoom0[] }
-  | { type: "SET_ROOMS"; value: IChatRoom0[] }
+  | { type: "SET_DM_ROOMS"; value: IChatRoom0[] }
+  | { type: "SET_NON_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
-  | { type: "SET_CURRENTROOMMEMBER"; value: IMember[] }
-  | { type: "SET_ISOPEN"; value: boolean };
+  | { type: "SET_CUR_MEM"; value: IMember[] }
+  | { type: "SET_ISOPEN"; value: boolean }
+  | { type: "ADD_ROOM"; value: IChatRoom0 };
 
 const initialState: RoomContextData = {
-  DM: [],
-  rooms: [],
+  dmRooms: [],
+  nonDmRooms: [],
   currentRoom: null,
   currentRoomMember: [],
   isOpen: false,
 };
 
-const RoomReducer = (state: RoomContextData, action: RoomAction) => {
+const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
   switch (action.type) {
     case "SET_ISOPEN":
-      return { ...state, isOpen: action.value };
-    case "SET_DM":
-      return { ...state, DM: action.value };
-    case "SET_ROOMS":
-      return { ...state, rooms: action.value };
+      return { ...roomState, isOpen: action.value };
+    case "SET_DM_ROOMS":
+      return { ...roomState, dmRooms: action.value };
+    case "SET_NON_ROOMS":
+      return { ...roomState, nonDmRooms: action.value };
     case "SET_CURRENTROOM":
-      return { ...state, currentRoom: action.value };
-    case "SET_CURRENTROOMMEMBER":
-      return { ...state, currentRoomMember: action.value };
+      return { ...roomState, currentRoom: action.value };
+    case "SET_CUR_MEM":
+      return { ...roomState, currentRoomMember: action.value };
+    case "ADD_ROOM":
+      return {
+        ...roomState,
+        nonDmRooms: [...roomState.nonDmRooms, action.value],
+      };
     default:
-      return state;
+      return roomState;
   }
 };
 
