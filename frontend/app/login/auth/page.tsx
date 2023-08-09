@@ -1,19 +1,8 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
-import Image from "next/image";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CircularProgress,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CircularProgress, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { main } from "@/font/color";
 
 const modalStyle = {
@@ -33,7 +22,7 @@ const Auth = () => {
   const router = useRouter();
 
   const postCode = async (code: string) => {
-    await fetch("http://localhost:4000/login/auth", {
+    await fetch("http://172.20.10.13:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -45,28 +34,17 @@ const Auth = () => {
     })
       .then(async (res) => {
         if (res.status === 200) {
+          const data = await res.json();
+          console.log(data.token);
+          localStorage.setItem("authorization", data.token);
           localStorage.setItem("loggedIn", "true");
-          const code = res.headers.get("code")!;
-          localStorage.setItem("authorization", code);
-          console.log("로그인 성공 code: ", code);
-          return router.push(`/login/auth?token=${code}`);
+          return router.push("/");
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         return alert(`[Error] ${error}`);
       });
-  };
-
-  const logout = async () => {
-    await fetch("http://localhost:4000/logout", {
-      method: "POST",
-    }).then((res) => {
-      if (res.status === 200) {
-        localStorage.setItem("loggedIn", "false");
-        return router.push("/login");
-      }
-    });
   };
 
   useEffect(() => {
@@ -79,7 +57,6 @@ const Auth = () => {
 
   return (
     <Box>
-      <button onClick={logout}>로그아웃</button>
       <Card sx={modalStyle}>
         <CircularProgress sx={{ color: "white" }} />
         <Typography sx={{ color: "white" }}>Loading...</Typography>
