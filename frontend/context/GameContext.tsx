@@ -16,7 +16,8 @@ type GameAction =
   | { type: "SET_LATENCY"; value: number }
   | { type: "A_SCORE"; value: number }
   | { type: "B_SCORE"; value: number }
-  | { type: "SCORE_RESET"; value: GameContextData };
+  | { type: "SCORE_RESET"; value: GameContextData }
+  | { type: "GAME_RESET"; value: GameContextData };
 
 const initialState: GameContextData = {
   gameMode: "",
@@ -59,8 +60,9 @@ function gameReducer(state: GameContextData, action: GameAction) {
     case "B_SCORE":
       return { ...state, bScore: action.value + 1 };
     case "SCORE_RESET":
-      return action.value;
-
+      return { ...state, state: action.value };
+    case "GAME_RESET":
+      return { ...state, state: action.value };
     default:
       return state;
   }

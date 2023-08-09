@@ -15,7 +15,6 @@ import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useEffect, useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
-import Pong from "@/components/game/ingame/PingPongCanvas";
 import { resetGameContextData, useGame } from "@/context/GameContext";
 
 const font = createTheme({

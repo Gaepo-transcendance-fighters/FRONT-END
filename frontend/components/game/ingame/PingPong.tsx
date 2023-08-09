@@ -5,7 +5,7 @@ import GamePaddle from "./GamePaddle";
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import GameBall from "./GameBall";
-import { useGame } from "@/context/GameContext";
+import { useGame, resetGameContextData } from "@/context/GameContext";
 
 interface ICor {
   x: number;
@@ -161,6 +161,7 @@ const PingPong = () => {
 
   useEffect(() => {
     if (state.aScore === 5 || state.bScore === 5) {
+      dispatch({ type: "GAME_RESET", value: resetGameContextData() });
       router.push("/gameresult");
     }
   }, [state.aScore, state.bScore]);
