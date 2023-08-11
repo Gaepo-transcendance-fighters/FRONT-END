@@ -1,18 +1,43 @@
 import React, { createContext, useContext, useReducer, ReactNode } from "react";
 
 interface GameContextData {
-  gameMode: string;
+  gameMode: number; // friend, normal, rank
   ballSpeedOption: number;
-  mapType: string;
+  mapType: number;
   aScore: number;
   bScore: number;
   latency: number;
 }
 
+enum SpeedOption {
+  speed1,
+  speed2,
+  speed3,
+}
+
+enum MapOption {
+  map1,
+  map2,
+  map3,
+}
+
+enum GameType {
+  FRIEND,
+  NORMAL,
+  RANK,
+}
+
+interface IGameOption {
+  gameType: GameType; // FRIED, NORMAL, RANK
+  userIdx: number;
+  speed: SpeedOption; //NORMAL, FAST, FASTER
+  mapNumber: MapOption; // A, B, C
+}
+
 type GameAction =
-  | { type: "SET_GAME_MODE"; value: string }
-  | { type: "SET_BALL_SPEED_OPTION"; value: string }
-  | { type: "SET_MAP_TYPE"; value: string }
+  | { type: "SET_GAME_MODE"; value: GameType }
+  | { type: "SET_BALL_SPEED_OPTION"; value: SpeedOption }
+  | { type: "SET_MAP_TYPE"; value: MapOption }
   | { type: "SET_LATENCY"; value: number }
   | { type: "A_SCORE"; value: number }
   | { type: "B_SCORE"; value: number }
@@ -20,9 +45,9 @@ type GameAction =
   | { type: "GAME_RESET"; value: GameContextData };
 
 const initialState: GameContextData = {
-  gameMode: "",
+  gameMode: 1,
   ballSpeedOption: 3,
-  mapType: "map2",
+  mapType: MapOption.map2,
   latency: 0,
   aScore: 0,
   bScore: 0,
@@ -30,9 +55,9 @@ const initialState: GameContextData = {
 
 export function resetGameContextData(): GameContextData {
   return {
-    gameMode: "",
+    gameMode: 1,
     ballSpeedOption: 3,
-    mapType: "map2",
+    mapType: MapOption.map2,
     latency: 0,
     aScore: 0,
     bScore: 0,
@@ -45,10 +70,11 @@ function gameReducer(state: GameContextData, action: GameAction) {
       return { ...state, gameMode: action.value };
     }
     case "SET_BALL_SPEED_OPTION": {
-      if (action.value === "speed1") return { ...state, ballSpeedOption: 2 };
-      else if (action.value === "speed2")
+      if (action.value === SpeedOption.speed1)
+        return { ...state, ballSpeedOption: 2 };
+      else if (action.value === SpeedOption.speed2)
         return { ...state, ballSpeedOption: 3 };
-      else if (action.value === "speed3")
+      else if (action.value === SpeedOption.speed3)
         return { ...state, ballSpeedOption: 4 };
     }
     case "SET_MAP_TYPE":
@@ -69,11 +95,11 @@ function gameReducer(state: GameContextData, action: GameAction) {
 }
 
 const GameContext = createContext<{
-  state: GameContextData;
-  dispatch: React.Dispatch<GameAction>;
+  gameState: GameContextData;
+  gameDispatch: React.Dispatch<GameAction>;
 }>({
-  state: initialState,
-  dispatch: () => {},
+  gameState: initialState,
+  gameDispatch: () => {},
 });
 
 export const useGame = () => {
@@ -81,10 +107,10 @@ export const useGame = () => {
 };
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(gameReducer, initialState);
+  const [gameState, gameDispatch] = useReducer(gameReducer, initialState);
 
   return (
-    <GameContext.Provider value={{ state, dispatch }}>
+    <GameContext.Provider value={{ gameState, gameDispatch }}>
       {children}
     </GameContext.Provider>
   );

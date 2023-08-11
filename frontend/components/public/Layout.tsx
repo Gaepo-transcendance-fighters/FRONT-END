@@ -57,18 +57,20 @@ interface IBlock {
 }
 
 interface IMaindata {
+  userObject: {};
   channelList: IChatRoom0[];
   friendList: IFriend[];
   blockList: IBlock[];
 }
 
 const Layout = () => {
-  const { state } = useAuth();
+  const { authState } = useAuth();
   const { roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
 
   useEffect(() => {
-    const MainEnter = (data: IMaindata) => {
+    const MainEnter = (data: any) => {
+      console.log(data);
       roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
@@ -83,14 +85,14 @@ const Layout = () => {
   useRequireAuth();
 
   useEffect(() => {
-    if (state.isLoggedIn) {
-      socket.emit("main_enter", { intra: "jaekim" }, (data: IMaindata) => {
+    if (authState.isLoggedIn) {
+      socket.emit("main_enter", { intra: "hoslim" }, (data: any) => {
         roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
         friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
         friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
       });
     }
-  }, [state.isLoggedIn]);
+  }, [authState.isLoggedIn]);
   // useEffect(() => {
   //   if (isLoggedIn) {
   //     socket.emit("main_enter", "intra_id", 상태코드);

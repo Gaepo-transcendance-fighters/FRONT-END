@@ -26,7 +26,7 @@ const startDirection: ICor[] = [
 ];
 
 const PingPong = () => {
-  const { state, dispatch } = useGame();
+  const { gameState, gameDispatch } = useGame();
   const router = useRouter();
   const requireAnimationRef = useRef(0);
 
@@ -41,7 +41,7 @@ const PingPong = () => {
   const handlePaddle = useCallback(
     (e: KeyboardEvent) => {
       const now = new Date().getTime();
-      if (now >= paddleStandard + state.latency) {
+      if (now >= paddleStandard + gameState.latency) {
         if (e.code === "ArrowUp") {
           setMyPaddle((prev) => {
             const newY = prev.y - 20;
@@ -63,7 +63,7 @@ const PingPong = () => {
         setPaddleStandard(newPaddleStandard);
       }
     },
-    [myPaddle.y, state.latency]
+    [myPaddle.y, gameState.latency]
   );
 
   const randomDirection = () => {
@@ -93,16 +93,16 @@ const PingPong = () => {
       setBallStandard(now);
       setPaddleStandard(now);
       setReady(true);
-    }, 2000 + state.latency);
+    }, 2000 + gameState.latency);
   };
 
   const ballMove = useCallback(() => {
     const now = new Date().getTime();
 
-    if (now >= ballStandard + state.latency) {
+    if (now >= ballStandard + gameState.latency) {
       const newLocation = {
-        x: ball.x + direction.x * state.ballSpeedOption,
-        y: ball.y + direction.y * state.ballSpeedOption,
+        x: ball.x + direction.x * gameState.ballSpeedOption,
+        y: ball.y + direction.y * gameState.ballSpeedOption,
       };
 
       if (
@@ -138,14 +138,14 @@ const PingPong = () => {
         setDirection((prev) => ({ x: prev.x, y: -prev.y }));
 
       if (newLocation.x <= -500) {
-        dispatch({ type: "B_SCORE", value: state.bScore });
+        gameDispatch({ type: "B_SCORE", value: gameState.bScore });
         resetBall();
         resetDerection();
         setReady(false);
         return;
       }
       if (newLocation.x > 500) {
-        dispatch({ type: "A_SCORE", value: state.aScore });
+        gameDispatch({ type: "A_SCORE", value: gameState.aScore });
         resetBall();
         resetDerection();
         setReady(false);
@@ -162,14 +162,14 @@ const PingPong = () => {
   useEffect(() => {});
 
   useEffect(() => {
-    if (state.aScore === 5 || state.bScore === 5) {
-      dispatch({ type: "GAME_RESET", value: resetGameContextData() });
+    if (gameState.aScore === 5 || gameState.bScore === 5) {
+      gameDispatch({ type: "GAME_RESET", value: resetGameContextData() });
       router.push("/gameresult");
     }
-  }, [state.aScore, state.bScore]);
+  }, [gameState.aScore, gameState.bScore]);
 
   useEffect(() => {
-    dispatch({ type: "SET_LATENCY", value: 12 });
+    gameDispatch({ type: "SET_LATENCY", value: 12 });
     if (!ready) return gameStart();
 
     window.addEventListener("keydown", handlePaddle);

@@ -29,18 +29,24 @@ const infomodalStyle = {
   p: 4,
 };
 
+enum GameType {
+  FRIEND,
+  NORMAL,
+  RANK,
+}
+
 const Game = () => {
   const router = useRouter();
-  const { state, dispatch } = useGame();
+  const { gameState, gameDispatch } = useGame();
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const ClickNomalGame = () => {
-    dispatch({ type: "SET_GAME_MODE", value: "normal" });
+    gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
     router.push("./optionselect");
   };
 
   const ClickRankGame = () => {
-    dispatch({ type: "SET_GAME_MODE", value: "rank" });
+    gameDispatch({ type: "SET_GAME_MODE", value: GameType.RANK });
     router.push("./inwaiting");
   };
 

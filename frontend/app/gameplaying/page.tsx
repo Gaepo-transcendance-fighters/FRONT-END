@@ -37,7 +37,7 @@ const modalStyle = {
 
 const GamePlaying = () => {
   const router = useRouter();
-  const { state, dispatch } = useGame();
+  const { gameState, gameDispatch } = useGame();
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const ClickNomalGame = () => {
@@ -46,7 +46,7 @@ const GamePlaying = () => {
 
   const BackToMain = () => {
     router.push("/");
-    dispatch({ type: "SCORE_RESET", value: resetGameContextData() });
+    gameDispatch({ type: "SCORE_RESET", value: resetGameContextData() });
   };
 
   const handleOpenModal_redir = () => {
@@ -61,7 +61,7 @@ const GamePlaying = () => {
   };
 
   useEffect(() => {
-    dispatch({ type: "SCORE_RESET", value: resetGameContextData() });
+    gameDispatch({ type: "SCORE_RESET", value: resetGameContextData() });
   }, []);
 
   return (
@@ -102,7 +102,7 @@ const GamePlaying = () => {
               }}
             >
               <Typography sx={{ fontSize: "3rem" }}>
-                {state.aScore} : {state.bScore}
+                {gameState.aScore} : {gameState.bScore}
               </Typography>
             </Card>
           </CardContent>
@@ -173,8 +173,8 @@ const GamePlaying = () => {
                 backgroundColor: "#05BEFF",
               }}
             >
-              Mode: {state.gameMode} || Speed: {state.ballSpeedOption} || Map:{" "}
-              {state.mapType}
+              Mode: {gameState.gameMode} || Speed: {gameState.ballSpeedOption}{" "}
+              || Map: {gameState.mapType}
             </Card>
             <Button variant="contained" onClick={handleOpenModal_redir}>
               상대방 탈주시

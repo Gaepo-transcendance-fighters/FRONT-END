@@ -29,10 +29,16 @@ import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useGame } from "@/context/GameContext";
 
+enum GameType {
+  FRIEND,
+  NORMAL,
+  RANK,
+}
+
 const inwaiting = () => {
   const router = useRouter();
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const { state, dispatch } = useGame();
+  const { gameState, gameDispatch } = useGame();
 
   const BackToMain = () => {
     router.push("/");
@@ -42,7 +48,7 @@ const inwaiting = () => {
     setOpenModal(true);
     setTimeout(() => {
       {
-        state.gameMode === "rank"
+        gameState.gameMode === GameType.RANK
           ? router.push("./gameplaying")
           : router.push("./optionselect");
       }
@@ -146,7 +152,7 @@ const inwaiting = () => {
                     </CardContent>
                   </CardContent>
                 </Card>
-                {state.gameMode == "rank" ? (
+                {gameState.gameMode == GameType.RANK ? (
                   <>
                     {" "}
                     <Card

@@ -22,12 +22,12 @@ import { useEffect } from "react";
 import { resetGameContextData } from "@/context/GameContext";
 
 const GameResult = () => {
-  const { state, dispatch } = useGame();
+  const { gameState, gameDispatch } = useGame();
 
   const router = useRouter();
 
   const BackToMain = () => {
-    dispatch({ type: "SCORE_RESET", value: resetGameContextData() });
+    gameDispatch({ type: "SCORE_RESET", value: resetGameContextData() });
     router.push("/");
   };
 
@@ -111,7 +111,7 @@ const GameResult = () => {
                   </Card>
                   <Card>
                     <Typography sx={{ fontSize: "2rem" }}>
-                      {state.aScore}
+                      {gameState.aScore}
                     </Typography>
                   </Card>
                   <Card
@@ -178,7 +178,7 @@ const GameResult = () => {
                   </Card>
                   <Card>
                     <Typography sx={{ fontSize: "2rem" }}>
-                      {state.bScore}
+                      {gameState.bScore}
                     </Typography>
                   </Card>
                   <Card
