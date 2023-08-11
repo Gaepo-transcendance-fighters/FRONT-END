@@ -1,3 +1,5 @@
+"use client";
+
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useEffect, useState, useRef } from "react";
 import ProtectedModal from "./ProtectedModal";
