@@ -60,7 +60,6 @@ const FriendList = () => {
 
   useEffect(() => {
     const cur = select ? friendState.blockList : friendState.friendList;
-    console.log(cur);
     setShowlist(cur);
   }, [friendState.friendList, friendState.blockList, select]);
 

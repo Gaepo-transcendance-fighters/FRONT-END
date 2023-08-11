@@ -1,50 +1,71 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-  Dispatch,
-  SetStateAction,
-  useReducer,
-} from "react";
+import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
-import { IChatRoom0, Mode } from "@/components/public/Layout";
 import { useRoom } from "@/context/RoomContext";
 
 export default function RoomTypeButton() {
-  const [dmRooms, setDmRooms] = useState<IChatRoom0[]>([]);
   const { roomState, roomDispatch } = useRoom();
   const [disabled, setDisabled] = useState(true);
 
-  const DivideRoom = () => {
-    roomState.rooms.map((room) => {
-      if (room.mode != Mode.PRIVATE) {
-        roomDispatch({ type: "SET_ROOMS", value: [room] });
-      } else {
-        setDmRooms((prev) => {
-          return [...prev, room];
-        });
+  /*
+  {
+    channelList[]? {
+      channel {
+        owner: string,
+        channelIdx: number,
+        mode : enum
       }
-    });
-  };
+  }
+*/
 
-  useEffect(() => {
-    DivideRoom();
-  }, [roomState.rooms]);
+  /*
+// emit - client 
+{
+	dmList[]? {
+	    dmChannel {
+	      targetNickname : string,
+	      targetIdx : number,
+	    }
+}
+*/
+  // useEffect(() => {
+  //   const ChatGetRoomList = (json: any) => {
+  //     roomDispatch({ type: "SET_NON_ROOMS", value: json.channelList });
+  //   };
+  //   socket.on("chat_get_roomlist", ChatGetRoomList);
+
+  //   return () => {
+  //     socket.off("chat_get_roomlist", ChatGetRoomList);
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   const ChatGetDmRoomList = (json: any) => {
+  //     roomDispatch({ type: "SET_DM_ROOMS", value: json.dmList });
+  //   };
+  //   socket.on("chat_get_DMlist", ChatGetDmRoomList);
+
+  //   return () => {
+  //     socket.off("chat_get_DMlist", ChatGetDmRoomList);
+  //   };
+  // }, []);
 
   const OnClick = (isNotDm: boolean) => {
-    roomDispatch({ type: "SET_ROOMS", value: [] });
-    setDmRooms([]);
-    DivideRoom();
-
     setDisabled(isNotDm);
   };
 
   const NonDmBtnClick = () => {
+    // socket.emit("chat_get_roomlist", (status_code: number) => {
+    //   console.log(status_code);
+    // });
     OnClick(true);
   };
 
   const DmBtnClick = () => {
+    // socket.emit("chat_get_DMlist", {userNickname : string, userIdx : number}, (status_code: number) => {
+    //   console.log(status_code);
+    // });
     OnClick(false);
   };
 
@@ -67,7 +88,7 @@ export default function RoomTypeButton() {
         </button>
       </div>
       <Rooms
-        roomsProp={disabled ? roomState.rooms : dmRooms}
+        currentRoomList={disabled ? roomState.nonDmRooms : roomState.dmRooms}
         channelType={disabled}
       />
     </>

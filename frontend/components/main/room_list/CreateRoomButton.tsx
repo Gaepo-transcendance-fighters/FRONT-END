@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 import CreateRoomModal from "./CreateRoomModal";
 
 export default function CreateRoomButton({

@@ -7,6 +7,7 @@ import { useRoom } from "@/context/RoomContext";
 
 export default function RoomList() {
   const { roomState } = useRoom();
+
   return (
     <>
       <CardContent
