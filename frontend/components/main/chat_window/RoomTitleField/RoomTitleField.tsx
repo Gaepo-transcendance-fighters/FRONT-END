@@ -1,15 +1,14 @@
 "use client";
 
-import Stack from "../Stack";
+import Stack from "./RoomNameStack";
 import Typography from "@mui/material/Typography";
 import VpnKeyTwoToneIcon from "@mui/icons-material/VpnKeyTwoTone";
-import SettingsIcon from "@mui/icons-material/Settings";
 import "./RoomTitleField.css";
-import { Box, Modal, Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import SettingIconButton from "./SettingIconButton";
 import { useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { Dispatch, SetStateAction } from "react";
+import { useRoom } from "@/context/RoomContext";
 
 export interface IChatRoom {
   roomName: string;
@@ -35,29 +34,14 @@ const mockChatRoomList: IChatRoom[] = [
   },
 ];
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-const RoomTitleField = ({
-  setFunction,
-}: {
-  setFunction: Dispatch<SetStateAction<boolean>>;
-}) => {
+const RoomTitleField = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { roomDispatch } = useRoom();
 
   const leaveRoom = () => {
-    setFunction(false);
+    roomDispatch({ type: "SET_ISOPEN", value: false });
   };
 
   return (

@@ -51,7 +51,7 @@ const initialState: RoomContextData = {
   nonDmRooms: [],
   currentRoom: null,
   currentRoomMember: [],
-  isOpen: false,
+  isOpen: true,
 };
 
 const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
