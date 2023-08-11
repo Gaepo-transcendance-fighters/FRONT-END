@@ -64,7 +64,7 @@ interface IMaindata {
 
 const Layout = () => {
   const { state } = useAuth();
-  const { roomDispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
 
   useEffect(() => {
@@ -83,6 +83,15 @@ const Layout = () => {
   useEffect(() => {
     const ChatEnterNoti = (data: any) => {
       console.log("data : ", data);
+      //if data.nickname doesn't exist in memberlist
+      let exists = false;
+
+      roomState.currentRoomMemberList.map((person) => {
+        return person.nickname === data.nickname
+          ? (exists = true)
+          : (exists = false);
+      });
+      return exists ? null : roomDispatch({ type: "ADD_CUR_MEM", value: data });
     };
     socket.on("chat_enter_noti", ChatEnterNoti);
 
