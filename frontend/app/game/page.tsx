@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 
 import { main } from "@/components/public/Layout";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useGame } from "@/context/GameContext";
@@ -39,7 +40,6 @@ const Game = () => {
   };
 
   const ClickRankGame = () => {
-    //임시로해놓겠습니다
     dispatch({ type: "SET_GAME_MODE", value: "rank" });
     router.push("./inwaiting");
   };
@@ -110,7 +110,8 @@ const Game = () => {
                       justifyContent: "center",
                     }}
                   >
-                    <Typography>How to?</Typography>
+                    {/* 상단 안내메세지 */}
+                    How to?
                   </Card>
 
                   <Card
@@ -145,7 +146,7 @@ const Game = () => {
                           backgroundColor: main.main3,
                         }}
                       >
-                        <Typography>일반게임 안내</Typography>
+                        일반게임 안내
                       </Card>
                       {/* 일반설명 */}
                       <Card
@@ -158,9 +159,7 @@ const Game = () => {
                           border: "1px solid black",
                         }}
                       >
-                        <Typography>
-                          설명이들어가야하는데뭘적어야할지모르겠어요
-                        </Typography>
+                        설명이들어가야하는데뭘적어야할지모르겠어요
                       </Card>
                     </CardContent>
 
@@ -185,7 +184,7 @@ const Game = () => {
                           backgroundColor: main.main3,
                         }}
                       >
-                        <Typography>랭크게임 안내</Typography>
+                        랭크게임 안내
                       </Card>
                       {/* 랭크설명 */}
                       <Card
@@ -198,9 +197,7 @@ const Game = () => {
                           border: "1px solid black",
                         }}
                       >
-                        <Typography>
-                          설명이들어가야하는데뭘적어야할지모르겠어요
-                        </Typography>
+                        설명이들어가야하는데뭘적어야할지모르겠어요
                       </Card>
                     </CardContent>
 
