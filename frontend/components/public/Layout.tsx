@@ -7,7 +7,9 @@ import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
+import io from "socket.io-client";
 import InviteGame from "../main/InviteGame/InviteGame";
+import WaitAccept from "../main/InviteGame/WaitAccept";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
@@ -22,6 +24,8 @@ export const main = {
   main4: "#265ECF",
   main5: "#214C97",
   main6: "#183C77",
+  main7: "#48a0ed",
+  main8: "#64D9F9",
 };
 
 export enum Permission {
@@ -120,6 +124,9 @@ const Layout = () => {
           }}
         >
           <Myprofile />
+          {/* <Myprofile Img={소켓으로받아온 imguri링크} Nickname={소켓으로받아온 닉네임}/> */}
+          {/* <InviteGame /> */}
+          {/* <WaitAccept /> */}
         </CardContent>
         <FriendList />
       </Stack>

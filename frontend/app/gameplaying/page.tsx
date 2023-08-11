@@ -13,7 +13,9 @@ import {
 
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import PingPong from "@/components/game/ingame/PingPong";
+import { resetGameContextData, useGame } from "@/context/GameContext";
 
 const font = createTheme({
   typography: {
@@ -35,15 +37,18 @@ const modalStyle = {
 
 const GamePlaying = () => {
   const router = useRouter();
+  const { state, dispatch } = useGame();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
   const ClickNomalGame = () => {
     router.push("./optionselect");
   };
 
   const BackToMain = () => {
     router.push("/");
+    dispatch({ type: "SCORE_RESET", value: resetGameContextData() });
   };
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const handleOpenModal_redir = () => {
     setOpenModal(true);
     setTimeout(() => {
@@ -54,6 +59,10 @@ const GamePlaying = () => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
+  useEffect(() => {
+    dispatch({ type: "SCORE_RESET", value: resetGameContextData() });
+  }, []);
 
   return (
     <ThemeProvider theme={font}>
@@ -92,14 +101,17 @@ const GamePlaying = () => {
                 border: "2px solid black",
               }}
             >
-              <Typography sx={{ fontSize: "3rem" }}>100 : 105</Typography>
+              <Typography sx={{ fontSize: "3rem" }}>
+                {state.aScore} : {state.bScore}
+              </Typography>
             </Card>
           </CardContent>
-          <CardContent>
+
+          <CardContent sx={{ transform: "translateX(3%)" }}>
             <Card
               style={{
-                width: "100%",
-                height: "65vh",
+                width: "max-content",
+                height: "max-content",
                 border: "2px solid black",
                 display: "flex",
                 justifyContent: "space-around",
@@ -109,7 +121,9 @@ const GamePlaying = () => {
             >
               <Card
                 style={{
-                  width: "10%",
+                  width: "max-content",
+                  padding: "20px",
+                  margin: "30px",
                   height: "15%",
                   border: "2px solid black",
                   display: "flex",
@@ -119,21 +133,13 @@ const GamePlaying = () => {
               >
                 Player 1
               </Card>
+              <PingPong />
+              {/* <Pong /> */}
               <Card
                 style={{
-                  width: "70%",
-                  height: "80%",
-                  border: "2px solid black",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
-                게임올라갈부분
-              </Card>
-              <Card
-                style={{
-                  width: "10%",
+                  width: "max-content",
+                  padding: "20px",
+                  margin: "30px",
                   height: "15%",
                   border: "2px solid black",
                   display: "flex",
@@ -167,7 +173,8 @@ const GamePlaying = () => {
                 backgroundColor: "#05BEFF",
               }}
             >
-              Mode~~~ || Speed~~~ || Map~~
+              Mode: {state.gameMode} || Speed: {state.ballSpeedOption} || Map:{" "}
+              {state.mapType}
             </Card>
             <Button variant="contained" onClick={handleOpenModal_redir}>
               상대방 탈주시
