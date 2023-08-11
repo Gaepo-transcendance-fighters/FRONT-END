@@ -1,14 +1,13 @@
 "use client";
 
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/style.css";
 import { AuthProvider } from "@/context/AuthContext";
-import { useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { RoomProvider } from "@/context/RoomContext";
 import { io } from "socket.io-client";
 import { FriendProvide } from "@/context/FriendContext";
+import { GameProvider } from "@/context/GameContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,6 +35,7 @@ export default function RootLayout({
   return (
     <ThemeProvider theme={font}>
       <AuthProvider>
+        <GameProvider>
         <RoomProvider>
           <FriendProvide>
             <html lang="en">
@@ -54,6 +54,7 @@ export default function RootLayout({
             </html>
           </FriendProvide>
         </RoomProvider>
+        </GameProvider>
       </AuthProvider>
     </ThemeProvider>
   );
