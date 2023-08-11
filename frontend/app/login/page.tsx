@@ -12,8 +12,6 @@ import {
 import { useRouter } from "next/navigation";
 import { main } from "@/font/color";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
-import axios from "axios";
 
 const modalStyle = {
   position: "absolute" as "absolute",

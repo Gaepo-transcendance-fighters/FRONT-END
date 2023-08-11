@@ -2,7 +2,7 @@
 
 import { Box, Card, CircularProgress, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 
 const modalStyle = {
@@ -21,8 +21,19 @@ const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
 
+  interface Data {
+    token: string;
+    jwt: string;
+    user: {
+      userIdx: number;
+      intra: string;
+      imgUri: string;
+      accessToken: string;
+      email: string;
+    };
+  }
   const postCode = async (code: string) => {
-    await fetch("http://172.20.10.13:4000/login/auth", {
+    await fetch("http://localhost:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -34,15 +45,16 @@ const Auth = () => {
     })
       .then(async (res) => {
         if (res.status === 200) {
-          const data = await res.json();
-          console.log(data.token);
-          localStorage.setItem("authorization", data.token);
           localStorage.setItem("loggedIn", "true");
-          return router.push("/");
+          const data: Data = await res.json();
+          console.log(data);
+          localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
+          localStorage.setItem("token", data.jwt);
+          return router.push(`/`);
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         return alert(`[Error] ${error}`);
       });
   };
