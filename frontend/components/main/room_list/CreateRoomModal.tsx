@@ -41,17 +41,17 @@ export default function CreateRoomModal({
       setValue("");
       setOpen(false);
     };
-    socket.on("chat_create_room", ChatCreateRoom);
+    socket.on("BR_chat_create_room", ChatCreateRoom);
 
     return () => {
-      socket.off("chat_create_room", ChatCreateRoom);
+      socket.off("BR_chat_create_room", ChatCreateRoom);
     };
   }, []);
   //userId=?
 
   const OnClick = () => {
     socket.emit(
-      "chat_create_room",
+      "BR_chat_create_room",
       JSON.stringify({ password: value }),
       (res: any) => {}
     );

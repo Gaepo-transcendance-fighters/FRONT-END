@@ -65,7 +65,7 @@ export default function ProtectedModal({
     socket.emit(
       "chat_enter",
       JSON.stringify({
-        userNickname: "intra_id",
+        userNickname: "hoslim",
         userIdx: 3,
         channelIdx: room.channelIdx,
         password: pwRef.current,

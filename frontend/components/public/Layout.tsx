@@ -80,6 +80,17 @@ const Layout = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const ChatEnterNoti = (data: any) => {
+      console.log("data : ", data);
+    };
+    socket.on("chat_enter_noti", ChatEnterNoti);
+
+    return () => {
+      socket.off("chat_enter_noti", ChatEnterNoti);
+    };
+  });
+
   useRequireAuth();
 
   useEffect(() => {
@@ -95,17 +106,6 @@ const Layout = () => {
       );
     }
   }, [state.isLoggedIn]);
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     socket.emit("main_enter", "intra_id", 상태코드);
-  //   }
-  // }, [isLoggedIn]);
-
-  // socket.io로 mock data 받았다고 가정했을때.
-  // useEffect(() => {
-  //   setRooms({ type: "main-enter", payload: mockChatRoomList0 });
-  // }, []);
-  // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 
   return (
     <Box sx={{ display: "flex" }}>
