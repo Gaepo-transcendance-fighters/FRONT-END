@@ -1,5 +1,5 @@
 "use client";
-import { ThemeProvider } from "@emotion/react";
+
 import {
   Button,
   Card,
@@ -12,8 +12,9 @@ import {
 } from "@mui/material";
 import io from "socket.io-client";
 
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
+
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
@@ -40,11 +41,12 @@ const OptionSelect = () => {
   const router = useRouter();
 
   const [selectedSpeedOption, setSelectedSpeedOption] =
-    useState<SpeedOption | null>(null);
+    useState<SpeedOption | null>("speed2");
 
   const [selectedMapOption, setSelectedMapOption] = useState<MapOption | null>(
-    null
+    "map2"
   );
+  const [countdown, setCountdown] = useState<number>(3);
 
   const handleSpeedOptionChange = (option: SpeedOption) => {
     setSelectedSpeedOption((prevOption) =>
@@ -58,19 +60,22 @@ const OptionSelect = () => {
     );
   };
 
-  useEffect(() => {
-    const checkOption = (value: IOption) => {
-      console.log(value);
-    };
-    socket.on("game_option", checkOption);
+ useEffect(() => {
+    countdown > 0 && setTimeout(() => setCountdown(countdown - 1), 1000);
+    // 나중에 이거 풀면됨
+    if (countdown == 0) cntRedir();
+  }, [countdown]);
 
-    return () => {
-      socket.off("game_option", checkOption);
-    };
-  }, []);
+  const cntRedir = () => {
+    dispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
+    dispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
 
+    setTimeout(() => {
+      router.push("./inwaiting");
+    }, 300);
+  };
+  
   return (
-    <ThemeProvider theme={font}>
       <Card sx={{ display: "flex" }}>
         <Stack
           sx={{
@@ -90,7 +95,7 @@ const OptionSelect = () => {
           >
             <Button
               style={{
-                width: "12%",
+                width: "max-content",
                 height: "3vh",
                 border: "2px solid black",
                 display: "flex",
@@ -177,7 +182,9 @@ const OptionSelect = () => {
                   {/* 속도체크박스 */}
                   <FormControlLabel
                     disabled={
-                      selectedSpeedOption && selectedSpeedOption !== "speed1"
+                      selectedSpeedOption === "speed1"
+                        ? true
+                        : false || countdown == 0
                         ? true
                         : false
                     }
@@ -192,7 +199,9 @@ const OptionSelect = () => {
                   />
                   <FormControlLabel
                     disabled={
-                      selectedSpeedOption && selectedSpeedOption !== "speed2"
+                      selectedSpeedOption === "speed2"
+                        ? true
+                        : false || countdown == 0
                         ? true
                         : false
                     }
@@ -207,7 +216,9 @@ const OptionSelect = () => {
                   />
                   <FormControlLabel
                     disabled={
-                      selectedSpeedOption && selectedSpeedOption !== "speed3"
+                      selectedSpeedOption === "speed3"
+                        ? true
+                        : false || countdown == 0
                         ? true
                         : false
                     }
@@ -260,7 +271,9 @@ const OptionSelect = () => {
                   {/* 맵옵션 버튼 들어갈 자리 */}
                   <FormControlLabel
                     disabled={
-                      selectedMapOption && selectedMapOption !== "map1"
+                      selectedMapOption === "map1"
+                        ? true
+                        : false || countdown == 0
                         ? true
                         : false
                     }
@@ -275,7 +288,9 @@ const OptionSelect = () => {
                   />
                   <FormControlLabel
                     disabled={
-                      selectedMapOption && selectedMapOption !== "map2"
+                      selectedMapOption === "map2"
+                        ? true
+                        : false || countdown == 0
                         ? true
                         : false
                     }
@@ -290,7 +305,9 @@ const OptionSelect = () => {
                   />
                   <FormControlLabel
                     disabled={
-                      selectedMapOption && selectedMapOption !== "map3"
+                      selectedMapOption === "map3"
+                        ? true
+                        : false || countdown == 0
                         ? true
                         : false
                     }
@@ -317,34 +334,51 @@ const OptionSelect = () => {
                   backgroundColor: main.main3,
                 }}
               >
-                <Button
-                  disabled={
-                    selectedMapOption != null && selectedSpeedOption != null
-                      ? false
-                      : true
-                  }
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    border: "5px solid RED",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "2rem",
-                    backgroundColor: "#F8C800",
-                  }}
-                  onClick={() => {
-                    return router.push("./inwaiting");
-                  }}
-                >
-                  Get Ready!
-                </Button>
+                {countdown == 0 ? (
+                  <>
+                    <Card
+                      style={{
+                        width: "100%",
+                        height: "90%",
+                        border: "5px solid RED",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "2rem",
+                        backgroundColor: "#F8C800",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "2rem" }}>
+                        {" "}
+                        GET READY!{" "}
+                      </Typography>
+                    </Card>
+                  </>
+                ) : (
+                  <>
+                    <Card
+                      style={{
+                        width: "100%",
+                        height: "90%",
+                        border: "5px solid #265ECF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "2rem",
+                        backgroundColor: main.main0,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "2rem" }}>
+                        {countdown}
+                      </Typography>
+                    </Card>
+                  </>
+                )}
               </Card>
             </Card>
           </CardContent>
         </Stack>
       </Card>
-    </ThemeProvider>
   );
 };
 

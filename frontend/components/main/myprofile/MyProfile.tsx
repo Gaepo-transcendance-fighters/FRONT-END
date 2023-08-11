@@ -1,3 +1,5 @@
+"use client";
+
 import { main } from "@/font/color";
 import {
   Avatar,
@@ -7,18 +9,35 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
   },
 });
 
+{
+  /* <Myprofile Img={소켓으로받아온 imguri링크} Nickname={소켓으로받아온 닉네임}/> */
+  // const Myprofile = (props) => {
+}
 const Myprofile = () => {
   const router = useRouter();
+  const searchparams = useSearchParams();
+
+  const createQuery = useCallback(
+    (nickname: string) => {
+      const params = new URLSearchParams(searchparams.toString());
+      params.set("name", nickname);
+
+      return params.toString();
+    },
+    [searchparams]
+  );
 
   const RedirMyprofile = () => {
-    router.push("./mypage");
+    router.push("./mypage" + "?" + createQuery("hoslim"));
   };
 
   return (
@@ -57,6 +76,7 @@ const Myprofile = () => {
               }}
             >
               NickName
+              {/* props.Nickname*/}
             </Typography>
           </Card>
         </div>

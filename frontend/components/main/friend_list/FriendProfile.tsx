@@ -13,7 +13,8 @@ import {
 import { useState } from "react";
 import { IFriend } from "./FriendList";
 import Image from "next/image";
-import InviteGame from "../InviteGame/InviteGame";
+import WaitAccept from "../InviteGame/WaitAccept";
+import Profilegamelog from "../myprofile/profilegamelog";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -21,7 +22,7 @@ const modalStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 500,
-  height: 530,
+  height: 700,
   bgcolor: "#65d9f9",
   border: "2px solid #000",
   boxShadow: 24,
@@ -102,7 +103,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 상태: {prop.isOnline ? loginOn : loginOff}
               </Typography>
               <Stack direction={"row"} spacing={2}>
-                <InviteGame />
+                <WaitAccept />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
@@ -184,48 +185,25 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
           <Card
             sx={{
               backgroundColor: "#3478c5",
-              height: "170px",
+              height: "55%",
+              overflowY: "scroll",
             }}
           >
             <CardContent sx={{ paddingBottom: 0 }}>
               <Typography>전적 기록</Typography>
             </CardContent>
-            <Stack direction={"row"}>
-              <Card
-                sx={{
-                  margin: 1,
-                  width: "100%",
-                  height: "120px",
-                  backgroundColor: "#48a0ed",
-                  overflow: "scroll",
-                }}
-              >
-                <Card
-                  sx={{
-                    backgroundColor: "#86d8f7",
-                    margin: 1,
-                  }}
-                >
-                  <Stack direction={"row"}>
-                    <CardContent
-                      sx={{ "&:last-child": { paddingBottom: "16px" } }}
-                    >
-                      <Typography>WIN</Typography>
-                    </CardContent>
-                    <CardContent
-                      sx={{ "&:last-child": { paddingBottom: "16px" } }}
-                    >
-                      <Typography>hoslim VS jujeon</Typography>
-                    </CardContent>
-                    <CardContent
-                      sx={{ "&:last-child": { paddingBottom: "16px" } }}
-                    >
-                      <Typography>5 : 3</Typography>
-                    </CardContent>
-                  </Stack>
-                </Card>
-              </Card>
-            </Stack>
+            <Box
+              sx={{
+                listStyleType: "none",
+                overflowY: "scroll",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <Profilegamelog />
+            </Box>
           </Card>
         </Box>
       </Modal>
