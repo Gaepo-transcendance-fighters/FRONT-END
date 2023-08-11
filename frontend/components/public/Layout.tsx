@@ -80,11 +80,15 @@ const Layout = () => {
 
   useEffect(() => {
     if (state.isLoggedIn) {
-      socket.emit("main_enter", { intra: "jaekim" }, (data: IMaindata) => {
-        roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
-        friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
-        friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-      });
+      socket.emit(
+        "main_enter",
+        JSON.stringify({ intra: "jaekim" }),
+        (data: IMaindata) => {
+          roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+          friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+          friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+        }
+      );
     }
   }, [state.isLoggedIn]);
   // useEffect(() => {

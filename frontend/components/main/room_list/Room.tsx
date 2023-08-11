@@ -46,12 +46,12 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   const RoomClick = (room: IChatRoom0) => {
     socket.emit(
       "chat_enter",
-      {
+      JSON.stringify({
         userNickname: "intra_id",
         userIdx: 3,
         channelIdx: room.channelIdx,
         password: pwRef.current,
-      },
+      }),
       (statusCode: number) => {
         //   if (statusCode가 정상) {
         if (room.mode === Mode.PROTECTED) handleOpen();
