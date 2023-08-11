@@ -41,16 +41,20 @@ export default function CreateRoomModal({
       setValue("");
       setOpen(false);
     };
-    socket.on("BR_chat_create_room", ChatCreateRoom);
+    socket.on("chat_create_room", ChatCreateRoom);
 
     return () => {
-      socket.off("BR_chat_create_room", ChatCreateRoom);
+      socket.off("chat_create_room", ChatCreateRoom);
     };
   }, []);
   //userId=?
 
   const OnClick = () => {
-    socket.emit("BR_chat_create_room", JSON.stringify({ password: value }), (res: any) => {});
+    socket.emit(
+      "chat_create_room",
+      JSON.stringify({ password: value }),
+      (res: any) => {}
+    );
     //TODO : dto 정하는게 어떨까... < 추천
     // 일단은 이렇게. dto는 나중에
   };
