@@ -4,8 +4,8 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
-import { useRoom } from "@/context/RoomContext";
-import { Mode } from "@/context/RoomContext";
+import { IChatRoom0, useRoom } from "@/context/RoomContext";
+import { socket } from "@/app/layout";
 
 const style = {
   position: "absolute" as "absolute",
@@ -35,35 +35,24 @@ export default function CreateRoomModal({
     setOpen(false);
   };
 
-  // useEffect(() => {
-  //   const ChatCreateRoom = (json) => {
-  // roomDispatch({ type: "ADD_ROOM", value: json.channel });
-  //   };
-  //   socket.on("main_enter", ChatCreateRoom, json);
+  useEffect(() => {
+    const ChatCreateRoom = (json: any) => {
+      roomDispatch({ type: "ADD_ROOM", value: json as IChatRoom0 });
+      setValue("");
+      setOpen(false);
+    };
+    socket.on("BR_chat_create_room", ChatCreateRoom);
 
-  //   return () => {
-  //     socket.off("main_enter", ChatCreateRoom, json);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("BR_chat_create_room", ChatCreateRoom);
+    };
+  }, []);
+  //userId=?
 
   const OnClick = () => {
-    //   socket.emit("chat_create_room", { password: value }, 상태코드);
-    //   if (정상상태코드) {
-    //   setValue("");
-    //   setOpen(false);
-    //   }
-    // /* 이 파일에서 socket 부분 주석처리하고 이 부분 주석 해제하면 정상으로 띄워짐
-    roomDispatch({
-      type: "ADD_ROOM",
-      value: {
-        channelIdx: 0,
-        owner: "jeeekimmm",
-        mode: Mode.PUBLIC,
-      },
-    });
-    setValue("");
-    setOpen(false);
-    // */
+    socket.emit("BR_chat_create_room", { password: value }, (res: any) => {});
+    //TODO : dto 정하는게 어떨까... < 추천
+    // 일단은 이렇게. dto는 나중에
   };
 
   return (

@@ -1,8 +1,9 @@
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useEffect, useState, useRef } from "react";
 import ProtectedModal from "./ProtectedModal";
-import { mockMemberList0, useRoom } from "@/context/RoomContext";
+import { useRoom } from "@/context/RoomContext";
 import { IChatRoom0, Mode } from "@/context/RoomContext";
+import { socket } from "@/app/layout";
 
 export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -29,52 +30,57 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
       : null;
   };
 
-  // useEffect(() => {
-  //   const ChatEnter = (json) => {
-  //     roomDispatch({ type: "SET_CUR_MEM", value: json.member });
-  //     //channelIdx 안보내줘도 될듯?
-  //   };
-  //   socket.on("chat_enter", ChatEnter);
+  useEffect(() => {
+    const ChatEnter = (json: any) => {
+      console.log("json : ", json);
+      roomDispatch({ type: "SET_CUR_MEM", value: json.member });
+      //channelIdx 안보내줘도 될듯?
+    };
+    socket.on("chat_enter", ChatEnter);
 
-  //   return () => {
-  //     socket.off("chat_enter", ChatEnter);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("chat_enter", ChatEnter);
+    };
+  }, []);
 
   const RoomClick = (room: IChatRoom0) => {
-    // socket.emit("chat_enter", { roomId: room.channelIdx, password? : pwRef.current }, (statusCode) => {
-    //   if (statusCode가 정상) {
-    if (room.mode === Mode.PROTECTED) handleOpen();
-    else {
-      if (roomState.currentRoom !== room) {
-        roomDispatch({ type: "SET_CURRENTROOM", value: room });
-        roomDispatch({ type: "SET_CUR_MEM", value: mockMemberList0 });
+    socket.emit(
+      "chat_enter",
+      {
+        userNickname: "intra_id",
+        userIdx: 3,
+        channelIdx: room.channelIdx,
+        password: pwRef.current,
+      },
+      (statusCode: number) => {
+        //   if (statusCode가 정상) {
+        if (room.mode === Mode.PROTECTED) handleOpen();
+        else {
+          if (roomState.currentRoom !== room) {
+            roomDispatch({ type: "SET_CURRENTROOM", value: room });
+          }
+          roomDispatch({ type: "SET_ISOPEN", value: true });
+        }
+        //   }
       }
-      roomDispatch({ type: "SET_ISOPEN", value: true });
-    }
-    //     }
-    //   });
+    );
   };
-
-  /*
-  protected > handleopen()
-  !protected > aroom=room > roomDispatch({ type: "SET_ISOPEN" ...)
-             > aroom!=room > roomDispatch({type : "SET_CURRENTROOM" ...)   roomDispatch({ type: "SET_ISOPEN" ...)
-  */
 
   return (
     <>
-      <button key={idx} className="item" onClick={() => RoomClick(room)}>
-        <div className="roomidx">{leftPadding(room.channelIdx)}</div>
-        <div className="owner">{room.owner}'s</div>
-        <div className="lock">
-          {room.mode === Mode.PROTECTED ? (
-            <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
-          ) : (
-            ""
-          )}
-        </div>
-      </button>
+      <>
+        <button key={idx} className="item" onClick={() => RoomClick(room)}>
+          <div className="roomidx">{leftPadding(room.channelIdx)}</div>
+          <div className="owner">{room.owner}'s</div>
+          <div className="lock">
+            {room.mode === Mode.PROTECTED ? (
+              <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
+            ) : (
+              ""
+            )}
+          </div>
+        </button>
+      </>
       <ProtectedModal
         open={open}
         handleClose={handleClose}

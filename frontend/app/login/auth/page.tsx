@@ -30,14 +30,14 @@ const modalStyle = {
 const Auth = () => {
   const [value, setValue] = useState("");
 
-  const { setIsLoggedIn } = useAuth();
+  const { state, dispatch } = useAuth();
   const router = useRouter();
 
   const handleLogin = () => {
     // const res = await()
     if (!value) return alert("Please enter your nickname");
     localStorage.setItem("loggedIn", "true");
-    setIsLoggedIn(true);
+    dispatch({ type: "LOGIN", value: true });
     router.push("/");
   };
 

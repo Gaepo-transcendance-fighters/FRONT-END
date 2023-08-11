@@ -25,61 +25,10 @@ export interface IMember {
 }
 
 export interface IChatRoom0 {
-  channelIdx: number;
   owner: string;
+  channelIdx: number;
   mode: Mode;
 }
-
-export const mockChatRoomList0: IChatRoom0[] = [
-  {
-    channelIdx: 0,
-    owner: "jeekim",
-    mode: Mode.PUBLIC,
-  },
-  {
-    channelIdx: 1,
-    owner: "jaekim",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 2,
-    owner: "0123456789",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 3,
-    owner: "bbbbbbbbbb",
-    mode: Mode.PUBLIC,
-  },
-  {
-    channelIdx: 4,
-    owner: "0123456789",
-    mode: Mode.PROTECTED,
-  },
-  {
-    channelIdx: 5,
-    owner: "zzzzzzzzzz",
-    mode: Mode.PROTECTED,
-  },
-];
-
-export const mockMemberList0: IMember[] = [
-  {
-    nickname: "jaekim",
-    imgUri: "/seal.png",
-    permission: Permission.OWNER,
-  },
-  {
-    nickname: "haryu",
-    imgUri: "/seal.png",
-    permission: Permission.ADMIN,
-  },
-  {
-    nickname: "wochae",
-    imgUri: "/seal.png",
-    permission: Permission.MEMBER,
-  },
-];
 
 interface RoomContextData {
   dmRooms: IChatRoom0[];
@@ -90,7 +39,7 @@ interface RoomContextData {
 }
 
 type RoomAction =
-  | { type: "SET_DM"; value: IChatRoom0[] }
+  | { type: "SET_DM_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_NON_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
   | { type: "SET_CUR_MEM"; value: IMember[] }
@@ -109,7 +58,7 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
   switch (action.type) {
     case "SET_ISOPEN":
       return { ...roomState, isOpen: action.value };
-    case "SET_DM":
+    case "SET_DM_ROOMS":
       return { ...roomState, dmRooms: action.value };
     case "SET_NON_ROOMS":
       return { ...roomState, nonDmRooms: action.value };
@@ -138,27 +87,6 @@ const RoomContext = createContext<{
 export const useRoom = () => {
   return useContext(RoomContext);
 };
-
-type actionType = {
-  type: string;
-  payload: IChatRoom0[];
-};
-
-// const RoomReducer = (roomState: IChatRoom0[], action: actionType) => {
-//   roomState;
-//   switch (action.type) {
-//     case "main-enter":
-//       return action.payload;
-//     case "create-room":
-//       return [...roomState, action.payload[0]];
-//     case "empty-nondmroom":
-//       return action.payload;
-//     case "divide-room":
-//       return [...roomState, action.payload[0]];
-//     default:
-//       return roomState;
-//   }
-// };
 
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
   const [roomState, roomDispatch] = useReducer(RoomReducer, initialState);
