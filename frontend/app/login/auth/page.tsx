@@ -2,7 +2,7 @@
 
 import { Box, Card, CircularProgress, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { main } from "@/font/color";
 
 const modalStyle = {

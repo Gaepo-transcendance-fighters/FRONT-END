@@ -121,7 +121,7 @@ const FriendList = () => {
             my: "7px",
             backgroundColor: main.main5,
             overflow: "scroll",
-            height: "45vh",
+            height: "43vh",
             padding: "10px",
             borderRadius: "10px",
           }}
