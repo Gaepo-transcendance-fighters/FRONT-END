@@ -57,9 +57,9 @@ interface IBlock {
 }
 
 interface IMaindata {
-  channel: IChatRoom0[];
-  friend: IFriend[];
-  block: IBlock[];
+  channelList: IChatRoom0[];
+  friendList: IFriend[];
+  blockList: IBlock[];
 }
 
 const Layout = () => {
@@ -69,10 +69,9 @@ const Layout = () => {
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
-      console.log("fetch", data);
-      roomDispatch({ type: "SET_ROOMS", value: data.channel });
-      friendDispatch({ type: "SET_FRIENDLIST", value: data.friend });
-      friendDispatch({ type: "SET_BLOCKLIST", value: data.block });
+      roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+      friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+      friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
     };
     socket.on("main_enter", MainEnter);
 
@@ -85,17 +84,22 @@ const Layout = () => {
 
   useEffect(() => {
     if (state.isLoggedIn) {
-      socket.emit("main_enter", "intra_id", (data: IMaindata) => {
-        roomDispatch({ type: "SET_ROOMS", value: data.channel });
-        friendDispatch({ type: "SET_FRIENDLIST", value: data.friend });
-        friendDispatch({ type: "SET_BLOCKLIST", value: data.block });
+      socket.emit("main_enter", { intra: "jaekim" }, (data: IMaindata) => {
+        roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+        friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+        friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
       });
     }
   }, [state.isLoggedIn]);
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     socket.emit("main_enter", "intra_id", 상태코드);
+  //   }
+  // }, [isLoggedIn]);
 
   // socket.io로 mock data 받았다고 가정했을때.
   // useEffect(() => {
-  //   roomDispatch({ type: "SET_ROOMS", value: mockChatRoomList0 });
+  //   setRooms({ type: "main-enter", payload: mockChatRoomList0 });
   // }, []);
   // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 

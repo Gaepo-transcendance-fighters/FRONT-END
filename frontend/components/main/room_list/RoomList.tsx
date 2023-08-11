@@ -1,20 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { Card, CardContent } from "@mui/material";
 import Title from "./Title";
 import RoomTypeButton from "./RoomTypeButton";
 import { main } from "@/font/color";
+import { useRoom } from "@/context/RoomContext";
 
 export default function RoomList() {
-  const [showMembersList, setShowMembersList] = useState(false);
+  const { roomState } = useRoom();
+
   return (
     <>
       <Card sx={{ margin: 1, borderRadius: "10px" }}>
         <CardContent
           id="portal"
           sx={{ "&:last-child": { pb: 0 }, backgroundColor: main.main2 }}
-          className={showMembersList ? "memactivate" : "memdeactivate"}
+          className={roomState.isOpen ? "memactivate" : "memdeactivate"}
         ></CardContent>
       </Card>
       <Card
