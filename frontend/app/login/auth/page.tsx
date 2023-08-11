@@ -34,11 +34,10 @@ const Auth = () => {
     })
       .then(async (res) => {
         if (res.status === 200) {
+          const data = await res.json();
+          localStorage.setItem("authorization", data.token);
           localStorage.setItem("loggedIn", "true");
-          const code = res.headers.get("code")!;
-          localStorage.setItem("authorization", code);
-          console.log("로그인 성공 code: ", code);
-          return router.push(`/login/auth?token=${code}`);
+          return router.push(`/login/auth?token=${data.token}`);
         }
       })
       .catch((error) => {
@@ -59,6 +58,10 @@ const Auth = () => {
   };
 
   useEffect(() => {
+    //임시 작업 용
+    localStorage.setItem("loggedIn", "true");
+    router.push(`/`);
+
     const code = searchParam.get("code");
     if (!code) return;
     console.log(code);

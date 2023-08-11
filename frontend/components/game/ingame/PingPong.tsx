@@ -159,6 +159,8 @@ const PingPong = () => {
     requireAnimationRef.current = requestAnimationFrame(ballMove);
   }, [ball]);
 
+  useEffect(() => {});
+
   useEffect(() => {
     if (state.aScore === 5 || state.bScore === 5) {
       dispatch({ type: "GAME_RESET", value: resetGameContextData() });

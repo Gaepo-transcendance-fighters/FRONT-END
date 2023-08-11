@@ -143,7 +143,7 @@ const Layout = () => {
           margin: 0,
         }}
       >
-        {/* <RoomList /> */}
+        <RoomList />
       </Stack>
     </Box>
   );
