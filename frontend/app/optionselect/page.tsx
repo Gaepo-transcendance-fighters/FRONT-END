@@ -27,7 +27,7 @@ const OptionSelect = () => {
     useState<SpeedOption>("speed2");
 
   const [selectedMapOption, setSelectedMapOption] = useState<MapOption>("map2");
-  const [countdown, setCountdown] = useState<number>(3);
+  const [countdown, setCountdown] = useState<number>(10);
 
   const handleSpeedOptionChange = (option: SpeedOption) => {
     setSelectedSpeedOption((prevOption) =>

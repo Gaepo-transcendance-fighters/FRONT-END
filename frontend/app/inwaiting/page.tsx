@@ -25,14 +25,14 @@ const modalStyle = {
   p: 4,
 };
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
+import { useGame } from "@/context/GameContext";
+
 const inwaiting = () => {
   const router = useRouter();
   const [openModal, setOpenModal] = useState<boolean>(false);
-
-  const searchParams = useSearchParams();
-  const mode = searchParams.get("mode");
+  const { state, dispatch } = useGame();
 
   const BackToMain = () => {
     router.push("/");
@@ -42,7 +42,7 @@ const inwaiting = () => {
     setOpenModal(true);
     setTimeout(() => {
       {
-        mode == "Rank"
+        state.gameMode === "rank"
           ? router.push("./gameplaying")
           : router.push("./optionselect");
       }
@@ -146,7 +146,7 @@ const inwaiting = () => {
                     </CardContent>
                   </CardContent>
                 </Card>
-                {mode == "Rank" ? (
+                {state.gameMode == "rank" ? (
                   <>
                     {" "}
                     <Card
