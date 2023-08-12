@@ -64,7 +64,7 @@ interface IMaindata {
 
 const Layout = () => {
   const { state } = useAuth();
-  const { roomDispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
 
   useEffect(() => {
@@ -80,28 +80,41 @@ const Layout = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const ChatEnterNoti = (data: any) => {
+      console.log("data : ", data);
+      //if data.nickname doesn't exist in memberlist
+      let exists = false;
+
+      roomState.currentRoomMemberList.map((person) => {
+        return person.nickname === data.nickname
+          ? (exists = true)
+          : (exists = false);
+      });
+      return exists ? null : roomDispatch({ type: "ADD_CUR_MEM", value: data });
+    };
+    socket.on("chat_enter_noti", ChatEnterNoti);
+
+    return () => {
+      socket.off("chat_enter_noti", ChatEnterNoti);
+    };
+  });
+
   useRequireAuth();
 
   useEffect(() => {
     if (state.isLoggedIn) {
-      socket.emit("main_enter", { intra: "jaekim" }, (data: IMaindata) => {
-        roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
-        friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
-        friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-      });
+      socket.emit(
+        "main_enter",
+        JSON.stringify({ intra: "jaekim" }),
+        (data: IMaindata) => {
+          roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+          friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+          friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+        }
+      );
     }
   }, [state.isLoggedIn]);
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     socket.emit("main_enter", "intra_id", 상태코드);
-  //   }
-  // }, [isLoggedIn]);
-
-  // socket.io로 mock data 받았다고 가정했을때.
-  // useEffect(() => {
-  //   setRooms({ type: "main-enter", payload: mockChatRoomList0 });
-  // }, []);
-  // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 
   return (
     <Box sx={{ display: "flex" }}>

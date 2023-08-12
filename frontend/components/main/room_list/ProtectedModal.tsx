@@ -3,18 +3,18 @@
 import Modal from "@mui/material/Modal";
 import {
   ChangeEvent,
-  useRef,
   MouseEvent,
   Dispatch,
   SetStateAction,
   KeyboardEvent,
-  MutableRefObject,
+  useRef,
 } from "react";
 import "./ProtectedModal.css";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom0 } from "@/context/RoomContext";
+import { socket } from "@/app/layout";
 
 const box = {
   position: "absolute" as "absolute",
@@ -45,18 +45,15 @@ export default function ProtectedModal({
   room,
   setFail,
   fail,
-  statusCode,
-  pwRef,
 }: {
   open: boolean;
   handleClose: () => void;
   room: IChatRoom0;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
-  statusCode: MutableRefObject<number>;
-  pwRef: MutableRefObject<string>;
 }) {
   const { roomDispatch } = useRoom();
+  const pwRef = useRef("");
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     pwRef.current = e.target.value;
@@ -65,26 +62,48 @@ export default function ProtectedModal({
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setFail(false);
-    // if (statusCode가 정상코드) {
-    // handleClose();
-    // setFail(false);
-    // roomDispatch({ type: "SET_CURRENTROOM", value: room });
-    // } else {
-    // setFail(true);
-    // }
+    socket.emit(
+      "chat_enter",
+      JSON.stringify({
+        userNickname: "hoslim",
+        userIdx: 3,
+        channelIdx: room.channelIdx,
+        password: pwRef.current,
+      }),
+      (statusCode: number) => {
+        if (statusCode === 200) {
+          handleClose();
+          setFail(false);
+          roomDispatch({ type: "SET_CURRENTROOM", value: room });
+        } else {
+          setFail(true);
+        }
+      }
+    );
     pwRef.current = "";
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       setFail(false);
-      // if (statusCode가 정상코드) {
-      // handleClose();
-      // setFail(false);
-      // roomDispatch({ type: "SET_CURRENTROOM", value: room });
-      // } else {
-      // setFail(true);
-      // }
+      socket.emit(
+        "chat_enter",
+        JSON.stringify({
+          userNickname: "intra_id",
+          userIdx: 3,
+          channelIdx: room.channelIdx,
+          password: pwRef.current,
+        }),
+        (statusCode: number) => {
+          if (statusCode === 200) {
+            handleClose();
+            setFail(false);
+            roomDispatch({ type: "SET_CURRENTROOM", value: room });
+          } else {
+            setFail(true);
+          }
+        }
+      );
       pwRef.current = "";
     }
   };

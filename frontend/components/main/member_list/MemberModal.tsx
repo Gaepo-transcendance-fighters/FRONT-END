@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Modal,
   Box,
@@ -91,7 +93,7 @@ export default function MemberModal({
                 textOverflow: "ellipsis",
               }}
             >
-              닉네임: {person.name}
+              닉네임: {person.friendNickname}
             </Typography>
             <Typography>
               상태: {person.isOnline ? loginOn : loginOff}
