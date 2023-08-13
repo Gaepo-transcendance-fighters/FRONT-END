@@ -1,8 +1,10 @@
 "use client";
 
 import "@/components/main/room_list/RoomList.css";
+import { IChatRoom0, useRoom } from "@/context/RoomContext";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { socket } from "@/app/page";
 
 const style = {
   position: "absolute" as "absolute",
@@ -18,11 +20,37 @@ const style = {
 };
 
 export default function EditRoomModal({ prop }: { prop: () => void }) {
-  const [value, setValue] = useState("origin password");
+  const { roomState, roomDispatch } = useRoom();
+  const [value, setValue] = useState("");
+  const payload = {
+    channelIdx: roomState.currentRoom?.channelIdx,
+    senderIdx: 3, // [번경필요]나중에 나의 userIdx 로 변경필요
+    changedPassword: value,
+  };
 
   const handleClose = () => {
     prop();
+    socket.emit("BR_chat_room_password", payload);
+    console.log("방설정변경 pw: ", value);
   };
+
+  useEffect(() => {
+    const roomSettingHandler = (channels: IChatRoom0[]) => {
+      console.log(channels);
+      const targetChannelIdx = roomState.currentRoom?.channelIdx;
+      const targetChannel: IChatRoom0 | undefined = channels.find(
+        (channel) => channel.channelIdx === targetChannelIdx
+      );
+      console.log("찾은 채널:", targetChannel);
+      if (targetChannel) {
+        roomDispatch({ type: "SET_NON_ROOMS", value: channels });
+        roomDispatch({ type: "SET_CURRENTROOM", value: targetChannel });
+      } else {
+        console.log("error ocurrued!");
+      }
+    };
+    socket.on("BR_chat_room_password", roomSettingHandler);
+  });
 
   return (
     <>
@@ -33,14 +61,15 @@ export default function EditRoomModal({ prop }: { prop: () => void }) {
           </Box>
           <Card sx={{ margin: 1, backgroundColor: "#3b85d8" }}>
             <Stack margin={1}>
-              <Typography>방 제목: </Typography>
+              <Typography>
+                {"방 제목: " + roomState.currentRoom?.owner + "'s room"}
+              </Typography>
             </Stack>
             <Stack margin={1}>
               <Typography>비밀번호 :</Typography>
               <TextField
                 sx={{ backgroundColor: "#ffffff" }}
                 value={value}
-                // type="password"
                 autoComplete="false"
                 onChange={(e) => setValue(e.currentTarget.value)}
               />

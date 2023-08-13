@@ -6,7 +6,7 @@ import VpnKeyTwoToneIcon from "@mui/icons-material/VpnKeyTwoTone";
 import "./RoomTitleField.css";
 import { IconButton } from "@mui/material";
 import SettingIconButton from "./SettingIconButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
@@ -39,8 +39,12 @@ const RoomTitleField = ({ setMsgs }: Props) => {
 
   const leaveRoom = () => {
     roomDispatch({ type: "SET_ISOPEN", value: false });
-    roomDispatch({type: "SET_CURRENTROOM", value: null})
+    roomDispatch({ type: "SET_CURRENTROOM", value: null });
   };
+
+  useEffect(() => {
+    console.log(roomState.currentRoom?.channelIdx, roomState.currentRoom?.mode);
+  })
 
   return (
     <div className="room_title_field">
@@ -56,7 +60,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
       </div>
       <div className="room_title_field_right">
         <div className="room_type">
-          {roomState.currentRoom?.mode === Mode.PRIVATE ? (
+          {roomState.currentRoom?.mode === "protected" ? (
             <VpnKeyTwoToneIcon />
           ) : null}
         </div>
