@@ -17,7 +17,7 @@ interface IChat {
 
 const ChatWindow = () => {
   const { roomState } = useRoom();
-  const [msgs, setMsgs] = useState<IChat[]>([]);
+  // const [msgs, setMsgs] = useState<IChat[]>([]);
 
   return (
     <Box sx={{ margin: "0", padding: "0", height: "60vh", minWidth: "300px" }}>
@@ -25,7 +25,7 @@ const ChatWindow = () => {
         <>
           <RoomTitleField/>
           <ChatField />
-          <BottomField setMsgs={setMsgs}/>
+          <BottomField/>
         </>
       ) : (
         <LobbyWindow />

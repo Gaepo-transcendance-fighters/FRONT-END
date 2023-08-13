@@ -7,6 +7,8 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { io } from "socket.io-client";
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
+import { useRoom } from "@/context/RoomContext";
+import { useAuth } from "@/context/AuthContext";
 
 const userId = 7;
 // export const socket = io('http://localhost:4000/chat');
@@ -20,9 +22,12 @@ interface IChat {
   msgDate: string;
 }
 // setMsgs: Dispatch<SetStateAction<IChat[]>>
-const BottomField = (setMsgs: Dispatch<SetStateAction<IChat[]>>) => {
+const BottomField = () => {
   const [msg, setMsg] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const [msgs, setMsgs] = useState<IChat[]>([]);
+  const { roomState } = useRoom();
+  const { state } = useAuth();
 
   const changeMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(event.target.value);
@@ -33,6 +38,7 @@ const BottomField = (setMsgs: Dispatch<SetStateAction<IChat[]>>) => {
       setMsgs((prevChats:any) => [...prevChats, chat]);
       setMsg("");
       console.log(chat);
+      console.log("myid : "+state.id);
     };
     socket.on("chat_send_msg", messageHandler);
 
@@ -42,13 +48,17 @@ const BottomField = (setMsgs: Dispatch<SetStateAction<IChat[]>>) => {
   }, []);
 
   useEffect(() => {
+    console.log("myid : "+state.id);
+  })
+
+  useEffect(() => {
     inputRef.current?.focus();
   });
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
-      const payload = { channelIdx: 10, senderIdx: 6, msg: msg };
+      const payload = { channelIdx: roomState.currentRoom?.channelIdx, senderIdx: 3, msg: msg };
       socket.emit("chat_send_msg", payload);
       inputRef.current?.focus();
     },
