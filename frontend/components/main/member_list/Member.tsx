@@ -34,16 +34,36 @@ export default function Member({
   const { userState } = useUser();
   const strings = ["now an administrator", "muted", "kicked", "banned"];
   const [string, setString] = useState<string>("");
+  const [admin, setAdmin] = useState(false);
 
   const handleOpenModal = () => {
     setOpenModal(true);
   };
 
+  useEffect(() => {
+    const CheckGrant = (json: any) => {
+      console.log("CheckGrant : ", json);
+    };
+    socket.on("chat_get_grant", CheckGrant);
+
+    return () => {
+      socket.off("chat_get_grant", CheckGrant);
+    };
+  }, []);
+
   const handleOpenMenu = (
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
-    setAnchorEl(e.currentTarget);
+    socket.emit(
+      "chat_get_grant",
+      JSON.stringify({
+        userIdx: userState.userIdx,
+        channelIdx: roomState.currentRoom?.channelIdx,
+      }),
+      () => {}
+    );
+    // setAnchorEl(e.currentTarget);
   };
 
   const handleCloseMenu = () => {
@@ -80,12 +100,12 @@ export default function Member({
 
   const SetAdmin = () => {
     // socket.emit("chat_room_admin", JSON.stringfy(
-      // {
-        //   channelIdx : roomState.currentRoom?.channelIdx,
-        //   userIdx : number,
-        //   grant : Permission.ADMIN,
-        // }), (statusCode) => {
-      setShowAlert(true);
+    // {
+    //   channelIdx : roomState.currentRoom?.channelIdx,
+    //   userIdx : number,
+    //   grant : Permission.ADMIN,
+    // }), (statusCode) => {
+    setShowAlert(true);
     setString(strings[0]);
     // });
   };
@@ -133,12 +153,14 @@ export default function Member({
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
-          {person.permission === Permission.OWNER ? (
-            <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
-          ) : null}
-          {person.permission === Permission.ADMIN ? (
-            <StarOutlineRoundedIcon sx={{ height: "15px", color: "yellow" }} />
-          ) : null}
+          {/* {person.permission === Permission.OWNER ? (
+              <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
+            ) : null}
+            {person.permission === Permission.ADMIN ? (
+              <StarOutlineRoundedIcon
+                sx={{ height: "15px", color: "yellow" }}
+              />
+            ) : null} */}
         </div>
       </div>
       <Menu
@@ -146,14 +168,17 @@ export default function Member({
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
       >
-        <MenuItem onClick={SetAdmin}>Set Admin</MenuItem>
+        <MenuItem onClick={SetAdmin}>
+          {admin ? "Set Admin" : "Unset Admin"}
+        </MenuItem>
         <MenuItem onClick={Mute}>Mute</MenuItem>
         <MenuItem onClick={Kick}>Kick</MenuItem>
         <MenuItem onClick={Ban}>Ban</MenuItem>
       </Menu>
       {showAlert ? (
-        <Alert sx={alert} severity="info">
-          {person.nickname} is {string}
+        <Alert sx={alert} severity="info" style={{ width: "333px" }}>
+          {/* {person.nickname} is {string} */}
+          {person.nickname} is not an administrator anymore
         </Alert>
       ) : null}
       <MemberModal

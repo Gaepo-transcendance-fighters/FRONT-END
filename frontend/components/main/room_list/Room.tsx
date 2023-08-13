@@ -32,7 +32,8 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   };
 
   useEffect(() => {
-    const ChatEnter = (json: IChatEnter) => {
+    // const ChatEnter = (json: IChatEnter) => {
+    const ChatEnter = (json: any) => {
       roomDispatch({ type: "SET_CUR_MEM", value: json.member });
       //channelIdx 안보내줘도 될듯?
     };
