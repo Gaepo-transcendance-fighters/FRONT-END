@@ -13,11 +13,10 @@ const BottomField = () => {
       sx={{
         marginBottom: 0,
         backgroundColor: "#4174D3",
-        // height: "11%",
         display: "flex",
         justifyContent: "center",
         margin: "0.5% 2% 2% 2%",
-        borderRadius: "5px",
+        borderRadius: "10px",
         minWidth: "260px",
       }}
     >

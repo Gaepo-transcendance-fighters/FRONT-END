@@ -21,6 +21,17 @@ const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
 
+  interface Data {
+    token: string;
+    jwt: string;
+    user: {
+      userIdx: number;
+      intra: string;
+      imgUri: string;
+      accessToken: string;
+      email: string;
+    };
+  }
   const postCode = async (code: string) => {
     await fetch("http://localhost:4000/login/auth", {
       method: "POST",
@@ -34,10 +45,12 @@ const Auth = () => {
     })
       .then(async (res) => {
         if (res.status === 200) {
-          const data = await res.json();
-          localStorage.setItem("authorization", data.token);
           localStorage.setItem("loggedIn", "true");
-          return router.push(`/login/auth?token=${data.token}`);
+          const data: Data = await res.json();
+          console.log(data);
+          localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
+          localStorage.setItem("token", data.jwt);
+          return router.push(`/`);
         }
       })
       .catch((error) => {
@@ -46,22 +59,7 @@ const Auth = () => {
       });
   };
 
-  const logout = async () => {
-    await fetch("http://localhost:4000/logout", {
-      method: "POST",
-    }).then((res) => {
-      if (res.status === 200) {
-        localStorage.setItem("loggedIn", "false");
-        return router.push("/login");
-      }
-    });
-  };
-
   useEffect(() => {
-    //임시 작업 용
-    localStorage.setItem("loggedIn", "true");
-    router.push(`/`);
-
     const code = searchParam.get("code");
     if (!code) return;
     console.log(code);
@@ -71,7 +69,6 @@ const Auth = () => {
 
   return (
     <Box>
-      <button onClick={logout}>로그아웃</button>
       <Card sx={modalStyle}>
         <CircularProgress sx={{ color: "white" }} />
         <Typography sx={{ color: "white" }}>Loading...</Typography>
