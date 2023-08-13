@@ -10,12 +10,20 @@ import GameStartButton from "../game/GameStartButton";
 import io from "socket.io-client";
 import InviteGame from "../main/InviteGame/InviteGame";
 import WaitAccept from "../main/InviteGame/WaitAccept";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useRoom } from "@/context/RoomContext";
+import { IChatEnterNoti, useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { socket } from "@/app/layout";
 import { useFriend } from "@/context/FriendContext";
+import Alert from "@mui/material/Alert";
+
+const alert = {
+  position: "absolute" as "absolute",
+  top: "100%",
+  left: "50%",
+  transform: "translate(-50%, -100%)",
+};
 
 export const main = {
   main0: "#67DBFB",
@@ -74,6 +82,8 @@ const Layout = () => {
   const { roomState, roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [newMem, setNewMem] = useState("");
 
   useRequireAuth();
 
@@ -99,15 +109,28 @@ const Layout = () => {
   }, []);
 
   useEffect(() => {
-    const ChatEnterNoti = (data: any) => {
+    const ChatEnterNoti = (data: IChatEnterNoti) => {
       console.log("data : ", data);
+      //alert
+      setShowAlert(true);
+      setNewMem(data.newMember);
     };
     socket.on("chat_enter_noti", ChatEnterNoti);
 
     return () => {
       socket.off("chat_enter_noti", ChatEnterNoti);
     };
-  });
+  }); // TODO : 위치?
+
+  useEffect(() => {
+    if (showAlert) {
+      const time = setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+
+      return () => clearTimeout(time);
+    }
+  }, [showAlert]);
 
   useRequireAuth();
 
@@ -168,6 +191,11 @@ const Layout = () => {
         }}
       >
         <RoomList />
+        {showAlert ? (
+          <Alert sx={alert} severity="info" style={{ width: "333px" }}>
+            {newMem} has joined
+          </Alert>
+        ) : null}
       </Stack>
     </Box>
   );

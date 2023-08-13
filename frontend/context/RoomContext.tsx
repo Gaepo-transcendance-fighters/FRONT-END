@@ -36,6 +36,11 @@ export interface IChatEnter {
   channelIdx: number;
 }
 
+export interface IChatEnterNoti {
+  member: IMember[];
+  newMember: string;
+}
+
 export interface IChatRoomAdmin {}
 
 export interface IChatGetRoom {
