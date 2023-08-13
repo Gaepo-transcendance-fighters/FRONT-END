@@ -23,10 +23,15 @@ export default function UseFormControl() {
             width: "45vw",
             margin: "8px",
             color: "white",
-            marginTop: "2%",
+            marginTop: "3%",
           }}
           onChange={changeMsg}
           placeholder="Please enter message"
+          inputProps={{
+            style: {
+              height: "10px",
+            },
+          }}
         />
       </FormControl>
     </Box>

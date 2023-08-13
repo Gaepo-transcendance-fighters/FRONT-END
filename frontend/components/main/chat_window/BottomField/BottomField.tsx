@@ -73,7 +73,7 @@ const BottomField = () => {
         display: "flex",
         justifyContent: "center",
         margin: "0.5% 2% 2% 2%",
-        borderRadius: "5px",
+        borderRadius: "10px",
         minWidth: "260px",
       }}
     >

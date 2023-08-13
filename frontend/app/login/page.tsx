@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { main } from "@/font/color";
+import { useEffect, useState } from "react";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -27,10 +28,15 @@ const modalStyle = {
 
 const Login = () => {
   const router = useRouter();
+  const [url, setUrl] = useState("");
 
   const handleLogin = () => {
-    router.push("/login/auth");
+    router.push(url);
   };
+
+  useEffect(() => {
+    setUrl(process.env.NEXT_PUBLIC_REDIRECTURL!);
+  }, []);
 
   return (
     <Box>
