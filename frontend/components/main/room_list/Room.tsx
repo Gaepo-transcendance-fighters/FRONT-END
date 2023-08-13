@@ -3,7 +3,7 @@
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useEffect, useState, useRef } from "react";
 import ProtectedModal from "./ProtectedModal";
-import { useRoom } from "@/context/RoomContext";
+import { IChatEnter, useRoom } from "@/context/RoomContext";
 import { IChatRoom0, Mode } from "@/context/RoomContext";
 import { socket } from "@/app/layout";
 
@@ -32,7 +32,7 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   };
 
   useEffect(() => {
-    const ChatEnter = (json: any) => {
+    const ChatEnter = (json: IChatEnter) => {
       roomDispatch({ type: "SET_CUR_MEM", value: json.member });
       //channelIdx 안보내줘도 될듯?
     };
@@ -48,7 +48,7 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
       socket.emit(
         "chat_enter",
         JSON.stringify({
-          userNickname: "intra_id",
+          userNickname: "hoslim",
           userIdx: 3,
           channelIdx: room.channelIdx,
         }),

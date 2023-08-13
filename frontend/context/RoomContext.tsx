@@ -30,6 +30,24 @@ export interface IChatRoom0 {
   mode: Mode;
 }
 
+export interface IChatEnter {
+  member: IMember[];
+  channelIdx: number;
+}
+
+export interface IChatRoomAdmin {}
+
+export interface IChatGetRoom {
+  owner?: string;
+  targetNickname?: null;
+  channelIdx: number;
+  mode: Mode;
+}
+
+export interface IChatGetRoomList {
+  channelList?: IChatGetRoom[];
+}
+
 interface RoomContextData {
   dmRooms: IChatRoom0[];
   nonDmRooms: IChatRoom0[];
@@ -77,7 +95,8 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
         ...roomState,
         currentRoomMemberList: [
           ...roomState.currentRoomMemberList,
-          action.value],
+          action.value,
+        ],
       };
     default:
       return roomState;

@@ -98,25 +98,17 @@ const Layout = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const ChatEnterNoti = (data: any) => {
-  //     console.log("data : ", data);
-  //     //if data.nickname doesn't exist in memberlist
-  //     let exists = false;
+  useEffect(() => {
+    const ChatEnterNoti = (data: any) => {
+      console.log("data : ", data);
+      //if data.nickname doesn't exist in memberlist
+    };
+    socket.on("chat_enter_noti", ChatEnterNoti);
 
-  //     roomState.currentRoomMemberList.map((person) => {
-  //       return person.nickname === data.nickname
-  //         ? (exists = true)
-  //         : (exists = false);
-  //     });
-  //     return exists ? null : roomDispatch({ type: "ADD_CUR_MEM", value: data });
-  //   };
-  //   socket.on("chat_enter_noti", ChatEnterNoti);
-
-  //   return () => {
-  //     socket.off("chat_enter_noti", ChatEnterNoti);
-  //   };
-  // });
+    return () => {
+      socket.off("chat_enter_noti", ChatEnterNoti);
+    };
+  });
 
   useRequireAuth();
 
@@ -125,7 +117,7 @@ const Layout = () => {
       // console.log("in emit");
       socket.emit(
         "main_enter",
-        JSON.stringify({ intra: "hoslim" }),
+        JSON.stringify({ intra: "jeekim" }),
         (data: IMaindata) => {
           roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
           friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });

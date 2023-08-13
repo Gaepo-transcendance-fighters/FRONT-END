@@ -67,16 +67,16 @@ export default function Member({
   }
   */
 
-  useEffect(() => {
-    const ChatRoomAdmin = (json : any) => {
-      roomDispatch({type : "SET_CUR_MEM", value : json.leftMember});
-    };
-    socket.on("chat_room_admin", ChatRoomAdmin);
+  // useEffect(() => {
+  //   const ChatRoomAdmin = (json : IChatRoomAdmin) => {
+  //     roomDispatch({type : "SET_CUR_MEM", value : json.leftMember});
+  //   };
+  //   socket.on("chat_room_admin", ChatRoomAdmin);
 
-    return () => {
-      socket.off("chat_room_admin", ChatRoomAdmin);
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("chat_room_admin", ChatRoomAdmin);
+  //   };
+  // }, []);
 
   const SetAdmin = () => {
     // socket.emit("chat_room_admin", JSON.stringfy(

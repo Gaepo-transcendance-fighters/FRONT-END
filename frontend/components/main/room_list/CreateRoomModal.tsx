@@ -6,6 +6,7 @@ import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { IChatRoom0, useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/layout";
+import { useUser } from "@/context/UserContext";
 
 const style = {
   position: "absolute" as "absolute",
@@ -29,6 +30,7 @@ export default function CreateRoomModal({
 }) {
   const [value, setValue] = useState("");
   const { roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   const handleClose = () => {
     setValue("");
@@ -36,7 +38,7 @@ export default function CreateRoomModal({
   };
 
   useEffect(() => {
-    const ChatCreateRoom = (json: any) => {
+    const ChatCreateRoom = (json: IChatRoom0) => {
       roomDispatch({ type: "ADD_ROOM", value: json as IChatRoom0 });
       setValue("");
       setOpen(false);
@@ -74,7 +76,7 @@ export default function CreateRoomModal({
             </Box>
             <Card sx={{ margin: 1, backgroundColor: "#4292DA" }}>
               <Stack margin={1}>
-                <Typography>방 제목: </Typography>
+                <Typography>방 제목: {userState.nickname}'s</Typography>
               </Stack>
               <Stack margin={1}>
                 <Typography>비밀번호 :</Typography>

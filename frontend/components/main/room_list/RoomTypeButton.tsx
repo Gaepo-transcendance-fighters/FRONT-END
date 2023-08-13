@@ -30,7 +30,7 @@ export default function RoomTypeButton() {
 }
 */
   // useEffect(() => {
-  //   const ChatGetRoomList = (json: any) => {
+  //   const ChatGetRoomList = (json: IChatGetRoomList) => {
   //     roomDispatch({ type: "SET_NON_ROOMS", value: json.channelList });
   //   };
   //   socket.on("chat_get_roomlist", ChatGetRoomList);
@@ -41,7 +41,7 @@ export default function RoomTypeButton() {
   // }, []);
 
   // useEffect(() => {
-  //   const ChatGetDmRoomList = (json: any) => {
+  //   const ChatGetDmRoomList = (json: IChatGetRoomList) => {
   //     roomDispatch({ type: "SET_DM_ROOMS", value: json.dmList });
   //   };
   //   socket.on("chat_get_DMlist", ChatGetDmRoomList);
