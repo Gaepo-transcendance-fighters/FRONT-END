@@ -4,12 +4,21 @@ import Image from "next/image";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import "@/components/main/member_list/MemberList.css";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, useEffect } from "react";
 import MemberModal from "./MemberModal";
 import { IMember, Permission, useRoom } from "@/context/RoomContext";
 import { Menu, MenuItem } from "@mui/material";
 import { Mode } from "@/components/public/Layout";
 import { useUser } from "@/context/UserContext";
+import Alert from "@mui/material/Alert";
+import { socket } from "@/app/layout";
+
+const alert = {
+  position: "absolute" as "absolute",
+  top: "100%",
+  left: "50%",
+  transform: "translate(-50%, -100%)",
+};
 
 export default function Member({
   idx,
@@ -19,9 +28,12 @@ export default function Member({
   person: IMember;
 }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { roomState } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
+  const strings = ["now an administrator", "muted", "kicked", "banned"];
+  const [string, setString] = useState<string>("");
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -38,6 +50,71 @@ export default function Member({
     setAnchorEl(null);
   };
 
+  useEffect(() => {
+    if (showAlert) {
+      const time = setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+
+      return () => clearTimeout(time);
+    }
+  }, [showAlert]);
+  /*
+  {
+    channelIdx : number,
+    userIdx : number,
+    grant : boolean,
+  }
+  */
+
+  useEffect(() => {
+    const ChatRoomAdmin = (json : any) => {
+      roomDispatch({type : "SET_CUR_MEM", value : json.leftMember});
+    };
+    socket.on("chat_room_admin", ChatRoomAdmin);
+
+    return () => {
+      socket.off("chat_room_admin", ChatRoomAdmin);
+    };
+  }, []);
+
+  const SetAdmin = () => {
+    // socket.emit("chat_room_admin", JSON.stringfy(
+      // {
+        //   channelIdx : roomState.currentRoom?.channelIdx,
+        //   userIdx : number,
+        //   grant : Permission.ADMIN,
+        // }), (statusCode) => {
+      setShowAlert(true);
+    setString(strings[0]);
+    // });
+  };
+
+  const Mute = () => {
+    // socket.emit("chat_mute");
+    setShowAlert(true);
+    setString(strings[1]);
+  };
+
+  const Kick = () => {
+    // socket.emit("chat_kick", JSON.stringfy(
+    // {
+    //   channelIdx : roomState.currentRoom?.channelIdx,
+    //   targetNickname : string,
+    // targetIdx : number
+    // }), (statusCode) => {
+    // if (statusCode === 200) {
+
+    setShowAlert(true);
+    setString(strings[2]);
+    // }
+  };
+
+  const Ban = () => {
+    // socket.emit("chat_ban");
+    setShowAlert(true);
+    setString(strings[3]);
+  };
   return (
     <>
       <div
@@ -69,11 +146,16 @@ export default function Member({
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
       >
-        <MenuItem>Set Admin</MenuItem>
-        <MenuItem>Mute</MenuItem>
-        <MenuItem>Kick</MenuItem>
-        <MenuItem>Ban</MenuItem>
+        <MenuItem onClick={SetAdmin}>Set Admin</MenuItem>
+        <MenuItem onClick={Mute}>Mute</MenuItem>
+        <MenuItem onClick={Kick}>Kick</MenuItem>
+        <MenuItem onClick={Ban}>Ban</MenuItem>
       </Menu>
+      {showAlert ? (
+        <Alert sx={alert} severity="info">
+          {person.nickname} is {string}
+        </Alert>
+      ) : null}
       {/* <MemberModal
         openModal={openModal}
         setOpenModal={setOpenModal}
@@ -82,3 +164,11 @@ export default function Member({
     </>
   );
 }
+
+/*
+person is kicked
+person is banned
+person is muted
+person is now an administrator
+person is not an administrator anymore
+*/
