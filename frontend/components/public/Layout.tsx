@@ -101,7 +101,6 @@ const Layout = () => {
   useEffect(() => {
     const ChatEnterNoti = (data: any) => {
       console.log("data : ", data);
-      //if data.nickname doesn't exist in memberlist
     };
     socket.on("chat_enter_noti", ChatEnterNoti);
 
@@ -114,25 +113,7 @@ const Layout = () => {
 
   useEffect(() => {
     if (state.isLoggedIn) {
-      // console.log("in emit");
-      socket.emit(
-        "main_enter",
-        JSON.stringify({ intra: "jeekim" }),
-        (data: IMaindata) => {
-          roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
-          friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
-          friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-          userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
-          userDispatch({
-            type: "CHANGE_NICK_NAME",
-            value: data.userObject.nickname,
-          });
-          userDispatch({
-            type: "SET_USER_IDX",
-            value: data.userObject.userIdx,
-          });
-        }
-      );
+      socket.emit("main_enter", JSON.stringify({ intra: "jeekim" }), () => {});
     }
   }, [state.isLoggedIn]);
 

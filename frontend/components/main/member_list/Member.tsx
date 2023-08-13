@@ -156,11 +156,11 @@ export default function Member({
           {person.nickname} is {string}
         </Alert>
       ) : null}
-      {/* <MemberModal
+      <MemberModal
         openModal={openModal}
         setOpenModal={setOpenModal}
         person={person}
-      /> */}
+      />
     </>
   );
 }
