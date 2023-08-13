@@ -17,19 +17,19 @@ const modalStyle = {
   boxShadow: 24,
   p: 4,
 };
+export interface Data {
+  token: string;
+  user: {
+    userIdx: number;
+    intra: string;
+    imgUri: string;
+    email: string;
+  };
+}
 const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
 
-  interface Data {
-    token: string;
-    user: {
-      userIdx: number;
-      intra: string;
-      imgUri: string;
-      email: string;
-    };
-  }
   const postCode = async (code: string) => {
     await fetch("http://localhost:4000/login/auth", {
       method: "POST",

@@ -97,6 +97,14 @@ const Myprofile = () => {
           >
             더보기
           </Button>
+          <Button
+            type="button"
+            onClick={() => {
+              router.push("./SecondAuth");
+            }}
+          >
+            2차인증ui
+          </Button>
         </div>
       </div>
     </ThemeProvider>
