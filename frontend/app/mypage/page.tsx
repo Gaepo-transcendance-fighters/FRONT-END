@@ -47,18 +47,28 @@ const myProfileStyle = {
   p: 4,
 };
 
+interface IUserData {
+  imgUrl: string;
+  rate: string;
+  rank: string;
+  email: string;
+}
+
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { main } from "@/components/public/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { get } from "https";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
+import axios from "axios";
 
 export default function PageRedir() {
   // async function GetData() {
-  //   const response = await fetch("/user/profile"); // <- user를 쿼리에서 받아온거로 변경해야함.
-  //   const data = await response.json();
+  //   await axios.get("/users/profile").then(async (res) => {
+  //     // const data: IUserData = await res.json();
+  //   }); // <- user를 쿼리에서 받아온거로 변경해야함.
+  //   // const data = await response.json();
   // }
 
   // async function SendImg(uri: string) {
@@ -91,17 +101,31 @@ export default function PageRedir() {
 
   const searchParams = useSearchParams();
   const nickname = searchParams.toString();
-  // console.log(nickname);
-
   const [checked, setChecked] = useState(true);
-
+  const [userData, setUserData] = useState<IUserData>();
   // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setChecked(event.target.checked);
   //   if (verified == true) setVerified(false);
   //   else setVerified(true);
   // };
 
-  console.log();
+  useEffect(() => {
+    // axios.get("http://localhost:4000/users/profile").then((response) => {
+    //   console.log(response);
+    //   // setUserData(response.data);
+    // });
+    const headers = {
+      Authorization: "Bearer" + localStorage.getItem("authorization"),
+    };
+    axios
+      .get("http://localhost:4000/users/profile", { headers })
+      .then((response) => {
+        console.log(response);
+      });
+  });
+
+  console.log(userData);
+
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
@@ -129,6 +153,7 @@ export default function PageRedir() {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+  // console.log("@@" + userState.nickname);
 
   return (
     <>
@@ -218,7 +243,7 @@ export default function PageRedir() {
                         }}
                       />
                     </Box>
-                    {/* 중간에 있는 텍스트 */}
+                    {/* 이미지, 닉네임, 2차인증, */}
                     <Stack
                       sx={{
                         width: "20vw",
@@ -356,12 +381,13 @@ export default function PageRedir() {
                   >
                     <CardContent sx={{ paddingBottom: 0 }}>전적</CardContent>
                     <Stack direction={"row"}>
+                      {/* 이미지 */}
                       <Card
                         sx={{
                           margin: 1,
                           marginRight: 0,
                           width: "30%",
-                          height: "max-content",
+                          // height: "90%",
                         }}
                       >
                         <CardContent
@@ -371,15 +397,25 @@ export default function PageRedir() {
                             "&:last-child": { paddingBottom: "16px" },
                           }}
                         >
-                          <Typography margin={1}>랭크(포인트)</Typography>
-                          <Typography margin={1}>승률</Typography>
+                          <img
+                            src="./rank/exp_medal_bronze.png"
+                            style={{
+                              width: "70%",
+                              height: "70%",
+                              display: "block",
+                              margin: "0 auto",
+                              // alignItems: "center",
+                              // justifyContent: "center",
+                            }}
+                          ></img>
                         </CardContent>
                       </Card>
+                      {/* !이미지 */}
                       <Card
                         sx={{
                           margin: 1,
                           width: "70%",
-                          height: "max-content",
+                          height: "60%",
                         }}
                       >
                         <CardContent
@@ -389,8 +425,10 @@ export default function PageRedir() {
                             "&:last-child": { paddingBottom: "16px" },
                           }}
                         >
-                          <Typography margin={1}>3000</Typography>
-                          <Typography margin={1}>0%</Typography>
+                          <Typography margin={1}>
+                            랭크(포인트) : 3000
+                          </Typography>
+                          <Typography margin={1}>승률 : 0%</Typography>
                         </CardContent>
                       </Card>
                     </Stack>
@@ -455,7 +493,7 @@ export default function PageRedir() {
                         width: "100%",
                       }}
                     >
-                      <MyGameLog />
+                      {/* <MyGameLog /> */}
                     </Box>
                   </Card>
                 </Stack>
