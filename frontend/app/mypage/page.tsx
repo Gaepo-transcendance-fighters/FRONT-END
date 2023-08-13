@@ -81,7 +81,8 @@ export default function PageRedir() {
   //   });
   // }
 
-  const UserData = useUser();
+  const { userState } = useUser();
+
   const router = useRouter();
 
   const BackToHome = () => {
@@ -100,6 +101,7 @@ export default function PageRedir() {
   //   else setVerified(true);
   // };
 
+  console.log();
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
@@ -207,7 +209,8 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
+                        // src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
+                        src={userState.imgUri}
                         style={{
                           width: "100%",
                           height: "75%",
@@ -229,7 +232,7 @@ export default function PageRedir() {
                         }}
                         style={{ fontSize: "3rem" }}
                       >
-                        MyNickName
+                        {userState.nickname}
                       </Typography>
 
                       <CardContent style={{ width: "100%" }}>

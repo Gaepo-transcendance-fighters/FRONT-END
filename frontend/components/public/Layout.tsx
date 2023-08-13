@@ -13,7 +13,7 @@ import WaitAccept from "../main/InviteGame/WaitAccept";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
-import { useUser } from "@/context/UserContext";
+import { UserProvider, useUser } from "@/context/UserContext";
 import { socket } from "@/app/layout";
 import { useFriend } from "@/context/FriendContext";
 
@@ -73,7 +73,7 @@ const Layout = () => {
   const { state } = useAuth();
   const { roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
-  const { UserState, UserDispatch } = useUser();
+  const { userState, userDispatch } = useUser();
 
   useRequireAuth();
 
@@ -83,12 +83,12 @@ const Layout = () => {
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
 
-      UserDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
-      UserDispatch({
+      userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+      userDispatch({
         type: "CHANGE_NICK_NAME",
         value: data.userObject.nickname,
       });
-      UserDispatch({ type: "SET_USER_IDX", value: data.userObject.userIdx });
+      userDispatch({ type: "SET_USER_IDX", value: data.userObject.userIdx });
     };
 
     socket.on("main_enter", MainEnter);
@@ -100,9 +100,6 @@ const Layout = () => {
   //socket에서 값을 받아와도 dispatch 하는 시간동안 값은 비어있으므로 내부에서 값을 찍어도 안나옴.
   //미세한 찰나일 것임.!
 
-  console.log(UserState);
-  console.log(friendState);
-
   useEffect(() => {
     if (state.isLoggedIn) {
       // console.log("in emit");
@@ -113,17 +110,15 @@ const Layout = () => {
           roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
           friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
           friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-          UserDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
-          UserDispatch({
+          userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+          userDispatch({
             type: "CHANGE_NICK_NAME",
             value: data.userObject.nickname,
           });
-          UserDispatch({
+          userDispatch({
             type: "SET_USER_IDX",
             value: data.userObject.userIdx,
           });
-          // console.log("in emit@");
-          console.log(UserState);
         }
       );
     }

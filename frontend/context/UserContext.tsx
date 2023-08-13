@@ -34,19 +34,19 @@ const UserReducer = (
 };
 
 const UserContext = createContext<{
-  UserState: UserContextData;
-  UserDispatch: React.Dispatch<UserAction>;
-}>({ UserState: initialState, UserDispatch: () => {} });
+  userState: UserContextData;
+  userDispatch: React.Dispatch<UserAction>;
+}>({ userState: initialState, userDispatch: () => {} });
 
 export const useUser = () => {
   return useContext(UserContext);
 };
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [UserState, UserDispatch] = useReducer(UserReducer, initialState);
+  const [userState, userDispatch] = useReducer(UserReducer, initialState);
 
   return (
-    <UserContext.Provider value={{ UserState, UserDispatch }}>
+    <UserContext.Provider value={{ userState, userDispatch }}>
       {children}
     </UserContext.Provider>
   );

@@ -26,6 +26,7 @@ import { useUser } from "@/context/UserContext";
 const Myprofile = () => {
   const router = useRouter();
   const searchparams = useSearchParams();
+  const { userState } = useUser();
 
   const createQuery = useCallback(
     (nickname: string) => {
@@ -38,7 +39,7 @@ const Myprofile = () => {
   );
 
   const RedirMyprofile = () => {
-    router.push("./mypage" + "?" + createQuery("hoslim"));
+    router.push("./mypage" + "?" + createQuery(userState.nickname));
   };
 
   return (
@@ -46,7 +47,8 @@ const Myprofile = () => {
       <div style={{ padding: 10 }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Avatar
-            src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
+            // src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
+            src={userState.imgUri}
             style={{
               width: "70%",
               height: "22vh",
@@ -76,7 +78,7 @@ const Myprofile = () => {
                 verticalAlign: "middle",
               }}
             >
-              NickName
+              {userState.nickname}
               {/* props.Nickname*/}
             </Typography>
           </Card>
