@@ -84,7 +84,6 @@ const Layout = () => {
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
 
       UserDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
-
       UserDispatch({
         type: "CHANGE_NICK_NAME",
         value: data.userObject.nickname,

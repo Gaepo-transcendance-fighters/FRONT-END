@@ -42,7 +42,7 @@ export const useUser = () => {
   return useContext(UserContext);
 };
 
-export const UserProvide = ({ children }: { children: ReactNode }) => {
+export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [UserState, UserDispatch] = useReducer(UserReducer, initialState);
 
   return (

@@ -8,7 +8,7 @@ import { RoomProvider } from "@/context/RoomContext";
 import { io } from "socket.io-client";
 import { FriendProvide } from "@/context/FriendContext";
 import { GameProvider } from "@/context/GameContext";
-import { UserProvide } from "@/context/UserContext";
+import { UserProvider } from "@/context/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <ThemeProvider theme={font}>
       <AuthProvider>
-        <UserProvide>
+        <UserProvider>
           <GameProvider>
             <RoomProvider>
               <FriendProvide>
@@ -57,7 +57,7 @@ export default function RootLayout({
               </FriendProvide>
             </RoomProvider>
           </GameProvider>
-        </UserProvide>
+        </UserProvider>
       </AuthProvider>
     </ThemeProvider>
   );
