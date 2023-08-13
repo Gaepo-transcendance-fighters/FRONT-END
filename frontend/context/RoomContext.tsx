@@ -36,6 +36,7 @@ interface RoomContextData {
   currentRoom: IChatRoom0 | null;
   currentRoomMemberList: IMember[];
   isOpen: boolean;
+  msgsResetStatus: boolean;
 }
 
 type RoomAction =
@@ -45,7 +46,8 @@ type RoomAction =
   | { type: "SET_CUR_MEM"; value: IMember[] }
   | { type: "SET_ISOPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom0 }
-  | { type: "ADD_CUR_MEM"; value: IMember };
+  | { type: "ADD_CUR_MEM"; value: IMember }
+  | { type: "SET_MSGS_RESET_STATUS"; value: boolean };
 
 const initialState: RoomContextData = {
   dmRooms: [],
@@ -53,6 +55,7 @@ const initialState: RoomContextData = {
   currentRoom: null,
   currentRoomMemberList: [],
   isOpen: false,
+  msgsResetStatus: false,
 };
 
 const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
@@ -78,6 +81,11 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
         currentRoomMemberList: [
           ...roomState.currentRoomMemberList,
           action.value],
+      };
+    case "SET_MSGS_RESET_STATUS":
+      return {
+        ...roomState,
+        msgsResetStatus: action.value,
       };
     default:
       return roomState;
