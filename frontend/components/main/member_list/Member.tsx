@@ -35,14 +35,16 @@ export default function Member({
   const strings = ["now an administrator", "muted", "kicked", "banned"];
   const [string, setString] = useState<string>("");
   const [admin, setAdmin] = useState(false);
+  const [authorization, setAuthorization] = useState("");
 
   const handleOpenModal = () => {
     setOpenModal(true);
   };
 
   useEffect(() => {
-    const CheckGrant = (json: any) => {
+    const CheckGrant = (json: string) => {
       console.log("CheckGrant : ", json);
+      setAuthorization(json);
     };
     socket.on("chat_get_grant", CheckGrant);
 
@@ -63,7 +65,7 @@ export default function Member({
       }),
       () => {}
     );
-    // setAnchorEl(e.currentTarget);
+    setAnchorEl(e.currentTarget);
   };
 
   const handleCloseMenu = () => {
@@ -110,8 +112,34 @@ export default function Member({
     // });
   };
 
+  // emit - roomId
+  // {
+  // 	targetNickname : string,
+  // 	targetIdx : number,
+  // 	mute : boolean
+  // }
+
+  useEffect(() => {
+    const ChatMute = (data: any) => {
+      console.log("Mute : ", data);
+    };
+
+    socket.on("chat_mute", ChatMute);
+
+    return () => {
+      socket.off("chat_mute", ChatMute);
+    };
+  });
+
   const Mute = () => {
-    // socket.emit("chat_mute");
+    socket.emit(
+      "chat_mute",
+      JSON.stringify({
+        channelIdx: roomState.currentRoom?.channelIdx,
+        targetNickname: person.nickname,
+        targetIdx: person.userIdx,
+      })
+    );
     setShowAlert(true);
     setString(strings[1]);
   };
@@ -141,10 +169,11 @@ export default function Member({
         key={idx}
         className="membtn"
         onClick={handleOpenModal}
-        onContextMenu={
-          roomState.currentRoom?.mode !== Mode.PRIVATE
-            ? (e) => handleOpenMenu(e)
-            : undefined
+        onContextMenu={(e) =>
+          handleOpenMenu(e)
+          // authorization === (Permission.ADMIN || Permission.OWNER)
+          //   ? handleOpenMenu(e)
+          //   : e.preventDefault()
         }
       >
         <div className="memimg">

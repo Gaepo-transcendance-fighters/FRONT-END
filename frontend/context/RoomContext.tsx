@@ -19,7 +19,7 @@ export enum Permission {
 }
 
 export interface IMember {
-  userIdx : number;
+  userIdx: number;
   nickname: string;
   imgUri: string;
   // permission: Permission;
@@ -54,8 +54,8 @@ export interface IChatGetRoomList {
   channelList?: IChatGetRoom[];
 }
 
-export interface ICheckGrant {
-  
+export interface IChatMute {
+  channelList?: IChatGetRoom[];
 }
 
 interface RoomContextData {
