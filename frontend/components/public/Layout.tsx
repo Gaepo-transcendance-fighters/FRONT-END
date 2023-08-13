@@ -14,8 +14,8 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
-import { socket } from "@/app/layout";
 import { useFriend } from "@/context/FriendContext";
+import { socket } from "@/app/page";
 
 export const main = {
   main0: "#67DBFB",
@@ -82,7 +82,6 @@ const Layout = () => {
       roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-
       userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
       userDispatch({
         type: "CHANGE_NICK_NAME",
@@ -107,18 +106,18 @@ const Layout = () => {
         "main_enter",
         JSON.stringify({ intra: "hoslim" }),
         (data: IMaindata) => {
-          roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
-          friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
-          friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-          userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
-          userDispatch({
-            type: "CHANGE_NICK_NAME",
-            value: data.userObject.nickname,
-          });
-          userDispatch({
-            type: "SET_USER_IDX",
-            value: data.userObject.userIdx,
-          });
+          // roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+          // friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+          // friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+          // userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+          // userDispatch({
+          //   type: "CHANGE_NICK_NAME",
+          //   value: data.userObject.nickname,
+          // });
+          // userDispatch({
+          //   type: "SET_USER_IDX",
+          //   value: data.userObject.userIdx,
+          // });
         }
       );
     }

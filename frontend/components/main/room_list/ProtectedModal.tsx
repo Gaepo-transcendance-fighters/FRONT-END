@@ -14,7 +14,7 @@ import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom0 } from "@/context/RoomContext";
-import { socket } from "@/app/layout";
+import { socket } from "@/app/page";
 
 const box = {
   position: "absolute" as "absolute",

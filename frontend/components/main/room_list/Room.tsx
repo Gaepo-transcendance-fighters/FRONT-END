@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import ProtectedModal from "./ProtectedModal";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom0, Mode } from "@/context/RoomContext";
-import { socket } from "@/app/layout";
+import { socket } from "@/app/page";
 
 export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   const [open, setOpen] = useState(false);

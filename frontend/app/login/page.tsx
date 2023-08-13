@@ -31,7 +31,9 @@ const Login = () => {
   const [url, setUrl] = useState("");
 
   const handleLogin = () => {
-    router.push(url);
+    localStorage.setItem("loggedIn", "true");
+    router.push("/");
+    // router.push(url);
   };
 
   useEffect(() => {
