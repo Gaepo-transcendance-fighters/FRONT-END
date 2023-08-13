@@ -15,6 +15,12 @@ export interface IChatRoom {
   isProtected: boolean;
 }
 
+export enum Mode {
+  PRIVATE = "private",
+  PUBLIC = "public",
+  PROTECTED = "protected",
+}
+
 const mockChatRoomList: IChatRoom[] = [
   {
     roomName: "jujeon room",
@@ -38,7 +44,7 @@ const RoomTitleField = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { roomDispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
 
   const leaveRoom = () => {
     roomDispatch({ type: "SET_ISOPEN", value: false });
@@ -49,12 +55,14 @@ const RoomTitleField = () => {
       <div className="room_title_field_left">
         <Stack />
         <div className="room_name">
-          {<Typography variant="h4">{mockChatRoomList[0].roomName}</Typography>}
+          {<Typography variant="h4">{roomState.currentRoom?.owner + "'s room"}</Typography>}
+          {/* {<Typography variant="h4">{mockChatRoomList[0].roomName}</Typography>} */}
         </div>
       </div>
       <div className="room_title_field_right">
         <div className="room_type">
-          {mockChatRoomList[0].isProtected ? <VpnKeyTwoToneIcon /> : null}
+          {roomState.currentRoom?.mode === Mode.PRIVATE ? <VpnKeyTwoToneIcon /> : null}
+          {/* {mockChatRoomList[0].isProtected ? <VpnKeyTwoToneIcon /> : null} */}
         </div>
         <div className="room_setting">
           <SettingIconButton />
