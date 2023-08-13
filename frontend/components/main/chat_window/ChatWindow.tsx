@@ -6,26 +6,30 @@ import RoomTitleField from "./RoomTitleField/RoomTitleField";
 import LobbyWindow from "./LobbyWindow";
 import { Box } from "@mui/material";
 import { useRoom } from "@/context/RoomContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IChat {
-  username: string;
+  channelIdx: number;
   senderIdx: number;
   msg: string;
-  msgDate: string;
+  msgDate: Date;
 }
 
 const ChatWindow = () => {
-  const { roomState } = useRoom();
-  // const [msgs, setMsgs] = useState<IChat[]>([]);
+  const { roomState, roomDispatch } = useRoom();
+  const [msgs, setMsgs] = useState<IChat[]>([]);
+
+  useEffect(() => {
+    setMsgs([]);
+  }, [roomState.currentRoom])
 
   return (
     <Box sx={{ margin: "0", padding: "0", height: "60vh", minWidth: "300px" }}>
       {roomState.isOpen ? (
         <>
-          <RoomTitleField/>
-          <ChatField />
-          <BottomField/>
+          <RoomTitleField setMsgs={setMsgs} />
+          <ChatField msgs={msgs} />
+          <BottomField setMsgs={setMsgs} />
         </>
       ) : (
         <LobbyWindow />

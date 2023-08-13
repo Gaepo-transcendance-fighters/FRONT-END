@@ -9,38 +9,29 @@ import SettingIconButton from "./SettingIconButton";
 import { useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useRoom } from "@/context/RoomContext";
+import { Dispatch, SetStateAction } from "react";
 
 export interface IChatRoom {
   roomName: string;
   isProtected: boolean;
 }
 
+interface IChat {
+  channelIdx: number;
+  senderIdx: number;
+  msg: string;
+  msgDate: Date;
+}
+interface Props {
+  setMsgs: Dispatch<SetStateAction<IChat[]>>;
+}
 export enum Mode {
   PRIVATE = "private",
   PUBLIC = "public",
   PROTECTED = "protected",
 }
 
-const mockChatRoomList: IChatRoom[] = [
-  {
-    roomName: "jujeon room",
-    isProtected: true,
-  },
-  {
-    roomName: "silee room",
-    isProtected: false,
-  },
-  {
-    roomName: "jeekim room",
-    isProtected: false,
-  },
-  {
-    roomName: "hoslim room",
-    isProtected: true,
-  },
-];
-
-const RoomTitleField = () => {
+const RoomTitleField = ({ setMsgs }: Props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -48,6 +39,7 @@ const RoomTitleField = () => {
 
   const leaveRoom = () => {
     roomDispatch({ type: "SET_ISOPEN", value: false });
+    roomDispatch({type: "SET_CURRENTROOM", value: null})
   };
 
   return (
@@ -55,14 +47,18 @@ const RoomTitleField = () => {
       <div className="room_title_field_left">
         <Stack />
         <div className="room_name">
-          {<Typography variant="h4">{roomState.currentRoom?.owner + "'s room"}</Typography>}
-          {/* {<Typography variant="h4">{mockChatRoomList[0].roomName}</Typography>} */}
+          {
+            <Typography variant="h4">
+              {roomState.currentRoom?.owner + "'s room"}
+            </Typography>
+          }
         </div>
       </div>
       <div className="room_title_field_right">
         <div className="room_type">
-          {roomState.currentRoom?.mode === Mode.PRIVATE ? <VpnKeyTwoToneIcon /> : null}
-          {/* {mockChatRoomList[0].isProtected ? <VpnKeyTwoToneIcon /> : null} */}
+          {roomState.currentRoom?.mode === Mode.PRIVATE ? (
+            <VpnKeyTwoToneIcon />
+          ) : null}
         </div>
         <div className="room_setting">
           <SettingIconButton />

@@ -5,40 +5,37 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import FormControl, { useFormControl } from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { io } from "socket.io-client";
+import { socket } from "@/app/page";
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
 import { useRoom } from "@/context/RoomContext";
 import { useAuth } from "@/context/AuthContext";
 
 const userId = 7;
-// export const socket = io('http://localhost:4000/chat');
-const socket = io("http://localhost:4000/chat", {
-  query: { userId: userId },
-});
 interface IChat {
-  username: string;
+  channelIdx: number;
   senderIdx: number;
   msg: string;
-  msgDate: string;
+  msgDate: Date;
+}
+interface Props {
+  setMsgs: Dispatch<SetStateAction<IChat[]>>;
 }
 // setMsgs: Dispatch<SetStateAction<IChat[]>>
-const BottomField = () => {
+const BottomField = ({ setMsgs }: Props) => {
   const [msg, setMsg] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const [msgs, setMsgs] = useState<IChat[]>([]);
   const { roomState } = useRoom();
-  const { state } = useAuth();
 
   const changeMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(event.target.value);
   };
 
   useEffect(() => {
-    const messageHandler = (chat:IChat[]) => {
-      setMsgs((prevChats:any) => [...prevChats, chat]);
+    const messageHandler = (chat: any) => {
+      console.log("chat", chat);
+      setMsgs((prevChats: any) => [...prevChats, chat]);
       setMsg("");
-      console.log(chat);
-      console.log("myid : "+state.id);
     };
     socket.on("chat_send_msg", messageHandler);
 
@@ -48,17 +45,18 @@ const BottomField = () => {
   }, []);
 
   useEffect(() => {
-    console.log("myid : "+state.id);
-  })
-
-  useEffect(() => {
     inputRef.current?.focus();
   });
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
-      const payload = { channelIdx: roomState.currentRoom?.channelIdx, senderIdx: 3, msg: msg };
+      const payload = {
+        channelIdx: roomState.currentRoom?.channelIdx,
+        senderIdx: 3,
+        msg: msg,
+      };
+      console.log("payload", payload);
       socket.emit("chat_send_msg", payload);
       inputRef.current?.focus();
     },
@@ -87,13 +85,18 @@ const BottomField = () => {
                 width: "45vw",
                 margin: "8px",
                 color: "white",
-                marginTop: "2%",
+                marginTop: "3%",
               }}
               autoFocus
               ref={inputRef}
               value={msg}
               onChange={changeMsg}
               placeholder="Please enter message"
+              inputProps={{
+                style: {
+                  height: "10px",
+                },
+              }}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
                   onSubmit(event);
