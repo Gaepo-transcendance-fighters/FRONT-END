@@ -19,8 +19,8 @@ interface IChat {
   msg: string;
   msgDate: string;
 }
-
-const BottomField = ({setMsgs}: {setMsgs: (chat[]) => void}) => {
+// setMsgs: Dispatch<SetStateAction<IChat[]>>
+const BottomField = (setMsgs: Dispatch<SetStateAction<IChat[]>>) => {
   const [msg, setMsg] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -30,7 +30,7 @@ const BottomField = ({setMsgs}: {setMsgs: (chat[]) => void}) => {
 
   useEffect(() => {
     const messageHandler = (chat:IChat[]) => {
-      setMsgs((prevChats:IChat[]) => [...prevChats, chat]);
+      setMsgs((prevChats:any) => [...prevChats, chat]);
       setMsg("");
       console.log(chat);
     };
