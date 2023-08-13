@@ -53,6 +53,7 @@ import { main } from "@/components/public/Layout";
 import { useState } from "react";
 import { get } from "https";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
+import { useUser } from "@/context/UserContext";
 
 export default function PageRedir() {
   // async function GetData() {
@@ -80,6 +81,7 @@ export default function PageRedir() {
   //   });
   // }
 
+  const UserData = useUser();
   const router = useRouter();
 
   const BackToHome = () => {

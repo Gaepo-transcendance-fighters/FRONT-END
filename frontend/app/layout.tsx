@@ -8,6 +8,7 @@ import { RoomProvider } from "@/context/RoomContext";
 import { io } from "socket.io-client";
 import { FriendProvide } from "@/context/FriendContext";
 import { GameProvider } from "@/context/GameContext";
+import { UserProvide } from "@/context/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,26 +36,28 @@ export default function RootLayout({
   return (
     <ThemeProvider theme={font}>
       <AuthProvider>
-        <GameProvider>
-        <RoomProvider>
-          <FriendProvide>
-            <html lang="en">
-              <body className={inter.className}>
-                <div
-                  style={{
-                    backgroundImage: `url("/background.png")`,
-                    width: "100%",
-                    backgroundRepeat: "repeat",
-                    height: "100vh",
-                  }}
-                >
-                  {children}
-                </div>
-              </body>
-            </html>
-          </FriendProvide>
-        </RoomProvider>
-        </GameProvider>
+        <UserProvide>
+          <GameProvider>
+            <RoomProvider>
+              <FriendProvide>
+                <html lang="en">
+                  <body className={inter.className}>
+                    <div
+                      style={{
+                        backgroundImage: `url("/background.png")`,
+                        width: "100%",
+                        backgroundRepeat: "repeat",
+                        height: "100vh",
+                      }}
+                    >
+                      {children}
+                    </div>
+                  </body>
+                </html>
+              </FriendProvide>
+            </RoomProvider>
+          </GameProvider>
+        </UserProvide>
       </AuthProvider>
     </ThemeProvider>
   );

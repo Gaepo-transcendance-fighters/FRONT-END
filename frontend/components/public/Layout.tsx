@@ -13,6 +13,7 @@ import WaitAccept from "../main/InviteGame/WaitAccept";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
+import { useUser } from "@/context/UserContext";
 import { socket } from "@/app/layout";
 import { useFriend } from "@/context/FriendContext";
 
@@ -56,39 +57,76 @@ interface IBlock {
   targetIdx: number;
 }
 
+interface IUserObject {
+  imgUri: string;
+  nickname: string;
+  userIdx: number;
+}
 interface IMaindata {
   channelList: IChatRoom0[];
   friendList: IFriend[];
   blockList: IBlock[];
+  userObject: IUserObject;
 }
 
 const Layout = () => {
   const { state } = useAuth();
   const { roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
+  const { UserState, UserDispatch } = useUser();
+
+  useRequireAuth();
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
       roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+
+      UserDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+
+      UserDispatch({
+        type: "CHANGE_NICK_NAME",
+        value: data.userObject.nickname,
+      });
+      UserDispatch({ type: "SET_USER_IDX", value: data.userObject.userIdx });
     };
+
     socket.on("main_enter", MainEnter);
 
     return () => {
       socket.off("main_enter", MainEnter);
     };
   }, []);
+  //socket에서 값을 받아와도 dispatch 하는 시간동안 값은 비어있으므로 내부에서 값을 찍어도 안나옴.
+  //미세한 찰나일 것임.!
 
-  useRequireAuth();
+  console.log(UserState);
+  console.log(friendState);
 
   useEffect(() => {
     if (state.isLoggedIn) {
-      socket.emit("main_enter", { intra: "jaekim" }, (data: IMaindata) => {
-        roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
-        friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
-        friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-      });
+      // console.log("in emit");
+      socket.emit(
+        "main_enter",
+        JSON.stringify({ intra: "jaekim" }),
+        (data: IMaindata) => {
+          roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+          friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+          friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+          UserDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+          UserDispatch({
+            type: "CHANGE_NICK_NAME",
+            value: data.userObject.nickname,
+          });
+          UserDispatch({
+            type: "SET_USER_IDX",
+            value: data.userObject.userIdx,
+          });
+          // console.log("in emit@");
+          console.log(UserState);
+        }
+      );
     }
   }, [state.isLoggedIn]);
   // useEffect(() => {
