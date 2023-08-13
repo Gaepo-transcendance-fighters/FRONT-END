@@ -8,8 +8,9 @@ import { IconButton } from "@mui/material";
 import SettingIconButton from "./SettingIconButton";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { useRoom } from "@/context/RoomContext";
+import { IChatRoom0, useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
+import { socket } from "@/app/page";
 
 export interface IChatRoom {
   roomName: string;
@@ -37,15 +38,53 @@ const RoomTitleField = ({ setMsgs }: Props) => {
   const handleClose = () => setOpen(false);
   const { roomState, roomDispatch } = useRoom();
 
+  const updateChannels = (
+    targetChannelIdx: number,
+    updatedChannel: IChatRoom0
+  ) => {
+    const updatedArray = roomState.nonDmRooms.map((item) => {
+      if (item.channelIdx === targetChannelIdx) {
+        return {
+          ...item,
+          owner: updatedChannel.owner,
+        };
+      }
+      return item;
+    });
+    console.log(roomState.nonDmRooms);
+    roomDispatch({ type: "SET_NON_ROOMS", value: updatedArray });
+  };
+
+  useEffect(() => {
+    const leaveHandler = (channel: IChatRoom0) => {
+      console.log(channel)
+      if (roomState.currentRoom) {
+        updateChannels(roomState.currentRoom?.channelIdx, channel);
+        roomDispatch({ type: "SET_ISOPEN", value: false });
+        roomDispatch({ type: "SET_CURRENTROOM", value: null });
+      }
+    };
+    socket.on("chat_goto_lobby", leaveHandler);
+    console.log("recieve from server");
+  });
+
   const leaveRoom = () => {
-    roomDispatch({ type: "SET_ISOPEN", value: false });
-    roomDispatch({ type: "SET_CURRENTROOM", value: null });
+    const payload = {
+      channelIdx: roomState.currentRoom?.channelIdx,
+      userIdx: 3, // [작업필요] 추후 나의 userIdx로 교체필요
+    };
+    socket.emit("chat_goto_lobby", payload);
+    console.log("click leaveroom");
   };
 
   useEffect(() => {
     console.log(roomState.currentRoom?.channelIdx, roomState.currentRoom?.mode);
-  })
-
+  });
+  // request body
+  // {
+  //   channelIdx : number
+  // 	userIdx : number
+  // }
   return (
     <div className="room_title_field">
       <div className="room_title_field_left">
