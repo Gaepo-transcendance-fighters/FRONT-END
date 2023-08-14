@@ -49,7 +49,6 @@ const myProfileStyle = {
 
 interface IUserData {
   nickname: string;
-  intra: string; //<-nickname 받기 전 임시
   imgUrl: string;
   Win: number;
   Lose: number;
@@ -60,7 +59,7 @@ interface IUserData {
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { main } from "@/components/public/Layout";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { get } from "https";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
@@ -155,9 +154,7 @@ export default function PageRedir() {
     }
   };
 
-  const onChangeNickName = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-
+  const onChangeNickName = async () => {
     const formData = new FormData();
     formData.append("ChangeNickName", inputName);
 
@@ -194,6 +191,10 @@ export default function PageRedir() {
     setAnchorEl(null);
   };
   // console.log("@@" + userState.nickname);
+
+  const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
+    e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, "");
+  };
 
   return (
     <>
@@ -363,7 +364,6 @@ export default function PageRedir() {
                         >
                           닉네임변경
                         </Button>
-
                         <Modal open={openModal} onClose={handleCloseModal}>
                           <Box sx={modalStyle} borderRadius={"10px"}>
                             <Card
@@ -394,22 +394,31 @@ export default function PageRedir() {
                                     overflow: "scroll",
                                   }}
                                 >
-                                  <Input
+                                  <input
                                     type="text"
-                                    sx={{ width: "40%" }}
+                                    maxLength={10}
+                                    style={{
+                                      width: "40%",
+                                      height: "32px",
+                                      fontSize: "15px",
+                                      border: 0,
+                                      borderRadius: "15px",
+                                      outline: "none",
+                                      paddingLeft: "10px",
+                                      backgroundColor: "#E9E9E9",
+                                    }}
+                                    onInput={handleOnInput}
                                     onChange={(event) => {
                                       setInputName(event?.target.value);
                                       console.log(inputName);
                                     }}
-                                  ></Input>
-                                  {/* 에러...내일고칠게여.. */}
+                                  />
                                   <Button
-                                    type="submit"
-                                    onClick={onChangeNickName}
                                     style={{
                                       border: "0.1px solid black",
                                       backgroundColor: "lightGray",
                                     }}
+                                    onClick={onChangeNickName}
                                   >
                                     입력
                                   </Button>
