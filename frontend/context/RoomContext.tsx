@@ -75,6 +75,13 @@ export interface IDmMemList {
   imgUrl: string;
 }
 
+export const alert = {
+  position: "absolute" as "absolute",
+  top: "100%",
+  left: "50%",
+  transform: "translate(-50%, -100%)",
+};
+
 interface RoomContextData {
   dmRooms: IChatRoom0[];
   nonDmRooms: IChatRoom0[];

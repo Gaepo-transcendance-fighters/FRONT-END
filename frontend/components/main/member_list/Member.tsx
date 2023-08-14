@@ -6,19 +6,11 @@ import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import "@/components/main/member_list/MemberList.css";
 import { useState, MouseEvent, useEffect } from "react";
 import MemberModal from "./MemberModal";
-import { IChatKick, IMember, Permission, useRoom } from "@/context/RoomContext";
+import { IChatKick, IMember, Permission, alert, useRoom } from "@/context/RoomContext";
 import { Menu, MenuItem } from "@mui/material";
-import { Mode } from "@/components/public/Layout";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
 import { socket } from "@/app/layout";
-
-const alert = {
-  position: "absolute" as "absolute",
-  top: "100%",
-  left: "50%",
-  transform: "translate(-50%, -100%)",
-};
 
 export default function Member({
   idx,
@@ -30,12 +22,18 @@ export default function Member({
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { roomState, roomDispatch } = useRoom();
-  const { userState } = useUser();
-  const strings = ["now an administrator", "muted", "kicked", "banned"];
   const [string, setString] = useState<string>("");
   const [admin, setAdmin] = useState(false);
   const [authorization, setAuthorization] = useState("");
+  const { roomState, roomDispatch } = useRoom();
+  const { userState } = useUser();
+  const strings = [
+    "now an administrator",
+    "not an administrator anymore",
+    "muted",
+    "kicked",
+    "banned",
+  ];
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -43,7 +41,6 @@ export default function Member({
 
   useEffect(() => {
     const CheckGrant = (json: string) => {
-      console.log("CheckGrant : ", json);
       setAuthorization(json);
     };
     socket.on("chat_get_grant", CheckGrant);
@@ -100,16 +97,18 @@ export default function Member({
     //   userIdx : number,
     //   grant : Permission.ADMIN,
     // }), (statusCode) => {
+    setAdmin((prev) => !prev);
     setShowAlert(true);
-    setString(strings[0]);
     // });
   };
+  useEffect(() => {
+    admin ? setString(strings[0]) : setString(strings[1]);
+  }, [admin]);
 
   // useEffect(() => {
   //   const ChatMute = (data: any) => { // 아직 api 완성안됨
   //     console.log("Mute : ", data);
   //   };
-
   //   socket.on("chat_mute", ChatMute);
 
   //   return () => {
@@ -127,14 +126,13 @@ export default function Member({
       })
     );
     setShowAlert(true);
-    setString(strings[1]);
+    setString(strings[2]);
   };
 
   useEffect(() => {
     const ChatKick = (data: IChatKick) => {
-      console.log("kick : ", data);
       setShowAlert(true);
-      setString(strings[2]);
+      setString(strings[3]);
     };
     socket.on("chat_kick", ChatKick);
 
@@ -159,26 +157,26 @@ export default function Member({
     // if (statusCode === 200) {
 
     // setShowAlert(true);
-    // setString(strings[2]);
+    // setString(strings[3]);
     // }
   };
 
   const Ban = () => {
     // socket.emit("chat_ban");
     setShowAlert(true);
-    setString(strings[3]);
+    setString(strings[4]);
   };
+
   return (
     <>
       <div
         key={idx}
         className="membtn"
         onClick={handleOpenModal}
-        onContextMenu={
-          (e) => handleOpenMenu(e)
-          // authorization === (Permission.ADMIN || Permission.OWNER)
-          //   ? handleOpenMenu(e)
-          //   : e.preventDefault()
+        onContextMenu={(e) =>
+          authorization === (Permission.ADMIN || Permission.OWNER)
+            ? handleOpenMenu(e)
+            : e.preventDefault()
         }
       >
         <div className="memimg">
@@ -203,7 +201,7 @@ export default function Member({
         onClose={handleCloseMenu}
       >
         <MenuItem onClick={SetAdmin}>
-          {admin ? "Set Admin" : "Unset Admin"}
+          {admin ? "Unset Admin" : "Set Admin"}
         </MenuItem>
         <MenuItem onClick={Mute}>Mute</MenuItem>
         <MenuItem onClick={Kick}>Kick</MenuItem>
@@ -211,8 +209,7 @@ export default function Member({
       </Menu>
       {showAlert ? (
         <Alert sx={alert} severity="info" style={{ width: "333px" }}>
-          {/* {person.nickname} is {string} */}
-          {person.nickname} is not an administrator anymore
+          {person.nickname} is {string}
         </Alert>
       ) : null}
       <MemberModal
@@ -223,11 +220,3 @@ export default function Member({
     </>
   );
 }
-
-/*
-person is kicked
-person is banned
-person is muted
-person is now an administrator
-person is not an administrator anymore
-*/

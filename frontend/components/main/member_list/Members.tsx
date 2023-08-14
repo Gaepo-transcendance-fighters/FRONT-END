@@ -31,23 +31,7 @@ export default function Members() {
       nickname: roomState.currentDmRoomMemberList?.userNickname2,
       imgUri: roomState.currentDmRoomMemberList?.imgUrl,
     });
-    console.log(
-      "Mem12 ",
-      roomState.currentDmRoomMemberList?.userIdx2,
-      roomState.currentDmRoomMemberList?.userNickname2
-    );
   }, [roomState.currentRoom]);
-  // const mem1Ref = useRef({
-  //   userIdx: roomState.currentDmRoomMemberList?.userIdx1,
-  //   nickname: roomState.currentDmRoomMemberList?.userNickname1,
-  //   imgUri: userState.imgUri,
-  // });
-
-  // const mem2Ref = useRef({
-  //   userIdx: roomState.currentDmRoomMemberList?.userIdx2,
-  // nickname: roomState.currentDmRoomMemberList?.userNickname2,
-  // imgUri: roomState.currentDmRoomMemberList?.imgUrl,
-  // });
 
   return (
     <div className="memlist">

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
-import { IChatGetRoomList, IChatRoom0, useRoom } from "@/context/RoomContext";
+import { IChatRoom0, useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/layout";
 import { useUser } from "@/context/UserContext";
 
@@ -13,7 +13,6 @@ export default function RoomTypeButton() {
 
   useEffect(() => {
     const ChatGetDmRoomList = (json: IChatRoom0[]) => {
-      console.log("ChatGetDmRoomList : ", json);
       roomDispatch({ type: "SET_DM_ROOMS", value: json });
     };
     socket.on("chat_get_DMList", ChatGetDmRoomList);
@@ -39,9 +38,7 @@ export default function RoomTypeButton() {
   }, []);
 
   const NonDmBtnClick = () => {
-    socket.emit("chat_get_roomList", (status_code: number) => {
-      console.log(status_code);
-    });
+    socket.emit("chat_get_roomList", (status_code: number) => {});
     OnClick(true);
   };
 

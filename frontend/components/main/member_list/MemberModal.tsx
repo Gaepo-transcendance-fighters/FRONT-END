@@ -45,9 +45,7 @@ export default function MemberModal({
   person: IMember;
 }) {
   const { friendState } = useFriend();
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const [curFriend, setCurFriend] = useState<IFriend | null>(null);
 
   useEffect(() => {
@@ -59,6 +57,7 @@ export default function MemberModal({
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
   const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
   };
