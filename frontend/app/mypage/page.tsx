@@ -92,7 +92,21 @@ export default function PageRedir() {
         setUserData(response.data);
       });
     // };
-  }, [reload]);
+    console.log("API REQUEST");
+  }, []);
+
+  const getData = () => {
+    const headers = {
+      Authorization: "Bearer " + localStorage.getItem("authorization"),
+    };
+    axios
+      .get("http://localhost:4000/users/profile", { headers })
+      .then((response) => {
+        setUserData(response.data);
+      });
+    // };
+    console.log("API REQUEST");
+  };
   console.log(userData);
 
   const OpenFileInput = () => {
@@ -136,14 +150,14 @@ export default function PageRedir() {
     try {
       const response = await axios({
         method: "PUT",
-        url: "http://localhost:4000/users/profile/:my_nickname",
+        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
 
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
-          ChangedNickName: inputName,
+          changedNickname: inputName,
         }),
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
@@ -154,7 +168,7 @@ export default function PageRedir() {
     } catch (error) {
       console.log("닉네임 변경중 문제가 발생");
     }
-    setReload(true);
+    getData();
   };
 
   const onChangeSecondAuth = async () => {
