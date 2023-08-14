@@ -79,7 +79,10 @@ export default function PageRedir() {
   const [verified, setVerified] = useState<boolean>(false);
   const [inputName, setInputName] = useState<string>("");
 
+  const [reload, setReload] = useState<boolean>(false);
+
   useEffect(() => {
+    // const getData = () => {
     const headers = {
       Authorization: "Bearer " + localStorage.getItem("authorization"),
     };
@@ -88,7 +91,23 @@ export default function PageRedir() {
       .then((response) => {
         setUserData(response.data);
       });
+    // };
+    console.log("API REQUEST");
   }, []);
+
+  const getData = () => {
+    const headers = {
+      Authorization: "Bearer " + localStorage.getItem("authorization"),
+    };
+    axios
+      .get("http://localhost:4000/users/profile", { headers })
+      .then((response) => {
+        setUserData(response.data);
+      });
+    // };
+    console.log("API REQUEST");
+  };
+  console.log(userData);
 
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
@@ -107,9 +126,10 @@ export default function PageRedir() {
       try {
         await axios({
           method: "UPDATE",
-          url: "http://localhost:4000/user/profile/:my_nickname",
+          url: "http://localhost:4000/users/profile/:my_nickname",
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + localStorage.getItem("authorization"),
           },
           data: formData,
         });
@@ -122,6 +142,7 @@ export default function PageRedir() {
 
   //body가 아니라 data로 보내야한다고함..?data에 객체를 직접 전달해도 axios가 JSON형태로 변환함.
   const onChangeNickName = async () => {
+    if (inputName === "") return alert("입력값이 없습니다");
     if (inputName === userData?.nickname) {
       return alert("현재 닉네임과 동일합니다!");
     }
@@ -129,7 +150,7 @@ export default function PageRedir() {
     try {
       const response = await axios({
         method: "PUT",
-        url: `http://localhost:4000/users/profile/${userData.nickname}`,
+        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
 
         headers: {
           "Content-Type": "application/json",
@@ -141,10 +162,14 @@ export default function PageRedir() {
         }),
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
-      else if (response.status === 200) console.log("Sucess");
+      else if (response.status === 200) {
+        console.log("Sucess");
+        handleCloseModal();
+      }
     } catch (error) {
       console.log("닉네임 변경중 문제가 발생");
     }
+    getData();
   };
 
   const onChangeSecondAuth = async () => {
@@ -154,7 +179,7 @@ export default function PageRedir() {
     try {
       const response = await axios({
         method: "PUT",
-        url: "http://localhost:4000/user/profile/:my_nickname",
+        url: "http://localhost:4000/users/profile/:my_nickname",
         headers: {
           "Content-Type": "application/json",
         },
@@ -406,6 +431,7 @@ export default function PageRedir() {
                                     onInput={handleOnInput}
                                     onChange={(event) => {
                                       setInputName(event?.target.value);
+
                                       console.log(inputName);
                                     }}
                                   />

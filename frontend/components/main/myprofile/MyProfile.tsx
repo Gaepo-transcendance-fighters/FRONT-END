@@ -41,7 +41,7 @@ const Myprofile = () => {
   const RedirMyprofile = () => {
     router.push("./mypage" + "?" + createQuery(userState.nickname));
   };
-
+  console.log(userState);
   return (
     <ThemeProvider theme={font}>
       <div style={{ padding: 10 }}>
