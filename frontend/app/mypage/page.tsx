@@ -129,13 +129,15 @@ export default function PageRedir() {
     try {
       const response = await axios({
         method: "PUT",
-        url: "http://localhost:4000/user/profile/:my_nickname",
+        url: `http://localhost:4000/users/profile/${userData.nickname}`,
 
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
+        
         data: JSON.stringify({
-          ChangedNickName: inputName,
+          changedNickname: inputName,
         }),
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
