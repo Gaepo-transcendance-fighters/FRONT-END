@@ -156,7 +156,6 @@ export default function PageRedir() {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
-        
         data: JSON.stringify({
           changedNickname: inputName,
         }),
