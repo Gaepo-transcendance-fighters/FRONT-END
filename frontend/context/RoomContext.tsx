@@ -52,7 +52,7 @@ export interface IChatGetRoom {
 }
 
 export interface IChatGetRoomList {
-  channelList: IChatRoom0[];
+  channels: IChatRoom0[];
   // channelList: IChatGetRoom[];
   // channelList?: IChatGetRoom[];
 }
