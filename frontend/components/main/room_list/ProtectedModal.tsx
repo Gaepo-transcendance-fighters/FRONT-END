@@ -13,7 +13,7 @@ import "./ProtectedModal.css";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom0 } from "@/context/RoomContext";
+import { IChatRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 
 const box = {
@@ -48,7 +48,7 @@ export default function ProtectedModal({
 }: {
   open: boolean;
   handleClose: () => void;
-  room: IChatRoom0;
+  room: IChatRoom;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
 }) {
@@ -74,7 +74,7 @@ export default function ProtectedModal({
         if (statusCode === 200) {
           handleClose();
           setFail(false);
-          roomDispatch({ type: "SET_CURRENTROOM", value: room });
+          roomDispatch({ type: "SET_CUR_ROOM", value: room });
         } else {
           setFail(true);
         }
@@ -98,7 +98,7 @@ export default function ProtectedModal({
           if (statusCode === 200) {
             handleClose();
             setFail(false);
-            roomDispatch({ type: "SET_CURRENTROOM", value: room });
+            roomDispatch({ type: "SET_CUR_ROOM", value: room });
           } else {
             setFail(true);
           }

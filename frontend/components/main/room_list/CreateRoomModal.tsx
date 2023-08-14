@@ -4,8 +4,9 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
-import { IChatRoom0, useRoom } from "@/context/RoomContext";
+import { IChatRoom, useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
+import { useUser } from "@/context/UserContext";
 
 const style = {
   position: "absolute" as "absolute",
@@ -29,6 +30,7 @@ export default function CreateRoomModal({
 }) {
   const [value, setValue] = useState("");
   const { roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   const handleClose = () => {
     setValue("");
@@ -36,7 +38,7 @@ export default function CreateRoomModal({
   };
 
   useEffect(() => {
-    const ChatCreateRoom = (data: IChatRoom0) => {
+    const ChatCreateRoom = (data: IChatRoom) => {
       roomDispatch({ type: "ADD_ROOM", value: data });
       setValue("");
       setOpen(false);
@@ -50,7 +52,11 @@ export default function CreateRoomModal({
   //userId=?
 
   const OnClick = () => {
-    socket.emit("BR_chat_create_room", JSON.stringify({ password: value }));
+    socket.emit(
+      "BR_chat_create_room",
+      JSON.stringify({ password: value }),
+      (res: any) => {} // 아직 안정해짐
+    );
     //TODO : dto 정하는게 어떨까... < 추천
     // 일단은 이렇게. dto는 나중에
   };
@@ -70,7 +76,7 @@ export default function CreateRoomModal({
             </Box>
             <Card sx={{ margin: 1, backgroundColor: "#4292DA" }}>
               <Stack margin={1}>
-                <Typography>방 제목: </Typography>
+                <Typography>방 제목: {userState.nickname}'s</Typography>
               </Stack>
               <Stack margin={1}>
                 <Typography>비밀번호 :</Typography>

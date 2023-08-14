@@ -2,70 +2,58 @@
 
 import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
-import { useRoom } from "@/context/RoomContext";
+import { IChatRoom, useRoom } from "@/context/RoomContext";
+import { socket } from "@/app/page";
+import { useUser } from "@/context/UserContext";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();
   const [disabled, setDisabled] = useState(true);
+  const { userState } = useUser();
 
-  /*
-  {
-    channelList[]? {
-      channel {
-        owner: string,
-        channelIdx: number,
-        mode : enum
-      }
-  }
-*/
+  useEffect(() => {
+    const ChatGetDmRoomList = (json?: IChatRoom[]) => {
+      json ? roomDispatch({ type: "SET_DM_ROOMS", value: json }) : null;
+    };
+    socket.on("chat_get_DMList", ChatGetDmRoomList);
 
-  /*
-// emit - client 
-{
-	dmList[]? {
-	    dmChannel {
-	      targetNickname : string,
-	      targetIdx : number,
-	    }
-}
-*/
-  // useEffect(() => {
-  //   const ChatGetRoomList = (json: any) => {
-  //     roomDispatch({ type: "SET_NON_ROOMS", value: json.channelList });
-  //   };
-  //   socket.on("chat_get_roomlist", ChatGetRoomList);
-
-  //   return () => {
-  //     socket.off("chat_get_roomlist", ChatGetRoomList);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const ChatGetDmRoomList = (json: any) => {
-  //     roomDispatch({ type: "SET_DM_ROOMS", value: json.dmList });
-  //   };
-  //   socket.on("chat_get_DMlist", ChatGetDmRoomList);
-
-  //   return () => {
-  //     socket.off("chat_get_DMlist", ChatGetDmRoomList);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("chat_get_DMList", ChatGetDmRoomList);
+    };
+  }, []);
 
   const OnClick = (isNotDm: boolean) => {
     setDisabled(isNotDm);
   };
 
+  useEffect(() => {
+    const ChatGetRoomList = (json?: IChatRoom[]) => {
+      json ? roomDispatch({ type: "SET_NON_DM_ROOMS", value: json }) : null;
+    };
+    socket.on("chat_get_roomList", ChatGetRoomList);
+
+    return () => {
+      socket.off("chat_get_roomList", ChatGetRoomList);
+    };
+  }, []);
+
   const NonDmBtnClick = () => {
-    // socket.emit("chat_get_roomlist", (status_code: number) => {
-    //   console.log(status_code);
-    // });
+    socket.emit("chat_get_roomList", (status_code: number) => {});
     OnClick(true);
   };
 
   const DmBtnClick = () => {
-    // socket.emit("chat_get_DMlist", JSON.stringify({userNickname : string, userIdx : number}), (status_code: number) => {
-    //   console.log(status_code);
-    // });
+    socket.emit(
+      "chat_get_DMList",
+      JSON.stringify({
+        userNickname: userState.nickname,
+        userIdx: userState.userIdx,
+      }),
+      (status_code: any) => {
+        // 아직 안 정해짐
+        console.log(status_code);
+      }
+    );
     OnClick(false);
   };
 
