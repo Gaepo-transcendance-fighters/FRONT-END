@@ -145,7 +145,7 @@ export default function Member({
     return () => {
       socket.off("chat_kick", ChatKick);
     };
-  });
+  }, []);
 
   const Kick = () => {
     socket.emit(
