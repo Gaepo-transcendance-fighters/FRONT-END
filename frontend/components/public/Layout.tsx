@@ -41,7 +41,7 @@ export enum Mode {
   PROTECTED = "protected",
 }
 
-export interface IChatRoom0 {
+export interface IChatRoom {
   channelIdx: number;
   owner: string;
   mode: Mode;
@@ -63,7 +63,7 @@ interface IUserObject {
   userIdx: number;
 }
 interface IMaindata {
-  channelList: IChatRoom0[];
+  channelList: IChatRoom[];
   friendList: IFriend[];
   blockList: IBlock[];
   userObject: IUserObject;

@@ -6,13 +6,13 @@ import "@/components/main/room_list/RoomList.css";
 import MemberList from "../member_list/MemberList";
 import CreateRoomButton from "./CreateRoomButton";
 import Room from "./Room";
-import { IChatRoom0, useRoom } from "@/context/RoomContext";
+import { IChatRoom, useRoom } from "@/context/RoomContext";
 
 export default function Rooms({
   currentRoomList,
   channelType,
 }: {
-  currentRoomList: IChatRoom0[];
+  currentRoomList: IChatRoom[];
   channelType: boolean;
 }) {
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(

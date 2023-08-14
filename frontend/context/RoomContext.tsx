@@ -24,7 +24,7 @@ export interface IMember {
   imgUri: string | undefined;
 }
 
-export interface IChatRoom0 {
+export interface IChatRoom {
   owner: string;
   targetNickname?: string;
   channelIdx: number;
@@ -51,7 +51,7 @@ export interface IChatGetRoom {
 }
 
 export interface IChatGetRoomList {
-  channels: IChatRoom0[];
+  channels: IChatRoom[];
 }
 
 export interface IChatMute {
@@ -98,21 +98,21 @@ export const alert = {
 };
 
 interface RoomContextData {
-  dmRooms: IChatRoom0[];
-  nonDmRooms: IChatRoom0[];
-  currentRoom: IChatRoom0 | null;
+  dmRooms: IChatRoom[];
+  nonDmRooms: IChatRoom[];
+  currentRoom: IChatRoom | null;
   currentRoomMemberList: IMember[];
   isOpen: boolean;
   currentDmRoomMemberList: IDmMemList | null;
 }
 
 type RoomAction =
-  | { type: "SET_DM_ROOMS"; value: IChatRoom0[] }
-  | { type: "SET_NON_DM_ROOMS"; value: IChatRoom0[] }
-  | { type: "SET_CUR_ROOM"; value: IChatRoom0 | null }
+  | { type: "SET_DM_ROOMS"; value: IChatRoom[] }
+  | { type: "SET_NON_DM_ROOMS"; value: IChatRoom[] }
+  | { type: "SET_CUR_ROOM"; value: IChatRoom | null }
   | { type: "SET_CUR_MEM"; value: IMember[] }
   | { type: "SET_IS_OPEN"; value: boolean }
-  | { type: "ADD_ROOM"; value: IChatRoom0 }
+  | { type: "ADD_ROOM"; value: IChatRoom }
   | { type: "ADD_CUR_MEM"; value: IMember }
   | { type: "SET_CUR_DM_MEM"; value: IDmMemList };
 

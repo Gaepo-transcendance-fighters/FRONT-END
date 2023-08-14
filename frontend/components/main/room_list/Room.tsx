@@ -9,11 +9,11 @@ import {
   alert,
   useRoom,
 } from "@/context/RoomContext";
-import { IChatRoom0, Mode } from "@/context/RoomContext";
+import { IChatRoom, Mode } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 
-export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
+export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -92,7 +92,7 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
     };
   }, []);
 
-  const RoomClick = (room: IChatRoom0) => {
+  const RoomClick = (room: IChatRoom) => {
     if (room.mode !== Mode.PROTECTED) {
       if (room.mode === Mode.PRIVATE) {
         socket.emit(

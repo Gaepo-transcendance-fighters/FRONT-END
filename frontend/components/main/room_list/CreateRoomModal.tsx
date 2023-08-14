@@ -4,7 +4,7 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
-import { IChatRoom0, useRoom } from "@/context/RoomContext";
+import { IChatRoom, useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 
@@ -38,7 +38,7 @@ export default function CreateRoomModal({
   };
 
   useEffect(() => {
-    const ChatCreateRoom = (data: IChatRoom0) => {
+    const ChatCreateRoom = (data: IChatRoom) => {
       roomDispatch({ type: "ADD_ROOM", value: data });
       setValue("");
       setOpen(false);
