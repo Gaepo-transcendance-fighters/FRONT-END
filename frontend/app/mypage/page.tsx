@@ -101,7 +101,7 @@ export default function PageRedir() {
   //   else setVerified(true);
   // };
 
-  console.log();
+  // console.log();
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
