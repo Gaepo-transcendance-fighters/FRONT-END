@@ -7,14 +7,14 @@ import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
-import io from "chatSocket.io-client";
+import io from "socket.io-client";
 import InviteGame from "../main/InviteGame/InviteGame";
 import WaitAccept from "../main/InviteGame/WaitAccept";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
-import { gameSocket } from "@/app/optionselect/page";
-import { chatSocket } from "@/app/page";
+import { UserProvider, useUser } from "@/context/UserContext";
+import { socket } from "@/app/page";
 import { useFriend } from "@/context/FriendContext";
 
 export const main = {
@@ -57,17 +57,25 @@ interface IBlock {
   targetIdx: number;
 }
 
+interface IUserObject {
+  imgUri: string;
+  nickname: string;
+  userIdx: number;
+}
 interface IMaindata {
-  userObject: {};
   channelList: IChatRoom0[];
   friendList: IFriend[];
   blockList: IBlock[];
+  userObject: IUserObject;
 }
 
 const Layout = () => {
   const { authState } = useAuth();
   const { roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
+  const { userState, userDispatch } = useUser();
+
+  useRequireAuth();
 
   useEffect(() => {
     const MainEnter = (data: any) => {
@@ -75,23 +83,45 @@ const Layout = () => {
       roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+
+      userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+      userDispatch({
+        type: "CHANGE_NICK_NAME",
+        value: data.userObject.nickname,
+      });
+      userDispatch({ type: "SET_USER_IDX", value: data.userObject.userIdx });
     };
-    chatSocket.on("main_enter", MainEnter);
+
+    socket.on("main_enter", MainEnter);
 
     return () => {
-      chatSocket.off("main_enter", MainEnter);
+      socket.off("main_enter", MainEnter);
     };
   }, []);
-
-  useRequireAuth();
+  //socket에서 값을 받아와도 dispatch 하는 시간동안 값은 비어있으므로 내부에서 값을 찍어도 안나옴.
+  //미세한 찰나일 것임.!
 
   useEffect(() => {
     if (authState.isLoggedIn) {
-      chatSocket.emit("main_enter", { intra: "hoslim" }, (data: any) => {
-        roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
-        friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
-        friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-      });
+      // console.log("in emit");
+      socket.emit(
+        "main_enter",
+        JSON.stringify({ intra: "jaekim" }),
+        (data: IMaindata) => {
+          roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+          friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+          friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+          userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+          userDispatch({
+            type: "CHANGE_NICK_NAME",
+            value: data.userObject.nickname,
+          });
+          userDispatch({
+            type: "SET_USER_IDX",
+            value: data.userObject.userIdx,
+          });
+        }
+      );
     }
   }, [authState.isLoggedIn]);
   // useEffect(() => {
