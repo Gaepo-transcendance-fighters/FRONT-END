@@ -60,49 +60,24 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { main } from "@/components/public/Layout";
 import React, { useEffect, useState, ChangeEvent } from "react";
-import { get } from "https";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
 
 export default function PageRedir() {
-  // async function SendImg(uri: string) {
-  //   const request = await fetch("/user/profile/:my_nickname", {
-  //     method: "POST",
-  //     body: JSON.stringify(uri),
-  //     headers: {
-  //       "Content-Type": "img-uri",
-  //     },
-  //   });
-  // }
-
-  // async function SendNewName(newname: string) {
-  //   const request = await fetch("/user/profile/:my_nickname", {
-  //     method: "POST",
-  //     body: JSON.stringify(newname),
-  //     headers: {
-  //       "Content-Type": "new-name",
-  //     },
-  //   });
-  // }
-
-  const { userState } = useUser();
-
   const router = useRouter();
-
-  const BackToHome = () => {
-    router.push("/");
-  };
 
   const searchParams = useSearchParams();
   const nickname = searchParams.toString();
+
+  const { userState } = useUser();
   const [checked, setChecked] = useState(true);
   const [userData, setUserData] = useState<IUserData>();
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setChecked(event.target.checked);
-  //   if (verified == true) setVerified(false);
-  //   else setVerified(true);
-  // };
+  const [message, setMessage] = useState("");
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [verified, setVerified] = useState<boolean>(false);
+  const [inputName, setInputName] = useState<string>("");
 
   useEffect(() => {
     const headers = {
@@ -112,27 +87,14 @@ export default function PageRedir() {
       .get("http://localhost:4000/users/profile", { headers })
       .then((response) => {
         setUserData(response.data);
-        // console.log(response.data);
       });
   }, []);
-  // console.log(userData);
-  console.log(userData);
 
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
 
-  // const HandleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const filelist = event.target.files;
-  //   console.log(filelist);
-
-  //   document
-  //     .getElementById("uploadForm")
-  //     .addEventListener("submit", function (e) {
-  //       e.preventDefault();
-  //     });
-  // };
-
+  //Form 데이터를 보내는데 이미지의 경우 어떻게 처리를 해야할지 잘 모르겠어서 일단 임시로 둡니다. 0814_15시
   const onChangeImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
@@ -142,38 +104,67 @@ export default function PageRedir() {
 
       formData.append("files", uploadFile);
 
-      await axios({
-        method: "post",
-        url: "http://localhost:4000/user/profile/:my_nickname",
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      try {
+        await axios({
+          method: "UPDATE",
+          url: "http://localhost:4000/user/profile/:my_nickname",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          data: formData,
+        });
+      } catch (error) {
+        console.log("이미지 변경중 에러");
+      }
       console.log(uploadFile);
     }
   };
 
+  //body가 아니라 data로 보내야한다고함..?data에 객체를 직접 전달해도 axios가 JSON형태로 변환함.
   const onChangeNickName = async () => {
-    const formData = new FormData();
-    formData.append("ChangeNickName", inputName);
+    if (inputName === userData?.nickname) {
+      return alert("현재 닉네임과 동일합니다!");
+    }
 
-    console.log("@@ " + inputName);
-    await axios({
-      method: "post",
-      url: "http://localhost:4000/user/profile/:my_nickname",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    try {
+      const response = await axios({
+        method: "PUT",
+        url: "http://localhost:4000/user/profile/:my_nickname",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({
+          ChangedNickName: inputName,
+        }),
+      });
+      if (response.status === 400) alert("이미 존재하는 닉네임입니다");
+      else if (response.status === 200) console.log("Sucess");
+    } catch (error) {
+      console.log("닉네임 변경중 문제가 발생");
+    }
   };
 
-  const [message, setMessage] = useState("");
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [verified, setVerified] = useState<boolean>(false);
-  const [inputName, setInputName] = useState<string>("");
+  const onChangeSecondAuth = async () => {
+    if (verified == true) setVerified(false);
+    else setVerified(true);
+
+    try {
+      const response = await axios({
+        method: "PUT",
+        url: "http://localhost:4000/user/profile/:my_nickname",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({
+          userNickName: userData?.nickname,
+          check2Auth: verified,
+        }),
+      });
+    } catch (error) {
+      console.log("2차인증 시 에러발생");
+    }
+  };
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -190,10 +181,13 @@ export default function PageRedir() {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
-  // console.log("@@" + userState.nickname);
 
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, "");
+  };
+
+  const BackToHome = () => {
+    router.push("/");
   };
 
   return (
@@ -433,10 +427,7 @@ export default function PageRedir() {
                             minWidth: "max-content",
                           }}
                           variant="contained"
-                          onClick={() => {
-                            if (verified == true) setVerified(false);
-                            else setVerified(true);
-                          }}
+                          onClick={onChangeSecondAuth}
                         >
                           {verified == true ? (
                             <>2차인증 비활성화</>
