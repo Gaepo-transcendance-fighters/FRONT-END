@@ -16,7 +16,7 @@ import {
 import { Menu, MenuItem } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
-import { socket } from "@/app/layout";
+import { socket } from "@/app/page";
 
 export default function Member({
   idx,
