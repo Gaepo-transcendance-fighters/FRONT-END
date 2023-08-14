@@ -32,7 +32,7 @@ const BottomField = ({ setMsgs }: Props) => {
   };
 
   useEffect(() => {
-    const messageHandler = (chat: any) => {
+    const messageHandler = (chat: IChat) => {
       console.log("chat", chat);
       setMsgs((prevChats: any) => [...prevChats, chat]);
       setMsg("");
