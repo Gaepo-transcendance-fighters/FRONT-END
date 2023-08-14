@@ -114,7 +114,7 @@ export default function PageRedir() {
       try {
         await axios({
           method: "UPDATE",
-          url: "http://localhost:4000/users/profile/:my_nickname",
+          url: `http://localhost:4000/users/profile/${userData.nickname}`,
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + localStorage.getItem("authorization"),
