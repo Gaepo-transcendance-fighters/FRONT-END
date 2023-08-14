@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
-import { useRoom } from "@/context/RoomContext";
+import { IChatGetRoomList, useRoom } from "@/context/RoomContext";
+import { socket } from "@/app/layout";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();
@@ -29,16 +30,6 @@ export default function RoomTypeButton() {
 	    }
 }
 */
-  // useEffect(() => {
-  //   const ChatGetRoomList = (json: IChatGetRoomList) => {
-  //     roomDispatch({ type: "SET_NON_ROOMS", value: json.channelList });
-  //   };
-  //   socket.on("chat_get_roomlist", ChatGetRoomList);
-
-  //   return () => {
-  //     socket.off("chat_get_roomlist", ChatGetRoomList);
-  //   };
-  // }, []);
 
   // useEffect(() => {
   //   const ChatGetDmRoomList = (json: IChatGetRoomList) => {
@@ -55,10 +46,23 @@ export default function RoomTypeButton() {
     setDisabled(isNotDm);
   };
 
+  useEffect(() => {
+    const ChatGetRoomList = (json: IChatGetRoomList) => {
+      json
+        ? roomDispatch({ type: "SET_NON_ROOMS", value: json.channelList })
+        : null;
+    };
+    socket.on("chat_get_roomlist", ChatGetRoomList);
+
+    return () => {
+      socket.off("chat_get_roomlist", ChatGetRoomList);
+    };
+  }, []);
+
   const NonDmBtnClick = () => {
-    // socket.emit("chat_get_roomlist", (status_code: number) => {
-    //   console.log(status_code);
-    // });
+    socket.emit("chat_get_roomlist", (status_code: number) => {
+      console.log(status_code);
+    });
     OnClick(true);
   };
 

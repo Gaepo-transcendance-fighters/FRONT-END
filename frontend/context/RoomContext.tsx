@@ -27,6 +27,7 @@ export interface IMember {
 
 export interface IChatRoom0 {
   owner: string;
+  targetNickname?: string;
   channelIdx: number;
   mode: Mode;
 }
@@ -45,13 +46,15 @@ export interface IChatRoomAdmin {}
 
 export interface IChatGetRoom {
   owner?: string;
-  targetNickname?: null;
+  targetNickname?: string;
   channelIdx: number;
   mode: Mode;
 }
 
 export interface IChatGetRoomList {
-  channelList?: IChatGetRoom[];
+  channelList: IChatRoom0[];
+  // channelList: IChatGetRoom[];
+  // channelList?: IChatGetRoom[];
 }
 
 export interface IChatMute {
