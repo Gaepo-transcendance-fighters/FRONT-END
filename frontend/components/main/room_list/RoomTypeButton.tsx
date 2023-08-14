@@ -4,43 +4,24 @@ import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
 import { IChatGetRoomList, IChatRoom0, useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/layout";
+import { useUser } from "@/context/UserContext";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();
   const [disabled, setDisabled] = useState(true);
+  const { userState } = useUser();
 
-  /*
-  {
-    channelList[]? {
-      channel {
-        owner: string,
-        channelIdx: number,
-        mode : enum
-      }
-  }
-*/
+  useEffect(() => {
+    const ChatGetDmRoomList = (json: IChatRoom0[]) => {
+      console.log("ChatGetDmRoomList : ", json);
+      roomDispatch({ type: "SET_DM_ROOMS", value: json });
+    };
+    socket.on("chat_get_DMList", ChatGetDmRoomList);
 
-  /*
-// emit - client 
-{
-	dmList[]? {
-	    dmChannel {
-	      targetNickname : string,
-	      targetIdx : number,
-	    }
-}
-*/
-
-  // useEffect(() => {
-  //   const ChatGetDmRoomList = (json: IChatGetRoomList) => {
-  //     roomDispatch({ type: "SET_DM_ROOMS", value: json.dmList });
-  //   };
-  //   socket.on("chat_get_DMlist", ChatGetDmRoomList);
-
-  //   return () => {
-  //     socket.off("chat_get_DMlist", ChatGetDmRoomList);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("chat_get_DMList", ChatGetDmRoomList);
+    };
+  }, []);
 
   const OnClick = (isNotDm: boolean) => {
     setDisabled(isNotDm);
@@ -65,9 +46,16 @@ export default function RoomTypeButton() {
   };
 
   const DmBtnClick = () => {
-    // socket.emit("chat_get_DMlist", JSON.stringify({userNickname : string, userIdx : number}), (status_code: number) => {
-    //   console.log(status_code);
-    // });
+    socket.emit(
+      "chat_get_DMList",
+      JSON.stringify({
+        userNickname: userState.nickname,
+        userIdx: userState.userIdx,
+      }),
+      (status_code: any) => {
+        console.log(status_code);
+      }
+    );
     OnClick(false);
   };
 
