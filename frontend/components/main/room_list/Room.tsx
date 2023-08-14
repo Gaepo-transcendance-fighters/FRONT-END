@@ -1,3 +1,5 @@
+"use client";
+
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useEffect, useState, useRef } from "react";
 import ProtectedModal from "./ProtectedModal";
@@ -9,7 +11,6 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
   const statusCode = useRef(0);
-  const pwRef = useRef("");
   const { roomState, roomDispatch } = useRoom();
 
   const leftPadding = (idx: number) => {
@@ -32,7 +33,6 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
 
   useEffect(() => {
     const ChatEnter = (json: any) => {
-      console.log("json : ", json);
       roomDispatch({ type: "SET_CUR_MEM", value: json.member });
       //channelIdx 안보내줘도 될듯?
     };
@@ -44,26 +44,26 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   }, []);
 
   const RoomClick = (room: IChatRoom0) => {
-    chatSocket.emit(
-      "chat_enter",
-      {
-        userNickname: "intra_id",
-        userIdx: 3,
-        channelIdx: room.channelIdx,
-        password: pwRef.current,
-      },
-      (statusCode: number) => {
-        //   if (statusCode가 정상) {
-        if (room.mode === Mode.PROTECTED) handleOpen();
-        else {
-          if (roomState.currentRoom !== room) {
-            roomDispatch({ type: "SET_CURRENTROOM", value: room });
+    if (room.mode !== Mode.PROTECTED) {
+      chatSocket.emit(
+        "chat_enter",
+        JSON.stringify({
+          userNickname: "intra_id",
+          userIdx: 3,
+          channelIdx: room.channelIdx,
+        }),
+        (statusCode: number) => {
+          if (statusCode === 200) {
+            if (roomState.currentRoom !== room) {
+              roomDispatch({ type: "SET_CURRENTROOM", value: room });
+            }
+            roomDispatch({ type: "SET_ISOPEN", value: true });
           }
-          roomDispatch({ type: "SET_ISOPEN", value: true });
         }
-        //   }
-      }
-    );
+      );
+    } else {
+      handleOpen();
+    }
   };
 
   return (
@@ -84,11 +84,9 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
       <ProtectedModal
         open={open}
         handleClose={handleClose}
-        statusCode={statusCode}
         room={room}
         fail={fail}
         setFail={setFail}
-        pwRef={pwRef}
       />
     </>
   );

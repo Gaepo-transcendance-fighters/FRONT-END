@@ -36,8 +36,8 @@ export default function CreateRoomModal({
   };
 
   useEffect(() => {
-    const ChatCreateRoom = (json: any) => {
-      roomDispatch({ type: "ADD_ROOM", value: json as IChatRoom0 });
+    const ChatCreateRoom = (data: IChatRoom0) => {
+      roomDispatch({ type: "ADD_ROOM", value: data });
       setValue("");
       setOpen(false);
     };
@@ -50,11 +50,7 @@ export default function CreateRoomModal({
   //userId=?
 
   const OnClick = () => {
-    chatSocket.emit(
-      "BR_chat_create_room",
-      { password: value },
-      (res: any) => {}
-    );
+    chatSocket.emit("BR_chat_create_room", JSON.stringify({ password: value }));
     //TODO : dto 정하는게 어떨까... < 추천
     // 일단은 이렇게. dto는 나중에
   };

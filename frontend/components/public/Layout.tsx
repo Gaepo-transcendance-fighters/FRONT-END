@@ -14,8 +14,12 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
+<<<<<<< HEAD
 import { chatSocket } from "@/app/page";
+=======
+>>>>>>> aac5bb08f4a1a5e41062ebeba502c43e7a5756c9
 import { useFriend } from "@/context/FriendContext";
+import { socket } from "@/app/page";
 
 export const main = {
   main0: "#67DBFB",
@@ -70,8 +74,13 @@ interface IMaindata {
 }
 
 const Layout = () => {
+<<<<<<< HEAD
   const { authState } = useAuth();
   const { roomDispatch } = useRoom();
+=======
+  const { state } = useAuth();
+  const { roomState, roomDispatch } = useRoom();
+>>>>>>> aac5bb08f4a1a5e41062ebeba502c43e7a5756c9
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
 
@@ -83,7 +92,6 @@ const Layout = () => {
       roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-
       userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
       userDispatch({
         type: "CHANGE_NICK_NAME",
@@ -106,23 +114,24 @@ const Layout = () => {
       // console.log("in emit");
       chatSocket.emit(
         "main_enter",
-        JSON.stringify({ intra: "jaekim" }),
+        JSON.stringify({ intra: "hoslim" }),
         (data: IMaindata) => {
-          roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
-          friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
-          friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-          userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
-          userDispatch({
-            type: "CHANGE_NICK_NAME",
-            value: data.userObject.nickname,
-          });
-          userDispatch({
-            type: "SET_USER_IDX",
-            value: data.userObject.userIdx,
-          });
+          // roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+          // friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+          // friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+          // userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+          // userDispatch({
+          //   type: "CHANGE_NICK_NAME",
+          //   value: data.userObject.nickname,
+          // });
+          // userDispatch({
+          //   type: "SET_USER_IDX",
+          //   value: data.userObject.userIdx,
+          // });
         }
       );
     }
+<<<<<<< HEAD
   }, [authState.isLoggedIn]);
   // useEffect(() => {
   //   if (isLoggedIn) {
@@ -135,6 +144,9 @@ const Layout = () => {
   //   setRooms({ type: "main-enter", payload: mockChatRoomList0 });
   // }, []);
   // chatSocket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
+=======
+  }, [state.isLoggedIn]);
+>>>>>>> aac5bb08f4a1a5e41062ebeba502c43e7a5756c9
 
   return (
     <Box sx={{ display: "flex" }}>

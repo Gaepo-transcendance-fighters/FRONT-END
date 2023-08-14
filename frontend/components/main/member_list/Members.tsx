@@ -9,7 +9,7 @@ export default function Members() {
   return (
     <div className="memlist">
       <div>
-        {roomState.currentRoomMember.map((person, idx) => (
+        {roomState.currentRoomMemberList.map((person, idx) => (
           <div key={idx}>
             <Member idx={idx} person={person} />
           </div>
