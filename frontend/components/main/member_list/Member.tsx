@@ -6,7 +6,13 @@ import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import "@/components/main/member_list/MemberList.css";
 import { useState, MouseEvent, useEffect } from "react";
 import MemberModal from "./MemberModal";
-import { IChatKick, IMember, Permission, alert, useRoom } from "@/context/RoomContext";
+import {
+  IChatKick,
+  IMember,
+  Permission,
+  alert,
+  useRoom,
+} from "@/context/RoomContext";
 import { Menu, MenuItem } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
@@ -150,6 +156,7 @@ export default function Member({
         targetIdx: person.userIdx,
       }),
       (data: any) => {
+        // 아직 안정해짐
         console.log("data : ", data);
       }
     );

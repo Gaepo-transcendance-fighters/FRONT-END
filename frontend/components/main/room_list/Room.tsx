@@ -3,7 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import ProtectedModal from "./ProtectedModal";
-import { IChatEnter, IChatEnterNoti, alert, useRoom } from "@/context/RoomContext";
+import {
+  IChatEnter,
+  IChatEnterNoti,
+  alert,
+  useRoom,
+} from "@/context/RoomContext";
 import { IChatRoom0, Mode } from "@/context/RoomContext";
 import { socket } from "@/app/layout";
 import Alert from "@mui/material/Alert";
@@ -17,7 +22,6 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
 
   useEffect(() => {
     const ChatEnterNoti = (data: IChatEnterNoti) => {
-      //alert
       setShowAlert(true);
       setNewMem(data.newMember);
     };
@@ -97,6 +101,7 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
             channelIdx: room.channelIdx,
           }),
           (json: any) => {
+            // 아직 안정해짐
             if (roomState.currentRoom !== room) {
               roomDispatch({ type: "SET_CURRENTROOM", value: room });
             }
@@ -149,10 +154,10 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
         setFail={setFail}
       />
       {showAlert ? (
-          <Alert sx={alert} severity="info" style={{ width: "333px" }}>
-            {newMem} has joined
-          </Alert>
-        ) : null}
+        <Alert sx={alert} severity="info" style={{ width: "333px" }}>
+          {newMem} has joined
+        </Alert>
+      ) : null}
     </>
   );
 }

@@ -22,7 +22,6 @@ export interface IMember {
   userIdx: number | undefined;
   nickname: string | undefined;
   imgUri: string | undefined;
-  // permission: Permission;
 }
 
 export interface IChatRoom0 {
@@ -53,8 +52,6 @@ export interface IChatGetRoom {
 
 export interface IChatGetRoomList {
   channels: IChatRoom0[];
-  // channelList: IChatGetRoom[];
-  // channelList?: IChatGetRoom[];
 }
 
 export interface IChatMute {
@@ -68,6 +65,24 @@ export interface IChatKick {
 }
 
 export interface IDmMemList {
+  userIdx1: number;
+  userIdx2: number;
+  userNickname1: string;
+  userNickname2: string;
+  imgUrl: string;
+}
+
+export interface IChatDmEnter {
+  // Message[] {
+  // 	message {
+  // 		sender : string,
+  // 		msg : string
+  // 	},
+  // 	...
+  // }, 이 부분은 주전님이 타입 정해주세요
+  // channelIdx : number; currentRoom이 있어서 필요성을 느끼지 못하지만,
+  //  이 부분도 필요하시면 주석해제하시고요!
+
   userIdx1: number;
   userIdx2: number;
   userNickname1: string;

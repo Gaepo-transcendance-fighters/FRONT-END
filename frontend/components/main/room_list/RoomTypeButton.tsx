@@ -50,6 +50,7 @@ export default function RoomTypeButton() {
         userIdx: userState.userIdx,
       }),
       (status_code: any) => {
+        // 아직 안 정해짐
         console.log(status_code);
       }
     );

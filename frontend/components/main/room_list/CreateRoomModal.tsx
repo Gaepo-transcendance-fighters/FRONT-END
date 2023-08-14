@@ -55,7 +55,7 @@ export default function CreateRoomModal({
     socket.emit(
       "BR_chat_create_room",
       JSON.stringify({ password: value }),
-      (res: any) => {}
+      (res: any) => {} // 아직 안정해짐
     );
     //TODO : dto 정하는게 어떨까... < 추천
     // 일단은 이렇게. dto는 나중에
