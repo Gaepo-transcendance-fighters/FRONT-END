@@ -74,7 +74,7 @@ export default function ProtectedModal({
         if (statusCode === 200) {
           handleClose();
           setFail(false);
-          roomDispatch({ type: "SET_CURRENTROOM", value: room });
+          roomDispatch({ type: "SET_CUR_ROOM", value: room });
         } else {
           setFail(true);
         }
@@ -98,7 +98,7 @@ export default function ProtectedModal({
           if (statusCode === 200) {
             handleClose();
             setFail(false);
-            roomDispatch({ type: "SET_CURRENTROOM", value: room });
+            roomDispatch({ type: "SET_CUR_ROOM", value: room });
           } else {
             setFail(true);
           }

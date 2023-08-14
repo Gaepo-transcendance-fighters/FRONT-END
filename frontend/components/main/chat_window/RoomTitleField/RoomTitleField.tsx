@@ -11,11 +11,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
 
-export interface IChatRoom {
-  roomName: string;
-  isProtected: boolean;
-}
-
 interface IChat {
   channelIdx: number;
   senderIdx: number;
@@ -38,8 +33,8 @@ const RoomTitleField = ({ setMsgs }: Props) => {
   const { roomState, roomDispatch } = useRoom();
 
   const leaveRoom = () => {
-    roomDispatch({ type: "SET_ISOPEN", value: false });
-    roomDispatch({type: "SET_CURRENTROOM", value: null})
+    roomDispatch({ type: "SET_IS_OPEN", value: false });
+    roomDispatch({ type: "SET_CUR_ROOM", value: null });
   };
 
   return (

@@ -28,7 +28,7 @@ export default function RoomTypeButton() {
 
   useEffect(() => {
     const ChatGetRoomList = (json?: IChatRoom0[]) => {
-      json ? roomDispatch({ type: "SET_NON_ROOMS", value: json }) : null;
+      json ? roomDispatch({ type: "SET_NON_DM_ROOMS", value: json }) : null;
     };
     socket.on("chat_get_roomList", ChatGetRoomList);
 

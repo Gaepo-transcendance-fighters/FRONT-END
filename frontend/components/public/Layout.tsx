@@ -79,7 +79,7 @@ const Layout = () => {
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
-      roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
       userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
@@ -156,7 +156,6 @@ const Layout = () => {
         }}
       >
         <RoomList />
-        
       </Stack>
     </Box>
   );

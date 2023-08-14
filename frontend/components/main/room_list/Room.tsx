@@ -56,7 +56,7 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
     setOpen(false);
     setFail(false);
     roomState.currentRoom
-      ? roomDispatch({ type: "SET_ISOPEN", value: true })
+      ? roomDispatch({ type: "SET_IS_OPEN", value: true })
       : null;
   };
 
@@ -103,9 +103,9 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
           (json: any) => {
             // 아직 안정해짐
             if (roomState.currentRoom !== room) {
-              roomDispatch({ type: "SET_CURRENTROOM", value: room });
+              roomDispatch({ type: "SET_CUR_ROOM", value: room });
             }
-            roomDispatch({ type: "SET_ISOPEN", value: true });
+            roomDispatch({ type: "SET_IS_OPEN", value: true });
           }
         );
       } else {
@@ -119,9 +119,9 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
           (statusCode: number) => {
             if (statusCode === 200) {
               if (roomState.currentRoom !== room) {
-                roomDispatch({ type: "SET_CURRENTROOM", value: room });
+                roomDispatch({ type: "SET_CUR_ROOM", value: room });
               }
-              roomDispatch({ type: "SET_ISOPEN", value: true });
+              roomDispatch({ type: "SET_IS_OPEN", value: true });
             }
           }
         );

@@ -108,10 +108,10 @@ interface RoomContextData {
 
 type RoomAction =
   | { type: "SET_DM_ROOMS"; value: IChatRoom0[] }
-  | { type: "SET_NON_ROOMS"; value: IChatRoom0[] }
-  | { type: "SET_CURRENTROOM"; value: IChatRoom0 | null }
+  | { type: "SET_NON_DM_ROOMS"; value: IChatRoom0[] }
+  | { type: "SET_CUR_ROOM"; value: IChatRoom0 | null }
   | { type: "SET_CUR_MEM"; value: IMember[] }
-  | { type: "SET_ISOPEN"; value: boolean }
+  | { type: "SET_IS_OPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom0 }
   | { type: "ADD_CUR_MEM"; value: IMember }
   | { type: "SET_CUR_DM_MEM"; value: IDmMemList };
@@ -127,13 +127,13 @@ const initialState: RoomContextData = {
 
 const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
   switch (action.type) {
-    case "SET_ISOPEN":
+    case "SET_IS_OPEN":
       return { ...roomState, isOpen: action.value };
     case "SET_DM_ROOMS":
       return { ...roomState, dmRooms: action.value };
-    case "SET_NON_ROOMS":
+    case "SET_NON_DM_ROOMS":
       return { ...roomState, nonDmRooms: action.value };
-    case "SET_CURRENTROOM":
+    case "SET_CUR_ROOM":
       return { ...roomState, currentRoom: action.value };
     case "SET_CUR_MEM":
       return { ...roomState, currentRoomMemberList: action.value };
