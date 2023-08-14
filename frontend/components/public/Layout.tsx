@@ -14,8 +14,8 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
-import { socket } from "@/app/layout";
 import { useFriend } from "@/context/FriendContext";
+import { socket } from "@/app/page";
 
 export const main = {
   main0: "#67DBFB",
@@ -71,7 +71,7 @@ interface IMaindata {
 
 const Layout = () => {
   const { state } = useAuth();
-  const { roomDispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
 
@@ -82,7 +82,6 @@ const Layout = () => {
       roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-
       userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
       userDispatch({
         type: "CHANGE_NICK_NAME",
@@ -105,35 +104,24 @@ const Layout = () => {
       // console.log("in emit");
       socket.emit(
         "main_enter",
-        JSON.stringify({ intra: "jaekim" }),
+        JSON.stringify({ intra: "hoslim" }),
         (data: IMaindata) => {
-          roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
-          friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
-          friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-          userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
-          userDispatch({
-            type: "CHANGE_NICK_NAME",
-            value: data.userObject.nickname,
-          });
-          userDispatch({
-            type: "SET_USER_IDX",
-            value: data.userObject.userIdx,
-          });
+          // roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+          // friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+          // friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
+          // userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+          // userDispatch({
+          //   type: "CHANGE_NICK_NAME",
+          //   value: data.userObject.nickname,
+          // });
+          // userDispatch({
+          //   type: "SET_USER_IDX",
+          //   value: data.userObject.userIdx,
+          // });
         }
       );
     }
   }, [state.isLoggedIn]);
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     socket.emit("main_enter", "intra_id", 상태코드);
-  //   }
-  // }, [isLoggedIn]);
-
-  // socket.io로 mock data 받았다고 가정했을때.
-  // useEffect(() => {
-  //   setRooms({ type: "main-enter", payload: mockChatRoomList0 });
-  // }, []);
-  // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 
   return (
     <Box sx={{ display: "flex" }}>

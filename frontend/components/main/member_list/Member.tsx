@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import StarIcon from "@mui/icons-material/Star";
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import "@/components/main/member_list/MemberList.css";
 import { useState, MouseEvent } from "react";
 import MemberModal from "./MemberModal";
-import { IMember, useRoom } from "@/context/RoomContext";
+import { IMember, Permission, useRoom } from "@/context/RoomContext";
 import { Menu, MenuItem } from "@mui/material";
 import { Mode } from "@/components/public/Layout";
+import { useUser } from "@/context/UserContext";
 
 export default function Member({
   idx,
@@ -19,6 +21,7 @@ export default function Member({
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { roomState } = useRoom();
+  const { userState } = useUser();
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -41,14 +44,24 @@ export default function Member({
         key={idx}
         className="membtn"
         onClick={handleOpenModal}
-        onContextMenu={roomState.currentRoom?.mode !== Mode.PRIVATE ? (e) => handleOpenMenu(e) : undefined}
+        onContextMenu={
+          roomState.currentRoom?.mode !== Mode.PRIVATE
+            ? (e) => handleOpenMenu(e)
+            : undefined
+        }
       >
         <div className="memimg">
           <Image src="/seal.png" alt="profile" width={53} height={53} />
+          {/* <Image src={person.imgUri} alt="profile" width={53} height={53} /> */}
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
-          <StarIcon sx={{ height: "15px", color: "yellow" }} />
+          {person.permission === Permission.OWNER ? (
+            <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
+          ) : null}
+          {person.permission === Permission.ADMIN ? (
+            <StarOutlineRoundedIcon sx={{ height: "15px", color: "yellow" }} />
+          ) : null}
         </div>
       </div>
       <Menu

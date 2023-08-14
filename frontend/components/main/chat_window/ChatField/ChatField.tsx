@@ -1,72 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 
-export interface IChat {
-  name: string;
-  message: string;
+interface IChat {
+  channelIdx: number;
+  senderIdx: number;
+  msg: string;
+  msgDate: Date;
 }
 
-const mockMessageHistories: IChat[] = [
-  {
-    name: "jujeon",
-    message: "1 hello there",
-  },
-  {
-    name: "jujeon",
-    message: "2 dear bear",
-  },
-  {
-    name: "jujeon",
-    message: "3 I got there",
-  },
-  {
-    name: "jujeon",
-    message:
-      "4 ft_transcendence asdkfjasdfklsadfijcj sdlkf l sdaif jisdf ljksdf ljk asd;kfadsk end",
-  },
-  {
-    name: "jujeon",
-    message: "5 ft_transcendence",
-  },
-  {
-    name: "jujeon",
-    message: "6 ft_transcendence",
-  },
-  {
-    name: "jujeon",
-    message: "7 ft_transcendence",
-  },
-  {
-    name: "jujeon",
-    message: "8 ft_transcendence",
-  },
-  {
-    name: "jujeon",
-    message: "9 ft_transcendence",
-  },
-  {
-    name: "jujeon",
-    message: "10 ft_transcendence",
-  },
-  {
-    name: "jujeon",
-    message: "11 ft_transcendence",
-  },
-  {
-    name: "jujeon",
-    message: "12 ende",
-  },
-];
+interface Props {
+  msgs: IChat[];
+}
 
-const ChatField = () => {
-  const [msgHistories, setMsgHistories] = useState<IChat[]>([]);
-
-  useEffect(() => {
-    setMsgHistories(mockMessageHistories);
-  }, []);
-
+const ChatField = ({ msgs }: Props) => {
+  console.log(msgs);
   return (
     <Box
       sx={{
@@ -78,7 +26,7 @@ const ChatField = () => {
         margin: "0% 2% 1% 2%",
       }}
     >
-      {msgHistories.map((value, i) => {
+      {msgs.map((value, i) => {
         return (
           <ul
             key={i}
@@ -95,7 +43,7 @@ const ChatField = () => {
               {/* {value.name + ": " + value.message} */}
               {
                 <Typography variant="h6">
-                  {value.name + ": " + value.message}
+                  {value.senderIdx + ": " + value.msg}
                 </Typography>
               }
             </li>

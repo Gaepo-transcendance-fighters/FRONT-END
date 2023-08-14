@@ -34,23 +34,24 @@ interface RoomContextData {
   dmRooms: IChatRoom0[];
   nonDmRooms: IChatRoom0[];
   currentRoom: IChatRoom0 | null;
-  currentRoomMember: IMember[];
+  currentRoomMemberList: IMember[];
   isOpen: boolean;
 }
 
 type RoomAction =
   | { type: "SET_DM_ROOMS"; value: IChatRoom0[] }
   | { type: "SET_NON_ROOMS"; value: IChatRoom0[] }
-  | { type: "SET_CURRENTROOM"; value: IChatRoom0 }
+  | { type: "SET_CURRENTROOM"; value: IChatRoom0 | null }
   | { type: "SET_CUR_MEM"; value: IMember[] }
   | { type: "SET_ISOPEN"; value: boolean }
-  | { type: "ADD_ROOM"; value: IChatRoom0 };
+  | { type: "ADD_ROOM"; value: IChatRoom0 }
+  | { type: "ADD_CUR_MEM"; value: IMember };
 
 const initialState: RoomContextData = {
   dmRooms: [],
   nonDmRooms: [],
   currentRoom: null,
-  currentRoomMember: [],
+  currentRoomMemberList: [],
   isOpen: false,
 };
 
@@ -65,11 +66,19 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
     case "SET_CURRENTROOM":
       return { ...roomState, currentRoom: action.value };
     case "SET_CUR_MEM":
-      return { ...roomState, currentRoomMember: action.value };
+      return { ...roomState, currentRoomMemberList: action.value };
     case "ADD_ROOM":
       return {
         ...roomState,
         nonDmRooms: [...roomState.nonDmRooms, action.value],
+      };
+    case "ADD_CUR_MEM":
+      return {
+        ...roomState,
+        currentRoomMemberList: [
+          ...roomState.currentRoomMemberList,
+          action.value,
+        ],
       };
     default:
       return roomState;
