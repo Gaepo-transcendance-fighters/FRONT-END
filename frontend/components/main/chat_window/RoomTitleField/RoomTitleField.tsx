@@ -51,22 +51,44 @@ const RoomTitleField = ({ setMsgs }: Props) => {
       }
       return item;
     });
-    console.log(roomState.nonDmRooms);
+    // console.log("[RoomTItleField] before updateChanels : " + roomState.nonDmRooms);
     roomDispatch({ type: "SET_NON_ROOMS", value: updatedArray });
   };
 
   useEffect(() => {
     const leaveHandler = (channel: IChatRoom0) => {
-      console.log(channel);
+      console.log(
+        "[RoomTItleField] receive from chat_goto_lobby API : " + channel
+      );
       if (roomState.currentRoom) {
         updateChannels(roomState.currentRoom?.channelIdx, channel);
         roomDispatch({ type: "SET_ISOPEN", value: false });
         roomDispatch({ type: "SET_CURRENTROOM", value: null });
-      }
+      } else
+        console.log("[RoomTItleField] there isn't roomState.currentRoom case");
+    };
+    const leaveAndDeleteHandler = (channels: IChatRoom0[]) => {
+      console.log(
+        "[RoomTItleField] leaveAndDeleteHandler on! chanel : ",
+        channels
+      );
+      if (roomState.currentRoom) {
+        roomDispatch({ type: "SET_ISOPEN", value: false });
+        roomDispatch({ type: "SET_CURRENTROOM", value: null });
+        roomDispatch({ type: "SET_NON_ROOMS", value: channels});
+      } else
+        console.log("[RoomTItleField] there isn't roomState.currentRoom case");
     };
     socket.on("chat_goto_lobby", leaveHandler);
-    console.log("recieve from server");
+    socket.on("BR_chat_room_delete", leaveAndDeleteHandler);
   });
+
+  useEffect(() => {
+    console.log(
+      "[RoomTItleField] show current channels has been changed : ",
+      roomState.nonDmRooms
+    );
+  }, [roomState.nonDmRooms]);
 
   const leaveRoom = () => {
     const payload = {
@@ -74,7 +96,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
       userIdx: 3, // [작업필요] 추후 나의 userIdx로 교체필요
     };
     socket.emit("chat_goto_lobby", payload);
-    console.log("click leaveroom");
+    console.log("[RoomTItleField] click leaveroom");
   };
 
   return (
