@@ -6,7 +6,7 @@ import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import "@/components/main/member_list/MemberList.css";
 import { useState, MouseEvent, useEffect } from "react";
 import MemberModal from "./MemberModal";
-import { IMember, Permission, useRoom } from "@/context/RoomContext";
+import { IChatKick, IMember, Permission, useRoom } from "@/context/RoomContext";
 import { Menu, MenuItem } from "@mui/material";
 import { Mode } from "@/components/public/Layout";
 import { useUser } from "@/context/UserContext";
@@ -81,13 +81,6 @@ export default function Member({
       return () => clearTimeout(time);
     }
   }, [showAlert]);
-  /*
-  {
-    channelIdx : number,
-    userIdx : number,
-    grant : boolean,
-  }
-  */
 
   // useEffect(() => {
   //   const ChatRoomAdmin = (json : IChatRoomAdmin) => {
@@ -112,24 +105,17 @@ export default function Member({
     // });
   };
 
-  // emit - roomId
-  // {
-  // 	targetNickname : string,
-  // 	targetIdx : number,
-  // 	mute : boolean
-  // }
+  // useEffect(() => {
+  //   const ChatMute = (data: any) => { // 아직 api 완성안됨
+  //     console.log("Mute : ", data);
+  //   };
 
-  useEffect(() => {
-    const ChatMute = (data: any) => {
-      console.log("Mute : ", data);
-    };
+  //   socket.on("chat_mute", ChatMute);
 
-    socket.on("chat_mute", ChatMute);
-
-    return () => {
-      socket.off("chat_mute", ChatMute);
-    };
-  });
+  //   return () => {
+  //     socket.off("chat_mute", ChatMute);
+  //   };
+  // });
 
   const Mute = () => {
     socket.emit(
@@ -144,17 +130,36 @@ export default function Member({
     setString(strings[1]);
   };
 
+  useEffect(() => {
+    const ChatKick = (data: IChatKick) => {
+      console.log("kick : ", data);
+      setShowAlert(true);
+      setString(strings[2]);
+    };
+    socket.on("chat_kick", ChatKick);
+
+    return () => {
+      socket.off("chat_kick", ChatKick);
+    };
+  });
+
   const Kick = () => {
-    // socket.emit("chat_kick", JSON.stringfy(
-    // {
-    //   channelIdx : roomState.currentRoom?.channelIdx,
-    //   targetNickname : string,
-    // targetIdx : number
-    // }), (statusCode) => {
+    socket.emit(
+      "chat_kick",
+      JSON.stringify({
+        channelIdx: roomState.currentRoom?.channelIdx,
+        targetNickname: person.nickname,
+        targetIdx: person.userIdx,
+      }),
+      (data: any) => {
+        console.log("data : ", data);
+      }
+    );
+    // }), (statusCode : number) => {
     // if (statusCode === 200) {
 
-    setShowAlert(true);
-    setString(strings[2]);
+    // setShowAlert(true);
+    // setString(strings[2]);
     // }
   };
 
@@ -169,8 +174,8 @@ export default function Member({
         key={idx}
         className="membtn"
         onClick={handleOpenModal}
-        onContextMenu={(e) =>
-          handleOpenMenu(e)
+        onContextMenu={
+          (e) => handleOpenMenu(e)
           // authorization === (Permission.ADMIN || Permission.OWNER)
           //   ? handleOpenMenu(e)
           //   : e.preventDefault()

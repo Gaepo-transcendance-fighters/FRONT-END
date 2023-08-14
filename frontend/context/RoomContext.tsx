@@ -58,6 +58,12 @@ export interface IChatMute {
   channelList?: IChatGetRoom[];
 }
 
+export interface IChatKick {
+  targetNickname: string;
+  targetIdx: number;
+  leftMember: IMember[];
+}
+
 interface RoomContextData {
   dmRooms: IChatRoom0[];
   nonDmRooms: IChatRoom0[];
