@@ -19,6 +19,7 @@ const font = createTheme({
 });
 
 import { useUser } from "@/context/UserContext";
+import tmp_friendprofile from "@/app/tmp_friend_profile/page";
 {
   /* <Myprofile Img={소켓으로받아온 imguri링크} Nickname={소켓으로받아온 닉네임}/> */
   // const Myprofile = (props) => {
@@ -104,6 +105,15 @@ const Myprofile = () => {
             }}
           >
             2차인증ui
+          </Button>
+
+          <Button
+            type="button"
+            onClick={() => {
+              router.push("./tmp_friend_profile");
+            }}
+          >
+            친구프로필페이지
           </Button>
         </div>
       </div>

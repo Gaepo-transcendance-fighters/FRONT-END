@@ -145,6 +145,7 @@ const Layout = () => {
           }}
         >
           <Myprofile />
+
           {/* <Myprofile Img={소켓으로받아온 imguri링크} Nickname={소켓으로받아온 닉네임}/> */}
           {/* <InviteGame /> */}
           {/* <WaitAccept /> */}
