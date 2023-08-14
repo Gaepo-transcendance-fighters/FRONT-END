@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import ProtectedModal from "./ProtectedModal";
 import {
+  IChatDmEnter,
   IChatEnter,
   IChatEnterNoti,
   alert,
@@ -73,7 +74,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   }, []);
 
   useEffect(() => {
-    const ChatDmEnter = (json: any) => {
+    const ChatDmEnter = (json: IChatDmEnter) => {
       roomDispatch({
         type: "SET_CUR_DM_MEM",
         value: {
