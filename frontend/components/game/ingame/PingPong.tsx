@@ -169,11 +169,17 @@ const PingPong = () => {
 
       if (newLocation.x <= -500) {
         gameDispatch({ type: "B_SCORE", value: gameState.bScore });
-        gameSocket.emit("game_pause_score", {
-          userIdx: gameState.bPlayer.id,
-          score: gameState.bScore,
-          getScoreTime: Date.now(),
-        });
+        gameSocket.emit(
+          "game_pause_score",
+          {
+            userIdx: gameState.bPlayer.id,
+            score: gameState.bScore,
+            getScoreTime: Date.now(),
+          },
+          (res: { code: number; msg: string }) => {
+            console.log(res);
+          }
+        );
         resetBall();
         resetDerection();
         setReady(false);
@@ -181,11 +187,17 @@ const PingPong = () => {
       }
       if (newLocation.x > 500) {
         gameDispatch({ type: "A_SCORE", value: gameState.aScore });
-        gameSocket.emit("game_pause_score", {
-          userIdx: gameState.aPlayer.id,
-          score: gameState.aScore,
-          getScoreTime: Date.now(),
-        });
+        gameSocket.emit(
+          "game_pause_score",
+          {
+            userIdx: gameState.aPlayer.id,
+            score: gameState.aScore,
+            getScoreTime: Date.now(),
+          },
+          (res: { code: number; msg: string }) => {
+            console.log(res);
+          }
+        );
         resetBall();
         resetDerection();
         setReady(false);
@@ -200,26 +212,26 @@ const PingPong = () => {
   }, [ball]);
 
   useEffect(() => {
-    gameSocket.on(
-      "game_start",
-      ({
-        animationStartDate,
-        ballDegreeX,
-        ballDegreeY,
-        ballNextPosX,
-        ballNextPosY,
-        ballExpectedEventDate,
-      }) => {
-        console.log("game_start");
-        gameDispatch({
-          type: "SET_SERVER_DATE_TIME",
-          value: animationStartDate,
-        });
-        console.log("server", ballDegreeX, ballDegreeY);
-        setDirection({ x: ballDegreeX, y: ballDegreeY });
-        gameStart();
-      }
-    );
+    // gameSocket.on(
+    //   "game_start",
+    //   ({
+    //     animationStartDate,
+    //     ballDegreeX,
+    //     ballDegreeY,
+    //     ballNextPosX,
+    //     ballNextPosY,
+    //     ballExpectedEventDate,
+    //   }) => {
+    //     console.log("game_start");
+    //     gameDispatch({
+    //       type: "SET_SERVER_DATE_TIME",
+    //       value: animationStartDate,
+    //     });
+    //     console.log("server", ballDegreeX, ballDegreeY);
+    //     setDirection({ x: ballDegreeX, y: ballDegreeY });
+    //     gameStart();
+    //   }
+    // );
     gameSocket.on(
       "game_predict_ball",
       ({
@@ -263,7 +275,7 @@ const PingPong = () => {
 
   useEffect(() => {
     gameDispatch({ type: "SET_LATENCY", value: 12 });
-    if (!ready) return;
+    if (!ready) return gameStart();
     window.addEventListener("keydown", handlePaddle);
     window.addEventListener("keyup", debouncedSendData);
 

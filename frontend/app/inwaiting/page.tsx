@@ -210,31 +210,40 @@ const Inwaiting = () => {
           type: "SET_LATENCY",
           value: latency < 0 ? -latency : latency,
         });
+      }
+    );
+    gameSocket.on(
+      "game_start",
+      ({
+        animationStartDate,
+        ballDegreeX,
+        ballDegreeY,
+        ballNextPosX,
+        ballNextPosY,
+        ballExpectedEventDate,
+      }: {
+        animationStartDate: number;
+        ballDegreeX: number;
+        ballDegreeY: number;
+        ballNextPosX: number;
+        ballNextPosY: number;
+        ballExpectedEventDate: number;
+      }) => {
+        console.log("game_start");
+        gameDispatch({
+          type: "SET_SERVER_DATE_TIME",
+          value: animationStartDate,
+        });
+        gameDispatch({
+          type: "SET_DEGREE",
+          value: { x: ballDegreeX, y: ballDegreeY },
+        });
         setOpenModal(true);
         setTimeout(() => {
           router.push("./gameplaying");
         }, 2000);
       }
     );
-    // gameSocket.on(
-    //   "game_start",
-    //   ({
-    //     animationStartDate,
-    //     ballDegreeX,
-    //     ballDegreeY,
-    //     ballNextPosX,
-    //     ballNextPosY,
-    //     ballExpectedEventDate,
-    //   }: {
-    //     animationStartDate: number;
-    //     ballDegreeX: number;
-    //     ballDegreeY: number;
-    //     ballNextPosX: number;
-    //     ballNextPosY: number;
-    //     ballExpectedEventDate: number;
-    //   }) => {
-    //   }
-    // );
 
     return () => {
       gameSocket.off("game_queue_success");
@@ -243,7 +252,7 @@ const Inwaiting = () => {
       gameSocket.off("game_ready_second");
       gameSocket.off("game_ready_second_answer");
       gameSocket.off("game_ready_final");
-      // gameSocket.off("game_start");
+      gameSocket.off("game_start");
     };
   }, []);
 

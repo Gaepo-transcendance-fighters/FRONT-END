@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
-import { socket } from "@/app/page";
+import { chatSocket } from "@/app/page";
 import { useFriend } from "@/context/FriendContext";
 
 export const main = {
@@ -92,19 +92,19 @@ const Layout = () => {
       userDispatch({ type: "SET_USER_IDX", value: data.userObject.userIdx });
     };
 
-    socket.on("main_enter", MainEnter);
+    chatSocket.on("main_enter", MainEnter);
 
     return () => {
-      socket.off("main_enter", MainEnter);
+      chatSocket.off("main_enter", MainEnter);
     };
   }, []);
-  //socket에서 값을 받아와도 dispatch 하는 시간동안 값은 비어있으므로 내부에서 값을 찍어도 안나옴.
+  //chatSocket에서 값을 받아와도 dispatch 하는 시간동안 값은 비어있으므로 내부에서 값을 찍어도 안나옴.
   //미세한 찰나일 것임.!
 
   useEffect(() => {
     if (authState.isLoggedIn) {
       // console.log("in emit");
-      socket.emit(
+      chatSocket.emit(
         "main_enter",
         JSON.stringify({ intra: "jaekim" }),
         (data: IMaindata) => {
