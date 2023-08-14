@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import ProtectedModal from "./ProtectedModal";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom0, Mode } from "@/context/RoomContext";
-import { socket } from "@/app/layout";
+import { chatSocket } from "@/app/page";
 
 export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -36,15 +36,15 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
       roomDispatch({ type: "SET_CUR_MEM", value: json.member });
       //channelIdx 안보내줘도 될듯?
     };
-    socket.on("chat_enter", ChatEnter);
+    chatSocket.on("chat_enter", ChatEnter);
 
     return () => {
-      socket.off("chat_enter", ChatEnter);
+      chatSocket.off("chat_enter", ChatEnter);
     };
   }, []);
 
   const RoomClick = (room: IChatRoom0) => {
-    socket.emit(
+    chatSocket.emit(
       "chat_enter",
       {
         userNickname: "intra_id",

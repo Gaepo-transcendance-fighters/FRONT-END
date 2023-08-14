@@ -17,7 +17,6 @@ import { main } from "@/components/public/Layout";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { io } from "socket.io-client";
-import { socket } from "../layout";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";
@@ -113,6 +112,8 @@ const OptionSelect = () => {
         console.log(res);
         if (res.code === "200") {
           console.log("queue regist start");
+          console.log(authState.id);
+          console.log(Date.now());
           gameSocket.emit(
             "game_queue_regist",
             {

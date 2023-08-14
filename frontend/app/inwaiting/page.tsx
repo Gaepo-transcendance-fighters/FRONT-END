@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -28,6 +28,20 @@ const modalStyle = {
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useGame } from "@/context/GameContext";
+import { gameSocket } from "../optionselect/page";
+import { useAuth } from "@/context/AuthContext";
+
+enum SpeedOption {
+  speed1,
+  speed2,
+  speed3,
+}
+
+enum MapOption {
+  map1,
+  map2,
+  map3,
+}
 
 enum GameType {
   FRIEND,
@@ -35,29 +49,203 @@ enum GameType {
   RANK,
 }
 
-const inwaiting = () => {
+interface IGameQueueSuccess {
+  GameRoomId: string;
+  userNicknameFirst: string;
+  userIdxFirst: number;
+  userNicknameSecond: string;
+  userIdxSecond: number;
+  successDate: Date;
+}
+
+interface IGameSetting {
+  roomId: string;
+  gameType: GameType; // friend, normal, rank
+  speed: SpeedOption; // normal, fast, faster
+  mapNumber: MapOption; // 0, 1, 2
+}
+
+const Inwaiting = () => {
   const router = useRouter();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { gameState, gameDispatch } = useGame();
+  const { authState, authDispatch } = useAuth();
+  const [gameFirstReady, setGameFirstReady] = useState<boolean>(false);
+  const [gameSecondReady, setGameSecondReady] = useState<boolean>(false);
 
   const BackToMain = () => {
-    router.push("/");
+    gameSocket.emit("game_queue_quit", authState.id, () => {
+      console.log("game_queue_quit");
+    });
+    router.push("/game");
   };
 
-  const handleOpenModal_redir = () => {
-    setOpenModal(true);
-    setTimeout(() => {
-      {
-        gameState.gameMode === GameType.RANK
-          ? router.push("./gameplaying")
-          : router.push("./optionselect");
+  /*
+"userIdx": "104018",
+"serverDateTime": 1691848951821,
+"clientDateTime": 1691848951821
+*/
+
+  const handleOpenModal_redir = useCallback(() => {
+    console.log("game_queue_start");
+    console.log(gameFirstReady);
+    console.log(gameSecondReady);
+    // gameSocket.on("game_ready_first", (gameSetting: IGameSetting) => {
+    //   console.log("game_ready_first");
+    //   gameDispatch({ type: "SET_GAME_MODE", value: gameSetting.gameType });
+    //   gameDispatch({
+    //     type: "SET_BALL_SPEED_OPTION",
+    //     value: gameSetting.speed,
+    //   });
+    //   gameDispatch({
+    //     type: "SET_MAP_TYPE",
+    //     value: gameSetting.mapNumber,
+    //   });
+
+    // gameSocket.on(
+    //   "game_ready_second",
+    //   ({
+    //     roodId,
+    //     serverDateTime,
+    //   }: {
+    //     roodId: string;
+    //     serverDateTime: string;
+    //   }) => {
+    //     console.log("game_ready_second");
+    //     gameDispatch({
+    //       type: "SET_ROOM_ID",
+    //       value: roodId,
+    //     });
+    //     gameDispatch({
+    //       type: "SET_SERVER_DATE_TIME",
+    //       value: serverDateTime,
+    //     });
+    if (gameFirstReady && gameSecondReady) {
+      gameSocket.emit(
+        "game_ready_second_answer",
+        {
+          userIdx: authState.id,
+          serverDateTime: gameState.serverDateTime,
+          clientDateTime: Date.now(),
+        },
+        () => {
+          console.log("game_ready_second_answer");
+        }
+      );
+    }
+    // }
+    // );
+    // });
+  }, [gameFirstReady, gameSecondReady]);
+
+  useEffect(() => {
+    gameSocket.on("game_queue_success", () => {});
+    gameSocket.on("game_queue_quit", () => {});
+    gameSocket.on("game_ready_first", (gameSetting: IGameSetting) => {
+      console.log("game_ready_first");
+      gameDispatch({ type: "SET_GAME_MODE", value: gameSetting.gameType });
+      gameDispatch({
+        type: "SET_BALL_SPEED_OPTION",
+        value: gameSetting.speed,
+      });
+      gameDispatch({
+        type: "SET_MAP_TYPE",
+        value: gameSetting.mapNumber,
+      });
+      setGameFirstReady(true);
+    });
+    gameSocket.on(
+      "game_ready_second",
+      ({
+        roodId,
+        serverDateTime,
+      }: {
+        roodId: string;
+        serverDateTime: number;
+      }) => {
+        console.log("game_ready_second");
+        gameDispatch({
+          type: "SET_ROOM_ID",
+          value: roodId,
+        });
+        gameDispatch({
+          type: "SET_SERVER_DATE_TIME",
+          value: serverDateTime,
+        });
+        setGameSecondReady(true);
       }
-    }, 2000);
-  };
+    );
+    gameSocket.on("game_ready_second_answer", () => {});
+    gameSocket.on(
+      "game_ready_final",
+      ({
+        userNicknameFirst,
+        userIdxFirst,
+        firstLatency,
+        userNicknameSecond,
+        userIdxSecond,
+        secondLatency,
+      }: {
+        userNicknameFirst: string;
+        userIdxFirst: number;
+        firstLatency: number;
+        userNicknameSecond: string;
+        userIdxSecond: number;
+        secondLatency: number;
+      }) => {
+        console.log("game_ready_final");
+        if (authState.id === userIdxFirst) {
+          gameDispatch({
+            type: "A_PLAYER",
+            value: { nick: userNicknameFirst, id: userIdxFirst },
+          });
+        } else if (authState.id === userIdxSecond) {
+          gameDispatch({
+            type: "B_PLAYER",
+            value: { nick: userNicknameSecond, id: userIdxSecond },
+          });
+        }
+        const latency = firstLatency - secondLatency;
+        gameDispatch({
+          type: "SET_LATENCY",
+          value: latency < 0 ? -latency : latency,
+        });
+        setOpenModal(true);
+        setTimeout(() => {
+          router.push("./gameplaying");
+        }, 2000);
+      }
+    );
+    // gameSocket.on(
+    //   "game_start",
+    //   ({
+    //     animationStartDate,
+    //     ballDegreeX,
+    //     ballDegreeY,
+    //     ballNextPosX,
+    //     ballNextPosY,
+    //     ballExpectedEventDate,
+    //   }: {
+    //     animationStartDate: number;
+    //     ballDegreeX: number;
+    //     ballDegreeY: number;
+    //     ballNextPosX: number;
+    //     ballNextPosY: number;
+    //     ballExpectedEventDate: number;
+    //   }) => {
+    //   }
+    // );
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+    return () => {
+      gameSocket.off("game_queue_success");
+      gameSocket.off("game_queue_quit");
+      gameSocket.off("game_ready_first");
+      gameSocket.off("game_ready_second");
+      gameSocket.off("game_ready_second_answer");
+      gameSocket.off("game_ready_final");
+      // gameSocket.off("game_start");
+    };
+  }, []);
 
   return (
     <Card sx={{ display: "flex" }}>
@@ -240,4 +428,5 @@ const inwaiting = () => {
     </Card>
   );
 };
-export default inwaiting;
+
+export default Inwaiting;

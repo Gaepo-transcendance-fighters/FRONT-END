@@ -5,7 +5,7 @@ import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { IChatRoom0, useRoom } from "@/context/RoomContext";
-import { socket } from "@/app/layout";
+import { chatSocket } from "@/app/page";
 
 const style = {
   position: "absolute" as "absolute",
@@ -41,16 +41,20 @@ export default function CreateRoomModal({
       setValue("");
       setOpen(false);
     };
-    socket.on("BR_chat_create_room", ChatCreateRoom);
+    chatSocket.on("BR_chat_create_room", ChatCreateRoom);
 
     return () => {
-      socket.off("BR_chat_create_room", ChatCreateRoom);
+      chatSocket.off("BR_chat_create_room", ChatCreateRoom);
     };
   }, []);
   //userId=?
 
   const OnClick = () => {
-    socket.emit("BR_chat_create_room", { password: value }, (res: any) => {});
+    chatSocket.emit(
+      "BR_chat_create_room",
+      { password: value },
+      (res: any) => {}
+    );
     //TODO : dto 정하는게 어떨까... < 추천
     // 일단은 이렇게. dto는 나중에
   };

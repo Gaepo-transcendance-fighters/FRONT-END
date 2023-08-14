@@ -7,13 +7,14 @@ import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
-import io from "socket.io-client";
+import io from "chatSocket.io-client";
 import InviteGame from "../main/InviteGame/InviteGame";
 import WaitAccept from "../main/InviteGame/WaitAccept";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
-import { socket } from "@/app/layout";
+import { gameSocket } from "@/app/optionselect/page";
+import { chatSocket } from "@/app/page";
 import { useFriend } from "@/context/FriendContext";
 
 export const main = {
@@ -75,10 +76,10 @@ const Layout = () => {
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
     };
-    socket.on("main_enter", MainEnter);
+    chatSocket.on("main_enter", MainEnter);
 
     return () => {
-      socket.off("main_enter", MainEnter);
+      chatSocket.off("main_enter", MainEnter);
     };
   }, []);
 
@@ -86,7 +87,7 @@ const Layout = () => {
 
   useEffect(() => {
     if (authState.isLoggedIn) {
-      socket.emit("main_enter", { intra: "hoslim" }, (data: any) => {
+      chatSocket.emit("main_enter", { intra: "hoslim" }, (data: any) => {
         roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
         friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
         friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
@@ -95,15 +96,15 @@ const Layout = () => {
   }, [authState.isLoggedIn]);
   // useEffect(() => {
   //   if (isLoggedIn) {
-  //     socket.emit("main_enter", "intra_id", 상태코드);
+  //     chatSocket.emit("main_enter", "intra_id", 상태코드);
   //   }
   // }, [isLoggedIn]);
 
-  // socket.io로 mock data 받았다고 가정했을때.
+  // chatSocket.io로 mock data 받았다고 가정했을때.
   // useEffect(() => {
   //   setRooms({ type: "main-enter", payload: mockChatRoomList0 });
   // }, []);
-  // socket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
+  // chatSocket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
 
   return (
     <Box sx={{ display: "flex" }}>

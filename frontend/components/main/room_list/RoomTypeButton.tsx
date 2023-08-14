@@ -33,10 +33,10 @@ export default function RoomTypeButton() {
   //   const ChatGetRoomList = (json: any) => {
   //     roomDispatch({ type: "SET_NON_ROOMS", value: json.channelList });
   //   };
-  //   socket.on("chat_get_roomlist", ChatGetRoomList);
+  //   chatSocket.on("chat_get_roomlist", ChatGetRoomList);
 
   //   return () => {
-  //     socket.off("chat_get_roomlist", ChatGetRoomList);
+  //     chatSocket.off("chat_get_roomlist", ChatGetRoomList);
   //   };
   // }, []);
 
@@ -44,10 +44,10 @@ export default function RoomTypeButton() {
   //   const ChatGetDmRoomList = (json: any) => {
   //     roomDispatch({ type: "SET_DM_ROOMS", value: json.dmList });
   //   };
-  //   socket.on("chat_get_DMlist", ChatGetDmRoomList);
+  //   chatSocket.on("chat_get_DMlist", ChatGetDmRoomList);
 
   //   return () => {
-  //     socket.off("chat_get_DMlist", ChatGetDmRoomList);
+  //     chatSocket.off("chat_get_DMlist", ChatGetDmRoomList);
   //   };
   // }, []);
 
@@ -56,14 +56,14 @@ export default function RoomTypeButton() {
   };
 
   const NonDmBtnClick = () => {
-    // socket.emit("chat_get_roomlist", (status_code: number) => {
+    // chatSocket.emit("chat_get_roomlist", (status_code: number) => {
     //   console.log(status_code);
     // });
     OnClick(true);
   };
 
   const DmBtnClick = () => {
-    // socket.emit("chat_get_DMlist", {userNickname : string, userIdx : number}, (status_code: number) => {
+    // chatSocket.emit("chat_get_DMlist", {userNickname : string, userIdx : number}, (status_code: number) => {
     //   console.log(status_code);
     // });
     OnClick(false);
