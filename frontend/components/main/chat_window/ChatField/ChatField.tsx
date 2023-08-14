@@ -40,7 +40,6 @@ const ChatField = ({ msgs }: Props) => {
                 padding: 0,
               }}
             >
-              {/* {value.name + ": " + value.message} */}
               {
                 <Typography variant="h6">
                   {value.senderIdx + ": " + value.msg}

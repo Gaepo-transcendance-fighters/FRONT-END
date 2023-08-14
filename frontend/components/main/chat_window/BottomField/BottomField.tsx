@@ -4,12 +4,10 @@ import { Box, Button } from "@mui/material";
 import { useState, useCallback, useEffect, useRef } from "react";
 import FormControl, { useFormControl } from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { io } from "socket.io-client";
 import { socket } from "@/app/page";
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
 import { useRoom } from "@/context/RoomContext";
-import { useAuth } from "@/context/AuthContext";
 
 const userId = 7;
 interface IChat {
@@ -21,7 +19,6 @@ interface IChat {
 interface Props {
   setMsgs: Dispatch<SetStateAction<IChat[]>>;
 }
-// setMsgs: Dispatch<SetStateAction<IChat[]>>
 const BottomField = ({ setMsgs }: Props) => {
   const [msg, setMsg] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -106,7 +103,6 @@ const BottomField = ({ setMsgs }: Props) => {
           </FormControl>
         </Box>
         <Button
-          // type="submit"
           style={{
             width: "8.5vw",
             justifyContent: "center",

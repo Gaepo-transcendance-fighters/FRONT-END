@@ -21,7 +21,7 @@ const ChatWindow = () => {
 
   useEffect(() => {
     setMsgs([]);
-  }, [roomState.currentRoom])
+  }, [roomState.currentRoom]);
 
   return (
     <Box sx={{ margin: "0", padding: "0", height: "60vh", minWidth: "300px" }}>

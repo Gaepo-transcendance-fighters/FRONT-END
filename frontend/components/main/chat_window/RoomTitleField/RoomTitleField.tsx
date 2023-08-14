@@ -57,7 +57,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
 
   useEffect(() => {
     const leaveHandler = (channel: IChatRoom0) => {
-      console.log(channel)
+      console.log(channel);
       if (roomState.currentRoom) {
         updateChannels(roomState.currentRoom?.channelIdx, channel);
         roomDispatch({ type: "SET_ISOPEN", value: false });
@@ -77,14 +77,6 @@ const RoomTitleField = ({ setMsgs }: Props) => {
     console.log("click leaveroom");
   };
 
-  useEffect(() => {
-    console.log(roomState.currentRoom?.channelIdx, roomState.currentRoom?.mode);
-  });
-  // request body
-  // {
-  //   channelIdx : number
-  // 	userIdx : number
-  // }
   return (
     <div className="room_title_field">
       <div className="room_title_field_left">
