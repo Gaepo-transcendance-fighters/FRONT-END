@@ -24,7 +24,7 @@ export default function Member({
   idx,
   person,
 }: {
-  idx: number;
+  idx?: number;
   person: IMember;
 }) {
   const [openModal, setOpenModal] = useState<boolean>(false);

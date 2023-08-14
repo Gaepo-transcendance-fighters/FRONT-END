@@ -19,9 +19,9 @@ export enum Permission {
 }
 
 export interface IMember {
-  userIdx: number;
-  nickname: string;
-  imgUri: string;
+  userIdx: number | undefined;
+  nickname: string | undefined;
+  imgUri: string | undefined;
   // permission: Permission;
 }
 
@@ -67,12 +67,21 @@ export interface IChatKick {
   leftMember: IMember[];
 }
 
+export interface IDmMemList {
+  userIdx1: number;
+  userIdx2: number;
+  userNickname1: string;
+  userNickname2: string;
+  imgUrl: string;
+}
+
 interface RoomContextData {
   dmRooms: IChatRoom0[];
   nonDmRooms: IChatRoom0[];
   currentRoom: IChatRoom0 | null;
   currentRoomMemberList: IMember[];
   isOpen: boolean;
+  currentDmRoomMemberList: IDmMemList | null;
 }
 
 type RoomAction =
@@ -82,7 +91,8 @@ type RoomAction =
   | { type: "SET_CUR_MEM"; value: IMember[] }
   | { type: "SET_ISOPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom0 }
-  | { type: "ADD_CUR_MEM"; value: IMember };
+  | { type: "ADD_CUR_MEM"; value: IMember }
+  | { type: "SET_CUR_DM_MEM"; value: IDmMemList };
 
 const initialState: RoomContextData = {
   dmRooms: [],
@@ -90,6 +100,7 @@ const initialState: RoomContextData = {
   currentRoom: null,
   currentRoomMemberList: [],
   isOpen: false,
+  currentDmRoomMemberList: null,
 };
 
 const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
@@ -117,6 +128,9 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
           action.value,
         ],
       };
+    case "SET_CUR_DM_MEM":
+      return { ...roomState, currentDmRoomMemberList: action.value };
+
     default:
       return roomState;
   }
