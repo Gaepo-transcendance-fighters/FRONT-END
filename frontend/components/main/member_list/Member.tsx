@@ -208,7 +208,7 @@ export default function Member({
         onClick={handleOpenModal}
         onContextMenu={
           (e) => handleOpenMenu(e)
-          // authorization === (Permission.ADMIN || Permission.OWNER)
+          // (authorization === (Permission.ADMIN || Permission.OWNER)) && (userState.nickname !== person.nickname)
           //   ? handleOpenMenu(e)
           //   : e.preventDefault()
         }
@@ -219,9 +219,6 @@ export default function Member({
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
-          {/* {person.permission === Permission.OWNER ? (
-            <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
-          ) : null} */}
           {person.nickname === roomState.currentRoom?.owner ? (
             <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
           ) : null}
