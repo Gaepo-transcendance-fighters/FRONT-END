@@ -96,6 +96,19 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     };
   }, []);
 
+  //TODO : 0명 되는 경우
+
+  useEffect(() => {
+    const GoToLobby = (json: IChatRoom[]) => {
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: json });
+    };
+    socket.on("chat_goto_lobby", GoToLobby);
+
+    return () => {
+      socket.off("chat_goto_lobby", GoToLobby);
+    };
+  }, []);
+
   const RoomClick = (room: IChatRoom) => {
     if (room.mode !== Mode.PROTECTED) {
       if (room.mode === Mode.PRIVATE) {
@@ -107,29 +120,41 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           (json: any) => {
             // 아직 안정해짐
             if (roomState.currentRoom !== room) {
-              //  전에 들어갔던 방이 있으면 그 방에서 탈퇴되게
               roomDispatch({ type: "SET_CUR_ROOM", value: room });
             }
             roomDispatch({ type: "SET_IS_OPEN", value: true });
           }
         );
       } else {
-        socket.emit(
-          "chat_enter",
-          JSON.stringify({
-            userNickname: userState.nickname,
-            userIdx: userState.userIdx,
-            channelIdx: room.channelIdx,
-          }),
-          (statusCode: number) => {
-            if (statusCode === 200) {
-              if (roomState.currentRoom !== room) {
+        if (roomState.currentRoom !== room) {
+          socket.emit(
+            "chat_enter",
+            JSON.stringify({
+              userNickname: userState.nickname,
+              userIdx: userState.userIdx,
+              channelIdx: room.channelIdx,
+            }),
+            (statusCode: number) => {
+              if (statusCode === 200) {
+                //  전에 들어갔던 방이 있으면 그 방에서 탈퇴되게
+                if (roomState.currentRoom) {
+                  socket.emit(
+                    "chat_goto_lobby",
+                    JSON.stringify({
+                      channelIdx: roomState.currentRoom.channelIdx,
+                      userIdx: userState.userIdx,
+                    }),
+                    (ret: any) => {
+                      console.log("chat_goto_lobby ret : ", ret);
+                    }
+                  );
+                }
                 roomDispatch({ type: "SET_CUR_ROOM", value: room });
+                roomDispatch({ type: "SET_IS_OPEN", value: true });
               }
-              roomDispatch({ type: "SET_IS_OPEN", value: true });
             }
-          }
-        );
+          );
+        }
       }
     } else {
       handleOpen();
