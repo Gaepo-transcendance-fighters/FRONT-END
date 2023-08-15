@@ -40,6 +40,7 @@ export default function CreateRoomModal({
   useEffect(() => {
     const ChatCreateRoom = (data: IChatRoom) => {
       roomDispatch({ type: "ADD_ROOM", value: data });
+      //생성한 방에 들어가는 로직?
       roomDispatch({
         type: "SET_CUR_MEM",
         value: [

@@ -104,6 +104,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           (json: any) => {
             // 아직 안정해짐
             if (roomState.currentRoom !== room) {
+              //  전에 들어갔던 방이 있으면 그 방에서 탈퇴되게
               roomDispatch({ type: "SET_CUR_ROOM", value: room });
             }
             roomDispatch({ type: "SET_IS_OPEN", value: true });

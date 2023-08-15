@@ -219,10 +219,10 @@ export default function Member({
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
-          {/* {person.permission === Permission.OWNER ? (
-              <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
-            ) : null}
-            {person.permission === Permission.ADMIN ? (
+          {person.permission === Permission.OWNER ? (
+            <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
+          ) : null}
+          {/* {person.permission === Permission.ADMIN ? (
               <StarOutlineRoundedIcon
                 sx={{ height: "15px", color: "yellow" }}
               />
