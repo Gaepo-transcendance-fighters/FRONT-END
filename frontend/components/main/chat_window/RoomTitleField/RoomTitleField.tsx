@@ -75,7 +75,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
       if (roomState.currentRoom) {
         roomDispatch({ type: "SET_ISOPEN", value: false });
         roomDispatch({ type: "SET_CURRENTROOM", value: null });
-        roomDispatch({ type: "SET_NON_ROOMS", value: channels});
+        roomDispatch({ type: "SET_NON_ROOMS", value: channels });
       } else
         console.log("[RoomTItleField] there isn't roomState.currentRoom case");
     };
@@ -93,7 +93,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
   const leaveRoom = () => {
     const payload = {
       channelIdx: roomState.currentRoom?.channelIdx,
-      userIdx: 3, // [작업필요] 추후 나의 userIdx로 교체필요
+      userIdx: 98029, // [작업필요] 추후 나의 userIdx로 교체필요
     };
     socket.emit("chat_goto_lobby", payload);
     console.log("[RoomTItleField] click leaveroom");

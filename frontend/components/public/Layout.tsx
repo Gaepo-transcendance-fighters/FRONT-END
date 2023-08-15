@@ -104,7 +104,7 @@ const Layout = () => {
       // console.log("in emit");
       socket.emit(
         "main_enter",
-        JSON.stringify({ intra: "hoslim" }),
+        JSON.stringify({ intra: "jujeon" }),
         (data: IMaindata) => {
           // roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
           // friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });

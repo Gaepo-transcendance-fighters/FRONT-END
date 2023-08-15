@@ -24,7 +24,7 @@ export default function EditRoomModal({ prop }: { prop: () => void }) {
   const [value, setValue] = useState("");
   const payload = {
     channelIdx: roomState.currentRoom?.channelIdx,
-    senderIdx: 3, // [번경필요]나중에 나의 userIdx 로 변경필요
+    senderIdx: 98029, // [번경필요]나중에 나의 userIdx 로 변경필요
     changedPassword: value,
   };
 

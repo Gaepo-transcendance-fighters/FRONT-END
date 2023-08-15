@@ -43,14 +43,14 @@ const BottomField = ({ setMsgs }: Props) => {
 
   useEffect(() => {
     inputRef.current?.focus();
-  });
+  }, []);
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
       const payload = {
         channelIdx: roomState.currentRoom?.channelIdx,
-        senderIdx: 3,
+        senderIdx: 98029,
         msg: msg,
       };
       console.log("payload", payload);

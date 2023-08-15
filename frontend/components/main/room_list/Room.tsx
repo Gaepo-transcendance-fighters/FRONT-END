@@ -49,7 +49,7 @@ export default function Room({ room, idx }: { room: IChatRoom0; idx: number }) {
         "chat_enter",
         JSON.stringify({
           userNickname: "intra_id",
-          userIdx: 3,
+          userIdx: 98029,
           channelIdx: room.channelIdx,
         }),
         (statusCode: number) => {
