@@ -22,6 +22,7 @@ export interface IMember {
   userIdx: number | undefined;
   nickname: string | undefined;
   imgUri: string | undefined;
+  permission?: Permission | undefined;
 }
 
 export interface IChatRoom {

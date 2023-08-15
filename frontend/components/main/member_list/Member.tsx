@@ -139,6 +139,7 @@ export default function Member({
     const ChatKick = (data: IChatKick) => {
       setShowAlert(true);
       setString(strings[3]);
+      roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
     };
     socket.on("chat_kick", ChatKick);
 
@@ -168,8 +169,33 @@ export default function Member({
     // }
   };
 
+  useEffect(() => {
+    const ChatBan = (data: IChatKick) => {
+      console.log("ChatBan : ", data);
+      setShowAlert(true);
+      setString(strings[3]);
+      roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
+    };
+    socket.on("chat_kick", ChatBan);
+
+    return () => {
+      socket.off("chat_kick", ChatBan);
+    };
+  }, []);
+
   const Ban = () => {
-    // socket.emit("chat_ban");
+    socket.emit(
+      "chat_ban",
+      JSON.stringify({
+        channelIdx: roomState.currentRoom?.channelIdx,
+        targetNickname: userState.nickname,
+        targetIdx: userState.userIdx,
+      }),
+      (statusCode: any) => {
+        // 아직 안정해짐
+        console.log("Ban : ", statusCode);
+      }
+    );
     setShowAlert(true);
     setString(strings[4]);
   };
@@ -180,10 +206,11 @@ export default function Member({
         key={idx}
         className="membtn"
         onClick={handleOpenModal}
-        onContextMenu={(e) =>
-          authorization === (Permission.ADMIN || Permission.OWNER)
-            ? handleOpenMenu(e)
-            : e.preventDefault()
+        onContextMenu={
+          (e) => handleOpenMenu(e)
+          // authorization === (Permission.ADMIN || Permission.OWNER)
+          //   ? handleOpenMenu(e)
+          //   : e.preventDefault()
         }
       >
         <div className="memimg">
