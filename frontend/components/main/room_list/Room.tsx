@@ -113,8 +113,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
         socket.emit(
           "chat_enter",
           JSON.stringify({
-            userNickname: "hoslim",
-            userIdx: 3,
+            userNickname: "jeekim",
+            userIdx: 98364,
             channelIdx: room.channelIdx,
           }),
           (statusCode: number) => {

@@ -4,7 +4,7 @@ import Layout from "@/components/public/Layout";
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 
-const userId = 3;
+const userId = 98364;
 // export const socket = io("http://localhost:4000/chat");
 export const socket = io("http://localhost:4000/chat", {
   query: { userId: userId },

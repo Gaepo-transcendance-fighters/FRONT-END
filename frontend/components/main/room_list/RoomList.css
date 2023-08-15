@@ -101,6 +101,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.item:disabled {
+  background-color: #7b8aa9;
+  color: rgba(255, 255, 255, 0.294);
+}
 
 .roomidx {
   display: inline-block;

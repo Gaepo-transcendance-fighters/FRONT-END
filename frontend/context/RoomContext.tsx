@@ -113,7 +113,6 @@ type RoomAction =
   | { type: "SET_CUR_MEM"; value: IMember[] }
   | { type: "SET_IS_OPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom }
-  | { type: "ADD_CUR_MEM"; value: IMember }
   | { type: "SET_CUR_DM_MEM"; value: IDmMemList };
 
 const initialState: RoomContextData = {
@@ -142,17 +141,8 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
         ...roomState,
         nonDmRooms: [...roomState.nonDmRooms, action.value],
       };
-    case "ADD_CUR_MEM":
-      return {
-        ...roomState,
-        currentRoomMemberList: [
-          ...roomState.currentRoomMemberList,
-          action.value,
-        ],
-      };
     case "SET_CUR_DM_MEM":
       return { ...roomState, currentDmRoomMemberList: action.value };
-
     default:
       return roomState;
   }

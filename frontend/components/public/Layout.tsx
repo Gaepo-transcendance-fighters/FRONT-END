@@ -101,7 +101,7 @@ const Layout = () => {
 
   useEffect(() => {
     if (state.isLoggedIn) {
-      socket.emit("main_enter", JSON.stringify({ intra: "hoslim" }), () => {});
+      socket.emit("main_enter", JSON.stringify({ intra: "jeekim" }), () => {});
     }
   }, [state.isLoggedIn]);
 

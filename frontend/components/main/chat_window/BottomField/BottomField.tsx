@@ -53,7 +53,7 @@ const BottomField = ({ setMsgs }: Props) => {
       event.preventDefault();
       const payload = {
         channelIdx: roomState.currentRoom?.channelIdx,
-        senderIdx: 3,
+        senderIdx: 98364,
         msg: msg,
       };
       console.log("payload", payload);
