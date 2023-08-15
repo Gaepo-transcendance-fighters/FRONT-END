@@ -6,14 +6,14 @@ import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import "@/components/main/member_list/MemberList.css";
 import { useState, MouseEvent, useEffect } from "react";
 import MemberModal from "./MemberModal";
+import { useRoom } from "@/context/RoomContext";
 import {
   IChatKick,
   IChatRoomAdmin,
   IMember,
   Permission,
   alert,
-  useRoom,
-} from "@/context/RoomContext";
+} from "@/type/type";
 import { Menu, MenuItem } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";

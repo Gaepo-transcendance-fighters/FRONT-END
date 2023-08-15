@@ -4,7 +4,8 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
-import { IChatRoom, Permission, useRoom } from "@/context/RoomContext";
+import { useRoom } from "@/context/RoomContext";
+import { IChatRoom, Permission } from "@/type/type";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 

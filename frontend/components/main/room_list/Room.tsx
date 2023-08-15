@@ -3,14 +3,15 @@
 import { useEffect, useState, useRef } from "react";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import ProtectedModal from "./ProtectedModal";
+import { useRoom } from "@/context/RoomContext";
 import {
+  IChatRoom,
+  Mode,
   IChatDmEnter,
   IChatEnter,
   IChatEnterNoti,
   alert,
-  useRoom,
-} from "@/context/RoomContext";
-import { IChatRoom, Mode } from "@/context/RoomContext";
+} from "@/type/type";
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";

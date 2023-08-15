@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
-import { IChatRoom, useRoom } from "@/context/RoomContext";
+import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
+import { IChatRoom } from "@/type/type";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();

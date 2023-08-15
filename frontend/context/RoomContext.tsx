@@ -1,3 +1,4 @@
+import { IChatRoom, IDmMemList, IMember } from "@/type/type";
 import {
   ReactNode,
   createContext,
@@ -5,102 +6,6 @@ import {
   useEffect,
   useReducer,
 } from "react";
-
-export enum Mode {
-  PRIVATE = "private",
-  PUBLIC = "public",
-  PROTECTED = "protected",
-}
-
-export enum Permission {
-  OWNER = "owner",
-  ADMIN = "admin",
-  MEMBER = "member",
-}
-
-export interface IMember {
-  userIdx: number | undefined;
-  nickname: string | undefined;
-  imgUri: string | undefined;
-  permission?: Permission | undefined;
-}
-
-export interface IChatRoom {
-  owner: string;
-  targetNickname?: string;
-  channelIdx: number;
-  mode: Mode;
-}
-
-export interface IChatEnter {
-  member: IMember[];
-  channelIdx: number;
-}
-
-export interface IChatEnterNoti {
-  member: IMember[];
-  newMember: string;
-}
-
-export interface IChatRoomAdmin {
-  userIdx: number;
-  grant: boolean;
-  admin: string[];
-}
-
-export interface IChatGetRoom {
-  owner?: string;
-  targetNickname?: string;
-  channelIdx: number;
-  mode: Mode;
-}
-
-export interface IChatGetRoomList {
-  channels: IChatRoom[];
-}
-
-export interface IChatMute {
-  channelList?: IChatGetRoom[];
-}
-
-export interface IChatKick {
-  targetNickname: string;
-  targetIdx: number;
-  leftMember: IMember[];
-}
-
-export interface IDmMemList {
-  userIdx1: number;
-  userIdx2: number;
-  userNickname1: string;
-  userNickname2: string;
-  imgUrl: string;
-}
-
-export interface IChatDmEnter {
-  // Message[] {
-  // 	message {
-  // 		sender : string,
-  // 		msg : string
-  // 	},
-  // 	...
-  // }, 이 부분은 주전님이 타입 정해주세요
-  // channelIdx : number; currentRoom이 있어서 필요성을 느끼지 못하지만,
-  //  이 부분도 필요하시면 주석해제하시고요!
-
-  userIdx1: number;
-  userIdx2: number;
-  userNickname1: string;
-  userNickname2: string;
-  imgUrl: string;
-}
-
-export const alert = {
-  position: "absolute" as "absolute",
-  top: "100%",
-  left: "50%",
-  transform: "translate(-50%, -100%)",
-};
 
 interface RoomContextData {
   dmRooms: IChatRoom[];
