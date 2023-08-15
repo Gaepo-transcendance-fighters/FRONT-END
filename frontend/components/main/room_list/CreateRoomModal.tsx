@@ -40,18 +40,17 @@ export default function CreateRoomModal({
   useEffect(() => {
     const ChatCreateRoom = (data: IChatRoom) => {
       roomDispatch({ type: "ADD_ROOM", value: data });
-      //생성한 방에 들어가는 로직?
-      roomDispatch({
-        type: "SET_CUR_MEM",
-        value: [
-          {
-            userIdx: userState.userIdx,
-            nickname: userState.nickname,
-            imgUri: userState.imgUri,
-            permission: Permission.OWNER,
-          },
-        ],
-      });
+      // roomDispatch({
+      //   type: "SET_CUR_MEM",
+      //   value: [
+      //     {
+      //       userIdx: userState.userIdx,
+      //       nickname: userState.nickname,
+      //       imgUri: userState.imgUri,
+      //       permission: Permission.OWNER,
+      //     },
+      //   ],
+      // });
       setValue("");
       setOpen(false);
     };
