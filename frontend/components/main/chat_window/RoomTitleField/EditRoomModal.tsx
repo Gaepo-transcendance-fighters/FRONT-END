@@ -50,6 +50,10 @@ export default function EditRoomModal({ prop }: { prop: () => void }) {
       }
     };
     socket.on("BR_chat_room_password", roomSettingHandler);
+
+    return () => {
+      socket.off("BR_chat_room_password", roomSettingHandler);
+    }
   });
 
   return (

@@ -81,6 +81,11 @@ const RoomTitleField = ({ setMsgs }: Props) => {
     };
     socket.on("chat_goto_lobby", leaveHandler);
     socket.on("BR_chat_room_delete", leaveAndDeleteHandler);
+
+    return () => {
+      socket.off("chat_goto_lobby", leaveHandler);
+      socket.off("BR_chat_room_delete", leaveAndDeleteHandler);
+    }
   });
 
   useEffect(() => {
