@@ -32,7 +32,7 @@ export default function Member({
   const [string, setString] = useState<string>("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminAry, setAdminAry] = useState<string[]>([]);
-  const [authorization, setAuthorization] = useState("");
+  // const [authorization, setAuthorization] = useState("");
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const strings = [
@@ -47,29 +47,29 @@ export default function Member({
     setOpenModal(true);
   };
 
-  useEffect(() => {
-    const CheckGrant = (json: string) => {
-      setAuthorization(json);
-    };
-    socket.on("chat_get_grant", CheckGrant);
+  // useEffect(() => {
+  //   const CheckGrant = (json: string) => {
+  //     setAuthorization(json);
+  //   };
+  //   socket.on("chat_get_grant", CheckGrant);
 
-    return () => {
-      socket.off("chat_get_grant", CheckGrant);
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("chat_get_grant", CheckGrant);
+  //   };
+  // }, []);
 
   const handleOpenMenu = (
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
-    socket.emit(
-      "chat_get_grant",
-      JSON.stringify({
-        userIdx: userState.userIdx,
-        channelIdx: roomState.currentRoom?.channelIdx,
-      }),
-      () => {}
-    );
+    // socket.emit(
+    //   "chat_get_grant",
+    //   JSON.stringify({
+    //     userIdx: userState.userIdx,
+    //     channelIdx: roomState.currentRoom?.channelIdx,
+    //   }),
+    //   () => {}
+    // );
     setAnchorEl(e.currentTarget);
   };
 
