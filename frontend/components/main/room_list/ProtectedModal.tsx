@@ -15,6 +15,7 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
+import { useUser } from "@/context/UserContext";
 
 const box = {
   position: "absolute" as "absolute",
@@ -53,6 +54,7 @@ export default function ProtectedModal({
   fail: boolean;
 }) {
   const { roomDispatch } = useRoom();
+  const { userState } = useUser();
   const pwRef = useRef("");
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -65,8 +67,8 @@ export default function ProtectedModal({
     socket.emit(
       "chat_enter",
       JSON.stringify({
-        userNickname: "hoslim",
-        userIdx: 3,
+        userNickname: userState.nickname,
+        userIdx: userState.userIdx,
         channelIdx: room.channelIdx,
         password: pwRef.current,
       }),
@@ -89,8 +91,8 @@ export default function ProtectedModal({
       socket.emit(
         "chat_enter",
         JSON.stringify({
-          userNickname: "intra_id",
-          userIdx: 3,
+          userNickname: userState.nickname,
+          userIdx: userState.userIdx,
           channelIdx: room.channelIdx,
           password: pwRef.current,
         }),

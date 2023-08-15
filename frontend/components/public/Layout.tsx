@@ -62,6 +62,7 @@ interface IUserObject {
   nickname: string;
   userIdx: number;
 }
+
 interface IMaindata {
   channelList: IChatRoom[];
   friendList: IFriend[];
@@ -100,10 +101,19 @@ const Layout = () => {
   //미세한 찰나일 것임.!
 
   useEffect(() => {
-    if (state.isLoggedIn) {
-      socket.emit("main_enter", JSON.stringify({ intra: "jeekim" }), () => {});
+    // if (state.isLoggedIn) {
+    if (localStorage.getItem("loggedIn")) {
+      socket.emit(
+        "main_enter",
+        JSON.stringify({ intra: localStorage.getItem("intra") }),
+        (ret: number) => {
+          if (ret === 200) {
+          }
+        }
+      );
     }
-  }, [state.isLoggedIn]);
+  }, [localStorage.getItem("loggedIn")]);
+  // }, [state.isLoggedIn]);
 
   return (
     <Box sx={{ display: "flex" }}>

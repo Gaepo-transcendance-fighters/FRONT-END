@@ -13,6 +13,7 @@ import {
 import { IChatRoom, Mode } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
+import { useUser } from "@/context/UserContext";
 
 export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -20,6 +21,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [newMem, setNewMem] = useState("");
   const { roomState, roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   useEffect(() => {
     const ChatEnterNoti = (data: IChatEnterNoti) => {
@@ -31,7 +33,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     return () => {
       socket.off("chat_enter_noti", ChatEnterNoti);
     };
-  }); // TODO : 위치?
+  });
 
   useEffect(() => {
     if (showAlert) {
@@ -114,8 +116,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
         socket.emit(
           "chat_enter",
           JSON.stringify({
-            userNickname: "jeekim",
-            userIdx: 98364,
+            userNickname: userState.nickname,
+            userIdx: userState.userIdx,
             channelIdx: room.channelIdx,
           }),
           (statusCode: number) => {

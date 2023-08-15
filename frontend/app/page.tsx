@@ -4,7 +4,8 @@ import Layout from "@/components/public/Layout";
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 
-const userId = 98364;
+// const userId = 98364;
+const userId = localStorage.getItem("idx");
 // export const socket = io("http://localhost:4000/chat");
 export const socket = io("http://localhost:4000/chat", {
   query: { userId: userId },

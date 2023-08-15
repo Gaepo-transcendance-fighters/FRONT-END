@@ -50,6 +50,9 @@ const Auth = () => {
           console.log(data);
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
           localStorage.setItem("token", data.jwt);
+          localStorage.setItem("img", data.user.imgUri);
+          localStorage.setItem("intra", data.user.intra);
+          localStorage.setItem("idx", data.user.userIdx.toString());
           return router.push(`/`);
         }
       })
