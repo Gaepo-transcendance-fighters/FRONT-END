@@ -42,7 +42,11 @@ export interface IChatEnterNoti {
   newMember: string;
 }
 
-export interface IChatRoomAdmin {}
+export interface IChatRoomAdmin {
+  userIdx: number;
+  grant: boolean;
+  admin: string[];
+}
 
 export interface IChatGetRoom {
   owner?: string;

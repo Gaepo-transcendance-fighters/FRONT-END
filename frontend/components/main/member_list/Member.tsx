@@ -8,6 +8,7 @@ import { useState, MouseEvent, useEffect } from "react";
 import MemberModal from "./MemberModal";
 import {
   IChatKick,
+  IChatRoomAdmin,
   IMember,
   Permission,
   alert,
@@ -29,7 +30,8 @@ export default function Member({
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [string, setString] = useState<string>("");
-  const [admin, setAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminAry, setAdminAry] = useState<string[]>([]);
   const [authorization, setAuthorization] = useState("");
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
@@ -85,31 +87,37 @@ export default function Member({
     }
   }, [showAlert]);
 
-  // useEffect(() => {
-  //   const ChatRoomAdmin = (json : IChatRoomAdmin) => {
-  //     roomDispatch({type : "SET_CUR_MEM", value : json.leftMember});
-  //   };
-  //   socket.on("chat_room_admin", ChatRoomAdmin);
+  useEffect(() => {
+    const ChatRoomAdmin = (json: IChatRoomAdmin) => {
+      setAdminAry(json.admin);
+    };
+    socket.on("chat_room_admin", ChatRoomAdmin);
 
-  //   return () => {
-  //     socket.off("chat_room_admin", ChatRoomAdmin);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("chat_room_admin", ChatRoomAdmin);
+    };
+  }, []);
 
   const SetAdmin = () => {
-    // socket.emit("chat_room_admin", JSON.stringfy(
-    // {
-    //   channelIdx : roomState.currentRoom?.channelIdx,
-    //   userIdx : number,
-    //   grant : Permission.ADMIN,
-    // }), (statusCode) => {
-    setAdmin((prev) => !prev);
-    setShowAlert(true);
-    // });
+    socket.emit(
+      "chat_room_admin",
+      JSON.stringify({
+        channelIdx: roomState.currentRoom?.channelIdx,
+        userIdx: person.userIdx,
+        grant: !isAdmin,
+      }),
+      (ret: string) => {
+        console.log("SetAdmin : ", ret);
+        setIsAdmin((prev) => !prev); //
+        console.log("SetAdmin isAdmin : ", isAdmin);
+        setShowAlert(true);
+      }
+    );
   };
+
   useEffect(() => {
-    admin ? setString(strings[0]) : setString(strings[1]);
-  }, [admin]);
+    isAdmin ? setString(strings[0]) : setString(strings[1]);
+  }, [isAdmin]);
 
   // useEffect(() => {
   //   const ChatMute = (data: any) => { // 아직 api 완성안됨
@@ -208,9 +216,11 @@ export default function Member({
         onClick={handleOpenModal}
         onContextMenu={
           (e) => handleOpenMenu(e)
-          // (authorization === (Permission.ADMIN || Permission.OWNER)) && (userState.nickname !== person.nickname)
-          //   ? handleOpenMenu(e)
-          //   : e.preventDefault()
+          // (e) =>
+          //   userState.nickname !== person.nickname &&
+          //   authorization === (Permission.ADMIN || Permission.OWNER)
+          //     ? handleOpenMenu(e)
+          //     : e.preventDefault()
         }
       >
         <div className="memimg">
@@ -219,14 +229,21 @@ export default function Member({
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
+          {adminAry.map((admin) => {
+            return admin === person.nickname ? (
+              <StarOutlineRoundedIcon
+                sx={{ height: "15px", color: "yellow" }}
+              />
+            ) : null;
+          })}
           {person.nickname === roomState.currentRoom?.owner ? (
             <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
           ) : null}
           {/* {person.permission === Permission.ADMIN ? (
-              <StarOutlineRoundedIcon
-                sx={{ height: "15px", color: "yellow" }}
-              />
-            ) : null} */}
+                <StarOutlineRoundedIcon
+                  sx={{ height: "15px", color: "yellow" }}
+                />
+              ) : null} */}
         </div>
       </div>
       <Menu
@@ -235,7 +252,7 @@ export default function Member({
         onClose={handleCloseMenu}
       >
         <MenuItem onClick={SetAdmin}>
-          {admin ? "Unset Admin" : "Set Admin"}
+          {isAdmin ? "Unset Admin" : "Set Admin"}
         </MenuItem>
         <MenuItem onClick={Mute}>Mute</MenuItem>
         <MenuItem onClick={Kick}>Kick</MenuItem>
