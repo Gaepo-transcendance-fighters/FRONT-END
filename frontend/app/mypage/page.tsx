@@ -110,13 +110,13 @@ export default function PageRedir() {
 
   const uploadImage = async (file: File) => {
     // readAsDataURL을 사용해 이미지를 base64로 변환
-    const dataUrl = await readFileAsDataURL(file);
+    const dataUrl: string = await readFileAsDataURL(file);
 
     console.log(dataUrl);
 
     // 서버로 이미지 업로드
-    const formData = new FormData();
-    formData.append("image", file);
+    // const formData = new FormData();
+    // formData.append("image", file);
 
     try {
       await axios({
@@ -126,12 +126,15 @@ export default function PageRedir() {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
-        data: formData,
+        data: JSON.stringify({
+          imgUri: dataUrl,
+        }),
       });
       console.log("업로드 완료");
     } catch (error) {
       console.error("업로드 실패", error);
     }
+    setReload((curr) => !curr);
   };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
