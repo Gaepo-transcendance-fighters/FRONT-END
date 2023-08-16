@@ -42,12 +42,12 @@ const Game = () => {
 
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
-    router.push("./optionselect");
+    router.replace("/optionselect");
   };
 
   const ClickRankGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.RANK });
-    router.push("./inwaiting");
+    router.replace("/inwaiting");
   };
 
   const BackToMain = () => {

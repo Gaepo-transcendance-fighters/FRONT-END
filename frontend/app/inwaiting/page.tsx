@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 
 import { useCallback, useEffect, useState } from "react";
+import useModal from "@/hooks/useModal";
+import Modals from "@/components/public/Modals";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -67,9 +69,11 @@ interface IGameSetting {
 
 const Inwaiting = () => {
   const router = useRouter();
+  const [client, setClient] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { gameState, gameDispatch } = useGame();
   const { authState, authDispatch } = useAuth();
+  const { isShowing, toggle } = useModal();
   const [gameFirstReady, setGameFirstReady] = useState<boolean>(false);
   const [gameSecondReady, setGameSecondReady] = useState<boolean>(false);
 
@@ -77,49 +81,11 @@ const Inwaiting = () => {
     gameSocket.emit("game_queue_quit", authState.id, () => {
       console.log("game_queue_quit");
     });
-    router.push("/game");
+    router.replace("/?from=game");
   };
-
-  /*
-"userIdx": "104018",
-"serverDateTime": 1691848951821,
-"clientDateTime": 1691848951821
-*/
 
   const handleOpenModal_redir = useCallback(() => {
     console.log("game_queue_start");
-    console.log(gameFirstReady);
-    console.log(gameSecondReady);
-    // gameSocket.on("game_ready_first", (gameSetting: IGameSetting) => {
-    //   console.log("game_ready_first");
-    //   gameDispatch({ type: "SET_GAME_MODE", value: gameSetting.gameType });
-    //   gameDispatch({
-    //     type: "SET_BALL_SPEED_OPTION",
-    //     value: gameSetting.speed,
-    //   });
-    //   gameDispatch({
-    //     type: "SET_MAP_TYPE",
-    //     value: gameSetting.mapNumber,
-    //   });
-
-    // gameSocket.on(
-    //   "game_ready_second",
-    //   ({
-    //     roodId,
-    //     serverDateTime,
-    //   }: {
-    //     roodId: string;
-    //     serverDateTime: string;
-    //   }) => {
-    //     console.log("game_ready_second");
-    //     gameDispatch({
-    //       type: "SET_ROOM_ID",
-    //       value: roodId,
-    //     });
-    //     gameDispatch({
-    //       type: "SET_SERVER_DATE_TIME",
-    //       value: serverDateTime,
-    //     });
     if (gameFirstReady && gameSecondReady) {
       gameSocket.emit(
         "game_ready_second_answer",
@@ -128,17 +94,21 @@ const Inwaiting = () => {
           serverDateTime: gameState.serverDateTime,
           clientDateTime: Date.now(),
         },
-        () => {
-          console.log("game_ready_second_answer");
-        }
+        () => console.log("game_ready_second_answer")
       );
     }
-    // }
-    // );
-    // });
   }, [gameFirstReady, gameSecondReady]);
 
   useEffect(() => {
+    setClient(true);
+    const preventGoBack = (e: PopStateEvent) => {
+      e.preventDefault();
+      toggle();
+    };
+
+    history.pushState(null, "", location.href);
+    window.addEventListener("popstate", preventGoBack);
+
     gameSocket.on("game_queue_success", () => {});
     gameSocket.on("game_queue_quit", () => {});
     gameSocket.on("game_ready_first", (gameSetting: IGameSetting) => {
@@ -241,12 +211,13 @@ const Inwaiting = () => {
         });
         setOpenModal(true);
         setTimeout(() => {
-          router.push("./gameplaying");
+          router.replace("./gameplaying");
         }, 2000);
       }
     );
 
     return () => {
+      window.removeEventListener("popstate", preventGoBack);
       gameSocket.off("game_queue_success");
       gameSocket.off("game_queue_quit");
       gameSocket.off("game_ready_first");
@@ -256,6 +227,8 @@ const Inwaiting = () => {
       gameSocket.off("game_start");
     };
   }, []);
+
+  if (!client) return <></>;
 
   return (
     <Card sx={{ display: "flex" }}>
@@ -312,6 +285,12 @@ const Inwaiting = () => {
             <Button variant="contained" onClick={handleOpenModal_redir}>
               큐가잡힌경우
             </Button>
+            <Modals
+              isShowing={isShowing}
+              hide={toggle}
+              message={`뒤로 가면 큐가 취소됩니다. 그래도 뒤로 가시겠습니까?`}
+              routing="/?from=game"
+            />
             <Modal open={openModal}>
               <Box sx={modalStyle} borderRadius={"10px"}>
                 <Card

@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  Modal,
-  Typography,
-} from "@mui/material";
+import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
@@ -47,7 +39,6 @@ const GamePlaying = () => {
 
   useEffect(() => {
     setClient(true);
-    console.log("history stack", history.length);
     const preventGoBack = (e: PopStateEvent) => {
       e.preventDefault();
       toggle();

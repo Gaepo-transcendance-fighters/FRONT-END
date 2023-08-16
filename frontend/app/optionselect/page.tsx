@@ -124,7 +124,7 @@ const OptionSelect = () => {
               console.log(res);
               if (res.code === "200") {
                 setTimeout(() => {
-                  router.push("./inwaiting");
+                  router.replace("./inwaiting");
                 }, 300);
               }
             }
@@ -164,7 +164,7 @@ const OptionSelect = () => {
               backgroundColor: "White",
             }}
             onClick={() => {
-              router.push("./game");
+              router.replace("/?from=game");
             }}
           >
             이전화면으로 돌아가기
