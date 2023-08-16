@@ -1,5 +1,5 @@
 "use client";
-import { ThemeProvider } from "@emotion/react";
+
 import {
   Box,
   Button,
@@ -7,7 +7,6 @@ import {
   CardContent,
   Stack,
   Modal,
-  createTheme,
   Typography,
 } from "@mui/material";
 
@@ -15,7 +14,10 @@ import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useEffect, useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
-import { resetGameContextData, useGame } from "@/context/GameContext";
+import { useGame } from "@/context/GameContext";
+import { gameSocket } from "@/app/optionselect/page";
+import useModal from "@/hooks/useModal";
+import Modals from "@/components/public/Modals";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -32,12 +34,15 @@ const modalStyle = {
 
 const GamePlaying = () => {
   const router = useRouter();
+  const [client, setClient] = useState<boolean>(false);
   const { gameState, gameDispatch } = useGame();
+  const { isShowing, toggle } = useModal();
+  const { isShowing: isShowing2, toggle: toggle2 } = useModal();
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const BackToMain = () => {
     router.push("/");
-    gameDispatch({ type: "SCORE_RESET", value: resetGameContextData() });
+    gameDispatch({ type: "SCORE_RESET" });
   };
 
   const handleOpenModal_redir = () => {
@@ -48,201 +53,193 @@ const GamePlaying = () => {
   };
 
   useEffect(() => {
-    gameDispatch({ type: "SCORE_RESET", value: resetGameContextData() });
+    setClient(true);
+    const preventGoBack = (e: PopStateEvent) => {
+      e.preventDefault();
+      toggle();
+    };
+
+    const preventRefresh = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+      router.push("/");
+    };
+    history.pushState(null, "", location.href);
+    window.addEventListener("popstate", preventGoBack);
+    window.addEventListener("beforeunload", preventRefresh);
+
+    gameSocket.on("game_queue_quit", (res: number) => {
+      console.log("상대가 나감", res);
+      //게임 종료 로직 추가 필요
+      gameDispatch({ type: "A_SCORE", value: 5 });
+      gameDispatch({ type: "B_SCORE", value: 0 });
+      setOpenModal(true);
+      setTimeout(() => {
+        router.push("./gameresult");
+      }, 2000);
+    });
+    return () => {
+      window.removeEventListener("popstate", preventGoBack);
+      window.removeEventListener("beforeunload", () => ({}));
+    };
   }, []);
 
+  if (!client) return <div>로딩중</div>;
+
   return (
-    <Card sx={{ display: "flex" }}>
-      <Stack
-        sx={{
-          width: "100%",
-          height: "100vh",
-          backgroundColor: main.main1,
-          padding: 0,
-          margin: 0,
-        }}
-      >
-        <Button
-          onClick={() => {
-            return router.push("./gameresult");
+    <>
+      <Card sx={{ display: "flex" }}>
+        <Stack
+          sx={{
+            width: "100%",
+            height: "100vh",
+            backgroundColor: main.main1,
+            padding: 0,
+            margin: 0,
           }}
         >
-          결과창보기
-        </Button>
-        <CardContent
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Card
+          <Button onClick={() => router.push("./gameresult")}>
+            결과창보기
+          </Button>
+          <CardContent
             style={{
-              width: "40%",
-              height: "10vh",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "3rem",
-              border: "2px solid black",
-            }}
-          >
-            <Typography sx={{ fontSize: "3rem" }}>
-              {gameState.aScore} : {gameState.bScore}
-            </Typography>
-          </Card>
-        </CardContent>
-
-        <CardContent sx={{ transform: "translateX(3%)", margin: "auto" }}>
-          <Card
-            style={{
-              width: "max-content",
-              height: "max-content",
-              border: "2px solid black",
-              display: "flex",
-              justifyContent: "space-around",
-              alignItems: "center",
-              backgroundColor: main.main3,
             }}
           >
             <Card
               style={{
-                width: "max-content",
-                padding: "20px",
-                margin: "30px",
-                height: "15%",
-                border: "2px solid black",
+                width: "40%",
+                height: "10vh",
                 display: "flex",
-                justifyContent: "space-around",
                 alignItems: "center",
+                justifyContent: "center",
+                fontSize: "3rem",
+                border: "2px solid black",
               }}
             >
-              Player 1
+              <Typography sx={{ fontSize: "3rem" }}>
+                {gameState.aScore} : {gameState.bScore}
+              </Typography>
             </Card>
-            <PingPong />
-            {/* <Pong /> */}
+          </CardContent>
+
+          <CardContent sx={{ mx: "auto" }}>
             <Card
               style={{
                 width: "max-content",
-                padding: "20px",
-                margin: "30px",
-                height: "15%",
+                height: "max-content",
                 border: "2px solid black",
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
+                backgroundColor: main.main3,
               }}
             >
-              Player 2
+              <Card
+                style={{
+                  width: "max-content",
+                  padding: "20px",
+                  margin: "30px",
+                  height: "15%",
+                  border: "2px solid black",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                }}
+              >
+                Player 1
+              </Card>
+
+              <PingPong />
+
+              <Card
+                style={{
+                  width: "max-content",
+                  padding: "20px",
+                  margin: "30px",
+                  height: "15%",
+                  border: "2px solid black",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                }}
+              >
+                Player 2
+              </Card>
             </Card>
-          </Card>
-        </CardContent>
+          </CardContent>
 
-        <CardContent
-          style={{
-            width: "100%",
-            height: "30vh",
-
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Card
+          <CardContent
             style={{
-              width: "20%",
-              height: "5vh",
+              width: "100%",
+              height: "30vh",
+
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              border: "1px solid black",
-              backgroundColor: "#05BEFF",
             }}
           >
-            Mode: {gameState.gameMode} || Speed: {gameState.ballSpeedOption} ||
-            Map: {gameState.mapType}
-          </Card>
-          <Button variant="contained" onClick={handleOpenModal_redir}>
-            상대방 탈주시
-          </Button>
-          <Modal open={openModal}>
-            <Box sx={modalStyle} borderRadius={"10px"}>
-              <Card
-                style={{
-                  width: "100%",
-                  height: "20%",
-                  backgroundColor: main.main4,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {/* 상단 안내메세지 */}
-                <CardContent
-                  style={{
-                    width: "100%",
-                    height: "20%",
-                    backgroundColor: main.main4,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  안내메세지
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  width: "100%",
-                  height: "90%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                }}
-              >
-                <CardContent
-                  style={{
-                    width: "100%",
-                    height: "40%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  상대방이탈주했습니다. 결과페이지로 이동합니다
-                </CardContent>
-              </Card>
-            </Box>
-          </Modal>
-        </CardContent>
-        <CardContent
-          style={{
-            width: "100%",
-            height: "30vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Button
+            <Card
+              style={{
+                width: "20%",
+                height: "5vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "1px solid black",
+                backgroundColor: "#05BEFF",
+              }}
+            >
+              Mode: {gameState.gameMode} || Speed: {gameState.ballSpeedOption}{" "}
+              || Map: {gameState.mapType}
+            </Card>
+            <Modals
+              isShowing={isShowing}
+              hide={toggle}
+              message="뒤로가기 멈춰!"
+              routing="/"
+            />
+            <Button onClick={() => setOpenModal(true)}>탈주시</Button>
+            <Modals
+              isShowing={openModal}
+              message="상대방이 탈주했습니다. 결과페이지로 이동합니다"
+            />
+            <Modals
+              isShowing={isShowing2}
+              hide={toggle2}
+              message="새로고침 멈춰!"
+            />
+          </CardContent>
+          <CardContent
             style={{
-              width: "10%",
-              height: "40%",
-              border: "2px solid red",
+              width: "100%",
+              height: "30vh",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "1.5rem",
-              backgroundColor: "#FB5C12",
             }}
-            onClick={BackToMain}
           >
-            도망가기
-          </Button>
-        </CardContent>
-      </Stack>
-    </Card>
+            <Button
+              style={{
+                width: "10%",
+                height: "40%",
+                border: "2px solid red",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.5rem",
+                backgroundColor: "#FB5C12",
+              }}
+              onClick={BackToMain}
+            >
+              도망가기
+            </Button>
+          </CardContent>
+        </Stack>
+      </Card>
+    </>
   );
 };
 export default GamePlaying;

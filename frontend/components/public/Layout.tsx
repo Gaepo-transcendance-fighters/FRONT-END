@@ -14,12 +14,8 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
-<<<<<<< HEAD
 import { chatSocket } from "@/app/page";
-=======
->>>>>>> aac5bb08f4a1a5e41062ebeba502c43e7a5756c9
 import { useFriend } from "@/context/FriendContext";
-import { socket } from "@/app/page";
 
 export const main = {
   main0: "#67DBFB",
@@ -74,13 +70,8 @@ interface IMaindata {
 }
 
 const Layout = () => {
-<<<<<<< HEAD
   const { authState } = useAuth();
-  const { roomDispatch } = useRoom();
-=======
-  const { state } = useAuth();
   const { roomState, roomDispatch } = useRoom();
->>>>>>> aac5bb08f4a1a5e41062ebeba502c43e7a5756c9
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
 
@@ -131,7 +122,6 @@ const Layout = () => {
         }
       );
     }
-<<<<<<< HEAD
   }, [authState.isLoggedIn]);
   // useEffect(() => {
   //   if (isLoggedIn) {
@@ -144,9 +134,6 @@ const Layout = () => {
   //   setRooms({ type: "main-enter", payload: mockChatRoomList0 });
   // }, []);
   // chatSocket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
-=======
-  }, [state.isLoggedIn]);
->>>>>>> aac5bb08f4a1a5e41062ebeba502c43e7a5756c9
 
   return (
     <Box sx={{ display: "flex" }}>

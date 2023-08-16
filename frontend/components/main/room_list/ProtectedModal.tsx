@@ -14,7 +14,7 @@ import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom0 } from "@/context/RoomContext";
-import { socket } from "@/app/page";
+import { chatSocket } from "@/app/page";
 
 const box = {
   position: "absolute" as "absolute",
@@ -62,7 +62,7 @@ export default function ProtectedModal({
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setFail(false);
-    socket.emit(
+    chatSocket.emit(
       "chat_enter",
       JSON.stringify({
         userNickname: "hoslim",
@@ -86,7 +86,7 @@ export default function ProtectedModal({
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       setFail(false);
-      socket.emit(
+      chatSocket.emit(
         "chat_enter",
         JSON.stringify({
           userNickname: "intra_id",

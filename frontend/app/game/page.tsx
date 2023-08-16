@@ -165,7 +165,10 @@ const Game = () => {
                           border: "1px solid black",
                         }}
                       >
-                        설명이들어가야하는데뭘적어야할지모르겠어요
+                        <strong>일반 게임</strong>은 랭크 점수를 걸지 않고
+                        상대와 겨루는 모드입니다. 이 모드에선 공의 스피드와 맵의
+                        종류를 직접 고를 수 있고 각 옵션은 상대의 선택와
+                        플레이어의 선택 중 랜덤으로 적용됩니다.
                       </Card>
                     </CardContent>
 
@@ -203,7 +206,11 @@ const Game = () => {
                           border: "1px solid black",
                         }}
                       >
-                        설명이들어가야하는데뭘적어야할지모르겠어요
+                        <Typography>
+                          <strong>랭크게임</strong>은 자신의 랭크 점수를 걸고
+                          상대와 겨루는 모드입니다. 이 모드는 보통 공 속도와
+                          기본 맵를 사용합니다.
+                        </Typography>
                       </Card>
                     </CardContent>
 

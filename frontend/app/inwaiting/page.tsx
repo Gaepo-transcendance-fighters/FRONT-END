@@ -157,17 +157,18 @@ const Inwaiting = () => {
     gameSocket.on(
       "game_ready_second",
       ({
-        roodId,
+        roomId,
         serverDateTime,
       }: {
-        roodId: string;
+        roomId: string;
         serverDateTime: number;
       }) => {
         console.log("game_ready_second");
         gameDispatch({
           type: "SET_ROOM_ID",
-          value: roodId,
+          value: roomId,
         });
+        console.log("roomid", roomId, "room", gameState.roomId);
         gameDispatch({
           type: "SET_SERVER_DATE_TIME",
           value: serverDateTime,

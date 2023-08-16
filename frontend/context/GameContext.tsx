@@ -48,7 +48,7 @@ type GameAction =
   | { type: "A_SCORE"; value: number }
   | { type: "B_PLAYER"; value: { nick: string; id: number } }
   | { type: "B_SCORE"; value: number }
-  | { type: "SCORE_RESET"; value: GameContextData }
+  | { type: "SCORE_RESET" }
   | { type: "GAME_RESET"; value: GameContextData }
   | { type: "SET_ROOM_ID"; value: string }
   | { type: "SET_SERVER_DATE_TIME"; value: number }
@@ -104,13 +104,13 @@ function gameReducer(state: GameContextData, action: GameAction) {
     case "A_PLAYER":
       return { ...state, aPlayer: action.value };
     case "A_SCORE":
-      return { ...state, aScore: action.value + 1 };
+      return { ...state, aScore: action.value };
     case "B_PLAYER":
       return { ...state, bPlayer: action.value };
     case "B_SCORE":
-      return { ...state, bScore: action.value + 1 };
+      return { ...state, bScore: action.value };
     case "SCORE_RESET":
-      return { ...state, state: action.value };
+      return { ...state, aScore: 0, bScore: 0 };
     case "GAME_RESET":
       return { ...state, state: action.value };
     case "SET_ROOM_ID":

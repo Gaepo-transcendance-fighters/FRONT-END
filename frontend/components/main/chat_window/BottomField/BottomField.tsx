@@ -5,7 +5,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import FormControl, { useFormControl } from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { io } from "socket.io-client";
-import { socket } from "@/app/page";
+import { chatSocket } from "@/app/page";
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
 import { useRoom } from "@/context/RoomContext";
@@ -37,10 +37,10 @@ const BottomField = ({ setMsgs }: Props) => {
       setMsgs((prevChats: any) => [...prevChats, chat]);
       setMsg("");
     };
-    socket.on("chat_send_msg", messageHandler);
+    chatSocket.on("chat_send_msg", messageHandler);
 
     return () => {
-      socket.off("chat_send_msg", messageHandler);
+      chatSocket.off("chat_send_msg", messageHandler);
     };
   }, []);
 
@@ -57,7 +57,7 @@ const BottomField = ({ setMsgs }: Props) => {
         msg: msg,
       };
       console.log("payload", payload);
-      socket.emit("chat_send_msg", payload);
+      chatSocket.emit("chat_send_msg", payload);
       inputRef.current?.focus();
     },
     [msg]

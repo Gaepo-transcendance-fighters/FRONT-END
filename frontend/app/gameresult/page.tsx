@@ -27,7 +27,7 @@ const GameResult = () => {
   const router = useRouter();
 
   const BackToMain = () => {
-    gameDispatch({ type: "SCORE_RESET", value: resetGameContextData() });
+    gameDispatch({ type: "SCORE_RESET" });
     router.push("/");
   };
 
