@@ -8,14 +8,9 @@ import { IconButton } from "@mui/material";
 import SettingIconButton from "./SettingIconButton";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { IChatRoom0, useRoom } from "@/context/RoomContext";
+import { IChatRoom, useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
 import { socket } from "@/app/page";
-
-export interface IChatRoom {
-  roomName: string;
-  isProtected: boolean;
-}
 
 interface IChat {
   channelIdx: number;
@@ -40,7 +35,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
 
   const updateChannels = (
     targetChannelIdx: number,
-    updatedChannel: IChatRoom0
+    updatedChannel: IChatRoom
   ) => {
     const updatedArray = roomState.nonDmRooms.map((item) => {
       if (item.channelIdx === targetChannelIdx) {
@@ -52,30 +47,30 @@ const RoomTitleField = ({ setMsgs }: Props) => {
       return item;
     });
     // console.log("[RoomTItleField] before updateChanels : " + roomState.nonDmRooms);
-    roomDispatch({ type: "SET_NON_ROOMS", value: updatedArray });
+    roomDispatch({ type: "SET_NON_DM_ROOMS", value: updatedArray });
   };
 
   useEffect(() => {
-    const leaveHandler = (channel: IChatRoom0) => {
+    const leaveHandler = (channel: IChatRoom) => {
       console.log(
         "[RoomTItleField] receive from chat_goto_lobby API : " + channel
       );
       if (roomState.currentRoom) {
         updateChannels(roomState.currentRoom?.channelIdx, channel);
-        roomDispatch({ type: "SET_ISOPEN", value: false });
-        roomDispatch({ type: "SET_CURRENTROOM", value: null });
+        roomDispatch({ type: "SET_IS_OPEN", value: false });
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
       } else
         console.log("[RoomTItleField] there isn't roomState.currentRoom case");
     };
-    const leaveAndDeleteHandler = (channels: IChatRoom0[]) => {
+    const leaveAndDeleteHandler = (channels: IChatRoom[]) => {
       console.log(
         "[RoomTItleField] leaveAndDeleteHandler on! chanel : ",
         channels
       );
       if (roomState.currentRoom) {
-        roomDispatch({ type: "SET_ISOPEN", value: false });
-        roomDispatch({ type: "SET_CURRENTROOM", value: null });
-        roomDispatch({ type: "SET_NON_ROOMS", value: channels });
+        roomDispatch({ type: "SET_IS_OPEN", value: false });
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
+        roomDispatch({ type: "SET_NON_DM_ROOMS", value: channels });
       } else
         console.log("[RoomTItleField] there isn't roomState.currentRoom case");
     };
