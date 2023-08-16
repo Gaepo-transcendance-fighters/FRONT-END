@@ -120,9 +120,22 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
             }),
             (json: any) => {
               // 아직 안정해짐
-              if (roomState.currentRoom !== room) {
-                roomDispatch({ type: "SET_CUR_ROOM", value: room });
+              if (
+                roomState.currentRoom &&
+                roomState.currentRoom.mode !== Mode.PRIVATE
+              ) {
+                socket.emit(
+                  "chat_goto_lobby",
+                  JSON.stringify({
+                    channelIdx: roomState.currentRoom.channelIdx,
+                    userIdx: userState.userIdx,
+                  }),
+                  (ret: any) => {
+                    console.log("chat_goto_lobby ret : ", ret);
+                  }
+                );
               }
+              roomDispatch({ type: "SET_CUR_ROOM", value: room });
               roomDispatch({ type: "SET_IS_OPEN", value: true });
             }
           );
