@@ -14,6 +14,7 @@ interface RoomContextData {
   currentRoomMemberList: IMember[];
   isOpen: boolean;
   currentDmRoomMemberList: IDmMemList | null;
+  adminAry : string[];
 }
 
 type RoomAction =
@@ -23,7 +24,8 @@ type RoomAction =
   | { type: "SET_CUR_MEM"; value: IMember[] }
   | { type: "SET_IS_OPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom }
-  | { type: "SET_CUR_DM_MEM"; value: IDmMemList };
+  | { type: "SET_CUR_DM_MEM"; value: IDmMemList }
+  | { type: "SET_ADMIN_ARY"; value: string[] }
 
 const initialState: RoomContextData = {
   dmRooms: [],
@@ -32,6 +34,7 @@ const initialState: RoomContextData = {
   currentRoomMemberList: [],
   isOpen: false,
   currentDmRoomMemberList: null,
+  adminAry : []
 };
 
 const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
@@ -53,6 +56,8 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
       };
     case "SET_CUR_DM_MEM":
       return { ...roomState, currentDmRoomMemberList: action.value };
+    case "SET_ADMIN_ARY":
+      return { ...roomState, adminAry: action.value };
     default:
       return roomState;
   }
