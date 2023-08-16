@@ -5,8 +5,10 @@ import { useEffect } from "react";
 import { io } from "socket.io-client";
 
 const userId = 3;
-// export const socket = io("http://localhost:4000/chat");
+// dev original
 export const socket = io("http://localhost:4000/chat", {
+// haryu's server
+// export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
   query: { userId: userId },
 });
 
