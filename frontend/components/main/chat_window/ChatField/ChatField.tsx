@@ -14,7 +14,7 @@ interface Props {
 }
 
 const ChatField = ({ msgs }: Props) => {
-  console.log(msgs);
+  // console.log(msgs);
   return (
     <Box
       sx={{

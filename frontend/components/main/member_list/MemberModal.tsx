@@ -12,8 +12,10 @@ import {
   MenuItem,
 } from "@mui/material";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
+import { IMember } from "@/context/RoomContext";
+import { useFriend } from "@/context/FriendContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -40,13 +42,22 @@ export default function MemberModal({
 }: {
   setOpenModal: Dispatch<SetStateAction<boolean>>;
   openModal: boolean;
-  person: IFriend;
+  person: IMember;
 }) {
+  const { friendState } = useFriend();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [curFriend, setCurFriend] = useState<IFriend | null>(null);
+
+  useEffect(() => {
+    friendState.friendList.map((friend) => {
+      friend.friendNickname === person.nickname ? setCurFriend(friend) : null;
+    });
+  }, []);
 
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
   const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
   };
@@ -93,10 +104,10 @@ export default function MemberModal({
                 textOverflow: "ellipsis",
               }}
             >
-              닉네임: {person.friendNickname}
+              닉네임: {curFriend?.friendNickname}
             </Typography>
             <Typography>
-              상태: {person.isOnline ? loginOn : loginOff}
+              상태: {curFriend?.isOnline ? loginOn : loginOff}
             </Typography>
             <Stack direction={"row"} spacing={2}>
               <Button

@@ -10,7 +10,7 @@ import GameStartButton from "../game/GameStartButton";
 import io from "socket.io-client";
 import InviteGame from "../main/InviteGame/InviteGame";
 import WaitAccept from "../main/InviteGame/WaitAccept";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
@@ -41,7 +41,7 @@ export enum Mode {
   PROTECTED = "protected",
 }
 
-export interface IChatRoom0 {
+export interface IChatRoom {
   channelIdx: number;
   owner: string;
   mode: Mode;
@@ -63,7 +63,7 @@ interface IUserObject {
   userIdx: number;
 }
 interface IMaindata {
-  channelList: IChatRoom0[];
+  channelList: IChatRoom[];
   friendList: IFriend[];
   blockList: IBlock[];
   userObject: IUserObject;
@@ -78,9 +78,8 @@ const Layout = () => {
   useRequireAuth();
 
   useEffect(() => {
-    const MainEnter = (data: any) => {
-      console.log(data);
-      roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
+    const MainEnter = (data: IMaindata) => {
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
       userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
@@ -102,24 +101,10 @@ const Layout = () => {
 
   useEffect(() => {
     if (authState.isLoggedIn) {
-      // console.log("in emit");
       chatSocket.emit(
         "main_enter",
         JSON.stringify({ intra: "hoslim" }),
-        (data: IMaindata) => {
-          // roomDispatch({ type: "SET_NON_ROOMS", value: data.channelList });
-          // friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
-          // friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-          // userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
-          // userDispatch({
-          //   type: "CHANGE_NICK_NAME",
-          //   value: data.userObject.nickname,
-          // });
-          // userDispatch({
-          //   type: "SET_USER_IDX",
-          //   value: data.userObject.userIdx,
-          // });
-        }
+        () => {}
       );
     }
   }, [authState.isLoggedIn]);
