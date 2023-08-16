@@ -236,7 +236,7 @@ const Inwaiting = () => {
         sx={{
           width: "100%",
           height: "100vh",
-          backgroundColor: main.main1,
+          backgroundImage: `url("/background.png")`,
           padding: 0,
           margin: 0,
         }}

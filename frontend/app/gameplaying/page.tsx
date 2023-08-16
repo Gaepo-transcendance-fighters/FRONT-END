@@ -63,9 +63,9 @@ const GamePlaying = () => {
     };
 
     history.pushState(null, "", location.href);
-    window.addEventListener("popstate", preventGoBack);
-    window.addEventListener("keydown", preventRefresh);
-    window.addEventListener("beforeunload", preventRefreshButton);
+    addEventListener("popstate", preventGoBack);
+    addEventListener("keydown", preventRefresh);
+    addEventListener("beforeunload", preventRefreshButton);
 
     gameSocket.on("game_queue_quit", (res: number) => {
       console.log("상대가 나감", res);
@@ -78,9 +78,9 @@ const GamePlaying = () => {
       }, 2000);
     });
     return () => {
-      window.removeEventListener("popstate", preventGoBack);
-      window.removeEventListener("keydown", preventRefresh);
-      window.removeEventListener("beforeunload", preventRefreshButton);
+      removeEventListener("popstate", preventGoBack);
+      removeEventListener("keydown", preventRefresh);
+      removeEventListener("beforeunload", preventRefreshButton);
     };
   }, []);
 
@@ -93,7 +93,7 @@ const GamePlaying = () => {
           sx={{
             width: "100%",
             height: "100vh",
-            backgroundColor: main.main1,
+            backgroundImage: `url("/background.png")`,
             padding: 0,
             margin: 0,
           }}

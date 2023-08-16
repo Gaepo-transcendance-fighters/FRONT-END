@@ -65,9 +65,9 @@ const Game = () => {
     <Card sx={{ display: "flex" }}>
       <Stack
         sx={{
+          backgroundImage: `url("/background.png")`,
           width: "100%",
           height: "100vh",
-          backgroundColor: main.main1,
           padding: 0,
           margin: 0,
         }}
