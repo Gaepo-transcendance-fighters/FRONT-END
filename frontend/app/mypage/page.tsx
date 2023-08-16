@@ -95,37 +95,63 @@ export default function PageRedir() {
     console.log("API REQUEST");
   }, [reload]);
 
-  console.log(userData);
-
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
 
-  //Form 데이터를 보내는데 이미지의 경우 어떻게 처리를 해야할지 잘 모르겠어서 일단 임시로 둡니다. 0814_15시
-  const onChangeImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
 
-    if (e.target.files) {
-      const uploadFile = e.target.files[0];
-      const formData = new FormData();
-
-      formData.append("files", uploadFile);
-
-      try {
-        await axios({
-          method: "UPDATE",
-          url: `http://localhost:4000/users/profile/${userData?.nickname}`,
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + localStorage.getItem("authorization"),
-          },
-          data: formData,
-        });
-      } catch (error) {
-        console.log("이미지 변경중 에러");
-      }
-      console.log(uploadFile);
+    const files = event.target.files;
+    if (files) {
+      uploadImage(files[0]);
     }
+  };
+
+  const uploadImage = async (file: File) => {
+    // readAsDataURL을 사용해 이미지를 base64로 변환
+    const dataUrl = await readFileAsDataURL(file);
+
+    console.log(dataUrl);
+
+    // 서버로 이미지 업로드
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      await axios({
+        method: "UPDATE",
+        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + localStorage.getItem("authorization"),
+        },
+        data: formData,
+      });
+      console.log("업로드 완료");
+    } catch (error) {
+      console.error("업로드 실패", error);
+    }
+  };
+
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        if (typeof e.target?.result === "string") {
+          resolve(e.target.result);
+        } else {
+          reject(new Error("FileReader error"));
+        }
+      };
+
+      reader.onerror = (e) => {
+        reject(new Error("FileReader error"));
+      };
+
+      reader.readAsDataURL(file);
+    });
   };
 
   //body가 아니라 data로 보내야한다고함..?data에 객체를 직접 전달해도 axios가 JSON형태로 변환함.
@@ -349,8 +375,8 @@ export default function PageRedir() {
                             name="Change_IMG"
                             style={{ display: "none" }}
                             accept="image/png, image/jpg, image/jpeg"
-                            onChange={onChangeImg}
-                            // onChange={HandleFileUpload}
+                            // onChange={onChangeImg}
+                            onChange={handleChange}
                           />
                         </form>
                         {/* <form>
