@@ -3,10 +3,10 @@
 import Layout from "@/components/public/Layout";
 import { io } from "socket.io-client";
 
-const userId = 3;
+const userId = 98029;
 export const socket = io("http://localhost:4000/chat", {
   query: { userId: userId },
-});
+}); 
 
 const Page = () => {
   return (
