@@ -78,6 +78,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const ChatDmEnter = (json: IChatDmEnter) => {
+      console.log("ChatDmEnter");
       roomDispatch({
         type: "SET_CUR_DM_MEM",
         value: {
@@ -89,10 +90,10 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
         },
       });
     };
-    socket.on("check_dm", ChatDmEnter);
+    socket.on("chat_get_DM", ChatDmEnter);
 
     return () => {
-      socket.off("check_dm", ChatDmEnter);
+      socket.off("chat_get_DM", ChatDmEnter);
     };
   }, []);
 
@@ -120,23 +121,26 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
             }),
             (json: any) => {
               // 아직 안정해짐
-              if (
-                roomState.currentRoom &&
-                roomState.currentRoom.mode !== Mode.PRIVATE
-              ) {
-                socket.emit(
-                  "chat_goto_lobby",
-                  JSON.stringify({
-                    channelIdx: roomState.currentRoom.channelIdx,
-                    userIdx: userState.userIdx,
-                  }),
-                  (ret: any) => {
-                    console.log("chat_goto_lobby ret : ", ret);
-                  }
-                );
+              if (json === 200) {
+                console.log("dm click");
+                if (
+                  roomState.currentRoom &&
+                  roomState.currentRoom.mode !== Mode.PRIVATE
+                ) {
+                  socket.emit(
+                    "chat_goto_lobby",
+                    JSON.stringify({
+                      channelIdx: roomState.currentRoom.channelIdx,
+                      userIdx: userState.userIdx,
+                    }),
+                    (ret: any) => {
+                      console.log("chat_goto_lobby ret : ", ret);
+                    }
+                  );
+                }
+                roomDispatch({ type: "SET_CUR_ROOM", value: room });
+                roomDispatch({ type: "SET_IS_OPEN", value: true });
               }
-              roomDispatch({ type: "SET_CUR_ROOM", value: room });
-              roomDispatch({ type: "SET_IS_OPEN", value: true });
             }
           );
         } else {

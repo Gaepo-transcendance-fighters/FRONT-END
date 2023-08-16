@@ -11,6 +11,7 @@ import {
   IChatKick,
   IChatRoomAdmin,
   IMember,
+  Mode,
   Permission,
   alert,
 } from "@/type/type";
@@ -32,7 +33,7 @@ export default function Member({
   const [string, setString] = useState<string>("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminAry, setAdminAry] = useState<string[]>([]);
-  // const [authorization, setAuthorization] = useState("");
+  const [isGranted, setIsGranted] = useState<boolean>(false);
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const strings = [
@@ -47,29 +48,41 @@ export default function Member({
     setOpenModal(true);
   };
 
-  // useEffect(() => {
-  //   const CheckGrant = (json: string) => {
-  //     setAuthorization(json);
-  //   };
-  //   socket.on("chat_get_grant", CheckGrant);
+  useEffect(() => {
+    const CheckGrant = (json: Permission) => {
+      // setAuthorization(json);
+      json === Permission.MEMBER ? setIsGranted(false) : setIsGranted(true);
+    };
+    socket.on("chat_get_grant", CheckGrant);
 
-  //   return () => {
-  //     socket.off("chat_get_grant", CheckGrant);
-  //   };
-  // }, []);
+    return () => {
+      socket.off("chat_get_grant", CheckGrant);
+    };
+  }, []);
 
   const handleOpenMenu = (
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
+    console.log("handleOpenMenu");
     // socket.emit(
     //   "chat_get_grant",
     //   JSON.stringify({
     //     userIdx: userState.userIdx,
-    //     channelIdx: roomState.currentRoom?.channelIdx,
+    //     channelIdx: roomState.currentRoom!.channelIdx,
     //   }),
-    //   () => {}
+    //   (ret: any) => {
+    //     console.log("handleOpenMenu ret : ", ret);
+    //   }
     // );
+
+    // ||
+    // adminAry.map((admin) => {
+    //   console.log("admin === person.nickname", admin, person.nickname);
+    //   return admin === person.nickname ? true : false;
+    // })
+
+    // isGranted ? setAnchorEl(e.currentTarget) : null;
     setAnchorEl(e.currentTarget);
   };
 
@@ -119,16 +132,17 @@ export default function Member({
     isAdmin ? setString(strings[0]) : setString(strings[1]);
   }, [isAdmin]);
 
-  // useEffect(() => {
-  //   const ChatMute = (data: any) => { // 아직 api 완성안됨
-  //     console.log("Mute : ", data);
-  //   };
-  //   socket.on("chat_mute", ChatMute);
+  useEffect(() => {
+    const ChatMute = (data: any) => {
+      // 아직 api 완성안됨
+      console.log("Mute : ", data);
+    };
+    socket.on("chat_mute", ChatMute);
 
-  //   return () => {
-  //     socket.off("chat_mute", ChatMute);
-  //   };
-  // });
+    return () => {
+      socket.off("chat_mute", ChatMute);
+    };
+  });
 
   const Mute = () => {
     socket.emit(
@@ -215,12 +229,33 @@ export default function Member({
         className="membtn"
         onClick={handleOpenModal}
         onContextMenu={
-          (e) => handleOpenMenu(e)
-          // (e) =>
-          //   userState.nickname !== person.nickname &&
-          //   authorization === (Permission.ADMIN || Permission.OWNER)
-          //     ? handleOpenMenu(e)
-          //     : e.preventDefault()
+          // (e) => handleOpenMenu(e)
+          (e) => {
+            //owner일때
+            //admin일때
+            //mem일때
+            // console.log("here");
+            // socket.emit(
+            //   "chat_get_grant",
+            //   JSON.stringify({
+            //     userIdx: userState.userIdx,
+            //     channelIdx: roomState.currentRoom!.channelIdx,
+            //   }),
+            //   (ret: any) => {
+            //     console.log("handleOpenMenu ret : ", ret);
+            //   }
+            // );
+            console.log(
+              "userState.nickname === roomState.currentRoom!.owner",
+              userState.nickname,
+              roomState.currentRoom!.owner
+            );
+            userState.nickname !== person.nickname &&
+            userState.nickname === roomState.currentRoom!.owner
+              ? // authorization === (Permission.ADMIN || Permission.OWNER)
+                handleOpenMenu(e)
+              : e.preventDefault();
+          }
         }
       >
         <div className="memimg">
