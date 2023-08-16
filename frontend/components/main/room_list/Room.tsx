@@ -85,11 +85,13 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           imgUrl: json.imgUrl,
         },
       });
+      console.log("ChatDmEnter 누르고 난 뒤 DM 멤버 체크")
+      console.log(roomState.currentDmRoomMemberList);
     };
-    socket.on("check_dm", ChatDmEnter);
+    socket.on("chat_get_DM", ChatDmEnter);
 
     return () => {
-      socket.off("check_dm", ChatDmEnter);
+      socket.off("chat_get_DM", ChatDmEnter);
     };
   }, []);
 
@@ -113,8 +115,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
         socket.emit(
           "chat_enter",
           JSON.stringify({
-            userNickname: "hoslim",
-            userIdx: 3,
+            userNickname: "jujeon",
+            userIdx: 98029,
             channelIdx: room.channelIdx,
           }),
           (statusCode: number) => {
