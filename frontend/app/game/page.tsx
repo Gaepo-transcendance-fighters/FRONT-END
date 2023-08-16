@@ -51,7 +51,7 @@ const Game = () => {
   };
 
   const BackToMain = () => {
-    router.push("/");
+    router.replace("/");
   };
 
   const handleOpenModal = () => {

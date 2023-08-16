@@ -36,6 +36,7 @@ const Modals = ({
   hide?: () => void;
   message: string;
   routing?: string;
+  from?: string;
 }) => {
   const router = useRouter();
   return isShowing
@@ -89,7 +90,9 @@ const Modals = ({
               </CardContent>
               {routing && (
                 <CardContent>
-                  <Button onClick={() => router.push(routing)}>도망가기</Button>
+                  <Button onClick={() => router.replace(routing)}>
+                    도망가기
+                  </Button>
                   <Button onClick={hide}>게임하기</Button>
                 </CardContent>
               )}

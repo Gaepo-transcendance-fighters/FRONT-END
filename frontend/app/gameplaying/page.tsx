@@ -40,33 +40,41 @@ const GamePlaying = () => {
   const { isShowing: isShowing2, toggle: toggle2 } = useModal();
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const BackToMain = () => {
-    router.push("/");
+  const backToMain = () => {
+    router.replace("/");
     gameDispatch({ type: "SCORE_RESET" });
-  };
-
-  const handleOpenModal_redir = () => {
-    setOpenModal(true);
-    setTimeout(() => {
-      router.push("./gameresult");
-    }, 2000);
   };
 
   useEffect(() => {
     setClient(true);
+    console.log("history stack", history.length);
     const preventGoBack = (e: PopStateEvent) => {
       e.preventDefault();
       toggle();
     };
 
-    const preventRefresh = (e: BeforeUnloadEvent) => {
+    const preventRefresh = (e: KeyboardEvent) => {
+      if (
+        e.key === "F5" ||
+        (e.ctrlKey === true && e.key === "r") ||
+        (e.metaKey === true && e.key === "r")
+      ) {
+        e.preventDefault();
+        toggle2();
+        return false;
+      }
+    };
+
+    const preventRefreshButton = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = "";
-      router.push("/");
+      router.replace("/?from=game");
     };
+
     history.pushState(null, "", location.href);
     window.addEventListener("popstate", preventGoBack);
-    window.addEventListener("beforeunload", preventRefresh);
+    window.addEventListener("keydown", preventRefresh);
+    window.addEventListener("beforeunload", preventRefreshButton);
 
     gameSocket.on("game_queue_quit", (res: number) => {
       console.log("상대가 나감", res);
@@ -75,12 +83,13 @@ const GamePlaying = () => {
       gameDispatch({ type: "B_SCORE", value: 0 });
       setOpenModal(true);
       setTimeout(() => {
-        router.push("./gameresult");
+        router.replace("./gameresult");
       }, 2000);
     });
     return () => {
       window.removeEventListener("popstate", preventGoBack);
-      window.removeEventListener("beforeunload", () => ({}));
+      window.removeEventListener("keydown", preventRefresh);
+      window.removeEventListener("beforeunload", preventRefreshButton);
     };
   }, []);
 
@@ -199,7 +208,7 @@ const GamePlaying = () => {
               isShowing={isShowing}
               hide={toggle}
               message="뒤로가기 멈춰!"
-              routing="/"
+              routing="/?from=game"
             />
             <Button onClick={() => setOpenModal(true)}>탈주시</Button>
             <Modals
@@ -210,6 +219,7 @@ const GamePlaying = () => {
               isShowing={isShowing2}
               hide={toggle2}
               message="새로고침 멈춰!"
+              routing="/?from=game"
             />
           </CardContent>
           <CardContent
@@ -232,7 +242,7 @@ const GamePlaying = () => {
                 fontSize: "1.5rem",
                 backgroundColor: "#FB5C12",
               }}
-              onClick={BackToMain}
+              onClick={backToMain}
             >
               도망가기
             </Button>
