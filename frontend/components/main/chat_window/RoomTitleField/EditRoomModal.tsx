@@ -1,7 +1,7 @@
 "use client";
 
 import "@/components/main/room_list/RoomList.css";
-import { IChatRoom0, useRoom } from "@/context/RoomContext";
+import { IChatRoom, useRoom } from "@/context/RoomContext";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { socket } from "@/app/page";
@@ -35,16 +35,16 @@ export default function EditRoomModal({ prop }: { prop: () => void }) {
   };
 
   useEffect(() => {
-    const roomSettingHandler = (channels: IChatRoom0[]) => {
+    const roomSettingHandler = (channels: IChatRoom[]) => {
       console.log(channels);
       const targetChannelIdx = roomState.currentRoom?.channelIdx;
-      const targetChannel: IChatRoom0 | undefined = channels.find(
+      const targetChannel: IChatRoom | undefined = channels.find(
         (channel) => channel.channelIdx === targetChannelIdx
       );
       console.log("찾은 채널:", targetChannel);
       if (targetChannel) {
-        roomDispatch({ type: "SET_NON_ROOMS", value: channels });
-        roomDispatch({ type: "SET_CURRENTROOM", value: targetChannel });
+        roomDispatch({ type: "SET_NON_DM_ROOMS", value: channels });
+        roomDispatch({ type: "SET_CUR_ROOM", value: targetChannel });
       } else {
         console.log("error ocurrued!");
       }
