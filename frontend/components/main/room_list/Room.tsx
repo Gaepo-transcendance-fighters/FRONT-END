@@ -98,35 +98,35 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   //TODO : 0명 되는 경우
 
-  useEffect(() => {
-    const GoToLobby = (json: IChatRoom[]) => {
-      roomDispatch({ type: "SET_NON_DM_ROOMS", value: json });
-    };
-    socket.on("chat_goto_lobby", GoToLobby);
+  // useEffect(() => {
+  //   const GoToLobby = (json: IChatRoom[]) => {
+  //     roomDispatch({ type: "SET_NON_DM_ROOMS", value: json });
+  //   };
+  //   socket.on("chat_goto_lobby", GoToLobby);
 
-    return () => {
-      socket.off("chat_goto_lobby", GoToLobby);
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("chat_goto_lobby", GoToLobby);
+  //   };
+  // }, []);
 
   const RoomClick = (room: IChatRoom) => {
-    if (room.mode !== Mode.PROTECTED) {
-      if (room.mode === Mode.PRIVATE) {
-        socket.emit(
-          "chat_get_DM",
-          JSON.stringify({
-            channelIdx: room.channelIdx,
-          }),
-          (json: any) => {
-            // 아직 안정해짐
-            if (roomState.currentRoom !== room) {
-              roomDispatch({ type: "SET_CUR_ROOM", value: room });
+    if (roomState.currentRoom !== room) {
+      if (room.mode !== Mode.PROTECTED) {
+        if (room.mode === Mode.PRIVATE) {
+          socket.emit(
+            "chat_get_DM",
+            JSON.stringify({
+              channelIdx: room.channelIdx,
+            }),
+            (json: any) => {
+              // 아직 안정해짐
+              if (roomState.currentRoom !== room) {
+                roomDispatch({ type: "SET_CUR_ROOM", value: room });
+              }
+              roomDispatch({ type: "SET_IS_OPEN", value: true });
             }
-            roomDispatch({ type: "SET_IS_OPEN", value: true });
-          }
-        );
-      } else {
-        if (roomState.currentRoom !== room) {
+          );
+        } else {
           socket.emit(
             "chat_enter",
             JSON.stringify({
@@ -136,8 +136,10 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
             }),
             (statusCode: number) => {
               if (statusCode === 200) {
-                //  전에 들어갔던 방이 있으면 그 방에서 탈퇴되게
-                if (roomState.currentRoom) {
+                if (
+                  roomState.currentRoom &&
+                  roomState.currentRoom.mode !== Mode.PRIVATE
+                ) {
                   socket.emit(
                     "chat_goto_lobby",
                     JSON.stringify({
@@ -155,9 +157,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
             }
           );
         }
+      } else {
+        handleOpen();
       }
-    } else {
-      handleOpen();
     }
   };
 

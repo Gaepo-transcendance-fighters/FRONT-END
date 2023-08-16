@@ -13,7 +13,7 @@ import "./ProtectedModal.css";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom } from "@/type/type";
+import { IChatRoom, Mode } from "@/type/type";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 
@@ -53,7 +53,7 @@ export default function ProtectedModal({
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
 }) {
-  const { roomDispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const pwRef = useRef("");
 
@@ -74,9 +74,25 @@ export default function ProtectedModal({
       }),
       (statusCode: number) => {
         if (statusCode === 200) {
+          if (
+            roomState.currentRoom &&
+            roomState.currentRoom.mode !== Mode.PRIVATE
+          ) {
+            socket.emit(
+              "chat_goto_lobby",
+              JSON.stringify({
+                channelIdx: roomState.currentRoom.channelIdx,
+                userIdx: userState.userIdx,
+              }),
+              (ret: any) => {
+                console.log("chat_goto_lobby ret : ", ret);
+              }
+            );
+          }
           handleClose();
           setFail(false);
           roomDispatch({ type: "SET_CUR_ROOM", value: room });
+          roomDispatch({ type: "SET_IS_OPEN", value: true });
         } else {
           setFail(true);
         }
@@ -98,9 +114,25 @@ export default function ProtectedModal({
         }),
         (statusCode: number) => {
           if (statusCode === 200) {
+            if (
+              roomState.currentRoom &&
+              roomState.currentRoom.mode !== Mode.PRIVATE
+            ) {
+              socket.emit(
+                "chat_goto_lobby",
+                JSON.stringify({
+                  channelIdx: roomState.currentRoom.channelIdx,
+                  userIdx: userState.userIdx,
+                }),
+                (ret: any) => {
+                  console.log("chat_goto_lobby ret : ", ret);
+                }
+              );
+            }
             handleClose();
             setFail(false);
             roomDispatch({ type: "SET_CUR_ROOM", value: room });
+            roomDispatch({ type: "SET_IS_OPEN", value: true });
           } else {
             setFail(true);
           }
