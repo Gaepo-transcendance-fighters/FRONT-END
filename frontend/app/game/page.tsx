@@ -61,6 +61,7 @@ const Game = () => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
   return (
     <Card sx={{ display: "flex" }}>
       <Stack

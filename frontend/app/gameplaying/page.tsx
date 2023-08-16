@@ -7,22 +7,8 @@ import { main } from "@/components/public/Layout";
 import { useEffect, useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
 import { useGame } from "@/context/GameContext";
-import { gameSocket } from "@/app/optionselect/page";
 import useModal from "@/hooks/useModal";
 import Modals from "@/components/public/Modals";
-
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 300,
-  height: 150,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const GamePlaying = () => {
   const router = useRouter();
@@ -67,16 +53,25 @@ const GamePlaying = () => {
     addEventListener("keydown", preventRefresh);
     addEventListener("beforeunload", preventRefreshButton);
 
-    gameSocket.on("game_queue_quit", (res: number) => {
-      console.log("상대가 나감", res);
-      //게임 종료 로직 추가 필요
-      gameDispatch({ type: "A_SCORE", value: 5 });
-      gameDispatch({ type: "B_SCORE", value: 0 });
-      setOpenModal(true);
-      setTimeout(() => {
-        router.replace("./gameresult");
-      }, 2000);
-    });
+    //탈주시
+    // gameSocket.on("game_queue_quit", (res: number) => {
+    //   console.log("상대가 나감", res);
+    //   gameDispatch({ type: "A_SCORE", value: 5 });
+    //   gameDispatch({ type: "B_SCORE", value: 0 });
+    //   gameSocket.emit("game_get_score", {
+    //     userIdx1: gameState.aPlayer.id,
+    //     userScore1: 5,
+    //     userIdx2: gameState.bPlayer.id,
+    //     userScore2: 0,
+    //     issueDate: Date.now(),
+    //     gameStatus: "game_quit",
+    //     winner: gameState.aPlayer.id,
+    //   });
+    //   setOpenModal(true);
+    //   setTimeout(() => {
+    //     router.replace("./gameresult");
+    //   }, 2000);
+    // });
     return () => {
       removeEventListener("popstate", preventGoBack);
       removeEventListener("keydown", preventRefresh);
@@ -98,9 +93,6 @@ const GamePlaying = () => {
             margin: 0,
           }}
         >
-          <Button onClick={() => router.push("./gameresult")}>
-            결과창보기
-          </Button>
           <CardContent
             style={{
               display: "flex",
@@ -184,7 +176,7 @@ const GamePlaying = () => {
             <Card
               style={{
                 width: "20%",
-                height: "5vh",
+                height: "max-content",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -192,8 +184,23 @@ const GamePlaying = () => {
                 backgroundColor: "#05BEFF",
               }}
             >
-              Mode: {gameState.gameMode} || Speed: {gameState.ballSpeedOption}{" "}
-              || Map: {gameState.mapType}
+              <Typography>
+                Mode:{" "}
+                {gameState.gameMode === 0
+                  ? "Friend"
+                  : gameState.gameMode === 1
+                  ? "Normal"
+                  : "Rank"}
+                <br />
+                Speed:{" "}
+                {gameState.ballSpeedOption === 2
+                  ? "Slow"
+                  : gameState.ballSpeedOption === 3
+                  ? "Normal"
+                  : "Fast"}
+                <br />
+                Map: {gameState.mapType}
+              </Typography>
             </Card>
             <Modals
               isShowing={isShowing}

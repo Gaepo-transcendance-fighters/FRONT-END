@@ -3,9 +3,8 @@
 import GameBoard from "./GameBoard";
 import GamePaddle from "./GamePaddle";
 import { useCallback, useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
 import GameBall from "./GameBall";
-import { useGame, resetGameContextData } from "@/context/GameContext";
+import { useGame } from "@/context/GameContext";
 import { gameSocket } from "@/app/optionselect/page";
 import { useAuth } from "@/context/AuthContext";
 
@@ -35,7 +34,6 @@ function debounce(func: (...args: any[]) => void, wait: number) {
 const PingPong = () => {
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
-  const router = useRouter();
   const requireAnimationRef = useRef(0);
 
   const [ready, setReady] = useState(false);
@@ -216,17 +214,17 @@ const PingPong = () => {
 
       if (newLocation.x <= -500) {
         gameDispatch({ type: "B_SCORE", value: gameState.bScore + 1 });
-        // gameSocket.emit(
-        //   "game_pause_score",
-        //   {
-        //     userIdx: gameState.bPlayer.id,
-        //     score: gameState.bScore,
-        //     getScoreTime: Date.now(),
-        //   },
-        //   (res: { code: number; msg: string }) => {
-        //     console.log(res);
-        //   }
-        // );
+        gameSocket.emit(
+          "game_pause_score",
+          {
+            userIdx: gameState.bPlayer.id,
+            score: gameState.bScore,
+            getScoreTime: Date.now(),
+          },
+          (res: { code: number; msg: string }) => {
+            console.log(res);
+          }
+        );
         resetBall();
         resetDerection();
         setReady(false);
@@ -234,17 +232,17 @@ const PingPong = () => {
       }
       if (newLocation.x > 500) {
         gameDispatch({ type: "A_SCORE", value: gameState.aScore + 1 });
-        // gameSocket.emit(
-        //   "game_pause_score",
-        //   {
-        //     userIdx: gameState.aPlayer.id,
-        //     score: gameState.aScore,
-        //     getScoreTime: Date.now(),
-        //   },
-        //   (res: { code: number; msg: string }) => {
-        //     console.log(res);
-        //   }
-        // );
+        gameSocket.emit(
+          "game_pause_score",
+          {
+            userIdx: gameState.aPlayer.id,
+            score: gameState.aScore,
+            getScoreTime: Date.now(),
+          },
+          (res: { code: number; msg: string }) => {
+            console.log(res);
+          }
+        );
         resetBall();
         resetDerection();
         setReady(false);
@@ -325,7 +323,10 @@ const PingPong = () => {
 
   useEffect(() => {
     gameDispatch({ type: "SET_LATENCY", value: 12 });
-    if (!ready) return gameStart();
+    if (!ready) {
+      gameStart();
+      return;
+    }
     window.addEventListener("keydown", handlePaddle);
     window.addEventListener("keyup", debouncedSendData);
 

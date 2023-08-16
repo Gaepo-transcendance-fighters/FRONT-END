@@ -1,20 +1,11 @@
 "use client";
 
-import { ThemeProvider } from "@emotion/react";
-import {
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  createTheme,
-  Typography,
-} from "@mui/material";
+import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useGame } from "@/context/GameContext";
 import { useEffect } from "react";
-import { resetGameContextData } from "@/context/GameContext";
 
 const GameResult = () => {
   const { gameState, gameDispatch } = useGame();

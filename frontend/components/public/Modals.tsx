@@ -8,7 +8,6 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { useState, ReactDOM } from "react";
 import { createPortal } from "react-dom";
 import { main } from "@/components/public/Layout";
 import { useRouter } from "next/navigation";
