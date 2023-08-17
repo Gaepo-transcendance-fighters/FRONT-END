@@ -96,9 +96,9 @@ export interface IChatGetRoomList {
 
 export interface IChatMute {
   // emit - roomId
-  targetNickname : string,
-	targetIdx : number,
-	mute : boolean
+  targetNickname: string;
+  targetIdx: number;
+  mute: boolean;
 }
 
 export interface IChatKick {
@@ -138,4 +138,14 @@ export const alert = {
   top: "100%",
   left: "50%",
   transform: "translate(-50%, -100%)",
+};
+
+export const lock = {
+  height: "13px",
+  color: "#afb2b3",
+};
+
+export const clickedLock = {
+  height: "13px",
+  color: "rgba(255, 255, 255, 0.294)",
 };

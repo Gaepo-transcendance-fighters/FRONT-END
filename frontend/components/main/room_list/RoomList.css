@@ -63,7 +63,7 @@
 }
 
 .roomclicked {
-  background-color: #1c408f;
+  background-color: #1c478e;
   border-radius: 10px;
   height: 43vh;
   bottom: 0;
@@ -101,9 +101,26 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.item:disabled {
+
+.clickeditem {
+  font-family: "crazy";
+  display: flex;
+  align-items: center;
+
+  /* background-color: #67dbfb; */
   background-color: #7b8aa9;
+  border-radius: 10px;
+  height: 50px;
+  border: 0px;
+  margin: 8px auto;
+  width: 100%;
+  /* color: black; */
   color: rgba(255, 255, 255, 0.294);
+  font-size: 18px;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .roomidx {
@@ -114,6 +131,15 @@
   font-family: "crazy";
   vertical-align: middle;
   color: rgb(255, 221, 0);
+}
+.clickedroomidx {
+  display: inline-block;
+  width: 17%;
+  margin: auto;
+  font-size: 16px;
+  font-family: "crazy";
+  vertical-align: middle;
+  color: rgba(255, 255, 255, 0.294);
 }
 .owner {
   width: 70%;

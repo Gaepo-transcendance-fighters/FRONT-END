@@ -11,6 +11,8 @@ import {
   IChatEnter,
   IChatEnterNoti,
   alert,
+  lock,
+  clickedLock,
 } from "@/type/type";
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
@@ -182,14 +184,36 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   return (
     <>
-      <button key={idx} className="item" onClick={() => RoomClick(room)}>
-        <div className="roomidx">{leftPadding(room.channelIdx)}</div>
+      <button
+        key={idx}
+        className={
+          roomState.currentRoom?.channelIdx === room.channelIdx
+            ? "clickeditem"
+            : "item"
+        }
+        onClick={() => RoomClick(room)}
+      >
+        <div
+          className={
+            roomState.currentRoom?.channelIdx === room.channelIdx
+              ? "clickedroomidx"
+              : "roomidx"
+          }
+        >
+          {leftPadding(room.channelIdx)}
+        </div>
         <div className="owner">
           {room.owner ? room.owner : room.targetNickname}'s
         </div>
         <div className="lock">
           {room.mode === Mode.PROTECTED ? (
-            <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
+            <LockRoundedIcon
+              sx={
+                roomState.currentRoom?.channelIdx === room.channelIdx
+                  ? clickedLock
+                  : lock
+              }
+            />
           ) : (
             ""
           )}
