@@ -81,7 +81,7 @@ export interface IChatEnterNoti {
 export interface IChatRoomAdmin {
   userIdx: number;
   grant: boolean;
-  admin: string[];
+  admin: { nickname: string }[];
 }
 
 export interface IChatGetRoom {

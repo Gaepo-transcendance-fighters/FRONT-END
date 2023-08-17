@@ -68,7 +68,6 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const ChatEnter = (json: IChatEnter) => {
-      console.log("ChatEnter : ", json);
       roomDispatch({ type: "SET_CUR_MEM", value: json.member });
       roomDispatch({ type: "SET_ADMIN_ARY", value: json.admin });
       //channelIdx 안보내줘도 될듯?
@@ -195,7 +194,6 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     }
   };
 
-  console.log("adminAry : ", roomState.adminAry);
   return (
     <>
       <button
