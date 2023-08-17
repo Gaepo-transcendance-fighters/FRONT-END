@@ -101,10 +101,19 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     };
   }, []);
 
-  //TODO : 0명 되는 경우
+  useEffect(() => {
+    const NoMember = (json: IChatRoom[]) => {
+      console.log("NoMember : ", json);
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: json });
+    };
+    socket.on("BR_chat_room_delete", NoMember);
+
+    return () => {
+      socket.off("BR_chat_room_delete", NoMember);
+    };
+  }, []);
 
   useEffect(() => {
-    // const GoToLobby = (json?: IChatRoom[]) => {
     const GoToLobby = (json: IChatRoom[]) => {
       console.log("GoToLobby : ", json);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: json });
