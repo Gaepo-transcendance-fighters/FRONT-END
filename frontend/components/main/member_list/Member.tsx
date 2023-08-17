@@ -9,6 +9,7 @@ import MemberModal from "./MemberModal";
 import { useRoom } from "@/context/RoomContext";
 import {
   IChatKick,
+  IChatMute,
   IChatRoomAdmin,
   IMember,
   Mode,
@@ -134,9 +135,11 @@ export default function Member({
   }, [isAdmin]);
 
   useEffect(() => {
-    const ChatMute = (data: any) => {
-      // 아직 api 완성안됨
+    const ChatMute = (data: IChatMute) => {
       console.log("Mute : ", data);
+      // console로 값 확인 후 아래
+      // emit - roomId 채팅에 있던 사람들한테 알림 쏴주기
+      // TODO : mute된 사람 전역? / useState
     };
     socket.on("chat_mute", ChatMute);
 

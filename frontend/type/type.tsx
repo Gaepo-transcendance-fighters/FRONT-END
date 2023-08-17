@@ -95,7 +95,10 @@ export interface IChatGetRoomList {
 }
 
 export interface IChatMute {
-  channelList?: IChatGetRoom[];
+  // emit - roomId
+  targetNickname : string,
+	targetIdx : number,
+	mute : boolean
 }
 
 export interface IChatKick {
