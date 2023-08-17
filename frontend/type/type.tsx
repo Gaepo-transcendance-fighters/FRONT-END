@@ -70,6 +70,7 @@ export interface IChatRoom {
 export interface IChatEnter {
   member: IMember[];
   channelIdx: number;
+  admin: { nickname: string }[];
 }
 
 export interface IChatEnterNoti {

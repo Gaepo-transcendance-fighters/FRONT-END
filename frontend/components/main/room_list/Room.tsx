@@ -68,7 +68,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const ChatEnter = (json: IChatEnter) => {
+      console.log("ChatEnter : ", json);
       roomDispatch({ type: "SET_CUR_MEM", value: json.member });
+      roomDispatch({ type: "SET_ADMIN_ARY", value: json.admin });
       //channelIdx 안보내줘도 될듯?
     };
     socket.on("chat_enter", ChatEnter);
@@ -102,7 +104,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   //TODO : 0명 되는 경우
 
   useEffect(() => {
+    // const GoToLobby = (json?: IChatRoom[]) => {
     const GoToLobby = (json: IChatRoom[]) => {
+      console.log("GoToLobby : ", json);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: json });
     };
     socket.on("chat_goto_lobby", GoToLobby);
@@ -182,6 +186,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     }
   };
 
+  console.log("adminAry : ", roomState.adminAry);
   return (
     <>
       <button

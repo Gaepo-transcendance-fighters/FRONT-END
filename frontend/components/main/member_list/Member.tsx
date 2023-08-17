@@ -103,7 +103,7 @@ export default function Member({
 
   useEffect(() => {
     const ChatRoomAdmin = (json: IChatRoomAdmin) => {
-      roomDispatch({type : "SET_ADMIN_ARY", value : json.admin});
+      // roomDispatch({ type: "SET_ADMIN_ARY", value: json.admin });
       // setAdminAry(json.admin);
     };
     socket.on("chat_room_admin", ChatRoomAdmin);
@@ -268,19 +268,30 @@ export default function Member({
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
-          {
-            // adminAry.map((admin) => {
-            roomState.adminAry.map((admin) => {
-            console.log("admin :", admin);
-            return admin === person.nickname ? (
-              <StarOutlineRoundedIcon
-                sx={{ height: "15px", color: "yellow" }}
-              />
-            ) : null;
-          })}
           {person.nickname === roomState.currentRoom?.owner ? (
             <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
+          ) : (
+            roomState.adminAry.map((admin) => {
+              return admin.nickname === person.nickname ? (
+                <StarOutlineRoundedIcon
+                  sx={{ height: "15px", color: "yellow" }}
+                />
+              ) : null;
+            })
+          )}
+          {/* {person.nickname === roomState.currentRoom?.owner ? (
+            <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
           ) : null}
+          {
+            roomState.adminAry.map((admin) => {
+              console.log("StarOutlineRoundedIcon admin :", admin);
+              return admin.nickname === person.nickname ? (
+                <StarOutlineRoundedIcon
+                  sx={{ height: "15px", color: "yellow" }}
+                />
+              ) : null;
+            })
+          } */}
           {/* {person.permission === Permission.ADMIN ? (
             <StarOutlineRoundedIcon sx={{ height: "15px", color: "yellow" }} />
           ) : null} */}
