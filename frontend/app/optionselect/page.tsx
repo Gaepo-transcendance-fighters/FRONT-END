@@ -50,7 +50,7 @@ interface IGameOption {
 const userId =
   typeof window !== "undefined" ? localStorage.getItem("userIdx") : null;
 
-export const gameSocket = io("http://paulryu9309.ddns.net:4000/chat", {
+export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
   query: { userId: userId },
 });
 
