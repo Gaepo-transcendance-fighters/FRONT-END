@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Box,
   Button,
@@ -10,11 +11,13 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IFriend } from "./FriendList";
 import Image from "next/image";
 import WaitAccept from "../InviteGame/WaitAccept";
 import MyGameLog from "../myprofile/MyGameLog";
+import { socket } from "@/app/page";
+import { useAuth } from "@/context/AuthContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -36,6 +39,7 @@ const loginOff = (
 );
 
 const FriendProfile = ({ prop }: { prop: IFriend }) => {
+  const { state, dispatch } = useAuth();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -54,6 +58,19 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    console.log("friendProfile", prop);
+    socket.on(
+      "user_profile",
+      {
+        userIdx: state.id,
+        targetNickname: prop.friendNickname,
+        targetIdx: prop.friendIdx,
+      },
+      (data) => {}
+    );
+  }, []);
 
   return (
     <>
