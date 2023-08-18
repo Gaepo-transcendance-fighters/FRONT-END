@@ -100,10 +100,8 @@ const Layout = () => {
   //미세한 찰나일 것임.!
 
   useEffect(() => {
-    if (state.isLoggedIn) {
-      socket.emit("main_enter", JSON.stringify({ intra: "jujeon" }), () => {});
-    }
-  }, [state.isLoggedIn]);
+    socket.emit("main_enter", { intra: userState.nickname });
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>

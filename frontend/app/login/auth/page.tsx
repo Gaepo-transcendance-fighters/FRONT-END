@@ -4,6 +4,7 @@ import { Box, Card, CircularProgress, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { main } from "@/font/color";
+import { useUser } from "@/context/UserContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -20,6 +21,7 @@ const modalStyle = {
 const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
+  const { userDispatch } = useUser();
 
   interface Data {
     token: string;
@@ -49,7 +51,8 @@ const Auth = () => {
           const data: Data = await res.json();
           console.log(data);
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
-          localStorage.setItem("token", data.jwt);
+          localStorage.setItem("token", data.token);
+          userDispatch({ type: "CHANGE_NICK_NAME", value: data.user.intra });
           return router.push(`/`);
         }
       })
