@@ -4,9 +4,9 @@ import Layout from "@/components/public/Layout";
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 
-// const userId =
-//   typeof window === "undefined" ? null : localStorage.getItem("userIdx");
-const userId = 98100;
+const userId =
+  typeof window === "undefined" ? null : localStorage.getItem("userIdx");
+// const userId = 3;
 // dev original
 export const socket = io("http://localhost:4000/chat", {
   // haryu's server
