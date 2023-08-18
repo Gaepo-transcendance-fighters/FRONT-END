@@ -19,6 +19,7 @@ const font = createTheme({
 });
 
 import { useUser } from "@/context/UserContext";
+import tmp_friendprofile from "@/app/tmp_friend_profile/page";
 {
   /* <Myprofile Img={소켓으로받아온 imguri링크} Nickname={소켓으로받아온 닉네임}/> */
   // const Myprofile = (props) => {
@@ -28,6 +29,7 @@ const Myprofile = () => {
   const searchparams = useSearchParams();
   const { userState } = useUser();
 
+  console.log(userState);
   const createQuery = useCallback(
     (nickname: string) => {
       const params = new URLSearchParams(searchparams.toString());
@@ -47,7 +49,6 @@ const Myprofile = () => {
       <div style={{ padding: 10 }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Avatar
-            // src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
             src={userState.imgUri}
             style={{
               width: "70%",
@@ -97,6 +98,23 @@ const Myprofile = () => {
           >
             더보기
           </Button>
+          {/* <Button
+            type="button"
+            onClick={() => {
+              router.push("./SecondAuth");
+            }}
+          >
+            2차인증ui
+          </Button>
+
+          <Button
+            type="button"
+            onClick={() => {
+              router.push("./tmp_friend_profile");
+            }}
+          >
+            친구프로필페이지
+          </Button> */}
         </div>
       </div>
     </ThemeProvider>
