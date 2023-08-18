@@ -139,7 +139,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   };
 
   const RoomClick = (room: IChatRoom) => {
-    if (roomState.currentRoom != room) {
+    if (JSON.stringify(roomState.currentRoom) !== JSON.stringify(room)) {
       if (room.mode === Mode.PROTECTED) handleOpen();
       else if (room.mode === Mode.PRIVATE) {
         socket.emit(
