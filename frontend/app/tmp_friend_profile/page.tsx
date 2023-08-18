@@ -29,6 +29,19 @@ const modalStyle = {
   p: 4,
 };
 
+interface FriendReqData {
+  userIdx: number;
+  targetNickname: string;
+  targetIdx: number;
+}
+
+interface FriendResData {
+  targetNickname: string;
+  imgUri: string;
+  rate: string;
+  isOnline: boolean;
+}
+
 const loginOn = <Image src="/logon1.png" alt="online" width={10} height={10} />;
 
 const loginOff = (
