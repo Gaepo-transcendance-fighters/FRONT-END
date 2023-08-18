@@ -29,6 +29,7 @@ const Myprofile = () => {
   const searchparams = useSearchParams();
   const { userState } = useUser();
 
+  console.log(userState);
   const createQuery = useCallback(
     (nickname: string) => {
       const params = new URLSearchParams(searchparams.toString());
@@ -97,7 +98,7 @@ const Myprofile = () => {
           >
             더보기
           </Button>
-          <Button
+          {/* <Button
             type="button"
             onClick={() => {
               router.push("./SecondAuth");
@@ -113,7 +114,7 @@ const Myprofile = () => {
             }}
           >
             친구프로필페이지
-          </Button>
+          </Button> */}
         </div>
       </div>
     </ThemeProvider>

@@ -111,6 +111,7 @@ export default function tmp_friendprofile() {
   const RankSrc = RankImgSelect(friendData);
 
   return (
+    //긁어갈때여기서부터.
     <Box sx={modalStyle} borderRadius={"10px"}>
       <Card
         sx={{
