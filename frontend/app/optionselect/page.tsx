@@ -46,7 +46,8 @@ interface IGameOption {
   mapNumber: MapOption; // A, B, C
 }
 
-export const gameSocket = io("http://localhost:4000/game", {
+// export const gameSocket = io("http://localhost:4000/game", {
+export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
   query: { userId: 135489 },
 });
 
