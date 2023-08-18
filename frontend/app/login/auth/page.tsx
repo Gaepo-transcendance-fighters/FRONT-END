@@ -33,10 +33,10 @@ const Auth = () => {
     };
   }
   const postCode = async (code: string) => {
-	// dev original
+    // dev original
     await fetch("http://localhost:4000/login/auth", {
-	// haryu's server
-    // await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
+      // haryu's server
+      // await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -53,6 +53,9 @@ const Auth = () => {
           console.log(data);
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
           localStorage.setItem("token", data.jwt);
+          localStorage.setItem("intra", data.user.intra);
+          localStorage.setItem("userIdx", data.user.userIdx.toString());
+          // localStorage.setItem("token", data.user.);
           return router.push(`/`);
         }
       })

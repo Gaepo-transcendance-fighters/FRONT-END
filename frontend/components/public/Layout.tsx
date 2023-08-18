@@ -76,6 +76,7 @@ const Layout = () => {
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
+      console.log("data : " + data);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
@@ -97,10 +98,14 @@ const Layout = () => {
   //미세한 찰나일 것임.!
 
   useEffect(() => {
-    if (state.isLoggedIn) {
-      socket.emit("main_enter", JSON.stringify({ intra: "hoslim" }), () => {});
+    if (localStorage.getItem("loggedIn")) {
+      socket.emit(
+        "main_enter",
+        JSON.stringify({ intra: localStorage.getItem("intra") }),
+        () => {}
+      );
     }
-  }, [state.isLoggedIn]);
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
