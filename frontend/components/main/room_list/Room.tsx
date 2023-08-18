@@ -139,7 +139,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   };
 
   const RoomClick = (room: IChatRoom) => {
-    if (JSON.stringify(roomState.currentRoom) !== JSON.stringify(room)) {
+    if (roomState.currentRoom?.channelIdx !== room.channelIdx) {
+      // TODO : 누른 버튼 색 다르게 해보기
       if (room.mode === Mode.PROTECTED) handleOpen();
       else if (room.mode === Mode.PRIVATE) {
         socket.emit(
