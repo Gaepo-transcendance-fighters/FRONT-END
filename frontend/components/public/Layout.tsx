@@ -52,14 +52,15 @@ const Layout = () => {
     if (localStorage.getItem("loggedIn")) {
       socket.emit(
         "main_enter",
-        JSON.stringify({ intra: localStorage.getItem("intra") }),
+        // JSON.stringify({ intra: localStorage.getItem("intra") }),
+        JSON.stringify({ intra: userState.nickname }),
         (ret: number) => {
           if (ret === 200) {
           }
         }
       );
     }
-  }, [localStorage.getItem("loggedIn")]);
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
