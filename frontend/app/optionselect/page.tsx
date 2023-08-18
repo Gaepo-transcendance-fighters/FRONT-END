@@ -47,8 +47,11 @@ interface IGameOption {
 }
 
 // export const gameSocket = io("http://localhost:4000/game", {
-export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
-  query: { userId: 135489 },
+const userId =
+  typeof window !== "undefined" ? localStorage.getItem("userIdx") : null;
+
+export const gameSocket = io("http://paulryu9309.ddns.net:4000/chat", {
+  query: { userId: userId },
 });
 
 const OptionSelect = () => {
@@ -78,6 +81,7 @@ const OptionSelect = () => {
   };
 
   useEffect(() => {
+    if (!gameSocket) return;
     gameSocket.on("game_queue_regist", () => {
       console.log("game_queue_regist 받음");
     });
@@ -98,6 +102,7 @@ const OptionSelect = () => {
   }, [countdown]);
 
   const cntRedir = () => {
+    if (!gameSocket) return;
     gameDispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
 
