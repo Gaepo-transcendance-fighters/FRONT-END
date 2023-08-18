@@ -21,7 +21,7 @@ const modalStyle = {
 const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
-  const { userState, userDispatch } = useUser();
+  const { userDispatch } = useUser();
 
   interface Data {
     token: string;
@@ -49,10 +49,10 @@ const Auth = () => {
         if (res.status === 200) {
           localStorage.setItem("loggedIn", "true");
           const data: Data = await res.json();
-          console.log(data);
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
           localStorage.setItem("token", data.jwt);
-          userDispatch({ type: "CHANGE_NICK_NAME", value: data.user.intra });
+          localStorage.setItem("intra", data.user.intra);
+          localStorage.setItem("idx", data.user.userIdx.toString());
           return router.push(`/`);
         }
       })

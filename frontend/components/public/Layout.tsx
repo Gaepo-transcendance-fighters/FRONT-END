@@ -50,10 +50,10 @@ const Layout = () => {
 
   useEffect(() => {
     if (localStorage.getItem("loggedIn")) {
+      console.log(userState.nickname);
       socket.emit(
         "main_enter",
-        // JSON.stringify({ intra: localStorage.getItem("intra") }),
-        JSON.stringify({ intra: userState.nickname }),
+        JSON.stringify({ intra: localStorage.getItem("intra") }),
         (ret: number) => {
           if (ret === 200) {
           }
@@ -61,6 +61,8 @@ const Layout = () => {
       );
     }
   }, []);
+
+  console.log(userState.nickname);
 
   return (
     <Box sx={{ display: "flex" }}>
