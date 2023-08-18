@@ -15,7 +15,7 @@ import {
   Permission,
   alert,
 } from "@/type/type";
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
 import { socket } from "@/app/page";
@@ -248,25 +248,28 @@ export default function Member({
           )}
         </div>
       </div>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-      >
-        {isAdmin ? null : (
-          <MenuItem onClick={SetAdmin}>
-            {isAuthorized ? "Unset Admin" : "Set Admin"}
-          </MenuItem>
-        )}
-        <MenuItem onClick={Mute}>Mute</MenuItem>
-        <MenuItem onClick={Kick}>Kick</MenuItem>
-        <MenuItem onClick={Ban}>Ban</MenuItem>
-      </Menu>
-      {showAlert ? (
-        <Alert sx={alert} severity="info" style={{ width: "333px" }}>
-          {person.nickname} is {string}
-        </Alert>
-      ) : null}
+      <Paper sx={{ width: "500px" }}>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleCloseMenu}
+          style={{ minWidth: 300 }}
+        >
+          {isAdmin ? null : (
+            <MenuItem onClick={SetAdmin}>
+              {isAuthorized ? "Unset Admin" : "Set Admin"}
+            </MenuItem>
+          )}
+          <MenuItem onClick={Mute}>Mute</MenuItem>
+          <MenuItem onClick={Kick}>Kick</MenuItem>
+          <MenuItem onClick={Ban}>Ban</MenuItem>
+        </Menu>
+        {showAlert ? (
+          <Alert sx={alert} severity="info" style={{ width: "333px" }}>
+            {person.nickname} is {string}
+          </Alert>
+        ) : null}
+      </Paper>
       <MemberModal
         openModal={openModal}
         setOpenModal={setOpenModal}
