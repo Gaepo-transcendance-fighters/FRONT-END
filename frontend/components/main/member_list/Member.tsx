@@ -16,7 +16,7 @@ import {
 import { Menu, MenuItem } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
-import { socket } from "@/app/page";
+import { chatSocket } from "@/app/page";
 
 export default function Member({
   idx,
@@ -49,10 +49,10 @@ export default function Member({
     const CheckGrant = (json: string) => {
       setAuthorization(json);
     };
-    socket.on("chat_get_grant", CheckGrant);
+    chatSocket.on("chat_get_grant", CheckGrant);
 
     return () => {
-      socket.off("chat_get_grant", CheckGrant);
+      chatSocket.off("chat_get_grant", CheckGrant);
     };
   }, []);
 
@@ -60,7 +60,7 @@ export default function Member({
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
-    socket.emit(
+    chatSocket.emit(
       "chat_get_grant",
       JSON.stringify({
         userIdx: userState.userIdx,
@@ -123,7 +123,7 @@ export default function Member({
   // });
 
   const Mute = () => {
-    socket.emit(
+    chatSocket.emit(
       "chat_mute",
       JSON.stringify({
         channelIdx: roomState.currentRoom?.channelIdx,
@@ -140,15 +140,15 @@ export default function Member({
       setShowAlert(true);
       setString(strings[3]);
     };
-    socket.on("chat_kick", ChatKick);
+    chatSocket.on("chat_kick", ChatKick);
 
     return () => {
-      socket.off("chat_kick", ChatKick);
+      chatSocket.off("chat_kick", ChatKick);
     };
   }, []);
 
   const Kick = () => {
-    socket.emit(
+    chatSocket.emit(
       "chat_kick",
       JSON.stringify({
         channelIdx: roomState.currentRoom?.channelIdx,
