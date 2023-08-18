@@ -136,9 +136,9 @@ export interface IChatDmEnter {
 
 export const alert = {
   position: "absolute" as "absolute",
-  top: "100%",
-  left: "50%",
-  transform: "translate(-50%, -100%)",
+  top: "90%",
+  right: "2%",
+  fontSize: "16px",
 };
 
 export const lock = {
