@@ -4,9 +4,10 @@ import GameBoard from "./GameBoard";
 import GamePaddle from "./GamePaddle";
 import { useCallback, useEffect, useState, useRef } from "react";
 import GameBall from "./GameBall";
-import { useGame } from "@/context/GameContext";
+import { useGame, resetGameContextData } from "@/context/GameContext";
 import { gameSocket } from "@/app/optionselect/page";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface ICor {
   x: number;
@@ -32,6 +33,7 @@ function debounce(func: (...args: any[]) => void, wait: number) {
 }
 
 const PingPong = () => {
+  const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
   const requireAnimationRef = useRef(0);
@@ -257,27 +259,6 @@ const PingPong = () => {
   }, [ball]);
 
   useEffect(() => {
-    // gameSocket.on(
-    //   "game_start",
-    //   ({
-    //     animationStartDate,
-    //     ballDegreeX,
-    //     ballDegreeY,
-    //     ballNextPosX,
-    //     ballNextPosY,
-    //     ballExpectedEventDate,
-    //   }) => {
-    //     console.log("game_start");
-    //     gameDispatch({
-    //       type: "SET_SERVER_DATE_TIME",
-    //       value: animationStartDate,
-    //     });
-    //     console.log("server", ballDegreeX, ballDegreeY);
-    //     setDirection({ x: ballDegreeX, y: ballDegreeY });
-    //     gameStart();
-    //   }
-    // );
-
     gameSocket.on(
       "game_predict_ball",
       ({
@@ -315,10 +296,11 @@ const PingPong = () => {
   }, []);
 
   useEffect(() => {
-    // if (gameState.aScore === 5 || gameState.bScore === 5) {
-    //   gameDispatch({ type: "GAME_RESET", value: resetGameContextData() });
-    //   router.push("/gameresult");
-    // }
+    if (gameState.aScore === 5 || gameState.bScore === 5) {
+      gameDispatch({ type: "GAME_RESET", value: resetGameContextData() });
+      //게임 종료 이벤트 자리
+      router.push("/gameresult");
+    }
   }, [gameState.aScore, gameState.bScore]);
 
   useEffect(() => {
