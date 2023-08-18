@@ -72,7 +72,14 @@ export default function PageRedir() {
 
   const { userState } = useUser();
   const [checked, setChecked] = useState(true);
-  const [userData, setUserData] = useState<IUserData>();
+  const [userData, setUserData] = useState<IUserData>({
+    nickname: "",
+    imgUrl: "",
+    Win: 0,
+    Lose: 0,
+    rank: 0,
+    email: "",
+  });
   const [message, setMessage] = useState("");
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -232,6 +239,15 @@ export default function PageRedir() {
   const BackToHome = () => {
     router.push("/");
   };
+
+  const RankImgSelect = (data: IUserData) => {
+    if (data.rank < 800) return "./rank/exp_medal_bronze.png";
+    else if (data.rank >= 800 && data.rank < 1100)
+      return "./rank/exp_medal_silver.png";
+    else if (data.rank >= 1100) return "./rank/exp_medal_gold.png";
+  };
+
+  const RankSrc = RankImgSelect(userData);
 
   return (
     <>
@@ -506,7 +522,7 @@ export default function PageRedir() {
                           }}
                         >
                           <img
-                            src="./rank/exp_medal_bronze.png"
+                            src={RankSrc}
                             style={{
                               width: "70%",
                               height: "70%",
@@ -532,10 +548,14 @@ export default function PageRedir() {
                           }}
                         >
                           <Typography margin={1}>
-                            랭크(포인트) : {userData?.rank}
+                            랭크(포인트) : {userData.rank}
                           </Typography>
                           <Typography margin={1}>
-                            승률 : 승/패에따라 계산해서 올려야함 0813기준{" "}
+                            승률 :{" "}
+                            {Math.floor(
+                              (userData.Win / (userData.Win + userData.Lose)) *
+                                100
+                            )}
                           </Typography>
                         </CardContent>
                       </Card>
