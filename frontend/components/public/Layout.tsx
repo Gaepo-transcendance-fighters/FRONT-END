@@ -62,8 +62,6 @@ const Layout = () => {
     }
   }, []);
 
-  console.log(userState.nickname);
-
   return (
     <Box sx={{ display: "flex" }}>
       <Stack

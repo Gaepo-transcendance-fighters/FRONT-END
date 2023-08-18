@@ -12,7 +12,6 @@ import {
   IChatMute,
   IChatRoomAdmin,
   IMember,
-  Mode,
   Permission,
   alert,
 } from "@/type/type";
@@ -32,8 +31,8 @@ export default function Member({
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [string, setString] = useState<string>("");
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isAdminnn, setIsAdminnn] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   // const [isGranted, setIsGranted] = useState<boolean>(false);
   const { roomState, roomDispatch } = useRoom();
@@ -51,8 +50,8 @@ export default function Member({
   };
 
   // useEffect(() => {
-  //   const CheckGrant = (json: Permission) => {
-  //     json === Permission.MEMBER ? setIsGranted(false) : setIsGranted(true);
+  //   const CheckGrant = (payload: Permission) => {
+  //     payload === Permission.MEMBER ? setIsGranted(false) : setIsGranted(true);
   //   };
   //   socket.on("chat_get_grant", CheckGrant);
 
@@ -70,8 +69,8 @@ export default function Member({
   useEffect(() => {
     roomState.adminAry.map((adminElement) => {
       return adminElement.nickname === userState.nickname
-        ? setIsAdminnn(true)
-        : setIsAdminnn(false);
+        ? setIsAdmin(true)
+        : setIsAdmin(false);
     });
   }, [roomState.adminAry]);
 
@@ -79,7 +78,7 @@ export default function Member({
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
-    userState.nickname === roomState.currentRoom?.owner || isAdminnn
+    userState.nickname === roomState.currentRoom?.owner || isAdmin
       ? setAnchorEl(e.currentTarget)
       : null;
   };
@@ -99,8 +98,8 @@ export default function Member({
   }, [showAlert]);
 
   useEffect(() => {
-    const ChatRoomAdmin = (json: IChatRoomAdmin) => {
-      roomDispatch({ type: "SET_ADMIN_ARY", value: json.admin });
+    const ChatRoomAdmin = (payload: IChatRoomAdmin) => {
+      roomDispatch({ type: "SET_ADMIN_ARY", value: payload.admin });
     };
     socket.on("chat_room_admin", ChatRoomAdmin);
 
@@ -115,20 +114,20 @@ export default function Member({
       JSON.stringify({
         channelIdx: roomState.currentRoom?.channelIdx,
         userIdx: person.userIdx,
-        grant: !isAdmin,
+        grant: !isAuthorized,
       }),
       (ret: string | number) => {
         console.log("SetAdmin ret : ", ret);
-        setIsAdmin((prev) => !prev); //
-        console.log("SetAdmin isAdmin : ", isAdmin);
+        setIsAuthorized((prev) => !prev); //
+        console.log("SetAdmin isAuthorized : ", isAuthorized);
         setShowAlert(true);
       }
     );
   };
 
   useEffect(() => {
-    isAdmin ? setString(strings[0]) : setString(strings[1]);
-  }, [isAdmin]);
+    isAuthorized ? setString(strings[0]) : setString(strings[1]);
+  }, [isAuthorized]);
 
   useEffect(() => {
     const ChatMute = (data: IChatMute) => {
@@ -159,8 +158,6 @@ export default function Member({
 
   useEffect(() => {
     const ChatKick = (data: IChatKick) => {
-      setShowAlert(true);
-      setString(strings[3]);
       console.log("ChatKick ", data);
       roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
     };
@@ -179,24 +176,18 @@ export default function Member({
         targetNickname: person.nickname,
         targetIdx: person.userIdx,
       }),
-      (data: any) => {
-        // 아직 안정해짐
-        console.log("data : ", data);
+      (ret: string | number) => {
+        console.log("ret : ", ret);
+        // if (ret === 200) {
+        // setShowAlert(true);
+        // setString(strings[3]);
       }
     );
-    // }), (statusCode : number) => {
-    // if (statusCode === 200) {
-
-    // setShowAlert(true);
-    // setString(strings[3]);
-    // }
   };
 
   useEffect(() => {
     const ChatBan = (data: IChatKick) => {
       console.log("ChatBan : ", data);
-      setShowAlert(true);
-      setString(strings[3]);
       roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
     };
     socket.on("chat_kick", ChatBan);
@@ -214,13 +205,14 @@ export default function Member({
         targetNickname: person.nickname,
         targetIdx: person.userIdx,
       }),
-      (statusCode: any) => {
-        // 아직 안정해짐
-        console.log("Ban : ", statusCode);
+      (ret: string | number) => {
+        console.log("Ban : ", ret);
+        if (ret === 200) {
+          setShowAlert(true);
+          setString(strings[4]);
+        }
       }
     );
-    setShowAlert(true);
-    setString(strings[4]);
   };
 
   return (
@@ -229,35 +221,12 @@ export default function Member({
         key={idx}
         className="membtn"
         onClick={handleOpenModal}
-        onContextMenu={
-          // (e) => handleOpenMenu(e)
-          (e) => {
-            //owner일때
-            //admin일때
-            //mem일때
-            // console.log("here");
-            // socket.emit(
-            //   "chat_get_grant",
-            //   JSON.stringify({
-            //     userIdx: userState.userIdx,
-            //     channelIdx: roomState.currentRoom!.channelIdx,
-            //   }),
-            //   (ret: any) => {
-            //     console.log("handleOpenMenu ret : ", ret);
-            //   }
-            // );
-            // console.log(
-            //   "userState.nickname === roomState.currentRoom!.owner",
-            //   userState.nickname,
-            //   roomState.currentRoom!.owner
-            // );
-            userState.nickname !== person.nickname &&
-            person.nickname !== roomState.currentRoom!.owner
-              ? // userState.nickname !== person.nickname &&
-                handleOpenMenu(e)
-              : e.preventDefault();
-          }
-        }
+        onContextMenu={(e) => {
+          userState.nickname !== person.nickname &&
+          person.nickname !== roomState.currentRoom!.owner
+            ? handleOpenMenu(e)
+            : e.preventDefault();
+        }}
       >
         <div className="memimg">
           <Image src="/seal.png" alt="profile" width={53} height={53} />
@@ -284,9 +253,9 @@ export default function Member({
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
       >
-        {isAdminnn ? null : (
+        {isAdmin ? null : (
           <MenuItem onClick={SetAdmin}>
-            {isAdmin ? "Unset Admin" : "Set Admin"}
+            {isAuthorized ? "Unset Admin" : "Set Admin"}
           </MenuItem>
         )}
         <MenuItem onClick={Mute}>Mute</MenuItem>

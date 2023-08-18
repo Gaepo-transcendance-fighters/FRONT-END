@@ -41,17 +41,6 @@ export default function CreateRoomModal({
   useEffect(() => {
     const ChatCreateRoom = (data: IChatRoom) => {
       roomDispatch({ type: "ADD_ROOM", value: data });
-      // roomDispatch({
-      //   type: "SET_CUR_MEM",
-      //   value: [
-      //     {
-      //       userIdx: userState.userIdx,
-      //       nickname: userState.nickname,
-      //       imgUri: userState.imgUri,
-      //       permission: Permission.OWNER,
-      //     },
-      //   ],
-      // });
       setValue("");
       setOpen(false);
     };
@@ -61,16 +50,15 @@ export default function CreateRoomModal({
       socket.off("BR_chat_create_room", ChatCreateRoom);
     };
   }, []);
-  //userId=?
 
   const OnClick = () => {
     socket.emit(
       "BR_chat_create_room",
       JSON.stringify({ password: value }),
-      (res: any) => {} // 아직 안정해짐
+      (ret: number) => {
+        // if (ret === 200)
+      }
     );
-    //TODO : dto 정하는게 어떨까... < 추천
-    // 일단은 이렇게. dto는 나중에
   };
 
   return (

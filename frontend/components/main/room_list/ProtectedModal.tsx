@@ -46,12 +46,14 @@ export default function ProtectedModal({
   room,
   setFail,
   fail,
+  RoomEnter,
 }: {
   open: boolean;
   handleClose: () => void;
   room: IChatRoom;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
+  RoomEnter: (room: IChatRoom) => void;
 }) {
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
@@ -72,27 +74,11 @@ export default function ProtectedModal({
         channelIdx: room.channelIdx,
         password: pwRef.current,
       }),
-      (statusCode: number) => {
-        if (statusCode === 200) {
-          if (
-            roomState.currentRoom &&
-            roomState.currentRoom.mode !== Mode.PRIVATE
-          ) {
-            socket.emit(
-              "chat_goto_lobby",
-              JSON.stringify({
-                channelIdx: roomState.currentRoom.channelIdx,
-                userIdx: userState.userIdx,
-              }),
-              (ret: any) => {
-                console.log("chat_goto_lobby ret : ", ret);
-              }
-            );
-          }
+      (ret: number) => {
+        if (ret === 200) {
+          RoomEnter(room);
           handleClose();
           setFail(false);
-          roomDispatch({ type: "SET_CUR_ROOM", value: room });
-          roomDispatch({ type: "SET_IS_OPEN", value: true });
         } else {
           setFail(true);
         }
@@ -112,27 +98,11 @@ export default function ProtectedModal({
           channelIdx: room.channelIdx,
           password: pwRef.current,
         }),
-        (statusCode: number) => {
-          if (statusCode === 200) {
-            if (
-              roomState.currentRoom &&
-              roomState.currentRoom.mode !== Mode.PRIVATE
-            ) {
-              socket.emit(
-                "chat_goto_lobby",
-                JSON.stringify({
-                  channelIdx: roomState.currentRoom.channelIdx,
-                  userIdx: userState.userIdx,
-                }),
-                (ret: any) => {
-                  console.log("chat_goto_lobby ret : ", ret);
-                }
-              );
-            }
+        (ret: number) => {
+          if (ret === 200) {
+            RoomEnter(room);
             handleClose();
             setFail(false);
-            roomDispatch({ type: "SET_CUR_ROOM", value: room });
-            roomDispatch({ type: "SET_IS_OPEN", value: true });
           } else {
             setFail(true);
           }
