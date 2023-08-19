@@ -79,7 +79,7 @@ const GamePlaying = () => {
     };
   }, []);
 
-  if (!client) return <div>로딩중</div>;
+  if (!client) return <></>;
 
   return (
     <>

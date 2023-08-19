@@ -5,10 +5,11 @@ import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { main } from "@/components/public/Layout";
 import { useGame } from "@/context/GameContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const GameResult = () => {
   const { gameState, gameDispatch } = useGame();
+  const [client, setClient] = useState(false);
 
   const router = useRouter();
 
@@ -17,7 +18,11 @@ const GameResult = () => {
     router.push("/");
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
+  if (!client) return <></>;
 
   return (
     <Card sx={{ display: "flex" }}>

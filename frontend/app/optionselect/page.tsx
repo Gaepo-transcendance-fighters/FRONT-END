@@ -58,6 +58,7 @@ const OptionSelect = () => {
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
+  const [client, setClient] = useState(false);
 
   const [selectedSpeedOption, setSelectedSpeedOption] = useState<SpeedOption>(
     SpeedOption.speed2
@@ -139,6 +140,12 @@ const OptionSelect = () => {
       }
     );
   };
+
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
+  if (!client) return <></>;
 
   return (
     <Card sx={{ display: "flex" }}>

@@ -75,8 +75,6 @@ const Layout = () => {
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
 
-  useRequireAuth();
-
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });

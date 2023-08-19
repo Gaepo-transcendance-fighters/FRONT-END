@@ -13,7 +13,7 @@ import {
 import { main } from "@/components/public/Layout";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGame } from "@/context/GameContext";
 
 const infomodalStyle = {
@@ -39,6 +39,7 @@ const Game = () => {
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [client, setClient] = useState<boolean>(false);
 
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
@@ -61,6 +62,12 @@ const Game = () => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
+  if (!client) return <></>;
 
   return (
     <Card sx={{ display: "flex" }}>
