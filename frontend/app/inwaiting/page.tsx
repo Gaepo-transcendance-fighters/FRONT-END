@@ -86,6 +86,7 @@ const Inwaiting = () => {
 
   const handleOpenModal_redir = useCallback(() => {
     console.log("game_queue_start");
+
     if (gameFirstReady && gameSecondReady) {
       gameSocket.emit(
         "game_ready_second_answer",

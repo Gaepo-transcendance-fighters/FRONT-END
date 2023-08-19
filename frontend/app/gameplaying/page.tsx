@@ -31,12 +31,12 @@ const GamePlaying = () => {
     };
 
     const preventRefresh = (e: KeyboardEvent) => {
+      e.preventDefault();
       if (
         e.key === "F5" ||
-        (e.ctrlKey === true && e.key === "r") ||
-        (e.metaKey === true && e.key === "r")
+        ((e.ctrlKey === true || e.metaKey === true) && e.key === "r")
       ) {
-        e.preventDefault();
+        console.log("새로고침");
         toggle2();
         return false;
       }

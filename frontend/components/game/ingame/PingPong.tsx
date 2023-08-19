@@ -134,27 +134,27 @@ const PingPong = () => {
         newLocation.y < myPaddle.y + 20
       ) {
         setDirection((prev) => ({ x: -prev.x, y: 1 }));
-        gameSocket.emit(
-          "game_predict_ball",
-          {
-            roomId: gameState.roomId,
-            ballPosX: ball.x,
-            ballPosY: ball.y,
-            ballDegreeX: direction.x,
-            ballDegreeY: direction.y,
-            ballHitDate: Date.now(),
-          },
-          (res: {
-            animationStartDate: number;
-            ballDegreeX: number;
-            ballDegreeY: number;
-            ballNextPosX: number;
-            ballNextPosY: number;
-            ballExpectedEventDate: number;
-          }) => {
-            console.log(200, "ok", res);
-          }
-        );
+        // gameSocket.emit(
+        //   "game_predict_ball",
+        //   {
+        //     roomId: gameState.roomId,
+        //     ballPosX: ball.x,
+        //     ballPosY: ball.y,
+        //     ballDegreeX: direction.x,
+        //     ballDegreeY: direction.y,
+        //     ballHitDate: Date.now(),
+        //   },
+        //   (res: {
+        //     animationStartDate: number;
+        //     ballDegreeX: number;
+        //     ballDegreeY: number;
+        //     ballNextPosX: number;
+        //     ballNextPosY: number;
+        //     ballExpectedEventDate: number;
+        //   }) => {
+        //     console.log(200, "ok", res);
+        //   }
+        // );
       } else if (
         newLocation.x > enemyPaddle.x - 20 &&
         newLocation.x < enemyPaddle.x &&
@@ -162,14 +162,14 @@ const PingPong = () => {
         newLocation.y < enemyPaddle.y + 20
       ) {
         setDirection((prev) => ({ x: -prev.x, y: 1 }));
-        gameSocket.emit("game_predict_ball", {
-          roomId: gameState.roomId,
-          ballPosX: ball.x,
-          ballPosY: ball.y,
-          ballDegreeX: direction.x,
-          ballDegreeY: direction.y,
-          ballHitDate: Date.now(),
-        });
+        // gameSocket.emit("game_predict_ball", {
+        //   roomId: gameState.roomId,
+        //   ballPosX: ball.x,
+        //   ballPosY: ball.y,
+        //   ballDegreeX: direction.x,
+        //   ballDegreeY: direction.y,
+        //   ballHitDate: Date.now(),
+        // });
       } else if (
         newLocation.x > myPaddle.x &&
         newLocation.x < myPaddle.x + 20 &&
@@ -177,14 +177,14 @@ const PingPong = () => {
         newLocation.y < myPaddle.y + 50
       ) {
         setDirection((prev) => ({ x: -prev.x, y: 2 }));
-        gameSocket.emit("game_predict_ball", {
-          roomId: gameState.roomId,
-          ballPosX: ball.x,
-          ballPosY: ball.y,
-          ballDegreeX: direction.x,
-          ballDegreeY: direction.y,
-          ballHitDate: Date.now(),
-        });
+        // gameSocket.emit("game_predict_ball", {
+        //   roomId: gameState.roomId,
+        //   ballPosX: ball.x,
+        //   ballPosY: ball.y,
+        //   ballDegreeX: direction.x,
+        //   ballDegreeY: direction.y,
+        //   ballHitDate: Date.now(),
+        // });
       } else if (
         newLocation.x > enemyPaddle.x - 20 &&
         newLocation.x < enemyPaddle.x &&
@@ -192,26 +192,26 @@ const PingPong = () => {
         newLocation.y < enemyPaddle.y + 50
       ) {
         setDirection((prev) => ({ x: -prev.x, y: 2 }));
-        gameSocket.emit("game_predict_ball", {
-          roomId: gameState.roomId,
-          ballPosX: ball.x,
-          ballPosY: ball.y,
-          ballDegreeX: direction.x,
-          ballDegreeY: direction.y,
-          ballHitDate: Date.now(),
-        });
+        // gameSocket.emit("game_predict_ball", {
+        //   roomId: gameState.roomId,
+        //   ballPosX: ball.x,
+        //   ballPosY: ball.y,
+        //   ballDegreeX: direction.x,
+        //   ballDegreeY: direction.y,
+        //   ballHitDate: Date.now(),
+        // });
       }
 
       if (newLocation.y <= -250 || newLocation.y >= 250) {
         setDirection((prev) => ({ x: prev.x, y: -prev.y }));
-        gameSocket.emit("game_predict_ball", {
-          roomId: gameState.roomId,
-          ballPosX: ball.x,
-          ballPosY: ball.y,
-          ballDegreeX: direction.x,
-          ballDegreeY: direction.y,
-          ballHitDate: Date.now(),
-        });
+        // gameSocket.emit("game_predict_ball", {
+        //   roomId: gameState.roomId,
+        //   ballPosX: ball.x,
+        //   ballPosY: ball.y,
+        //   ballDegreeX: direction.x,
+        //   ballDegreeY: direction.y,
+        //   ballHitDate: Date.now(),
+        // });
       }
 
       if (newLocation.x <= -500) {
@@ -227,6 +227,7 @@ const PingPong = () => {
             console.log(res);
           }
         );
+        cancelAnimationFrame(requireAnimationRef.current);
         resetBall();
         resetDerection();
         setReady(false);
@@ -245,6 +246,7 @@ const PingPong = () => {
             console.log(res);
           }
         );
+        cancelAnimationFrame(requireAnimationRef.current);
         resetBall();
         resetDerection();
         setReady(false);
@@ -255,8 +257,8 @@ const PingPong = () => {
       const newBallStandard = new Date().getTime();
       setBallStandard(newBallStandard);
     }
-    requireAnimationRef.current = requestAnimationFrame(ballMove);
-  }, [ball]);
+    requestAnimationFrame(ballMove);
+  }, [ball.x, ball.y]);
 
   useEffect(() => {
     gameSocket.on(
@@ -304,15 +306,14 @@ const PingPong = () => {
   }, [gameState.aScore, gameState.bScore]);
 
   useEffect(() => {
-    gameDispatch({ type: "SET_LATENCY", value: 12 });
-    if (!ready) {
-      gameStart();
-      return;
-    }
+    gameDispatch({ type: "SET_LATENCY", value: 0 });
+    console.log(ready);
+    if (!ready) return gameStart();
+
     window.addEventListener("keydown", handlePaddle);
     window.addEventListener("keyup", debouncedSendData);
 
-    requireAnimationRef.current = requestAnimationFrame(ballMove);
+    requestAnimationFrame(ballMove);
 
     return () => {
       window.removeEventListener("keydown", handlePaddle);
@@ -320,7 +321,7 @@ const PingPong = () => {
 
       cancelAnimationFrame(requireAnimationRef.current);
     };
-  }, [handlePaddle, ballMove, ready]);
+  }, [ready, ballMove]);
 
   return (
     <>

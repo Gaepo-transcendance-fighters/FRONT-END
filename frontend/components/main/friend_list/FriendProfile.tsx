@@ -29,10 +29,21 @@ const modalStyle = {
   p: 4,
 };
 
-const loginOn = <Image src="/logon1.png" alt="online" width={10} height={10} />;
+const loginOn = (
+  <Image src="/status/logon.png" alt="online" width={10} height={10} />
+);
 
 const loginOff = (
-  <Image src="/logoff.png" alt="offline" width={10} height={10} />
+  <Image src="/status/logoff.png" alt="offline" width={10} height={10} />
+);
+
+const gamePlaying = (
+  <Image
+    src="/status/gameplaying.png"
+    alt="gameplaying"
+    width={10}
+    height={10}
+  />
 );
 
 const FriendProfile = ({ prop }: { prop: IFriend }) => {
