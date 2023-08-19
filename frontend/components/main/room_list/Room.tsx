@@ -3,16 +3,20 @@
 import { useEffect, useState, useRef } from "react";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import ProtectedModal from "./ProtectedModal";
+import { useRoom } from "@/context/RoomContext";
 import {
+  IChatRoom,
+  Mode,
   IChatDmEnter,
   IChatEnter,
   IChatEnterNoti,
   alert,
-  useRoom,
-} from "@/context/RoomContext";
-import { IChatRoom, Mode } from "@/context/RoomContext";
+  lock,
+  clickedLock,
+} from "@/type/type";
 import { chatSocket } from "@/app/page";
 import Alert from "@mui/material/Alert";
+import { useUser } from "@/context/UserContext";
 
 export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -20,6 +24,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [newMem, setNewMem] = useState("");
   const { roomState, roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   useEffect(() => {
     const ChatEnterNoti = (data: IChatEnterNoti) => {
@@ -31,7 +36,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     return () => {
       chatSocket.off("chat_enter_noti", ChatEnterNoti);
     };
-  }); // TODO : 위치?
+  });
 
   useEffect(() => {
     if (showAlert) {
@@ -62,8 +67,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   };
 
   useEffect(() => {
-    const ChatEnter = (json: IChatEnter) => {
-      roomDispatch({ type: "SET_CUR_MEM", value: json.member });
+    const ChatEnter = (payload: IChatEnter) => {
+      roomDispatch({ type: "SET_CUR_MEM", value: payload.member });
+      roomDispatch({ type: "SET_ADMIN_ARY", value: payload.admin });
       //channelIdx 안보내줘도 될듯?
     };
     chatSocket.on("chat_enter", ChatEnter);
@@ -74,74 +80,129 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   }, []);
 
   useEffect(() => {
-    const ChatDmEnter = (json: IChatDmEnter) => {
+    const ChatDmEnter = (payload: IChatDmEnter) => {
       roomDispatch({
         type: "SET_CUR_DM_MEM",
         value: {
-          userIdx1: json.userIdx1,
-          userIdx2: json.userIdx2,
-          userNickname1: json.userNickname1,
-          userNickname2: json.userNickname2,
-          imgUrl: json.imgUrl,
+          userIdx1: payload.userIdx1,
+          userIdx2: payload.userIdx2,
+          userNickname1: payload.userNickname1,
+          userNickname2: payload.userNickname2,
+          imgUrl: payload.imgUrl,
         },
       });
     };
-    chatSocket.on("check_dm", ChatDmEnter);
+    chatSocket.on("chat_get_DM", ChatDmEnter);
 
     return () => {
-      chatSocket.off("check_dm", ChatDmEnter);
+      chatSocket.off("chat_get_DM", ChatDmEnter);
     };
   }, []);
 
+  useEffect(() => {
+    const NoMember = (payload: IChatRoom[]) => {
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
+    };
+    chatSocket.on("BR_chat_room_delete", NoMember);
+
+    return () => {
+      chatSocket.off("BR_chat_room_delete", NoMember);
+    };
+  }, []);
+
+  useEffect(() => {
+    const GoToLobby = (payload: IChatRoom[]) => {
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
+    };
+    chatSocket.on("chat_goto_lobby", GoToLobby);
+
+    return () => {
+      chatSocket.off("chat_goto_lobby", GoToLobby);
+    };
+  }, []);
+
+  const RoomEnter = (room: IChatRoom) => {
+    if (roomState.currentRoom && roomState.currentRoom.mode !== Mode.PRIVATE) {
+      chatSocket.emit(
+        "chat_goto_lobby",
+        JSON.stringify({
+          channelIdx: roomState.currentRoom.channelIdx,
+          userIdx: userState.userIdx,
+        }),
+        (ret: number | string) => {
+          console.log("chat_goto_lobby ret : ", ret);
+        }
+      );
+    }
+    roomDispatch({ type: "SET_CUR_ROOM", value: room });
+    roomDispatch({ type: "SET_IS_OPEN", value: true });
+  };
+
   const RoomClick = (room: IChatRoom) => {
-    if (room.mode !== Mode.PROTECTED) {
-      if (room.mode === Mode.PRIVATE) {
+    if (roomState.currentRoom != room) {
+      if (room.mode === Mode.PROTECTED) handleOpen();
+      else if (room.mode === Mode.PRIVATE) {
         chatSocket.emit(
           "chat_get_DM",
           JSON.stringify({
             channelIdx: room.channelIdx,
           }),
-          (json: any) => {
-            // 아직 안정해짐
-            if (roomState.currentRoom !== room) {
-              roomDispatch({ type: "SET_CUR_ROOM", value: room });
+          (ret: number) => {
+            if (ret === 200) {
+              RoomEnter(room);
             }
-            roomDispatch({ type: "SET_IS_OPEN", value: true });
           }
         );
       } else {
         chatSocket.emit(
           "chat_enter",
           JSON.stringify({
-            userNickname: "hoslim",
-            userIdx: 3,
+            userNickname: userState.nickname,
+            userIdx: userState.userIdx,
             channelIdx: room.channelIdx,
           }),
-          (statusCode: number) => {
-            if (statusCode === 200) {
-              if (roomState.currentRoom !== room) {
-                roomDispatch({ type: "SET_CUR_ROOM", value: room });
-              }
-              roomDispatch({ type: "SET_IS_OPEN", value: true });
+          (ret: number) => {
+            if (ret === 200) {
+              RoomEnter(room);
             }
           }
         );
       }
-    } else {
-      handleOpen();
     }
   };
 
   return (
     <>
-      <button key={idx} className="item" onClick={() => RoomClick(room)}>
-        <div className="roomidx">{leftPadding(room.channelIdx)}</div>
+      <button
+        key={idx}
+        className={
+          roomState.currentRoom?.channelIdx === room.channelIdx
+            ? "clickeditem"
+            : "item"
+        }
+        onClick={() => RoomClick(room)}
+      >
+        <div
+          className={
+            roomState.currentRoom?.channelIdx === room.channelIdx
+              ? "clickedroomidx"
+              : "roomidx"
+          }
+        >
+          {leftPadding(room.channelIdx)}
+        </div>
         <div className="owner">
           {room.owner ? room.owner : room.targetNickname}'s
         </div>
         <div className="lock">
           {room.mode === Mode.PROTECTED ? (
-            <LockRoundedIcon sx={{ height: "13px", color: "#afb2b3" }} />
+            <LockRoundedIcon
+              sx={
+                roomState.currentRoom?.channelIdx === room.channelIdx
+                  ? clickedLock
+                  : lock
+              }
+            />
           ) : (
             ""
           )}
@@ -153,6 +214,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
         room={room}
         fail={fail}
         setFail={setFail}
+        RoomEnter={RoomEnter}
       />
       {showAlert ? (
         <Alert sx={alert} severity="info" style={{ width: "333px" }}>

@@ -13,7 +13,7 @@ import {
 import React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { io } from "socket.io-client";

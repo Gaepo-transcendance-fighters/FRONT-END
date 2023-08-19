@@ -2,7 +2,8 @@
 
 import Member from "./Member";
 import "@/components/main/member_list/MemberList.css";
-import { IMember, Mode, useRoom } from "@/context/RoomContext";
+import { useRoom } from "@/context/RoomContext";
+import { IMember, Mode } from "@/type/type";
 import { useUser } from "@/context/UserContext";
 import { useEffect, useState } from "react";
 

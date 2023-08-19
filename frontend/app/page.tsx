@@ -10,7 +10,7 @@ import { io } from "socket.io-client";
 // haryu's server
 
 const userId =
-  typeof window !== "undefined" ? localStorage.getItem("userIdx") : null;
+  typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 
 export const chatSocket = io("http://paulryu9309.ddns.net:4000/chat", {
   query: { userId: userId },

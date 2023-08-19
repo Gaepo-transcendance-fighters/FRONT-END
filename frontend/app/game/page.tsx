@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";

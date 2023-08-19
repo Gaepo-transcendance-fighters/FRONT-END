@@ -4,7 +4,8 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
-import { IChatRoom, useRoom } from "@/context/RoomContext";
+import { useRoom } from "@/context/RoomContext";
+import { IChatRoom, Permission } from "@/type/type";
 import { chatSocket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 
@@ -49,16 +50,15 @@ export default function CreateRoomModal({
       chatSocket.off("BR_chat_create_room", ChatCreateRoom);
     };
   }, []);
-  //userId=?
 
   const OnClick = () => {
     chatSocket.emit(
       "BR_chat_create_room",
       JSON.stringify({ password: value }),
-      (res: any) => {} // 아직 안정해짐
+      (ret: number) => {
+        // if (ret === 200)
+      }
     );
-    //TODO : dto 정하는게 어떨까... < 추천
-    // 일단은 이렇게. dto는 나중에
   };
 
   return (
