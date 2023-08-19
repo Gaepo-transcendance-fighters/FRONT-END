@@ -19,6 +19,7 @@ import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
 import { socket } from "@/app/page";
+import { ILeftMember } from "../room_list/Room";
 
 export default function Member({
   idx,
@@ -160,8 +161,18 @@ export default function Member({
 
   useEffect(() => {
     const ChatKick = (data: IChatKick) => {
+      if (data.targetNickname === userState.nickname) {
+        roomDispatch({type: "SET_CUR_ROOM", value: null})
+        return;
+      }
       console.log("ChatKick ", data);
-      roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
+      const list: IMember[] = data.leftMember.map((mem: ILeftMember) => {
+        return {
+        nickname: mem.userNickname,
+        userIdx: mem.userIdx,
+        imgUri: mem.imgUri,
+    }})
+      roomDispatch({ type: "SET_CUR_MEM", value: list });
     };
     socket.on("chat_kick", ChatKick);
 
@@ -189,13 +200,24 @@ export default function Member({
 
   useEffect(() => {
     const ChatBan = (data: IChatKick) => {
-      console.log("ChatBan : ", data);
-      roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
+      if (data.targetNickname === userState.nickname) {
+        roomDispatch({type: "SET_CUR_ROOM", value: null})
+        return;
+      }
+      console.log("ban", data)
+      const list: IMember[] = data.leftMember.map((mem: ILeftMember) => {
+        return {
+        nickname: mem.userNickname,
+        userIdx: mem.userIdx,
+        imgUri: mem.imgUri,
+    }})
+      
+      roomDispatch({ type: "SET_CUR_MEM", value: list });
     };
-    socket.on("chat_kick", ChatBan);
+    socket.on("chat_ban", ChatBan);
 
     return () => {
-      socket.off("chat_kick", ChatBan);
+      socket.off("chat_ban", ChatBan);
     };
   }, []);
 

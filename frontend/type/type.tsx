@@ -1,5 +1,7 @@
 "use client";
 
+import { ILeftMember } from "@/components/main/room_list/Room";
+
 export const main = {
   main0: "#67DBFB",
   main1: "#55B7EB",
@@ -102,7 +104,6 @@ export interface IChatGetRoomList {
 }
 
 export interface IChatMute {
-  // emit - roomId
   targetNickname: string;
   targetIdx: number;
   mute: boolean;
@@ -111,7 +112,8 @@ export interface IChatMute {
 export interface IChatKick {
   targetNickname: string;
   targetIdx: number;
-  leftMember: IMember[];
+  leftMember: ILeftMember[];
+  // leftMember: IMember[];
 }
 
 export interface IDmMemList {
@@ -119,7 +121,8 @@ export interface IDmMemList {
   userIdx2: number;
   userNickname1: string;
   userNickname2: string;
-  imgUrl: string;
+  // channelIdx: number;
+  imgUri: string;
 }
 
 export interface IChatDmEnter {
@@ -137,7 +140,8 @@ export interface IChatDmEnter {
   userIdx2: number;
   userNickname1: string;
   userNickname2: string;
-  imgUrl: string;
+  // channelIdx: number;
+  imgUri: string;
 }
 
 export const alert = {

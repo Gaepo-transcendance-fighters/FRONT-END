@@ -39,6 +39,14 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const ChatExitRoom = ({leftMember, owner}: {leftMember: ILeftMember[], owner: string}) => {
+      console.log("room", room)
+      console.log("owner", owner)
+      if (!leftMember){
+        roomDispatch({type: "SET_CUR_ROOM", value: null});
+        roomDispatch({type: "SET_IS_OPEN", value: false})
+        // window.alert("너 킥 당함"); // TODO : 서버에서 다섯번 보냄? 왜?
+        return ;
+      }
       const list: IMember[] = leftMember.map((mem: ILeftMember) => {
         return {
         nickname: mem.userNickname,
@@ -46,7 +54,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
         imgUri: mem.imgUri,
     }})
     const newRoom: IChatRoom = {
-      owner: owner,
+      owner: owner ? owner : room.owner,
       channelIdx: roomState.currentRoom!.channelIdx,
       mode: roomState.currentRoom!.mode,
     }
@@ -62,7 +70,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const ChatEnterNoti = (data: IChatEnterNoti) => {
-      console.log("ChatEnterNoti ", data )
+      // console.log("ChatEnterNoti ", data )
       setShowAlert(true);
       setNewMem(data.newMember);
       roomDispatch({type: "SET_CUR_MEM", value: data.member})
@@ -125,7 +133,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           userIdx2: payload.userIdx2,
           userNickname1: payload.userNickname1,
           userNickname2: payload.userNickname2,
-          imgUrl: payload.imgUrl,
+          // channelIdx: payload.channelIdx,
+          imgUri: payload.imgUri,
         },
       });
     };
@@ -149,6 +158,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const GoToLobby = (payload: IChatRoom[]) => {
+      console.log("GoToLobby ", payload);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
     socket.on("chat_goto_lobby", GoToLobby);
