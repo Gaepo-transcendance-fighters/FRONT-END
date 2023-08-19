@@ -48,8 +48,7 @@ const myProfileStyle = {
 };
 
 import { useRouter, useSearchParams } from "next/navigation";
-
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useState, useEffect } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
