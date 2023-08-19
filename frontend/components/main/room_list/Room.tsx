@@ -17,6 +17,11 @@ import {
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";
+import { IMember } from "@/type/type";
+
+export interface ILeftMember {
+  userNickname: string, userIdx: number, imgUri: string
+}
 
 export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -26,17 +31,49 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
 
+    // userIdx: number | undefined;
+    // nickname: string | undefined;
+    // imgUri: string | undefined;
+    // permission?: Permission | undefined;
+
+
+  useEffect(() => {
+    const ChatExitRoom = ({leftMember, owner}: {leftMember: ILeftMember[], owner: string}) => {
+      const list: IMember[] = leftMember.map((mem: ILeftMember) => {
+        return {
+        nickname: mem.userNickname,
+        userIdx: mem.userIdx,
+        imgUri: mem.imgUri,
+    }})
+    const newRoom: IChatRoom = {
+      owner: owner,
+      channelIdx: roomState.currentRoom!.channelIdx,
+      mode: roomState.currentRoom!.mode,
+    }
+      roomDispatch({type: "SET_CUR_MEM", value: list})
+      roomDispatch({type: "SET_CUR_ROOM", value: newRoom})
+    };
+    socket.on("chat_room_exit", ChatExitRoom);
+
+    return () => {
+      socket.off("chat_room_exit", ChatExitRoom);
+    };
+  }, [roomState.currentRoom]);
+
   useEffect(() => {
     const ChatEnterNoti = (data: IChatEnterNoti) => {
+      console.log("ChatEnterNoti ", data )
       setShowAlert(true);
       setNewMem(data.newMember);
+      roomDispatch({type: "SET_CUR_MEM", value: data.member})
+      roomDispatch({type: "SET_ADMIN_ARY", value: data.admin})
     };
     socket.on("chat_enter_noti", ChatEnterNoti);
 
     return () => {
       socket.off("chat_enter_noti", ChatEnterNoti);
     };
-  });
+  }, []);
 
   useEffect(() => {
     if (showAlert) {

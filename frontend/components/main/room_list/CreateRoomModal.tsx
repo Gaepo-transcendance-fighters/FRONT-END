@@ -38,9 +38,13 @@ export default function CreateRoomModal({
     setOpen(false);
   };
 
+
+  
   useEffect(() => {
     const ChatCreateRoom = (data: IChatRoom) => {
       roomDispatch({ type: "ADD_ROOM", value: data });
+      if (data.owner !== userState.nickname)
+        return ;
       if (
         roomState.currentRoom &&
         roomState.currentRoom.mode !== Mode.PRIVATE

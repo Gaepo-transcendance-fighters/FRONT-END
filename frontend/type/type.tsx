@@ -76,6 +76,7 @@ export interface IChatEnter {
 export interface IChatEnterNoti {
   member: IMember[];
   newMember: string;
+  admin : { nickname: string }[];
 }
 
 export interface IChatRoomAdmin {
@@ -89,6 +90,11 @@ export interface IChatGetRoom {
   targetNickname?: string;
   channelIdx: number;
   mode: Mode;
+}
+
+export interface IChatRoomExit {
+    leftMember : IMember[];
+    owner : string
 }
 
 export interface IChatGetRoomList {

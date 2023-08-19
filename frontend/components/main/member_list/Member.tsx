@@ -67,6 +67,8 @@ export default function Member({
   }; // TODO : isOwner 사용한다음엔 false로 설정하기
 
   useEffect(() => {
+    if (roomState.currentRoom?.owner === userState.nickname)
+      setIsOwner(true);
     roomState.adminAry.map((adminElement) => {
       return adminElement.nickname === userState.nickname
         ? setIsAdmin(true)
@@ -255,11 +257,11 @@ export default function Member({
           onClose={handleCloseMenu}
           style={{ minWidth: 300 }}
         >
-          {isAdmin ? null : (
+          {isOwner ? (
             <MenuItem onClick={SetAdmin}>
               {isAuthorized ? "Unset Admin" : "Set Admin"}
             </MenuItem>
-          )}
+          ) : null}
           <MenuItem onClick={Mute}>Mute</MenuItem>
           <MenuItem onClick={Kick}>Kick</MenuItem>
           <MenuItem onClick={Ban}>Ban</MenuItem>
