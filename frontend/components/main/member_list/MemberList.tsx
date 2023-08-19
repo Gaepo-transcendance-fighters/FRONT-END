@@ -6,7 +6,7 @@ import Title from "../room_list/Title";
 import Members from "./Members";
 import { useRoom } from "@/context/RoomContext";
 
-export default function MemberList({}: {}) {
+export default function MemberList() {
   const { roomState } = useRoom();
 
   return (

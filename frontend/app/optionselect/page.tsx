@@ -13,7 +13,7 @@ import {
 import React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 
 type SpeedOption = "speed1" | "speed2" | "speed3";

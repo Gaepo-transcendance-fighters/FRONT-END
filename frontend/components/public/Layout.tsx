@@ -16,58 +16,7 @@ import { useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { useFriend } from "@/context/FriendContext";
 import { socket } from "@/app/page";
-
-export const main = {
-  main0: "#67DBFB",
-  main1: "#55B7EB",
-  main2: "#4292DA",
-  main3: "#2C70DD",
-  main4: "#265ECF",
-  main5: "#214C97",
-  main6: "#183C77",
-  main7: "#48a0ed",
-  main8: "#64D9F9",
-};
-
-export enum Permission {
-  OWNER = "owner",
-  ADMIN = "admin",
-  MEMBER = "member",
-}
-
-export enum Mode {
-  PRIVATE = "private",
-  PUBLIC = "public",
-  PROTECTED = "protected",
-}
-
-export interface IChatRoom {
-  channelIdx: number;
-  owner: string;
-  mode: Mode;
-}
-
-interface IFriend {
-  friendNickname: string;
-  isOnline: boolean;
-}
-
-interface IBlock {
-  targetNickname: string;
-  targetIdx: number;
-}
-
-interface IUserObject {
-  imgUri: string;
-  nickname: string;
-  userIdx: number;
-}
-interface IMaindata {
-  channelList: IChatRoom[];
-  friendList: IFriend[];
-  blockList: IBlock[];
-  userObject: IUserObject;
-}
+import { IMaindata } from "@/type/type";
 
 const Layout = () => {
   const { state } = useAuth();
@@ -100,10 +49,18 @@ const Layout = () => {
   //미세한 찰나일 것임.!
 
   useEffect(() => {
-    if (state.isLoggedIn) {
-      socket.emit("main_enter", JSON.stringify({ intra: "hoslim" }), () => {});
+    if (localStorage.getItem("loggedIn")) {
+      console.log(userState.nickname);
+      socket.emit(
+        "main_enter",
+        JSON.stringify({ intra: localStorage.getItem("intra") }),
+        (ret: number) => {
+          if (ret === 200) {
+          }
+        }
+      );
     }
-  }, [state.isLoggedIn]);
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
