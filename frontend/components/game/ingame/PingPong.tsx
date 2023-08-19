@@ -216,18 +216,17 @@ const PingPong = () => {
 
       if (newLocation.x <= -500) {
         gameDispatch({ type: "B_SCORE", value: gameState.bScore + 1 });
-        gameSocket.emit(
-          "game_pause_score",
-          {
-            userIdx: gameState.bPlayer.id,
-            score: gameState.bScore,
-            getScoreTime: Date.now(),
-          },
-          (res: { code: number; msg: string }) => {
-            console.log(res);
-          }
-        );
-        cancelAnimationFrame(requireAnimationRef.current);
+        // gameSocket.emit(
+        //   "game_pause_score",
+        //   {
+        //     userIdx: gameState.bPlayer.id,
+        //     score: gameState.bScore,
+        //     getScoreTime: Date.now(),
+        //   },
+        //   (res: { code: number; msg: string }) => {
+        //     console.log(res);
+        //   }
+        // );
         resetBall();
         resetDerection();
         setReady(false);
@@ -235,18 +234,17 @@ const PingPong = () => {
       }
       if (newLocation.x > 500) {
         gameDispatch({ type: "A_SCORE", value: gameState.aScore + 1 });
-        gameSocket.emit(
-          "game_pause_score",
-          {
-            userIdx: gameState.aPlayer.id,
-            score: gameState.aScore,
-            getScoreTime: Date.now(),
-          },
-          (res: { code: number; msg: string }) => {
-            console.log(res);
-          }
-        );
-        cancelAnimationFrame(requireAnimationRef.current);
+        // gameSocket.emit(
+        //   "game_pause_score",
+        //   {
+        //     userIdx: gameState.aPlayer.id,
+        //     score: gameState.aScore,
+        //     getScoreTime: Date.now(),
+        //   },
+        //   (res: { code: number; msg: string }) => {
+        //     console.log(res);
+        //   }
+        // );
         resetBall();
         resetDerection();
         setReady(false);
@@ -257,8 +255,8 @@ const PingPong = () => {
       const newBallStandard = new Date().getTime();
       setBallStandard(newBallStandard);
     }
-    requestAnimationFrame(ballMove);
-  }, [ball.x, ball.y]);
+    requireAnimationRef.current = requestAnimationFrame(ballMove);
+  }, [ball]);
 
   useEffect(() => {
     gameSocket.on(
@@ -307,13 +305,12 @@ const PingPong = () => {
 
   useEffect(() => {
     gameDispatch({ type: "SET_LATENCY", value: 0 });
-    console.log(ready);
     if (!ready) return gameStart();
 
     window.addEventListener("keydown", handlePaddle);
     window.addEventListener("keyup", debouncedSendData);
 
-    requestAnimationFrame(ballMove);
+    requireAnimationRef.current = requestAnimationFrame(ballMove);
 
     return () => {
       window.removeEventListener("keydown", handlePaddle);
