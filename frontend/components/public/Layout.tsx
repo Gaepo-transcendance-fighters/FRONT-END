@@ -43,8 +43,6 @@ const Layout = () => {
       socket.off("main_enter", MainEnter);
     };
   }, []);
-  //socket에서 값을 받아와도 dispatch 하는 시간동안 값은 비어있으므로 내부에서 값을 찍어도 안나옴.
-  //미세한 찰나일 것임.!
 
   useEffect(() => {
     if (localStorage.getItem("loggedIn")) {

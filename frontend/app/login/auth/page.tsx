@@ -24,15 +24,12 @@ const Auth = () => {
   const { userDispatch } = useUser();
 
   interface Data {
+    userIdx: number;
+    intra: string;
+    imgUri: string;
     token: string;
-    jwt: string;
-    user: {
-      userIdx: number;
-      intra: string;
-      imgUri: string;
-      accessToken: string;
-      email: string;
-    };
+    email: string;
+    check2Auth: boolean;
   }
   const postCode = async (code: string) => {
     // dev original
@@ -50,13 +47,14 @@ const Auth = () => {
     })
       .then(async (res) => {
         if (res.status === 200) {
-          localStorage.setItem("loggedIn", "true");
           const data: Data = await res.json();
+          console.log("data : ", data);
+          localStorage.setItem("loggedIn", "true");
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
-          localStorage.setItem("token", data.jwt);
-          localStorage.setItem("intra", data.user.intra);
-          localStorage.setItem("idx", data.user.userIdx.toString());
-
+          // localStorage.setItem("token", data.jwt);
+          localStorage.setItem("intra", data.intra);
+          localStorage.setItem("idx", data.userIdx.toString());
+          localStorage.setItem("email", data.email); // <- 0820 21시 30분경 추가
           return router.push(`/`);
         }
       })
