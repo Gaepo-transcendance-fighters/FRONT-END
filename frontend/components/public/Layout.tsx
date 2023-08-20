@@ -1,19 +1,16 @@
 "use client";
 
-import { CardContent, Stack, Box, Button } from "@mui/material";
+import { CardContent, Stack, Box } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
-import io from "socket.io-client";
-import InviteGame from "../main/InviteGame/InviteGame";
-import WaitAccept from "../main/InviteGame/WaitAccept";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
-import { UserProvider, useUser } from "@/context/UserContext";
+import { useUser } from "@/context/UserContext";
 import { useFriend } from "@/context/FriendContext";
 import { socket } from "@/app/page";
 import { IMaindata } from "@/type/type";
@@ -28,6 +25,7 @@ const Layout = () => {
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
+      console.log("data : " + data);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });

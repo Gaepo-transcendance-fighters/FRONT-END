@@ -4,19 +4,14 @@ import { Card, Typography, Stack, Tooltip } from "@mui/material";
 import Image from "next/image";
 import FriendProfile from "./FriendProfile";
 import { main } from "@/font/color";
+import { useEffect } from "react";
 
+import { IFriend, IBlock, IUserProp } from "@/type/type";
 const loginOn = <Image src="/logon1.png" alt="online" width={10} height={10} />;
 
 const loginOff = (
   <Image src="/logoff.png" alt="offline" width={10} height={10} />
 );
-
-interface IUserProp {
-  friendNickname: string;
-  isOnline: boolean;
-  targetNickname?: string;
-  targetIdx?: number;
-}
 
 const Friend = ({ prop }: { prop: IUserProp }) => {
   return (

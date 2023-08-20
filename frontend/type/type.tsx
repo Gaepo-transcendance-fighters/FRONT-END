@@ -34,6 +34,7 @@ export enum Mode {
 
 export interface IFriend {
   friendNickname: string;
+  friendIdx: number;
   isOnline: boolean;
 }
 
@@ -42,6 +43,13 @@ export interface IBlock {
   targetIdx: number;
 }
 
+export interface IUserProp {
+  friendNickname: string;
+  friendIdx: number;
+  isOnline: boolean;
+  targetNickname?: string;
+  targetIdx?: number;
+}
 export interface IUserObject {
   imgUri: string;
   nickname: string;

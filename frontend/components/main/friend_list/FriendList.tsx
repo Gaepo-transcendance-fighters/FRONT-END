@@ -8,6 +8,7 @@ import { useFriend } from "@/context/FriendContext";
 
 export interface IFriend {
   friendNickname: string;
+  friendIdx: number;
   isOnline: boolean;
 }
 
@@ -48,10 +49,24 @@ const unselectedButton = {
 
 interface IUserProp {
   friendNickname: string;
+  friendIdx: number;
   isOnline: boolean;
   targetNickname?: string;
   targetIdx?: number;
 }
+
+const MockFriendList: IUserProp[] = [
+  {
+    friendNickname: "haryu",
+    friendIdx: 1,
+    isOnline: true,
+  },
+  {
+    friendNickname: "paul",
+    friendIdx: 2,
+    isOnline: false,
+  },
+];
 
 const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
@@ -60,7 +75,8 @@ const FriendList = () => {
 
   useEffect(() => {
     const cur = select ? friendState.blockList : friendState.friendList;
-    setShowlist(cur);
+    // setShowlist(cur);
+    setShowlist(MockFriendList);
   }, [friendState.friendList, friendState.blockList, select]);
 
   return (

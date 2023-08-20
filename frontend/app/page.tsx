@@ -12,7 +12,6 @@ export const socket = io("http://localhost:4000/chat", {
 });
 
 const Page = () => {
-  console.log(socket.id);
   return (
     <>
       <Layout></Layout>
