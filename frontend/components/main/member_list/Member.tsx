@@ -15,10 +15,11 @@ import {
   Permission,
   alert,
 } from "@/type/type";
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
 import { socket } from "@/app/page";
+import { ILeftMember } from "../room_list/Room";
 
 export default function Member({
   idx,
@@ -46,7 +47,10 @@ export default function Member({
   ];
 
   const handleOpenModal = () => {
-    setOpenModal(true);
+    // setOpenModal(true);
+    userState.nickname === person.nickname
+      ? setOpenModal(false)
+      : setOpenModal(true);
   };
 
   // useEffect(() => {
@@ -67,6 +71,7 @@ export default function Member({
   }; // TODO : isOwner 사용한다음엔 false로 설정하기
 
   useEffect(() => {
+    if (roomState.currentRoom?.owner === userState.nickname) setIsOwner(true);
     roomState.adminAry.map((adminElement) => {
       return adminElement.nickname === userState.nickname
         ? setIsAdmin(true)
@@ -158,8 +163,19 @@ export default function Member({
 
   useEffect(() => {
     const ChatKick = (data: IChatKick) => {
+      if (data.targetNickname === userState.nickname) {
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
+        return;
+      }
       console.log("ChatKick ", data);
-      roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
+      const list: IMember[] = data.leftMember.map((mem: ILeftMember) => {
+        return {
+          nickname: mem.userNickname,
+          userIdx: mem.userIdx,
+          imgUri: mem.imgUri,
+        };
+      });
+      roomDispatch({ type: "SET_CUR_MEM", value: list });
     };
     socket.on("chat_kick", ChatKick);
 
@@ -187,13 +203,25 @@ export default function Member({
 
   useEffect(() => {
     const ChatBan = (data: IChatKick) => {
-      console.log("ChatBan : ", data);
-      roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
+      if (data.targetNickname === userState.nickname) {
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
+        return;
+      }
+      console.log("ban", data);
+      const list: IMember[] = data.leftMember.map((mem: ILeftMember) => {
+        return {
+          nickname: mem.userNickname,
+          userIdx: mem.userIdx,
+          imgUri: mem.imgUri,
+        };
+      });
+
+      roomDispatch({ type: "SET_CUR_MEM", value: list });
     };
-    socket.on("chat_kick", ChatBan);
+    socket.on("chat_ban", ChatBan);
 
     return () => {
-      socket.off("chat_kick", ChatBan);
+      socket.off("chat_ban", ChatBan);
     };
   }, []);
 
@@ -248,25 +276,28 @@ export default function Member({
           )}
         </div>
       </div>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-      >
-        {isAdmin ? null : (
-          <MenuItem onClick={SetAdmin}>
-            {isAuthorized ? "Unset Admin" : "Set Admin"}
-          </MenuItem>
-        )}
-        <MenuItem onClick={Mute}>Mute</MenuItem>
-        <MenuItem onClick={Kick}>Kick</MenuItem>
-        <MenuItem onClick={Ban}>Ban</MenuItem>
-      </Menu>
-      {showAlert ? (
-        <Alert sx={alert} severity="info" style={{ width: "333px" }}>
-          {person.nickname} is {string}
-        </Alert>
-      ) : null}
+      <Paper sx={{ width: "500px" }}>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleCloseMenu}
+          style={{ minWidth: 300 }}
+        >
+          {isOwner ? (
+            <MenuItem onClick={SetAdmin}>
+              {isAuthorized ? "Unset Admin" : "Set Admin"}
+            </MenuItem>
+          ) : null}
+          <MenuItem onClick={Mute}>Mute</MenuItem>
+          <MenuItem onClick={Kick}>Kick</MenuItem>
+          <MenuItem onClick={Ban}>Ban</MenuItem>
+        </Menu>
+        {showAlert ? (
+          <Alert sx={alert} severity="info" style={{ width: "333px" }}>
+            {person.nickname} is {string}
+          </Alert>
+        ) : null}
+      </Paper>
       <MemberModal
         openModal={openModal}
         setOpenModal={setOpenModal}
