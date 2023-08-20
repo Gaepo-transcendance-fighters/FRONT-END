@@ -108,8 +108,7 @@ const BottomField = ({ setMsgs }: Props) => {
               : roomState.currentDmRoomMemberList?.userIdx1, // <------------------ 현재 채널의 모든 사용자들의 인덱스를 알아야한다.
         };
       }
-      // console.log("메세지 전송 눌렀을때 payload", payload);
-      socket.emit("chat_send_msg", payload);
+      socket.emit("chat_send_msg", JSON.stringify(payload));
       inputRef.current?.focus();
     },
     [msg]

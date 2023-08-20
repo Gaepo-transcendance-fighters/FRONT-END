@@ -17,52 +17,10 @@ interface Props {
 
 const DmChatField = ({ msgs, setMsgs }: Props) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const { roomState, roomDispatch } = useRoom();
+  const { roomState } = useRoom();
   const observerTarget = useRef(null);
   const [lastDate, setLastDate] = useState<string>();
-  const [pageNum, setPageNum] = useState(0);
   const { initMsgState } = useInitMsg();
-  // 첫 메세지 20개 불러오는 로직
-
-  // useEffect(() => {
-  //   const func = (chatList: any) => {
-  //     console.log(1, "func");
-  //     console.log("chatlist", chatList);
-  //     // <-                       [변경필요] any type have to be changed
-  //     chatList.message.forEach((data: any) => {
-  //       // <--- [변경필요]any type
-  //       const payload: IChat = {
-  //         channelIdx: roomState.currentRoom?.channelIdx,
-  //         senderIdx:
-  //           data.sender === roomState.currentDmRoomMemberList?.userIdx1
-  //             ? roomState.currentDmRoomMemberList?.userIdx1
-  //             : roomState.currentDmRoomMemberList?.userIdx2,
-  //         msg: data.msg,
-  //         msgDate: data.msgDate,
-  //       };
-  //       setMsgs((prevState) => [...prevState, payload]);
-  //       console.log("after on", msgs);
-  //     });
-  // roomDispatch({
-  //   type: "SET_CUR_DM_MEM",
-  //   value: {
-  //     userIdx1: chatList.userIdx1,
-  //     userIdx2: chatList.userIdx2,
-  //     userNickname1: chatList.userNickname1,
-  //     userNickname2: chatList.userNickname2,
-  //     imgUrl: chatList.imgUrl,
-  //   },
-  // });
-  // const tempLastIdx = chatList.length - 1;
-  // const tempLastElement = chatList[tempLastIdx];
-  // setLastDate(tempLastElement.msgDate);
-  // };
-
-  //   socket.on("chat_get_DM", func);
-  //   return () => {
-  //     socket.off("chat_get_DM", func);
-  //   };
-  // }, [msgs]);
 
   // 첫 메세지 20개 불러오는 로직
   useEffect(() => {
@@ -79,12 +37,9 @@ const DmChatField = ({ msgs, setMsgs }: Props) => {
           msg: data.msg,
           msgDate: data.msgDate,
         };
-
-        // payload 객체를 반환합니다.
         return payload;
       }
     );
-    // setMsgs((prevState) => [...prevState, ...list]);
     if (roomState.currentRoom?.channelIdx) setMsgs([]);
     setMsgs((prevState) => {
       return [...prevState, ...list];
@@ -94,6 +49,7 @@ const DmChatField = ({ msgs, setMsgs }: Props) => {
   useEffect(() => {
     console.log(msgs);
   }, [msgs, setMsgs]);
+
   // 무한 스크롤 요청 부분
   // observe 시작 해주는 로직
   // 이전대화기록의 마지막을 보게되면 이전 대화기록을 요청한다.
@@ -114,7 +70,6 @@ const DmChatField = ({ msgs, setMsgs }: Props) => {
     );
 
     if (observerTarget.current) {
-      console.log("change");
       observer.observe(observerTarget.current);
     }
 
