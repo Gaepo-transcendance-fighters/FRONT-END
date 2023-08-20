@@ -56,6 +56,7 @@ const Auth = () => {
           localStorage.setItem("token", data.jwt);
           localStorage.setItem("intra", data.user.intra);
           localStorage.setItem("idx", data.user.userIdx.toString());
+
           return router.push(`/`);
         }
       })
