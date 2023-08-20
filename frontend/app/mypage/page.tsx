@@ -118,16 +118,9 @@ export default function PageRedir() {
   const uploadImage = async (file: File) => {
     // readAsDataURL을 사용해 이미지를 base64로 변환
     const dataUrl: string = await readFileAsDataURL(file);
-
-    console.log(dataUrl);
-
-    // 서버로 이미지 업로드
-    // const formData = new FormData();
-    // formData.append("image", file);
-
     try {
       await axios({
-        method: "UPDATE",
+        method: "PUT",
         url: `http://localhost:4000/users/profile/${userData?.nickname}`,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -173,7 +166,7 @@ export default function PageRedir() {
 
     try {
       const response = await axios({
-        method: "PUT",
+        method: "PATCH",
         url: `http://localhost:4000/users/profile/${userData?.nickname}`,
 
         headers: {
@@ -201,13 +194,13 @@ export default function PageRedir() {
 
     try {
       const response = await axios({
-        method: "PUT",
+        method: "PATCH",
         url: "http://localhost:4000/users/profile/:my_nickname",
         headers: {
           "Content-Type": "application/json",
         },
         data: JSON.stringify({
-          userNickName: userData?.nickname,
+          // userNickName: userData?.nickname,
           check2Auth: verified,
         }),
       });
