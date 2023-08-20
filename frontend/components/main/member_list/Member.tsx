@@ -14,12 +14,12 @@ import {
   IMember,
   Permission,
   alert,
-} from "@/type/type";
+  ILeftMember
+} from "@/type/RoomType";
 import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
 import { socket } from "@/app/page";
-import { ILeftMember } from "../room_list/Room";
 
 export default function Member({
   idx,
@@ -47,7 +47,6 @@ export default function Member({
   ];
 
   const handleOpenModal = () => {
-    // setOpenModal(true);
     userState.nickname === person.nickname
       ? setOpenModal(false)
       : setOpenModal(true);
@@ -123,7 +122,7 @@ export default function Member({
       }),
       (ret: string | number) => {
         console.log("SetAdmin ret : ", ret);
-        setIsAuthorized((prev) => !prev); //
+        setIsAuthorized((prev) => !prev);
         console.log("SetAdmin isAuthorized : ", isAuthorized);
         setShowAlert(true);
       }
@@ -193,7 +192,6 @@ export default function Member({
         targetIdx: person.userIdx,
       }),
       (ret: string | number) => {
-        console.log("ret : ", ret);
         // if (ret === 200) {
         // setShowAlert(true);
         // setString(strings[3]);
@@ -207,7 +205,6 @@ export default function Member({
         roomDispatch({ type: "SET_CUR_ROOM", value: null });
         return;
       }
-      console.log("ban", data);
       const list: IMember[] = data.leftMember.map((mem: ILeftMember) => {
         return {
           nickname: mem.userNickname,
@@ -215,7 +212,6 @@ export default function Member({
           imgUri: mem.imgUri,
         };
       });
-
       roomDispatch({ type: "SET_CUR_MEM", value: list });
     };
     socket.on("chat_ban", ChatBan);

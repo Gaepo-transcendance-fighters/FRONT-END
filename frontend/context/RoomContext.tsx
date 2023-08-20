@@ -1,4 +1,4 @@
-import { IChatRoom, IDmMemList, IMember } from "@/type/type";
+import { IChatRoom, IDmMemList, IMember } from "@/type/RoomType";
 import {
   ReactNode,
   createContext,

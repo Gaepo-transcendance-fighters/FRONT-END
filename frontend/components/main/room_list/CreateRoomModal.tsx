@@ -5,7 +5,7 @@ import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom, Mode, Permission } from "@/type/type";
+import { IChatRoom, Mode, Permission } from "@/type/RoomType";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 
