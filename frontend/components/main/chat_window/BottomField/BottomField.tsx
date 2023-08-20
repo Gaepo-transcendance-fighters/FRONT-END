@@ -57,7 +57,7 @@ const BottomField = ({ setMsgs }: Props) => {
         msg: msg,
       };
       console.log("payload", payload);
-      socket.emit("chat_send_msg", payload);
+      socket.emit("chat_send_msg", JSON.stringify(payload));
       inputRef.current?.focus();
     },
     [msg]

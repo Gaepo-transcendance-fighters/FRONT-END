@@ -75,11 +75,18 @@ const MyGameLog = () => {
     const id = localStorage.getItem("idx");
     console.log("id : " + id);
     await axios
+
       .get(
         `http://localhost:4000/game/records/?userIdx=${id}&page=${pageNum}`
       )
       // haryu's server
       //   .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
+
+      //dev original
+//       .get(`http://localhost:4000/chat/messages?channelIdx=1&index=${pageNum}`)
+      //haryu's server
+      //.get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
+
       .then((res) => {
         console.log(res.data);
         // const newData = Array.isArray(res.data) ? res.data : [res.data];
