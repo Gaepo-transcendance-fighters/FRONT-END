@@ -11,13 +11,9 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { IChatRoom, useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
 import { socket } from "@/app/page";
+import { useUser } from "@/context/UserContext";
+import { IChat } from "../ChatWindow";
 
-interface IChat {
-  channelIdx: number;
-  senderIdx: number;
-  msg: string;
-  msgDate: Date;
-}
 interface Props {
   setMsgs: Dispatch<SetStateAction<IChat[]>>;
 }
@@ -32,6 +28,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { roomState, roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   const updateChannels = (
     targetChannelIdx: number,
@@ -80,22 +77,26 @@ const RoomTitleField = ({ setMsgs }: Props) => {
     return () => {
       socket.off("chat_goto_lobby", leaveHandler);
       socket.off("BR_chat_room_delete", leaveAndDeleteHandler);
-    }
+    };
   });
 
   useEffect(() => {
     console.log(
-      "[RoomTItleField] show current channels has been changed : ",
+      "[RoomTItleField] show current nonDmchannels has been changed : ",
       roomState.nonDmRooms
     );
   }, [roomState.nonDmRooms]);
+
+  useEffect(() => {
+    console.log("userState.nickname : " + userState);
+  }, [userState.nickname]);
 
   const leaveRoom = () => {
     const payload = {
       channelIdx: roomState.currentRoom?.channelIdx,
       userIdx: 98029, // [작업필요] 추후 나의 userIdx로 교체필요
     };
-    socket.emit("chat_goto_lobby", payload);
+    socket.emit("chat_goto_lobby", JSON.stringify(payload));
     console.log("[RoomTItleField] click leaveroom");
   };
 
@@ -106,7 +107,9 @@ const RoomTitleField = ({ setMsgs }: Props) => {
         <div className="room_name">
           {
             <Typography variant="h4">
-              {roomState.currentRoom?.owner + "'s room"}
+              {roomState.currentRoom?.mode === "private"
+                ? userState.nickname + "'s room"
+                : roomState.currentRoom?.owner + "'s room"}
             </Typography>
           }
         </div>

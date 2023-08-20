@@ -73,27 +73,28 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     };
   }, []);
 
-  useEffect(() => {
-    const ChatDmEnter = (json: IChatDmEnter) => {
-      roomDispatch({
-        type: "SET_CUR_DM_MEM",
-        value: {
-          userIdx1: json.userIdx1,
-          userIdx2: json.userIdx2,
-          userNickname1: json.userNickname1,
-          userNickname2: json.userNickname2,
-          imgUrl: json.imgUrl,
-        },
-      });
-      console.log("ChatDmEnter 누르고 난 뒤 DM 멤버 체크")
-      console.log(roomState.currentDmRoomMemberList);
-    };
-    socket.on("chat_get_DM", ChatDmEnter);
+  // useEffect(() => {
+  //   const ChatDmEnter = (json: IChatDmEnter) => {
+  //     console.log("[Room.tsx] 지킴님쪽에서는 한번만 눌러도 정보가 들어오는지")
+  //     roomDispatch({
+  //       type: "SET_CUR_DM_MEM",
+  //       value: {
+  //         userIdx1: json.userIdx1,
+  //         userIdx2: json.userIdx2,
+  //         userNickname1: json.userNickname1,
+  //         userNickname2: json.userNickname2,
+  //         imgUrl: json.imgUrl,
+  //       },
+  //     });
+  //     // console.log("ChatDmEnter 누르고 난 뒤 DM 멤버 체크")
+  //     // console.log(roomState.currentDmRoomMemberList);
+  //   };
+  //   socket.on("chat_get_DM", ChatDmEnter);
 
-    return () => {
-      socket.off("chat_get_DM", ChatDmEnter);
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("chat_get_DM", ChatDmEnter);
+  //   };
+  // }, []);
 
   const RoomClick = (room: IChatRoom) => {
     if (room.mode !== Mode.PROTECTED) {
