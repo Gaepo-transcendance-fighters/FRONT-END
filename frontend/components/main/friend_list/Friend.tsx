@@ -11,16 +11,6 @@ const loginOff = (
   <Image src="/logoff.png" alt="offline" width={10} height={10} />
 );
 
-interface IFriend {
-  friendNickname: string;
-  isOnline: boolean;
-}
-
-interface IBlock {
-  targetNickname: string;
-  targetIdx: number;
-}
-
 interface IUserProp {
   friendNickname: string;
   isOnline: boolean;

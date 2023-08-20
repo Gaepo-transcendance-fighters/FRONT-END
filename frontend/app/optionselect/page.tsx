@@ -13,7 +13,7 @@ import {
 import React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { io } from "socket.io-client";
@@ -50,7 +50,7 @@ interface IGameOption {
 const userId =
   typeof window !== "undefined" ? localStorage.getItem("userIdx") : null;
 
-export const gameSocket = io("http://paulryu9309.ddns.net:4000/chat", {
+export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
   query: { userId: userId },
 });
 
@@ -58,6 +58,7 @@ const OptionSelect = () => {
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
+  const [client, setClient] = useState(false);
 
   const [selectedSpeedOption, setSelectedSpeedOption] = useState<SpeedOption>(
     SpeedOption.speed2
@@ -139,6 +140,12 @@ const OptionSelect = () => {
       }
     );
   };
+
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
+  if (!client) return <></>;
 
   return (
     <Card sx={{ display: "flex" }}>

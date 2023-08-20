@@ -50,8 +50,7 @@ const myProfileStyle = {
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { main } from "@/components/public/Layout";
-import { useState } from "react";
-import { get } from "https";
+import { useState, useEffect } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 
@@ -82,6 +81,7 @@ export default function PageRedir() {
   // }
 
   const { userState } = useUser();
+  const [client, setClient] = useState(false);
 
   const router = useRouter();
 
@@ -101,7 +101,6 @@ export default function PageRedir() {
   //   else setVerified(true);
   // };
 
-  console.log();
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
@@ -129,6 +128,12 @@ export default function PageRedir() {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
+  if (!client) return <></>;
 
   return (
     <>

@@ -134,27 +134,27 @@ const PingPong = () => {
         newLocation.y < myPaddle.y + 20
       ) {
         setDirection((prev) => ({ x: -prev.x, y: 1 }));
-        gameSocket.emit(
-          "game_predict_ball",
-          {
-            roomId: gameState.roomId,
-            ballPosX: ball.x,
-            ballPosY: ball.y,
-            ballDegreeX: direction.x,
-            ballDegreeY: direction.y,
-            ballHitDate: Date.now(),
-          },
-          (res: {
-            animationStartDate: number;
-            ballDegreeX: number;
-            ballDegreeY: number;
-            ballNextPosX: number;
-            ballNextPosY: number;
-            ballExpectedEventDate: number;
-          }) => {
-            console.log(200, "ok", res);
-          }
-        );
+        // gameSocket.emit(
+        //   "game_predict_ball",
+        //   {
+        //     roomId: gameState.roomId,
+        //     ballPosX: ball.x,
+        //     ballPosY: ball.y,
+        //     ballDegreeX: direction.x,
+        //     ballDegreeY: direction.y,
+        //     ballHitDate: Date.now(),
+        //   },
+        //   (res: {
+        //     animationStartDate: number;
+        //     ballDegreeX: number;
+        //     ballDegreeY: number;
+        //     ballNextPosX: number;
+        //     ballNextPosY: number;
+        //     ballExpectedEventDate: number;
+        //   }) => {
+        //     console.log(200, "ok", res);
+        //   }
+        // );
       } else if (
         newLocation.x > enemyPaddle.x - 20 &&
         newLocation.x < enemyPaddle.x &&
@@ -162,14 +162,14 @@ const PingPong = () => {
         newLocation.y < enemyPaddle.y + 20
       ) {
         setDirection((prev) => ({ x: -prev.x, y: 1 }));
-        gameSocket.emit("game_predict_ball", {
-          roomId: gameState.roomId,
-          ballPosX: ball.x,
-          ballPosY: ball.y,
-          ballDegreeX: direction.x,
-          ballDegreeY: direction.y,
-          ballHitDate: Date.now(),
-        });
+        // gameSocket.emit("game_predict_ball", {
+        //   roomId: gameState.roomId,
+        //   ballPosX: ball.x,
+        //   ballPosY: ball.y,
+        //   ballDegreeX: direction.x,
+        //   ballDegreeY: direction.y,
+        //   ballHitDate: Date.now(),
+        // });
       } else if (
         newLocation.x > myPaddle.x &&
         newLocation.x < myPaddle.x + 20 &&
@@ -177,14 +177,14 @@ const PingPong = () => {
         newLocation.y < myPaddle.y + 50
       ) {
         setDirection((prev) => ({ x: -prev.x, y: 2 }));
-        gameSocket.emit("game_predict_ball", {
-          roomId: gameState.roomId,
-          ballPosX: ball.x,
-          ballPosY: ball.y,
-          ballDegreeX: direction.x,
-          ballDegreeY: direction.y,
-          ballHitDate: Date.now(),
-        });
+        // gameSocket.emit("game_predict_ball", {
+        //   roomId: gameState.roomId,
+        //   ballPosX: ball.x,
+        //   ballPosY: ball.y,
+        //   ballDegreeX: direction.x,
+        //   ballDegreeY: direction.y,
+        //   ballHitDate: Date.now(),
+        // });
       } else if (
         newLocation.x > enemyPaddle.x - 20 &&
         newLocation.x < enemyPaddle.x &&
@@ -192,41 +192,41 @@ const PingPong = () => {
         newLocation.y < enemyPaddle.y + 50
       ) {
         setDirection((prev) => ({ x: -prev.x, y: 2 }));
-        gameSocket.emit("game_predict_ball", {
-          roomId: gameState.roomId,
-          ballPosX: ball.x,
-          ballPosY: ball.y,
-          ballDegreeX: direction.x,
-          ballDegreeY: direction.y,
-          ballHitDate: Date.now(),
-        });
+        // gameSocket.emit("game_predict_ball", {
+        //   roomId: gameState.roomId,
+        //   ballPosX: ball.x,
+        //   ballPosY: ball.y,
+        //   ballDegreeX: direction.x,
+        //   ballDegreeY: direction.y,
+        //   ballHitDate: Date.now(),
+        // });
       }
 
       if (newLocation.y <= -250 || newLocation.y >= 250) {
         setDirection((prev) => ({ x: prev.x, y: -prev.y }));
-        gameSocket.emit("game_predict_ball", {
-          roomId: gameState.roomId,
-          ballPosX: ball.x,
-          ballPosY: ball.y,
-          ballDegreeX: direction.x,
-          ballDegreeY: direction.y,
-          ballHitDate: Date.now(),
-        });
+        // gameSocket.emit("game_predict_ball", {
+        //   roomId: gameState.roomId,
+        //   ballPosX: ball.x,
+        //   ballPosY: ball.y,
+        //   ballDegreeX: direction.x,
+        //   ballDegreeY: direction.y,
+        //   ballHitDate: Date.now(),
+        // });
       }
 
       if (newLocation.x <= -500) {
         gameDispatch({ type: "B_SCORE", value: gameState.bScore + 1 });
-        gameSocket.emit(
-          "game_pause_score",
-          {
-            userIdx: gameState.bPlayer.id,
-            score: gameState.bScore,
-            getScoreTime: Date.now(),
-          },
-          (res: { code: number; msg: string }) => {
-            console.log(res);
-          }
-        );
+        // gameSocket.emit(
+        //   "game_pause_score",
+        //   {
+        //     userIdx: gameState.bPlayer.id,
+        //     score: gameState.bScore,
+        //     getScoreTime: Date.now(),
+        //   },
+        //   (res: { code: number; msg: string }) => {
+        //     console.log(res);
+        //   }
+        // );
         resetBall();
         resetDerection();
         setReady(false);
@@ -234,17 +234,17 @@ const PingPong = () => {
       }
       if (newLocation.x > 500) {
         gameDispatch({ type: "A_SCORE", value: gameState.aScore + 1 });
-        gameSocket.emit(
-          "game_pause_score",
-          {
-            userIdx: gameState.aPlayer.id,
-            score: gameState.aScore,
-            getScoreTime: Date.now(),
-          },
-          (res: { code: number; msg: string }) => {
-            console.log(res);
-          }
-        );
+        // gameSocket.emit(
+        //   "game_pause_score",
+        //   {
+        //     userIdx: gameState.aPlayer.id,
+        //     score: gameState.aScore,
+        //     getScoreTime: Date.now(),
+        //   },
+        //   (res: { code: number; msg: string }) => {
+        //     console.log(res);
+        //   }
+        // );
         resetBall();
         resetDerection();
         setReady(false);
@@ -304,11 +304,9 @@ const PingPong = () => {
   }, [gameState.aScore, gameState.bScore]);
 
   useEffect(() => {
-    gameDispatch({ type: "SET_LATENCY", value: 12 });
-    if (!ready) {
-      gameStart();
-      return;
-    }
+    gameDispatch({ type: "SET_LATENCY", value: 0 });
+    if (!ready) return gameStart();
+
     window.addEventListener("keydown", handlePaddle);
     window.addEventListener("keyup", debouncedSendData);
 
@@ -320,7 +318,7 @@ const PingPong = () => {
 
       cancelAnimationFrame(requireAnimationRef.current);
     };
-  }, [handlePaddle, ballMove, ready]);
+  }, [ready, ballMove]);
 
   return (
     <>

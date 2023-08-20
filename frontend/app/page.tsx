@@ -2,8 +2,7 @@
 
 import Layout from "@/components/public/Layout";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { useUser } from "@/context/UserContext";
+import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 // dev original
@@ -11,7 +10,7 @@ import { io } from "socket.io-client";
 // haryu's server
 
 const userId =
-  typeof window !== "undefined" ? localStorage.getItem("userIdx") : null;
+  typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 
 export const chatSocket = io("http://paulryu9309.ddns.net:4000/chat", {
   query: { userId: userId },
@@ -20,6 +19,7 @@ export const chatSocket = io("http://paulryu9309.ddns.net:4000/chat", {
 const Page = () => {
   const param = useSearchParams();
   const router = useRouter();
+  const [client, setClient] = useState(false);
 
   useEffect(() => {
     if (param.get("from") === "game") {
@@ -34,6 +34,12 @@ const Page = () => {
       };
     }
   }, []);
+
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
+  if (!client) return <></>;
 
   return (
     <>

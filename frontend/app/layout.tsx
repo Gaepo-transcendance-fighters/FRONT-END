@@ -8,6 +8,7 @@ import { RoomProvider } from "@/context/RoomContext";
 import { FriendProvider } from "@/context/FriendContext";
 import { GameProvider } from "@/context/GameContext";
 import { UserProvider } from "@/context/UserContext";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  useRequireAuth();
+
   return (
     <ThemeProvider theme={font}>
       <AuthProvider>

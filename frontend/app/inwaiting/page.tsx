@@ -28,7 +28,7 @@ const modalStyle = {
 };
 
 import { useRouter } from "next/navigation";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { gameSocket } from "../optionselect/page";
 import { useAuth } from "@/context/AuthContext";
@@ -86,6 +86,7 @@ const Inwaiting = () => {
 
   const handleOpenModal_redir = useCallback(() => {
     console.log("game_queue_start");
+
     if (gameFirstReady && gameSecondReady) {
       gameSocket.emit(
         "game_ready_second_answer",

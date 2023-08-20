@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
-import { IMember } from "@/context/RoomContext";
+import { IMember } from "@/type/type";
 import { useFriend } from "@/context/FriendContext";
 
 const modalStyle = {

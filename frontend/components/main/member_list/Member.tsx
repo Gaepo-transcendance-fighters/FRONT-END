@@ -6,13 +6,15 @@ import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import "@/components/main/member_list/MemberList.css";
 import { useState, MouseEvent, useEffect } from "react";
 import MemberModal from "./MemberModal";
+import { useRoom } from "@/context/RoomContext";
 import {
   IChatKick,
+  IChatMute,
+  IChatRoomAdmin,
   IMember,
   Permission,
   alert,
-  useRoom,
-} from "@/context/RoomContext";
+} from "@/type/type";
 import { Menu, MenuItem } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
@@ -29,8 +31,10 @@ export default function Member({
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [string, setString] = useState<string>("");
-  const [admin, setAdmin] = useState(false);
-  const [authorization, setAuthorization] = useState("");
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  // const [isGranted, setIsGranted] = useState<boolean>(false);
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const strings = [
@@ -45,30 +49,38 @@ export default function Member({
     setOpenModal(true);
   };
 
-  useEffect(() => {
-    const CheckGrant = (json: string) => {
-      setAuthorization(json);
-    };
-    chatSocket.on("chat_get_grant", CheckGrant);
+  // useEffect(() => {
+  //   const CheckGrant = (payload: Permission) => {
+  //     payload === Permission.MEMBER ? setIsGranted(false) : setIsGranted(true);
+  //   };
+  //   socket.on("chat_get_grant", CheckGrant);
 
-    return () => {
-      chatSocket.off("chat_get_grant", CheckGrant);
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("chat_get_grant", CheckGrant);
+  //   };
+  // }, []);
+
+  const CheckOwner = (nickname: string) => {
+    nickname === roomState.currentRoom?.owner
+      ? setIsOwner(true)
+      : setIsOwner(false);
+  }; // TODO : isOwner 사용한다음엔 false로 설정하기
+
+  useEffect(() => {
+    roomState.adminAry.map((adminElement) => {
+      return adminElement.nickname === userState.nickname
+        ? setIsAdmin(true)
+        : setIsAdmin(false);
+    });
+  }, [roomState.adminAry]);
 
   const handleOpenMenu = (
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
-    chatSocket.emit(
-      "chat_get_grant",
-      JSON.stringify({
-        userIdx: userState.userIdx,
-        channelIdx: roomState.currentRoom?.channelIdx,
-      }),
-      () => {}
-    );
-    setAnchorEl(e.currentTarget);
+    userState.nickname === roomState.currentRoom?.owner || isAdmin
+      ? setAnchorEl(e.currentTarget)
+      : null;
   };
 
   const handleCloseMenu = () => {
@@ -85,42 +97,51 @@ export default function Member({
     }
   }, [showAlert]);
 
-  // useEffect(() => {
-  //   const ChatRoomAdmin = (json : IChatRoomAdmin) => {
-  //     roomDispatch({type : "SET_CUR_MEM", value : json.leftMember});
-  //   };
-  //   socket.on("chat_room_admin", ChatRoomAdmin);
+  useEffect(() => {
+    const ChatRoomAdmin = (payload: IChatRoomAdmin) => {
+      roomDispatch({ type: "SET_ADMIN_ARY", value: payload.admin });
+    };
+    chatSocket.on("chat_room_admin", ChatRoomAdmin);
 
-  //   return () => {
-  //     socket.off("chat_room_admin", ChatRoomAdmin);
-  //   };
-  // }, []);
+    return () => {
+      chatSocket.off("chat_room_admin", ChatRoomAdmin);
+    };
+  }, []);
 
   const SetAdmin = () => {
-    // socket.emit("chat_room_admin", JSON.stringfy(
-    // {
-    //   channelIdx : roomState.currentRoom?.channelIdx,
-    //   userIdx : number,
-    //   grant : Permission.ADMIN,
-    // }), (statusCode) => {
-    setAdmin((prev) => !prev);
-    setShowAlert(true);
-    // });
+    chatSocket.emit(
+      "chat_room_admin",
+      JSON.stringify({
+        channelIdx: roomState.currentRoom?.channelIdx,
+        userIdx: person.userIdx,
+        grant: !isAuthorized,
+      }),
+      (ret: string | number) => {
+        console.log("SetAdmin ret : ", ret);
+        setIsAuthorized((prev) => !prev); //
+        console.log("SetAdmin isAuthorized : ", isAuthorized);
+        setShowAlert(true);
+      }
+    );
   };
+
   useEffect(() => {
-    admin ? setString(strings[0]) : setString(strings[1]);
-  }, [admin]);
+    isAuthorized ? setString(strings[0]) : setString(strings[1]);
+  }, [isAuthorized]);
 
-  // useEffect(() => {
-  //   const ChatMute = (data: any) => { // 아직 api 완성안됨
-  //     console.log("Mute : ", data);
-  //   };
-  //   socket.on("chat_mute", ChatMute);
+  useEffect(() => {
+    const ChatMute = (data: IChatMute) => {
+      console.log("Mute : ", data);
+      // console로 값 확인 후 아래
+      // emit - roomId 채팅에 있던 사람들한테 알림 쏴주기
+      // TODO : mute된 사람 전역? / useState
+    };
+    chatSocket.on("chat_mute", ChatMute);
 
-  //   return () => {
-  //     socket.off("chat_mute", ChatMute);
-  //   };
-  // });
+    return () => {
+      chatSocket.off("chat_mute", ChatMute);
+    };
+  });
 
   const Mute = () => {
     chatSocket.emit(
@@ -137,8 +158,8 @@ export default function Member({
 
   useEffect(() => {
     const ChatKick = (data: IChatKick) => {
-      setShowAlert(true);
-      setString(strings[3]);
+      console.log("ChatKick ", data);
+      roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
     };
     chatSocket.on("chat_kick", ChatKick);
 
@@ -155,23 +176,43 @@ export default function Member({
         targetNickname: person.nickname,
         targetIdx: person.userIdx,
       }),
-      (data: any) => {
-        // 아직 안정해짐
-        console.log("data : ", data);
+      (ret: string | number) => {
+        console.log("ret : ", ret);
+        // if (ret === 200) {
+        // setShowAlert(true);
+        // setString(strings[3]);
       }
     );
-    // }), (statusCode : number) => {
-    // if (statusCode === 200) {
-
-    // setShowAlert(true);
-    // setString(strings[3]);
-    // }
   };
 
+  useEffect(() => {
+    const ChatBan = (data: IChatKick) => {
+      console.log("ChatBan : ", data);
+      roomDispatch({ type: "SET_CUR_MEM", value: data.leftMember });
+    };
+    chatSocket.on("chat_kick", ChatBan);
+
+    return () => {
+      chatSocket.off("chat_kick", ChatBan);
+    };
+  }, []);
+
   const Ban = () => {
-    // socket.emit("chat_ban");
-    setShowAlert(true);
-    setString(strings[4]);
+    chatSocket.emit(
+      "chat_ban",
+      JSON.stringify({
+        channelIdx: roomState.currentRoom?.channelIdx,
+        targetNickname: person.nickname,
+        targetIdx: person.userIdx,
+      }),
+      (ret: string | number) => {
+        console.log("Ban : ", ret);
+        if (ret === 200) {
+          setShowAlert(true);
+          setString(strings[4]);
+        }
+      }
+    );
   };
 
   return (
@@ -180,11 +221,12 @@ export default function Member({
         key={idx}
         className="membtn"
         onClick={handleOpenModal}
-        onContextMenu={(e) =>
-          authorization === (Permission.ADMIN || Permission.OWNER)
+        onContextMenu={(e) => {
+          userState.nickname !== person.nickname &&
+          person.nickname !== roomState.currentRoom!.owner
             ? handleOpenMenu(e)
-            : e.preventDefault()
-        }
+            : e.preventDefault();
+        }}
       >
         <div className="memimg">
           <Image src="/seal.png" alt="profile" width={53} height={53} />
@@ -192,14 +234,18 @@ export default function Member({
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
-          {/* {person.permission === Permission.OWNER ? (
-              <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
-            ) : null}
-            {person.permission === Permission.ADMIN ? (
-              <StarOutlineRoundedIcon
-                sx={{ height: "15px", color: "yellow" }}
-              />
-            ) : null} */}
+          {person.nickname === roomState.currentRoom?.owner ? (
+            <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
+          ) : (
+            roomState.adminAry.map((admin, idx) => {
+              return admin.nickname === person.nickname ? (
+                <StarOutlineRoundedIcon
+                  key={idx}
+                  sx={{ height: "15px", color: "yellow" }}
+                />
+              ) : null;
+            })
+          )}
         </div>
       </div>
       <Menu
@@ -207,9 +253,11 @@ export default function Member({
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
       >
-        <MenuItem onClick={SetAdmin}>
-          {admin ? "Unset Admin" : "Set Admin"}
-        </MenuItem>
+        {isAdmin ? null : (
+          <MenuItem onClick={SetAdmin}>
+            {isAuthorized ? "Unset Admin" : "Set Admin"}
+          </MenuItem>
+        )}
         <MenuItem onClick={Mute}>Mute</MenuItem>
         <MenuItem onClick={Kick}>Kick</MenuItem>
         <MenuItem onClick={Ban}>Ban</MenuItem>

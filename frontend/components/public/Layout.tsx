@@ -16,66 +16,13 @@ import { useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { chatSocket } from "@/app/page";
 import { useFriend } from "@/context/FriendContext";
-
-export const main = {
-  main0: "#67DBFB",
-  main1: "#55B7EB",
-  main2: "#4292DA",
-  main3: "#2C70DD",
-  main4: "#265ECF",
-  main5: "#214C97",
-  main6: "#183C77",
-  main7: "#48a0ed",
-  main8: "#64D9F9",
-};
-
-export enum Permission {
-  OWNER = "owner",
-  ADMIN = "admin",
-  MEMBER = "member",
-}
-
-export enum Mode {
-  PRIVATE = "private",
-  PUBLIC = "public",
-  PROTECTED = "protected",
-}
-
-export interface IChatRoom {
-  channelIdx: number;
-  owner: string;
-  mode: Mode;
-}
-
-interface IFriend {
-  friendNickname: string;
-  isOnline: boolean;
-}
-
-interface IBlock {
-  targetNickname: string;
-  targetIdx: number;
-}
-
-interface IUserObject {
-  imgUri: string;
-  nickname: string;
-  userIdx: number;
-}
-interface IMaindata {
-  channelList: IChatRoom[];
-  friendList: IFriend[];
-  blockList: IBlock[];
-  userObject: IUserObject;
-}
+import { IMaindata } from "@/type/type";
 
 const Layout = () => {
   const { authState } = useAuth();
   const { roomState, roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
-
-  useRequireAuth();
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
@@ -100,25 +47,18 @@ const Layout = () => {
   //미세한 찰나일 것임.!
 
   useEffect(() => {
-    if (authState.isLoggedIn) {
+    if (localStorage.getItem("loggedIn")) {
+      console.log(userState.nickname);
       chatSocket.emit(
         "main_enter",
-        JSON.stringify({ intra: "hoslim" }),
-        () => {}
+        JSON.stringify({ intra: localStorage.getItem("intra") }),
+        (ret: number) => {
+          if (ret === 200) {
+          }
+        }
       );
     }
-  }, [authState.isLoggedIn]);
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     chatSocket.emit("main_enter", "intra_id", 상태코드);
-  //   }
-  // }, [isLoggedIn]);
-
-  // chatSocket.io로 mock data 받았다고 가정했을때.
-  // useEffect(() => {
-  //   setRooms({ type: "main-enter", payload: mockChatRoomList0 });
-  // }, []);
-  // chatSocket 부분 다 주석처리하고, 이 부분 주석해제하면 웹페이지 정상적으로 띄워짐
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>

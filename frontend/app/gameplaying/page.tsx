@@ -3,7 +3,7 @@
 import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 
 import { useRouter } from "next/navigation";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useEffect, useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
 import { useGame } from "@/context/GameContext";
@@ -31,12 +31,12 @@ const GamePlaying = () => {
     };
 
     const preventRefresh = (e: KeyboardEvent) => {
+      e.preventDefault();
       if (
         e.key === "F5" ||
-        (e.ctrlKey === true && e.key === "r") ||
-        (e.metaKey === true && e.key === "r")
+        ((e.ctrlKey === true || e.metaKey === true) && e.key === "r")
       ) {
-        e.preventDefault();
+        console.log("새로고침");
         toggle2();
         return false;
       }
@@ -79,7 +79,7 @@ const GamePlaying = () => {
     };
   }, []);
 
-  if (!client) return <div>로딩중</div>;
+  if (!client) return <></>;
 
   return (
     <>

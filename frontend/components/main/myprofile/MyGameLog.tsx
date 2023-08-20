@@ -6,7 +6,7 @@ import { Card } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
 
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 const TOTAL_PAGES = 100;
 
 const options = {
