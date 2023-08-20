@@ -8,17 +8,18 @@ import { Box } from "@mui/material";
 import { useRoom } from "@/context/RoomContext";
 import { useEffect, useState } from "react";
 
-interface IChat {
-  channelIdx: number;
-  senderIdx: number;
+export interface IChat {
+  channelIdx: number | undefined;
+  senderIdx: number | undefined;
   msg: string;
-  msgDate: Date;
+  msgDate: string;
 }
 
 const ChatWindow = () => {
-  const { roomState, roomDispatch } = useRoom();
+  const { roomState } = useRoom();
   const [msgs, setMsgs] = useState<IChat[]>([]);
 
+  // 방전환시 채팅내역 초기화
   useEffect(() => {
     setMsgs([]);
   }, [roomState.currentRoom]);
@@ -28,7 +29,7 @@ const ChatWindow = () => {
       {roomState.isOpen ? (
         <>
           <RoomTitleField setMsgs={setMsgs} />
-          <ChatField msgs={msgs} />
+          <ChatField msgs={msgs} setMsgs={setMsgs} />
           <BottomField setMsgs={setMsgs} />
         </>
       ) : (
