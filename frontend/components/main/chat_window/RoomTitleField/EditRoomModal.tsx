@@ -1,7 +1,8 @@
 "use client";
 
 import "@/components/main/room_list/RoomList.css";
-import { IChatRoom, useRoom } from "@/context/RoomContext";
+import { useRoom } from "@/context/RoomContext";
+import { IChatRoom } from "@/type/type";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { socket } from "@/app/page";
@@ -53,7 +54,7 @@ export default function EditRoomModal({ prop }: { prop: () => void }) {
 
     return () => {
       socket.off("BR_chat_room_password", roomSettingHandler);
-    }
+    };
   });
 
   return (
