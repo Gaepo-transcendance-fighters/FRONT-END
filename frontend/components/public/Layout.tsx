@@ -48,12 +48,6 @@ const Layout = () => {
 
   useEffect(() => {
     if (localStorage.getItem("loggedIn")) {
-<<<<<<< HEAD
-      socket.emit(
-        "main_enter",
-        JSON.stringify({ intra: localStorage.getItem("intra") }),
-        () => {}
-=======
       console.log(userState.nickname);
       socket.emit(
         "main_enter",
@@ -62,7 +56,6 @@ const Layout = () => {
           if (ret === 200) {
           }
         }
->>>>>>> origin
       );
     }
   }, []);

@@ -41,7 +41,7 @@ interface GameRecord {
 
 const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
-  const [pageNum, setPageNum] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
 
   const [chats, setChats] = useState<ChatMessage[]>([]);
   const [gameRecord, setGameReGameRecord] = useState<GameRecord[]>([]);
@@ -72,21 +72,29 @@ const MyGameLog = () => {
 
   // /game/records/userIdx={userIdx}&page={page}
   const callUser = useCallback(async () => {
+    const id = localStorage.getItem("idx");
+    console.log("id : " + id);
     await axios
       .get(
-        "http://localhost:4000/game/records/userIdx=${userState.userIdx}&page=${pageNum}"
+        `http://localhost:4000/game/records/?userIdx=${id}&page=${pageNum}`
       )
       // haryu's server
       //   .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       .then((res) => {
-        const newData = Array.isArray(res.data) ? res.data : [res.data];
+        console.log(res.data);
+        // const newData = Array.isArray(res.data) ? res.data : [res.data];
+        const newData = res.data.gameList;
 
         // setChats((prevChats) => [...prevChats, ...newData]);
-        setChats((prevRecord) => [...prevRecord, ...newData]);
+        console.log(newData);
+        setGameReGameRecord((prevRecord) => {
+          return [...prevRecord, ...newData];
+        });
+        console.log(gameRecord);
 
         setLoading(false);
       });
-  }, [pageNum]);
+  }, [pageNum, chats]);
 
   useEffect(() => {
     if (pageNum <= TOTAL_PAGES) {
@@ -143,6 +151,8 @@ const MyGameLog = () => {
                   height: "80%",
                 }}
               >
+                <Typography variant="h6">{gameRecord.matchUserNickname}</Typography>
+                <Typography variant="h6">{gameRecord.score}</Typography>
                 <Typography variant="h6">{gameRecord.type}</Typography>
               </Card>
             </div>
