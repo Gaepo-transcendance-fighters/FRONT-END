@@ -36,10 +36,11 @@ const SecondAuth = () => {
     const response = await axios({
       method: "POST",
       url: `http://localhost:4000/users/second`,
-      data: JSON.stringify({
+      data: {
         userIdx: localStorage.getItem("idx"),
+        // userIdx: Number(localStorage.getItem("idx")),
         email: localStorage.getItem("email"),
-      }),
+      },
     });
     if (response.status == 200) setBlock(true);
     else console.log("재시도필요");
@@ -51,10 +52,10 @@ const SecondAuth = () => {
     const response = await axios({
       method: "PATCH",
       url: `http://localhost:4000/users/second`,
-      data: JSON.stringify({
+      data: {
         userIdx: localStorage.getItem("idx"),
         code: inputnumber,
-      }),
+      },
     });
     if (response.status == 200) console.log("sucess in check 2 auth");
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
