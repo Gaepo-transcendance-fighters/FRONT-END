@@ -47,7 +47,10 @@ export default function Member({
   ];
 
   const handleOpenModal = () => {
-    setOpenModal(true);
+    // setOpenModal(true);
+    userState.nickname === person.nickname
+      ? setOpenModal(false)
+      : setOpenModal(true);
   };
 
   // useEffect(() => {
@@ -68,8 +71,7 @@ export default function Member({
   }; // TODO : isOwner 사용한다음엔 false로 설정하기
 
   useEffect(() => {
-    if (roomState.currentRoom?.owner === userState.nickname)
-      setIsOwner(true);
+    if (roomState.currentRoom?.owner === userState.nickname) setIsOwner(true);
     roomState.adminAry.map((adminElement) => {
       return adminElement.nickname === userState.nickname
         ? setIsAdmin(true)
@@ -162,16 +164,17 @@ export default function Member({
   useEffect(() => {
     const ChatKick = (data: IChatKick) => {
       if (data.targetNickname === userState.nickname) {
-        roomDispatch({type: "SET_CUR_ROOM", value: null})
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
         return;
       }
       console.log("ChatKick ", data);
       const list: IMember[] = data.leftMember.map((mem: ILeftMember) => {
         return {
-        nickname: mem.userNickname,
-        userIdx: mem.userIdx,
-        imgUri: mem.imgUri,
-    }})
+          nickname: mem.userNickname,
+          userIdx: mem.userIdx,
+          imgUri: mem.imgUri,
+        };
+      });
       roomDispatch({ type: "SET_CUR_MEM", value: list });
     };
     socket.on("chat_kick", ChatKick);
@@ -201,17 +204,18 @@ export default function Member({
   useEffect(() => {
     const ChatBan = (data: IChatKick) => {
       if (data.targetNickname === userState.nickname) {
-        roomDispatch({type: "SET_CUR_ROOM", value: null})
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
         return;
       }
-      console.log("ban", data)
+      console.log("ban", data);
       const list: IMember[] = data.leftMember.map((mem: ILeftMember) => {
         return {
-        nickname: mem.userNickname,
-        userIdx: mem.userIdx,
-        imgUri: mem.imgUri,
-    }})
-      
+          nickname: mem.userNickname,
+          userIdx: mem.userIdx,
+          imgUri: mem.imgUri,
+        };
+      });
+
       roomDispatch({ type: "SET_CUR_MEM", value: list });
     };
     socket.on("chat_ban", ChatBan);

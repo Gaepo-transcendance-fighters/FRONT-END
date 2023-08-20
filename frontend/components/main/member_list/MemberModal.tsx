@@ -50,12 +50,16 @@ export default function MemberModal({
   const { friendState } = useFriend();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [curFriend, setCurFriend] = useState<IFriend | null>(null);
-  const { roomState, roomDispatch} = useRoom()
+  const { roomState, roomDispatch } = useRoom();
 
   useEffect(() => {
-    friendState.friendList.map((friend) => {
-      friend.friendNickname === person.nickname ? setCurFriend(friend) : null;
+    setCurFriend({
+      friendNickname: person.nickname!,
+      isOnline: true,
     });
+    // friendState.friendList.map((friend) => {
+    //   friend.friendNickname === person.nickname ? setCurFriend(friend) : null;
+    // });
   }, []);
 
   const handleCloseModal = () => {
@@ -71,24 +75,25 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    socket.on("check_dm", (payload : IChatDmEnter) => {
-      
-    })
-    socket.on("create_dm", () => {})
-    return (() => {
-      socket.off("check_dm", ()=>{})
-      socket.off("create_dm", () => {})
-    })
-  }, [])
+    socket.on("check_dm", (payload: IChatDmEnter) => {});
+    socket.on("create_dm", () => {});
+    return () => {
+      socket.off("check_dm", () => {});
+      socket.off("create_dm", () => {});
+    };
+  }, []);
 
   const sendDM = () => {
-    socket.emit("check_dm", {targetNickname: person.nickname, targetIdx: person.userIdx}, (res: number) => {
-      if (res === 200) return ;
-      else if (res !== 200) {
-        
+    socket.emit(
+      "check_dm",
+      { targetNickname: person.nickname, targetIdx: person.userIdx },
+      (res: number) => {
+        if (res === 200) return;
+        else if (res !== 200) {
+        }
       }
-    })
-  }
+    );
+  };
 
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
