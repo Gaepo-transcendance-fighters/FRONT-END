@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
-import { IChatRoom, useRoom } from "@/context/RoomContext";
+import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
+import { IChatRoom } from "@/type/type";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();
@@ -12,8 +13,8 @@ export default function RoomTypeButton() {
   const { userState } = useUser();
 
   useEffect(() => {
-    const ChatGetDmRoomList = (json?: IChatRoom[]) => {
-      json ? roomDispatch({ type: "SET_DM_ROOMS", value: json }) : null;
+    const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
+      payload ? roomDispatch({ type: "SET_DM_ROOMS", value: payload }) : null;
     };
     socket.on("chat_get_DMList", ChatGetDmRoomList);
 
@@ -27,8 +28,10 @@ export default function RoomTypeButton() {
   };
 
   useEffect(() => {
-    const ChatGetRoomList = (json?: IChatRoom[]) => {
-      json ? roomDispatch({ type: "SET_NON_DM_ROOMS", value: json }) : null;
+    const ChatGetRoomList = (payload?: IChatRoom[]) => {
+      payload
+        ? roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload })
+        : null;
     };
     socket.on("chat_get_roomList", ChatGetRoomList);
 
@@ -38,7 +41,7 @@ export default function RoomTypeButton() {
   }, []);
 
   const NonDmBtnClick = () => {
-    socket.emit("chat_get_roomList", (status_code: number) => {});
+    socket.emit("chat_get_roomList", (ret: number) => {});
     OnClick(true);
   };
 
@@ -49,9 +52,8 @@ export default function RoomTypeButton() {
         userNickname: userState.nickname,
         userIdx: userState.userIdx,
       }),
-      (status_code: any) => {
-        // 아직 안 정해짐
-        console.log(status_code);
+      (ret: number) => {
+        console.log(ret);
       }
     );
     OnClick(false);

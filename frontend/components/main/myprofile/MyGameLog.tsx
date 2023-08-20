@@ -6,7 +6,7 @@ import { Card } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
 
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 const TOTAL_PAGES = 100;
 
 const options = {
@@ -48,7 +48,10 @@ const MyGameLog = () => {
 
   const callUser = useCallback(async () => {
     await axios
+	// dev original
       .get(`http://localhost:4000/chat/messages?channelIdx=1&index=${pageNum}`)
+	// haryu's server
+    //   .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setChats((prevChats) => [...prevChats, ...newData]);

@@ -3,8 +3,11 @@
 import Layout from "@/components/public/Layout";
 import { io } from "socket.io-client";
 
-const userId = 98029;
+const userId =
+  typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 export const socket = io("http://localhost:4000/chat", {
+// haryu's server
+// export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
   query: { userId: userId },
 }); 
 
