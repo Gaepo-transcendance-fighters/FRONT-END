@@ -8,6 +8,7 @@ import { RoomProvider } from "@/context/RoomContext";
 import { FriendProvide } from "@/context/FriendContext";
 import { GameProvider } from "@/context/GameContext";
 import { UserProvider } from "@/context/UserContext";
+import { InitMsgProvider } from "@/context/InitMsgContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,20 +36,22 @@ export default function RootLayout({
           <GameProvider>
             <RoomProvider>
               <FriendProvide>
-                <html lang="en">
-                  <body className={inter.className}>
-                    <div
-                      style={{
-                        backgroundImage: `url("/background.png")`,
-                        width: "100%",
-                        backgroundRepeat: "repeat",
-                        height: "100vh",
-                      }}
-                    >
-                      {children}
-                    </div>
-                  </body>
-                </html>
+                <InitMsgProvider>
+                  <html lang="en">
+                    <body className={inter.className}>
+                      <div
+                        style={{
+                          backgroundImage: `url("/background.png")`,
+                          width: "100%",
+                          backgroundRepeat: "repeat",
+                          height: "100vh",
+                        }}
+                      >
+                        {children}
+                      </div>
+                    </body>
+                  </html>
+                </InitMsgProvider>
               </FriendProvide>
             </RoomProvider>
           </GameProvider>

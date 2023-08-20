@@ -17,6 +17,7 @@ import {
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";
+import { useInitMsg } from "@/context/InitMsgContext";
 
 export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [newMem, setNewMem] = useState("");
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
+  const { initMsgDispatch } = useInitMsg();
 
   useEffect(() => {
     const ChatEnterNoti = (data: IChatEnterNoti) => {
@@ -78,27 +80,27 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       socket.off("chat_enter", ChatEnter);
     };
   }, []);
-  
-  // DmChat과 합침
-  // useEffect(() => {
-  //   const ChatDmEnter = (json: IChatDmEnter) => {
-  //     roomDispatch({
-  //       type: "SET_CUR_DM_MEM",
-  //       value: {
-  //         userIdx1: json.userIdx1,
-  //         userIdx2: json.userIdx2,
-  //         userNickname1: json.userNickname1,
-  //         userNickname2: json.userNickname2,
-  //         imgUrl: json.imgUrl,
-  //       },
-  //     });
-  //   };
-  //   socket.on("check_dm", ChatDmEnter);
 
-  //   return () => {
-  //     socket.off("check_dm", ChatDmEnter);
-  //   };
-  // }, []);
+  useEffect(() => {
+    const ChatDmEnter = (json: IChatDmEnter) => {
+      roomDispatch({
+        type: "SET_CUR_DM_MEM",
+        value: {
+          userIdx1: json.userIdx1,
+          userIdx2: json.userIdx2,
+          userNickname1: json.userNickname1,
+          userNickname2: json.userNickname2,
+          imgUrl: json.imgUrl,
+        },
+      });
+      initMsgDispatch({ type: "SET_INIT_MSG", value: json });
+    };
+    socket.on("chat_get_DM", ChatDmEnter);
+
+    return () => {
+      socket.off("chat_get_DM", ChatDmEnter);
+    };
+  }, []);
 
   useEffect(() => {
     const NoMember = (payload: IChatRoom[]) => {
