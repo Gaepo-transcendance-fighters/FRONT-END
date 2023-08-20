@@ -78,8 +78,6 @@ export const useRoom = () => {
 export const RoomProvider = ({ children }: { children: ReactNode }) => {
   const [roomState, roomDispatch] = useReducer(RoomReducer, initialState);
 
-  useEffect(() => {}, []);
-
   return (
     <RoomContext.Provider value={{ roomState, roomDispatch }}>
       {children}
