@@ -51,7 +51,7 @@ const Auth = () => {
           console.log("data : ", data);
           localStorage.setItem("loggedIn", "true");
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
-          // localStorage.setItem("token", data.jwt);
+          localStorage.setItem("imgUri", data.imgUri);
           localStorage.setItem("intra", data.intra);
           localStorage.setItem("idx", data.userIdx.toString());
           localStorage.setItem("email", data.email); // <- 0820 21시 30분경 추가
