@@ -32,7 +32,7 @@ type AuthAction =
 
 const initialState: AuthContextData = {
   isLoggedIn: false,
-  id: 135489,
+  id: 0,
   nickname: "",
   imgUrl: "",
   blockList: null,
