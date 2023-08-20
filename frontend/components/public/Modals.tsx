@@ -9,7 +9,7 @@ import {
   Button,
 } from "@mui/material";
 import { createPortal } from "react-dom";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 
 const modalStyle = {

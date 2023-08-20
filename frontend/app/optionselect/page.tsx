@@ -48,7 +48,7 @@ interface IGameOption {
 
 // export const gameSocket = io("http://localhost:4000/game", {
 const userId =
-  typeof window !== "undefined" ? localStorage.getItem("userIdx") : null;
+  typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 
 export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
   query: { userId: userId },
@@ -57,7 +57,7 @@ export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
 const OptionSelect = () => {
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
-  const { authState } = useAuth();
+  const { authState, authDispatch } = useAuth();
   const [client, setClient] = useState(false);
 
   const [selectedSpeedOption, setSelectedSpeedOption] = useState<SpeedOption>(
@@ -103,33 +103,38 @@ const OptionSelect = () => {
   }, [countdown]);
 
   const cntRedir = () => {
-    if (!gameSocket) return;
+    if (!gameSocket || !userId) return;
     gameDispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
+    authDispatch({type: "SET_ID", value: parseInt(userId)})
+
+    console.log(authState.id)
+    console.log(userId)
 
     gameSocket.emit(
       "game_option",
       {
         gameType: gameState.gameMode,
-        userIdx: authState.id,
+        userIdx: userId,
         speed: selectedSpeedOption,
         mapNumber: selectedMapOption,
       },
-      (res: { code: string; msg: string }) => {
+      (res: { code: number; msg: string }) => {
         console.log(res);
-        if (res.code === "200") {
+        if (res.code === 200) {
           console.log("queue regist start");
           console.log(authState.id);
           console.log(Date.now());
+          
           gameSocket.emit(
             "game_queue_regist",
             {
-              userIdx: authState.id,
+              userIdx: userId,
               queueDate: Date.now(),
             },
-            (res: { code: string; msg: string }) => {
+            (res: { code: number; msg: string }) => {
               console.log(res);
-              if (res.code === "200") {
+              if (res.code === 200) {
                 setTimeout(() => {
                   router.replace("./inwaiting");
                 }, 300);
