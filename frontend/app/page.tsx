@@ -1,6 +1,7 @@
 "use client";
 
 import Layout from "@/components/public/Layout";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
@@ -20,6 +21,7 @@ const Page = () => {
   const param = useSearchParams();
   const router = useRouter();
   const [client, setClient] = useState(false);
+  const { authDispatch } = useAuth();
 
   useEffect(() => {
     if (param.get("from") === "game") {
@@ -37,6 +39,8 @@ const Page = () => {
 
   useEffect(() => {
     setClient(true);
+    if (!userId) return;
+    authDispatch({ type: "SET_ID", value: parseInt(userId) });
   }, []);
 
   if (!client) return <></>;
