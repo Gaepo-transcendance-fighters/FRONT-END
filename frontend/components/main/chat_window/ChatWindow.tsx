@@ -11,18 +11,30 @@ import { useEffect, useState } from "react";
 export interface IChat {
   channelIdx: number | undefined;
   senderIdx: number | undefined;
+  sender?: string;
   msg: string;
   msgDate: string;
 }
 
 const ChatWindow = () => {
   const { roomState } = useRoom();
+  const [prevRoom, setPrevRoom] = useState(0);
   const [msgs, setMsgs] = useState<IChat[]>([]);
 
   // 방전환시 채팅내역 초기화
   useEffect(() => {
-    setMsgs([]);
-  }, [roomState.currentRoom]);
+    console.log("!!!", roomState.currentRoom?.channelIdx);
+    if (!roomState.currentRoom?.channelIdx) return;
+    console.log("prev", prevRoom);
+    console.log("channel", roomState.currentRoom.channelIdx);
+    if (!roomState.currentRoom) setMsgs([]);
+    // else if (roomState.currentRoom.channelIdx !== prevRoom) setMsgs([]);
+    setPrevRoom(roomState.currentRoom?.channelIdx);
+  }, [roomState.currentRoom?.channelIdx]);
+
+  useEffect(() => {
+    console.log("chatwindow", msgs);
+  }, [msgs]);
 
   return (
     <Box sx={{ margin: "0", padding: "0", height: "60vh", minWidth: "300px" }}>

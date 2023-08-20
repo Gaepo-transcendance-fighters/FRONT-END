@@ -37,7 +37,7 @@ const ChatField = ({ msgs, setMsgs }: Props) => {
             >
               {
                 <Typography variant="h6">
-                  {value.senderIdx + ": " + value.msg}
+                  {value.sender + ": " + value.msg}
                 </Typography>
               }
             </li>

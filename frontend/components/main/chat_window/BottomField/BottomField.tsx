@@ -32,13 +32,34 @@ const BottomField = ({ setMsgs }: Props) => {
   };
 
   useEffect(() => {
-    const messageHandler = (chat: IChat) => {
-      // console.log("서버로부터 내가보낸 메세지 수신");
-      // console.log("chat", chat);
+    const messageHandler = (chatFromServer: IChat) => {
       if (roomState.currentRoom?.mode === "private") {
+        const chat = {
+          channelIdx: chatFromServer.channelIdx,
+          senderIdx: chatFromServer.sender === roomState.currentDmRoomMemberList?.userIdx1
+            ? roomState.currentDmRoomMemberList?.userIdx1
+            : roomState.currentDmRoomMemberList?.userIdx2,
+          sender: chatFromServer.sender,
+          msg: chatFromServer.msg,
+          msgDate: chatFromServer.msgDate, }
         setMsgs((prevChats: any) => [chat, ...prevChats]); // <----- any type 나중 변경 필요.
+        console.log("[BottomField]디엠에서 메세지 보낼때 내가 state에 붙여주는 낱개의 메시지");
+        console.log(chat);
       } else {
-        setMsgs((prevChats: any) => [...prevChats, chat]); // <----- any type 나중 변경 필요.
+        const result = roomState.currentRoomMemberList.find(person => person.userIdx === chatFromServer.senderIdx)
+        if (result?.nickname) {
+          const chat = {
+            channelIdx: chatFromServer.channelIdx,
+            senderIdx: chatFromServer.senderIdx,
+            sender: result?.nickname,
+            msg: chatFromServer.msg,
+            msgDate: chatFromServer.msgDate, 
+          }
+          setMsgs((prevChats: any) => [...prevChats, chat]); // <----- any type 나중 변경 필요.
+        }
+        else {
+          console.log("[ERROR] there aren't nickname from data")
+        }
       }
       setMsg("");
     };
@@ -64,7 +85,7 @@ const BottomField = ({ setMsgs }: Props) => {
       ) {
         payload = {
           channelIdx: roomState.currentRoom?.channelIdx,
-          senderIdx: 98029, // <-====================== 나중에 변경필요
+          senderIdx: userState.userIdx,
           msg: msg,
           targetIdx:
             userState.userIdx === roomState.currentDmRoomMemberList?.userIdx1
@@ -79,7 +100,7 @@ const BottomField = ({ setMsgs }: Props) => {
       ) {
         payload = {
           channelIdx: roomState.currentRoom?.channelIdx,
-          senderIdx: 98029, // <-====================== 나중에 변경필요
+          senderIdx: userState.userIdx,
           msg: msg,
           targetIdx:
             userState.userIdx === roomState.currentDmRoomMemberList?.userIdx1
