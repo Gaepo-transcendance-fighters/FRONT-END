@@ -17,7 +17,12 @@ import {
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";
+import { IMember } from "@/type/type";
 import { useInitMsg } from "@/context/InitMsgContext";
+
+export interface ILeftMember {
+  userNickname: string, userIdx: number, imgUri: string
+}
 
 export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -28,17 +33,56 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const { userState } = useUser();
   const { initMsgDispatch } = useInitMsg();
 
+    // userIdx: number | undefined;
+    // nickname: string | undefined;
+    // imgUri: string | undefined;
+    // permission?: Permission | undefined;
+
+  useEffect(() => {
+    const ChatExitRoom = ({leftMember, owner}: {leftMember: ILeftMember[], owner: string}) => {
+      console.log("room", room)
+      console.log("owner", owner)
+      if (!leftMember){
+        roomDispatch({type: "SET_CUR_ROOM", value: null});
+        roomDispatch({type: "SET_IS_OPEN", value: false})
+        // window.alert("너 킥 당함"); // TODO : 서버에서 다섯번 보냄? 왜?
+        return ;
+      }
+      const list: IMember[] = leftMember.map((mem: ILeftMember) => {
+        return {
+        nickname: mem.userNickname,
+        userIdx: mem.userIdx,
+        imgUri: mem.imgUri,
+    }})
+    const newRoom: IChatRoom = {
+      owner: owner ? owner : room.owner,
+      channelIdx: roomState.currentRoom!.channelIdx,
+      mode: roomState.currentRoom!.mode,
+    }
+      roomDispatch({type: "SET_CUR_MEM", value: list})
+      roomDispatch({type: "SET_CUR_ROOM", value: newRoom})
+    };
+    socket.on("chat_room_exit", ChatExitRoom);
+
+    return () => {
+      socket.off("chat_room_exit", ChatExitRoom);
+    };
+  }, [roomState.currentRoom]);
+
   useEffect(() => {
     const ChatEnterNoti = (data: IChatEnterNoti) => {
+      // console.log("ChatEnterNoti ", data )
       setShowAlert(true);
       setNewMem(data.newMember);
+      roomDispatch({type: "SET_CUR_MEM", value: data.member})
+      roomDispatch({type: "SET_ADMIN_ARY", value: data.admin})
     };
     socket.on("chat_enter_noti", ChatEnterNoti);
 
     return () => {
       socket.off("chat_enter_noti", ChatEnterNoti);
     };
-  });
+  }, []);
 
   useEffect(() => {
     if (showAlert) {
@@ -82,18 +126,19 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   }, []);
 
   useEffect(() => {
-    const ChatDmEnter = (json: IChatDmEnter) => {
+    const ChatDmEnter = (payload: IChatDmEnter) => {
       roomDispatch({
         type: "SET_CUR_DM_MEM",
         value: {
-          userIdx1: json.userIdx1,
-          userIdx2: json.userIdx2,
-          userNickname1: json.userNickname1,
-          userNickname2: json.userNickname2,
-          imgUrl: json.imgUrl,
+          userIdx1: payload.userIdx1,
+          userIdx2: payload.userIdx2,
+          userNickname1: payload.userNickname1,
+          userNickname2: payload.userNickname2,
+          // channelIdx: payload.channelIdx,
+          imgUri: payload.imgUri,
         },
       });
-      initMsgDispatch({ type: "SET_INIT_MSG", value: json });
+      initMsgDispatch({ type: "SET_INIT_MSG", value: payload });
     };
     socket.on("chat_get_DM", ChatDmEnter);
 
@@ -115,6 +160,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const GoToLobby = (payload: IChatRoom[]) => {
+      console.log("GoToLobby ", payload);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
     socket.on("chat_goto_lobby", GoToLobby);
@@ -142,7 +188,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   };
 
   const RoomClick = (room: IChatRoom) => {
-    if (roomState.currentRoom != room) {
+    if (roomState.currentRoom?.channelIdx !== room.channelIdx) {
+      // TODO : 누른 버튼 색 다르게 해보기
       if (room.mode === Mode.PROTECTED) handleOpen();
       else if (room.mode === Mode.PRIVATE) {
         socket.emit(

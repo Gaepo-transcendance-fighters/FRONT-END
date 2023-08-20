@@ -43,10 +43,10 @@ const Chats = () => {
   const callUser = useCallback(async () => {
     console.log(pageNum);
     await axios
-	// dev original
+      // dev original
       .get(`http://localhost:4000/chat/messages?channelIdx=1&index=${pageNum}`)
-	// haryu's server
-    //   .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
+      // haryu's server
+      //   .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setChats((prevChats) => [...prevChats, ...newData]);
@@ -74,7 +74,7 @@ const Chats = () => {
           position: "sticky",
           margin: "1% 0% 1% 0%",
           padding: "2% 2% 0.5% 2%",
-          height: "36vh"
+          height: "36vh",
         }}
       >
         {chats.map((chats, i) => {
