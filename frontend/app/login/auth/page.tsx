@@ -55,6 +55,7 @@ const Auth = () => {
           localStorage.setItem("intra", data.intra);
           localStorage.setItem("idx", data.userIdx.toString());
           localStorage.setItem("email", data.email); // <- 0820 21시 30분경 추가
+          localStorage.setItem("check2Auth", data.check2Auth.toString());
           return router.push(`/`);
         }
       })
