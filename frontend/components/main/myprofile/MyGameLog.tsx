@@ -43,13 +43,10 @@ const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
 
-  const [chats, setChats] = useState<ChatMessage[]>([]);
-  const [gameRecord, setGameReGameRecord] = useState<GameRecord[]>([]);
+  const [gameRecord, setGameRecord] = useState<GameRecord[]>([]);
 
   const [lastElement, setLastElement] = useState<HTMLDivElement | null>(null);
-
   const { userState } = useUser();
-
   const observerTarget = useRef(null);
 
   useEffect(() => {
@@ -70,20 +67,16 @@ const MyGameLog = () => {
     };
   }, [observerTarget]);
 
-  // /game/records/userIdx={userIdx}&page={page}
   const callUser = useCallback(async () => {
     await axios
       .get(
-        "http://localhost:4000/game/records/userIdx=${userState.userIdx}&page=${pageNum}"
+        `http://localhost:4000/game/records/userIdx=${userState.userIdx}&page=${pageNum}`
       )
       // haryu's server
       //   .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
-
-        // setChats((prevChats) => [...prevChats, ...newData]);
-        setChats((prevRecord) => [...prevRecord, ...newData]);
-
+        setGameRecord((prevRecord) => [...prevRecord, ...newData]);
         setLoading(false);
       });
   }, [pageNum]);
@@ -111,13 +104,6 @@ const MyGameLog = () => {
           width: "100%",
         }}
       >
-        {/* interface ChatMessage {
-  channelIdx: number;
-  sender: string;
-  msg: string;
-} */}
-
-        {/* {chats.map((chats, i) => { */}
         {gameRecord.map((gameRecord, i) => {
           return (
             <div
@@ -129,7 +115,7 @@ const MyGameLog = () => {
                 margin: "0px 0 0 0",
                 color: "white",
                 width: "80%",
-                height: "100px",
+                height: "200px",
                 // backgroundColor: "#48a0ed",
                 backgroundColor: main.main1,
               }}
