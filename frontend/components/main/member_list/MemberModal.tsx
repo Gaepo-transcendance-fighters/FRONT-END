@@ -14,8 +14,10 @@ import {
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
-import { IMember } from "@/type/type";
+import { IChatDmEnter, IMember } from "@/type/type";
 import { useFriend } from "@/context/FriendContext";
+import { useRoom } from "@/context/RoomContext";
+import { socket } from "@/app/page";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -44,14 +46,20 @@ export default function MemberModal({
   openModal: boolean;
   person: IMember;
 }) {
+  // console.log("MemberModal : ", person);
   const { friendState } = useFriend();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [curFriend, setCurFriend] = useState<IFriend | null>(null);
+  const { roomState, roomDispatch } = useRoom();
 
   useEffect(() => {
-    friendState.friendList.map((friend) => {
-      friend.friendNickname === person.nickname ? setCurFriend(friend) : null;
+    setCurFriend({
+      friendNickname: person.nickname!,
+      isOnline: true,
     });
+    // friendState.friendList.map((friend) => {
+    //   friend.friendNickname === person.nickname ? setCurFriend(friend) : null;
+    // });
   }, []);
 
   const handleCloseModal = () => {
@@ -64,6 +72,27 @@ export default function MemberModal({
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
+  };
+
+  useEffect(() => {
+    socket.on("check_dm", (payload: IChatDmEnter) => {});
+    socket.on("create_dm", () => {});
+    return () => {
+      socket.off("check_dm", () => {});
+      socket.off("create_dm", () => {});
+    };
+  }, []);
+
+  const sendDM = () => {
+    socket.emit(
+      "check_dm",
+      { targetNickname: person.nickname, targetIdx: person.userIdx },
+      (res: number) => {
+        if (res === 200) return;
+        else if (res !== 200) {
+        }
+      }
+    );
   };
 
   return (
@@ -121,6 +150,7 @@ export default function MemberModal({
                 type="button"
                 sx={{ minWidth: "max-content" }}
                 variant="contained"
+                onClick={sendDM}
               >
                 DM
               </Button>

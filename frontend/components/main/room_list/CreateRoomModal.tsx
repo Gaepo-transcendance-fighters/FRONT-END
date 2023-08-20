@@ -5,7 +5,7 @@ import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom, Permission } from "@/type/type";
+import { IChatRoom, Mode, Permission } from "@/type/type";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 
@@ -30,7 +30,7 @@ export default function CreateRoomModal({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [value, setValue] = useState("");
-  const { roomDispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
 
   const handleClose = () => {
@@ -38,9 +38,41 @@ export default function CreateRoomModal({
     setOpen(false);
   };
 
+
+  
   useEffect(() => {
     const ChatCreateRoom = (data: IChatRoom) => {
       roomDispatch({ type: "ADD_ROOM", value: data });
+      if (data.owner !== userState.nickname)
+        return ;
+      if (
+        roomState.currentRoom &&
+        roomState.currentRoom.mode !== Mode.PRIVATE
+      ) {
+        socket.emit(
+          "chat_goto_lobby",
+          JSON.stringify({
+            channelIdx: roomState.currentRoom.channelIdx,
+            userIdx: userState.userIdx,
+          }),
+          (ret: number | string) => {
+            console.log("chat_goto_lobby ret : ", ret);
+          }
+        );
+      }
+      roomDispatch({ type: "SET_CUR_ROOM", value: data });
+      roomDispatch({ type: "SET_IS_OPEN", value: true });
+      roomDispatch({
+        type: "SET_CUR_MEM",
+        value: [
+          {
+            userIdx: userState.userIdx,
+            nickname: userState.nickname,
+            imgUri: userState.imgUri,
+            permission: Permission.OWNER,
+          },
+        ],
+      });
       setValue("");
       setOpen(false);
     };
@@ -49,7 +81,7 @@ export default function CreateRoomModal({
     return () => {
       socket.off("BR_chat_create_room", ChatCreateRoom);
     };
-  }, []);
+  }, [userState.userIdx, roomState.currentRoom]);
 
   const OnClick = () => {
     socket.emit(

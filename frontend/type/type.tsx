@@ -1,5 +1,7 @@
 "use client";
 
+import { ILeftMember } from "@/components/main/room_list/Room";
+
 export const main = {
   main0: "#67DBFB",
   main1: "#55B7EB",
@@ -84,6 +86,7 @@ export interface IChatEnter {
 export interface IChatEnterNoti {
   member: IMember[];
   newMember: string;
+  admin : { nickname: string }[];
 }
 
 export interface IChatRoomAdmin {
@@ -99,12 +102,16 @@ export interface IChatGetRoom {
   mode: Mode;
 }
 
+export interface IChatRoomExit {
+    leftMember : IMember[];
+    owner : string
+}
+
 export interface IChatGetRoomList {
   channels: IChatRoom[];
 }
 
 export interface IChatMute {
-  // emit - roomId
   targetNickname: string;
   targetIdx: number;
   mute: boolean;
@@ -113,7 +120,8 @@ export interface IChatMute {
 export interface IChatKick {
   targetNickname: string;
   targetIdx: number;
-  leftMember: IMember[];
+  leftMember: ILeftMember[];
+  // leftMember: IMember[];
 }
 
 export interface IDmMemList {
@@ -121,7 +129,8 @@ export interface IDmMemList {
   userIdx2: number;
   userNickname1: string;
   userNickname2: string;
-  imgUrl: string;
+  // channelIdx: number;
+  imgUri: string;
 }
 
 export interface IChatDmEnter {
@@ -139,14 +148,15 @@ export interface IChatDmEnter {
   userIdx2: number;
   userNickname1: string;
   userNickname2: string;
-  imgUrl: string;
+  // channelIdx: number;
+  imgUri: string;
 }
 
 export const alert = {
   position: "absolute" as "absolute",
-  top: "100%",
-  left: "50%",
-  transform: "translate(-50%, -100%)",
+  top: "90%",
+  right: "2%",
+  fontSize: "16px",
 };
 
 export const lock = {
