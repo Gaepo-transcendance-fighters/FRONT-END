@@ -8,15 +8,7 @@ import { useGame, resetGameContextData } from "@/context/GameContext";
 import { gameSocket } from "@/app/optionselect/page";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-
-interface ICor {
-  x: number;
-  y: number;
-}
-
-interface IPaddle extends ICor {}
-
-interface IBall extends ICor {}
+import { IPaddle, IBall } from "@/type/type";
 
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeout: ReturnType<typeof setTimeout> | null = null;

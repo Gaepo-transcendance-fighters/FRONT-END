@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
 import { useRoom } from "@/context/RoomContext";
-import { chatSocket } from "@/app/page";
+import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { IChatRoom } from "@/type/type";
 
@@ -16,10 +16,10 @@ export default function RoomTypeButton() {
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
       payload ? roomDispatch({ type: "SET_DM_ROOMS", value: payload }) : null;
     };
-    chatSocket.on("chat_get_DMList", ChatGetDmRoomList);
+    socket.on("chat_get_DMList", ChatGetDmRoomList);
 
     return () => {
-      chatSocket.off("chat_get_DMList", ChatGetDmRoomList);
+      socket.off("chat_get_DMList", ChatGetDmRoomList);
     };
   }, []);
 
@@ -33,20 +33,20 @@ export default function RoomTypeButton() {
         ? roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload })
         : null;
     };
-    chatSocket.on("chat_get_roomList", ChatGetRoomList);
+    socket.on("chat_get_roomList", ChatGetRoomList);
 
     return () => {
-      chatSocket.off("chat_get_roomList", ChatGetRoomList);
+      socket.off("chat_get_roomList", ChatGetRoomList);
     };
   }, []);
 
   const NonDmBtnClick = () => {
-    chatSocket.emit("chat_get_roomList", (ret: number) => {});
+    socket.emit("chat_get_roomList", (ret: number) => {});
     OnClick(true);
   };
 
   const DmBtnClick = () => {
-    chatSocket.emit(
+    socket.emit(
       "chat_get_DMList",
       JSON.stringify({
         userNickname: userState.nickname,

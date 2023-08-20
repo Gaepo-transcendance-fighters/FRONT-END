@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { UserProvider, useUser } from "@/context/UserContext";
-import { chatSocket } from "@/app/page";
+import { socket } from "@/app/page";
 import { useFriend } from "@/context/FriendContext";
 import { IMaindata } from "@/type/type";
 
@@ -37,10 +37,10 @@ const Layout = () => {
       userDispatch({ type: "SET_USER_IDX", value: data.userObject.userIdx });
     };
 
-    chatSocket.on("main_enter", MainEnter);
+    socket.on("main_enter", MainEnter);
 
     return () => {
-      chatSocket.off("main_enter", MainEnter);
+      socket.off("main_enter", MainEnter);
     };
   }, []);
   //chatSocket에서 값을 받아와도 dispatch 하는 시간동안 값은 비어있으므로 내부에서 값을 찍어도 안나옴.
@@ -49,7 +49,7 @@ const Layout = () => {
   useEffect(() => {
     if (localStorage.getItem("loggedIn")) {
       console.log(userState.nickname);
-      chatSocket.emit(
+      socket.emit(
         "main_enter",
         JSON.stringify({ intra: localStorage.getItem("intra") }),
         (ret: number) => {
