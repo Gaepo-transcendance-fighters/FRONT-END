@@ -6,35 +6,14 @@ import FriendProfile from "./FriendProfile";
 import { main } from "@/font/color";
 import { useEffect } from "react";
 
+import { IFriend, IBlock, IUserProp } from "@/type/type";
 const loginOn = <Image src="/logon1.png" alt="online" width={10} height={10} />;
 
 const loginOff = (
   <Image src="/logoff.png" alt="offline" width={10} height={10} />
 );
 
-interface IFriend {
-  friendNickname: string;
-  friendIdx: number;
-  isOnline: boolean;
-}
-
-interface IBlock {
-  targetNickname: string;
-  targetIdx: number;
-}
-
-interface IUserProp {
-  friendNickname: string;
-  friendIdx: number;
-  isOnline: boolean;
-  targetNickname?: string;
-  targetIdx?: number;
-}
-
 const Friend = ({ prop }: { prop: IUserProp }) => {
-  useEffect(() => {
-    console.log("friend", prop);
-  }, []);
   return (
     <>
       <Card sx={{ margin: 1, backgroundColor: main.main0 }}>

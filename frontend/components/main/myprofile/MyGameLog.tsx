@@ -7,6 +7,9 @@ import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
 
 import { main } from "@/type/type";
+
+import { useUser } from "@/context/UserContext";
+
 const TOTAL_PAGES = 100;
 
 const options = {
@@ -19,12 +22,33 @@ interface ChatMessage {
   msg: string;
 }
 
+enum type {
+  nomal,
+  rank,
+}
+enum result {
+  win,
+  lose,
+}
+
+interface GameRecord {
+  matchUserIdx: number;
+  matchUserNickname: string;
+  score: string;
+  type: type;
+  result: result;
+}
+
 const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
 
   const [chats, setChats] = useState<ChatMessage[]>([]);
+  const [gameRecord, setGameReGameRecord] = useState<GameRecord[]>([]);
+
   const [lastElement, setLastElement] = useState<HTMLDivElement | null>(null);
+
+  const { userState } = useUser();
 
   const observerTarget = useRef(null);
 
@@ -46,15 +70,20 @@ const MyGameLog = () => {
     };
   }, [observerTarget]);
 
+  // /game/records/userIdx={userIdx}&page={page}
   const callUser = useCallback(async () => {
     await axios
-	// dev original
-      .get(`http://localhost:4000/chat/messages?channelIdx=1&index=${pageNum}`)
-	// haryu's server
-    //   .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
+      .get(
+        "http://localhost:4000/game/records/userIdx=${userState.userIdx}&page=${pageNum}"
+      )
+      // haryu's server
+      //   .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
-        setChats((prevChats) => [...prevChats, ...newData]);
+
+        // setChats((prevChats) => [...prevChats, ...newData]);
+        setChats((prevRecord) => [...prevRecord, ...newData]);
+
         setLoading(false);
       });
   }, [pageNum]);
@@ -79,12 +108,17 @@ const MyGameLog = () => {
           overflowY: "scroll",
           overflowAnchor: "none",
           position: "sticky",
-          //   margin: "1% 0% 1% 0%",
-          //   padding: "2% 2% 0.5% 2%",
           width: "100%",
         }}
       >
-        {chats.map((chats, i) => {
+        {/* interface ChatMessage {
+  channelIdx: number;
+  sender: string;
+  msg: string;
+} */}
+
+        {/* {chats.map((chats, i) => { */}
+        {gameRecord.map((gameRecord, i) => {
           return (
             <div
               key={i}
@@ -109,9 +143,7 @@ const MyGameLog = () => {
                   height: "80%",
                 }}
               >
-                <Typography variant="h6">
-                  {chats.sender + ": " + chats.msg}
-                </Typography>
+                <Typography variant="h6">{gameRecord.type}</Typography>
               </Card>
             </div>
           );
