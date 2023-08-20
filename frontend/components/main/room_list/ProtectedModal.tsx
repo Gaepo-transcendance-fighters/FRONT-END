@@ -13,8 +13,9 @@ import "./ProtectedModal.css";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom } from "@/context/RoomContext";
+import { IChatRoom, Mode } from "@/type/type";
 import { socket } from "@/app/page";
+import { useUser } from "@/context/UserContext";
 
 const box = {
   position: "absolute" as "absolute",
@@ -45,14 +46,17 @@ export default function ProtectedModal({
   room,
   setFail,
   fail,
+  RoomEnter,
 }: {
   open: boolean;
   handleClose: () => void;
   room: IChatRoom;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
+  RoomEnter: (room: IChatRoom) => void;
 }) {
-  const { roomDispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
+  const { userState } = useUser();
   const pwRef = useRef("");
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -65,16 +69,16 @@ export default function ProtectedModal({
     socket.emit(
       "chat_enter",
       JSON.stringify({
-        userNickname: "hoslim",
-        userIdx: 3,
+        userNickname: userState.nickname,
+        userIdx: userState.userIdx,
         channelIdx: room.channelIdx,
         password: pwRef.current,
       }),
-      (statusCode: number) => {
-        if (statusCode === 200) {
+      (ret: number) => {
+        if (ret === 200) {
+          RoomEnter(room);
           handleClose();
           setFail(false);
-          roomDispatch({ type: "SET_CUR_ROOM", value: room });
         } else {
           setFail(true);
         }
@@ -89,16 +93,16 @@ export default function ProtectedModal({
       socket.emit(
         "chat_enter",
         JSON.stringify({
-          userNickname: "intra_id",
-          userIdx: 3,
+          userNickname: userState.nickname,
+          userIdx: userState.userIdx,
           channelIdx: room.channelIdx,
           password: pwRef.current,
         }),
-        (statusCode: number) => {
-          if (statusCode === 200) {
+        (ret: number) => {
+          if (ret === 200) {
+            RoomEnter(room);
             handleClose();
             setFail(false);
-            roomDispatch({ type: "SET_CUR_ROOM", value: room });
           } else {
             setFail(true);
           }

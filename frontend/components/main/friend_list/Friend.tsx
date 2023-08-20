@@ -12,6 +12,7 @@ const loginOff = (
   <Image src="/logoff.png" alt="offline" width={10} height={10} />
 );
 
+<<<<<<< HEAD
 interface IFriend {
   friendNickname: string;
   friendIdx: number;
@@ -23,6 +24,8 @@ interface IBlock {
   targetIdx: number;
 }
 
+=======
+>>>>>>> origin
 interface IUserProp {
   friendNickname: string;
   friendIdx: number;

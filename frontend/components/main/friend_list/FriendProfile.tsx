@@ -19,7 +19,7 @@ import { socket } from "@/app/page";
 import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 
 const modalStyle = {
   position: "absolute" as "absolute",

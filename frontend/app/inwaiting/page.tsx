@@ -26,7 +26,7 @@ const modalStyle = {
 };
 
 import { useRouter } from "next/navigation";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 
 const inwaiting = () => {

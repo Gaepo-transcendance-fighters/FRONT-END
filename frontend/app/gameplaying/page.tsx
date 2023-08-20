@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 import { useRouter } from "next/navigation";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useEffect, useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
 import { resetGameContextData, useGame } from "@/context/GameContext";

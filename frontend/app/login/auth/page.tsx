@@ -4,6 +4,7 @@ import { Box, Card, CircularProgress, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { main } from "@/font/color";
+import { useUser } from "@/context/UserContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -20,6 +21,7 @@ const modalStyle = {
 const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
+  const { userDispatch } = useUser();
 
   interface Data {
     token: string;
@@ -50,12 +52,10 @@ const Auth = () => {
         if (res.status === 200) {
           localStorage.setItem("loggedIn", "true");
           const data: Data = await res.json();
-          console.log(data);
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
           localStorage.setItem("token", data.jwt);
           localStorage.setItem("intra", data.user.intra);
-          localStorage.setItem("userIdx", data.user.userIdx.toString());
-          // localStorage.setItem("token", data.user.);
+          localStorage.setItem("idx", data.user.userIdx.toString());
           return router.push(`/`);
         }
       })

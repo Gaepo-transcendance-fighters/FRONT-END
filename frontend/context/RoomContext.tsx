@@ -1,3 +1,4 @@
+import { IChatRoom, IDmMemList, IMember } from "@/type/type";
 import {
   ReactNode,
   createContext,
@@ -6,97 +7,6 @@ import {
   useReducer,
 } from "react";
 
-export enum Mode {
-  PRIVATE = "private",
-  PUBLIC = "public",
-  PROTECTED = "protected",
-}
-
-export enum Permission {
-  OWNER = "owner",
-  ADMIN = "admin",
-  MEMBER = "member",
-}
-
-export interface IMember {
-  userIdx: number | undefined;
-  nickname: string | undefined;
-  imgUri: string | undefined;
-}
-
-export interface IChatRoom {
-  owner: string;
-  targetNickname?: string;
-  channelIdx: number;
-  mode: Mode;
-}
-
-export interface IChatEnter {
-  member: IMember[];
-  channelIdx: number;
-}
-
-export interface IChatEnterNoti {
-  member: IMember[];
-  newMember: string;
-}
-
-export interface IChatRoomAdmin {}
-
-export interface IChatGetRoom {
-  owner?: string;
-  targetNickname?: string;
-  channelIdx: number;
-  mode: Mode;
-}
-
-export interface IChatGetRoomList {
-  channels: IChatRoom[];
-}
-
-export interface IChatMute {
-  channelList?: IChatGetRoom[];
-}
-
-export interface IChatKick {
-  targetNickname: string;
-  targetIdx: number;
-  leftMember: IMember[];
-}
-
-export interface IDmMemList {
-  userIdx1: number;
-  userIdx2: number;
-  userNickname1: string;
-  userNickname2: string;
-  imgUrl: string;
-}
-
-export interface IChatDmEnter {
-  // Message[] {
-  // 	message {
-  // 		sender : string,
-  // 		msg : string
-  // 	},
-  // 	...
-  // }, 이 부분은 주전님이 타입 정해주세요
-  // channelIdx : number; currentRoom이 있어서 필요성을 느끼지 못하지만,
-  //  이 부분도 필요하시면 주석해제하시고요!
-
-  userIdx1: number;
-  userIdx2: number;
-  userNickname1: string;
-  userNickname2: string;
-  imgUrl: string;
-}
-
-export const alert = {
-  position: "absolute" as "absolute",
-  top: "100%",
-  left: "50%",
-  transform: "translate(-50%, -100%)",
-};
-
 interface RoomContextData {
   dmRooms: IChatRoom[];
   nonDmRooms: IChatRoom[];
@@ -104,6 +14,7 @@ interface RoomContextData {
   currentRoomMemberList: IMember[];
   isOpen: boolean;
   currentDmRoomMemberList: IDmMemList | null;
+  adminAry: { nickname: string }[];
 }
 
 type RoomAction =
@@ -113,8 +24,8 @@ type RoomAction =
   | { type: "SET_CUR_MEM"; value: IMember[] }
   | { type: "SET_IS_OPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom }
-  | { type: "ADD_CUR_MEM"; value: IMember }
-  | { type: "SET_CUR_DM_MEM"; value: IDmMemList };
+  | { type: "SET_CUR_DM_MEM"; value: IDmMemList }
+  | { type: "SET_ADMIN_ARY"; value: { nickname: string }[] };
 
 const initialState: RoomContextData = {
   dmRooms: [],
@@ -123,6 +34,7 @@ const initialState: RoomContextData = {
   currentRoomMemberList: [],
   isOpen: false,
   currentDmRoomMemberList: null,
+  adminAry: [],
 };
 
 const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
@@ -142,17 +54,10 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
         ...roomState,
         nonDmRooms: [...roomState.nonDmRooms, action.value],
       };
-    case "ADD_CUR_MEM":
-      return {
-        ...roomState,
-        currentRoomMemberList: [
-          ...roomState.currentRoomMemberList,
-          action.value,
-        ],
-      };
     case "SET_CUR_DM_MEM":
       return { ...roomState, currentDmRoomMemberList: action.value };
-
+    case "SET_ADMIN_ARY":
+      return { ...roomState, adminAry: action.value };
     default:
       return roomState;
   }

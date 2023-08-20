@@ -1,7 +1,7 @@
 "use client";
 import { Box, Button, Card, CardContent, Modal } from "@mui/material";
 import { useState } from "react";
-import { main } from "@/components/public/Layout";
+import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/page";
 
