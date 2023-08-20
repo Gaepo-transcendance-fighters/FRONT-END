@@ -18,7 +18,7 @@ export default function Members() {
   const [mem2, setMem2] = useState<IMember>({
     userIdx: roomState.currentDmRoomMemberList?.userIdx2,
     nickname: roomState.currentDmRoomMemberList?.userNickname2,
-    imgUri: roomState.currentDmRoomMemberList?.imgUrl,
+    imgUri: roomState.currentDmRoomMemberList?.imgUri,
   });
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function Members() {
     setMem2({
       userIdx: roomState.currentDmRoomMemberList?.userIdx2,
       nickname: roomState.currentDmRoomMemberList?.userNickname2,
-      imgUri: roomState.currentDmRoomMemberList?.imgUrl,
+      imgUri: roomState.currentDmRoomMemberList?.imgUri,
     });
   }, [roomState.currentRoom]);
 
