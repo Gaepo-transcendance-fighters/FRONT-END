@@ -62,7 +62,6 @@ interface Modals {
 }
 
 import { useRouter, useSearchParams } from "next/navigation";
-
 import { main } from "@/type/type";
 import React, { useEffect, useState, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";

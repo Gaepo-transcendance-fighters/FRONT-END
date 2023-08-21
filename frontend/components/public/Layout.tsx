@@ -16,12 +16,10 @@ import { socket } from "@/app/page";
 import { IMaindata } from "@/type/type";
 
 const Layout = () => {
-  const { state } = useAuth();
+  const { authState } = useAuth();
   const { roomState, roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
-
-  useRequireAuth();
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
@@ -43,6 +41,8 @@ const Layout = () => {
       socket.off("main_enter", MainEnter);
     };
   }, []);
+  //chatSocket에서 값을 받아와도 dispatch 하는 시간동안 값은 비어있으므로 내부에서 값을 찍어도 안나옴.
+  //미세한 찰나일 것임.!
 
   useEffect(() => {
     if (localStorage.getItem("loggedIn")) {

@@ -69,11 +69,12 @@ const MyGameLog = () => {
 
   const callUser = useCallback(async () => {
     await axios
+      //dev original
+      // .get(`http://localhost:4000/chat/messages?channelIdx=1&index=${pageNum}`)
+      //haryu's server
       .get(
-        `http://localhost:4000/game/records/userIdx=${userState.userIdx}&page=${pageNum}`
+        `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`
       )
-      // haryu's server
-      //   .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setGameRecord((prevRecord) => [...prevRecord, ...newData]);
