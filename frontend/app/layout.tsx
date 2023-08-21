@@ -5,7 +5,7 @@ import "@/app/style.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { RoomProvider } from "@/context/RoomContext";
-import { FriendProvide } from "@/context/FriendContext";
+import { FriendProvider } from "@/context/FriendContext";
 import { GameProvider } from "@/context/GameContext";
 import { UserProvider } from "@/context/UserContext";
 import { InitMsgProvider } from "@/context/InitMsgContext";
@@ -29,13 +29,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  useRequireAuth();
+
   return (
     <ThemeProvider theme={font}>
       <AuthProvider>
         <UserProvider>
           <GameProvider>
             <RoomProvider>
-              <FriendProvide>
+              <FriendProvider>
                 <InitMsgProvider>
                   <html lang="en">
                     <body className={inter.className}>
@@ -52,7 +54,7 @@ export default function RootLayout({
                     </body>
                   </html>
                 </InitMsgProvider>
-              </FriendProvide>
+              </FriendProvider>
             </RoomProvider>
           </GameProvider>
         </UserProvider>

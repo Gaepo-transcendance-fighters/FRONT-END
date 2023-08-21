@@ -166,3 +166,12 @@ export const clickedLock = {
   height: "13px",
   color: "rgba(255, 255, 255, 0.294)",
 };
+
+export interface ICor {
+  x: number;
+  y: number;
+}
+
+export interface IPaddle extends ICor {}
+
+export interface IBall extends ICor {}
