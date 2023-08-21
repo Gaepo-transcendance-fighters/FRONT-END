@@ -56,6 +56,11 @@ interface IUserData {
   email: string;
 }
 
+interface Modals {
+  nickNameModal: boolean;
+  authModal: boolean;
+}
+
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { main } from "@/type/type";
@@ -63,15 +68,11 @@ import React, { useEffect, useState, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
+import { CssOutlined } from "@mui/icons-material";
 
 export default function PageRedir() {
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const nickname = searchParams.toString();
-
   const { userState } = useUser();
-  const [checked, setChecked] = useState(true);
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
     imgUrl: "",
@@ -80,9 +81,8 @@ export default function PageRedir() {
     rank: 0,
     email: "",
   });
-  const [message, setMessage] = useState("");
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  // const [openModal, setOpenModal] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);
   const [inputName, setInputName] = useState<string>("");
 
@@ -209,20 +209,73 @@ export default function PageRedir() {
     }
   };
 
-  const handleOpenModal = () => {
+  const SecondAuthModal = () => {
+    if (verified == true) setVerified(false);
+    else setVerified(true);
+    console.log("@@@");
+    {
+      handleOpenModal();
+
+      <>
+        <Modal open={openModal} onClose={handleCloseModal}>
+          <Box
+            sx={{
+              position: "absolute" as "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 100,
+              height: 150,
+              bgcolor: "#65d9f9",
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
+            }}
+            borderRadius={"10px"}
+          >
+            <Card
+              sx={{
+                backgroundColor: main.main4,
+                height: "170px",
+                margin: -1,
+              }}
+            >
+              <Stack direction={"row"}>
+                <Card
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  sx={{
+                    margin: 1,
+                    width: "100%",
+                    height: "120px",
+                    backgroundColor: main.main1,
+                    overflow: "scroll",
+                  }}
+                >
+                  asd
+                </Card>
+              </Stack>
+            </Card>
+          </Box>
+        </Modal>
+      </>;
+    }
+  };
+
+  const [openModal, setOpenModal] = useState<Modals>({
+    nickNameModal: false,
+    authModal: false,
+  });
+
+  const handleOpenModal = (modalname) => {
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
-  };
-
-  const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
   };
 
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -480,12 +533,13 @@ export default function PageRedir() {
                             minWidth: "max-content",
                           }}
                           variant="contained"
-                          onClick={onChangeSecondAuth}
+                          // onClick={SecondAuthModal}
+                          onClick={handleOpenModal}
                         >
                           {verified == true ? (
-                            <>2차인증 비활성화</>
-                          ) : (
                             <>2차인증 활성화</>
+                          ) : (
+                            <>2차인증 비활성화</>
                           )}
                         </Button>
                       </Stack>

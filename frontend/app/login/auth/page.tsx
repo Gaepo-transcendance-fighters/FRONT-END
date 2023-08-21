@@ -31,6 +31,7 @@ const Auth = () => {
     email: string;
     check2Auth: boolean;
   }
+
   const postCode = async (code: string) => {
     // dev original
     await fetch("http://localhost:4000/login/auth", {
