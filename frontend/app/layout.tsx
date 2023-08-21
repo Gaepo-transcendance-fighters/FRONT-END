@@ -9,6 +9,7 @@ import { FriendProvider } from "@/context/FriendContext";
 import { GameProvider } from "@/context/GameContext";
 import { UserProvider } from "@/context/UserContext";
 import { InitMsgProvider } from "@/context/InitMsgContext";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const inter = Inter({ subsets: ["latin"] });
 

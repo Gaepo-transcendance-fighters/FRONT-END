@@ -5,7 +5,7 @@ import Rooms from "./Rooms";
 import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
-import { IChatRoom } from "@/type/type";
+import { IChatRoom, ReturnMsgDto } from "@/type/type";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();
@@ -52,7 +52,7 @@ export default function RoomTypeButton() {
         userNickname: userState.nickname,
         userIdx: userState.userIdx,
       }),
-      (ret: number) => {
+      (ret: ReturnMsgDto) => {
         console.log(ret);
       }
     );

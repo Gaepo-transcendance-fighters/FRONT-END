@@ -13,6 +13,7 @@ import {
   IChatRoomAdmin,
   IMember,
   Permission,
+  ReturnMsgDto,
   alert,
 } from "@/type/type";
 import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
@@ -233,9 +234,9 @@ export default function Member({
         targetNickname: person.nickname,
         targetIdx: person.userIdx,
       }),
-      (ret: string | number) => {
+      (ret: ReturnMsgDto) => {
         console.log("Ban : ", ret);
-        if (ret === 200) {
+        if (ret.code === 200) {
           setShowAlert(true);
           setString(strings[4]);
         }

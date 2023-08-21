@@ -58,12 +58,12 @@ interface IUserProp {
 const MockFriendList: IUserProp[] = [
   {
     friendNickname: "haryu",
-    friendIdx: 1,
+    friendIdx: 2,
     isOnline: true,
   },
   {
-    friendNickname: "paul",
-    friendIdx: 2,
+    friendNickname: "jeekim",
+    friendIdx: 4,
     isOnline: false,
   },
 ];

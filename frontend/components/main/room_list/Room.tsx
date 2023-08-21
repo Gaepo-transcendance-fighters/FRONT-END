@@ -13,6 +13,7 @@ import {
   alert,
   lock,
   clickedLock,
+  ReturnMsgDto,
 } from "@/type/type";
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
@@ -136,6 +137,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const ChatDmEnter = (payload: IChatDmEnter) => {
+      console.log("chat_get_dm 응답 받았어.")
       roomDispatch({
         type: "SET_CUR_DM_MEM",
         value: {
@@ -181,13 +183,14 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   const RoomEnter = (room: IChatRoom) => {
     if (roomState.currentRoom && roomState.currentRoom.mode !== Mode.PRIVATE) {
+      console.log("[RoomEnter 조건문 안에 들어왔따. ]")
       socket.emit(
         "chat_goto_lobby",
         JSON.stringify({
           channelIdx: roomState.currentRoom.channelIdx,
           userIdx: userState.userIdx,
         }),
-        (ret: number | string) => {
+        (ret: ReturnMsgDto) => {
           console.log("chat_goto_lobby ret : ", ret);
         }
       );
@@ -199,20 +202,24 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const RoomClick = (room: IChatRoom) => {
     if (roomState.currentRoom?.channelIdx !== room.channelIdx) {
       // TODO : 누른 버튼 색 다르게 해보기
+      console.log("[RoomClick 시작]")
       if (room.mode === Mode.PROTECTED) handleOpen();
       else if (room.mode === Mode.PRIVATE) {
+      console.log("[RoomClick dm 방 입장 emit]")
         socket.emit(
           "chat_get_DM",
           JSON.stringify({
             channelIdx: room.channelIdx,
           }),
-          (ret: number) => {
-            if (ret === 200) {
+          (ret: ReturnMsgDto) => {
+            if (ret.code === 200) {
+      console.log("[RoomClick dm ret 200 ]")
               RoomEnter(room);
             }
           }
         );
       } else {
+      console.log("[RoomClick 일반 방 입장 emit]")
         socket.emit(
           "chat_enter",
           JSON.stringify({
@@ -220,8 +227,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
             userIdx: userState.userIdx,
             channelIdx: room.channelIdx,
           }),
-          (ret: number) => {
-            if (ret === 200) {
+          (ret: ReturnMsgDto) => {
+      console.log("[RoomClick 일반 방 입장 ret 200]")
+            if (ret.code === 200) {
               RoomEnter(room);
             }
           }
