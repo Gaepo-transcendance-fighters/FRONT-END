@@ -9,7 +9,7 @@ interface Props {
   setMsgs: Dispatch<SetStateAction<IChat[]>>;
 }
 
-const ChatField = ({ msgs, setMsgs }: Props) => {
+const NonDmChat = ({ msgs, setMsgs }: Props) => {
   return (
     <Box
       sx={{
@@ -48,4 +48,4 @@ const ChatField = ({ msgs, setMsgs }: Props) => {
   );
 };
 
-export default ChatField;
+export default NonDmChat;

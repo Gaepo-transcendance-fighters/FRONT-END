@@ -15,7 +15,7 @@ interface Props {
   setMsgs: Dispatch<SetStateAction<IChat[]>>;
 }
 
-const DmChatField = ({ msgs, setMsgs }: Props) => {
+const DmChat = ({ msgs, setMsgs }: Props) => {
   const [loading, setLoading] = useState<boolean>(true);
   const { roomState } = useRoom();
   const observerTarget = useRef(null);
@@ -84,7 +84,7 @@ const DmChatField = ({ msgs, setMsgs }: Props) => {
     if (!lastDate) {
       return;
     }
-    console.log("요청하는 lastDate", lastDate)
+    console.log("요청하는 lastDate", lastDate);
     await axios
       .get(
         `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
@@ -166,4 +166,4 @@ const DmChatField = ({ msgs, setMsgs }: Props) => {
   );
 };
 
-export default DmChatField;
+export default DmChat;

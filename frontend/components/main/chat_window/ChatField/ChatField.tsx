@@ -4,7 +4,8 @@ import { Box, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { IChat } from "../ChatWindow";
 import { useRoom } from "@/context/RoomContext";
-import DmChatField from "./DmChat";
+import DmChat from "./DmChat";
+import NonDmChat from "./NonDmChat";
 
 interface Props {
   msgs: IChat[];
@@ -16,9 +17,9 @@ const ChatField = ({ msgs, setMsgs }: Props) => {
   return (
     <>
       {roomState.currentRoom?.mode === "private" ? (
-        <DmChatField msgs={msgs} setMsgs={setMsgs} />
+        <DmChat msgs={msgs} setMsgs={setMsgs} />
       ) : (
-        <ChatField msgs={msgs} setMsgs={setMsgs} />
+        <NonDmChat msgs={msgs} setMsgs={setMsgs} />
       )}
     </>
   );
