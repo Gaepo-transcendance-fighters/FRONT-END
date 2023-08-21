@@ -92,7 +92,7 @@ export const useFriend = () => {
   return useContext(FriendContext);
 };
 
-export const FriendProvide = ({ children }: { children: ReactNode }) => {
+export const FriendProvider = ({ children }: { children: ReactNode }) => {
   const [friendState, friendDispatch] = useReducer(FriendReducer, initialState);
 
   return (
