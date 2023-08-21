@@ -15,7 +15,7 @@ interface IPayload {
   channelIdx: number | undefined;
   senderIdx: number;
   msg: string;
-  targetIdx: number | null;
+  targetIdx?: number | null;
 }
 
 interface Props {
@@ -43,10 +43,9 @@ const BottomField = ({ setMsgs }: Props) => {
           msg: chatFromServer.msg,
           msgDate: chatFromServer.msgDate, }
         setMsgs((prevChats: any) => [chat, ...prevChats]); // <----- any type 나중 변경 필요.
-        console.log("[BottomField]디엠에서 메세지 보낼때 내가 state에 붙여주는 낱개의 메시지");
         console.log(chat);
       } else {
-        const result = roomState.currentRoomMemberList.find(person => person.userIdx === chatFromServer.senderIdx)
+          const result = roomState.currentRoomMemberList.find(person => person.userIdx === chatFromServer.senderIdx)
         if (result?.nickname) {
           const chat = {
             channelIdx: chatFromServer.channelIdx,
@@ -76,7 +75,7 @@ const BottomField = ({ setMsgs }: Props) => {
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
-      event.preventDefault();
+        event.preventDefault();
       let payload: IPayload | undefined = undefined;
       if (
         roomState.currentRoom?.mode === "private" &&
@@ -94,21 +93,15 @@ const BottomField = ({ setMsgs }: Props) => {
         };
       } else if (
         (roomState.currentRoom?.mode === "public" ||
-          roomState.currentRoom?.mode === "protected") &&
-        roomState.currentDmRoomMemberList?.userIdx1 &&
-        roomState.currentDmRoomMemberList?.userIdx2
+          roomState.currentRoom?.mode === "protected")
       ) {
         payload = {
           channelIdx: roomState.currentRoom?.channelIdx,
           senderIdx: userState.userIdx,
-          msg: msg,
-          targetIdx:
-            userState.userIdx === roomState.currentDmRoomMemberList?.userIdx1
-              ? roomState.currentDmRoomMemberList?.userIdx2
-              : roomState.currentDmRoomMemberList?.userIdx1, // <------------------ 현재 채널의 모든 사용자들의 인덱스를 알아야한다.
+          msg: msg, // <------------------ 현재 채널의 모든 사용자들의 인덱스를 알아야한다.
         };
       }
-      socket.emit("chat_send_msg", JSON.stringify(payload));
+        socket.emit("chat_send_msg", payload);
       inputRef.current?.focus();
     },
     [msg]
