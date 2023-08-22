@@ -29,6 +29,8 @@ const Auth = () => {
   interface Data {
     token: string;
     jwt: string;
+    userIdx: number;
+    intra: string;
     user: {
       userIdx: number;
       intra: string;
@@ -57,9 +59,9 @@ const Auth = () => {
           const data: Data = await res.json();
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
           localStorage.setItem("token", data.jwt);
-          localStorage.setItem("intra", data.user.intra);
-          localStorage.setItem("idx", data.user.userIdx.toString());
-          authDispatch({ type: "SET_ID", value: data.user.userIdx });
+          localStorage.setItem("intra", data.intra);
+          localStorage.setItem("idx", data.userIdx.toString());
+          authDispatch({ type: "SET_ID", value: data.userIdx });
 
           return router.push(`/`);
         }

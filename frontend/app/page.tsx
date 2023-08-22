@@ -5,19 +5,31 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { socket } from "./layout";
 
 // dev original
 // export const socket = io("http://localhost:4000/chat", {
 // haryu's server
 
-const userId =
-  typeof window !== "undefined" ? localStorage.getItem("idx") : null;
+// const userId =
+//   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 // // export const socket = io("http://localhost:4000/chat", {
 //   // haryu's server
 // export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
 //   query: { userId: userId },
 // });
+
+const userId =
+  typeof window !== "undefined" ? localStorage.getItem("idx") : null;
+
+// export const socket = io("http://localhost:4000/chat", {
+// haryu's server
+export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
+  query: { userId: userId },
+});
+
+export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
+  query: { userId: userId },
+});
 
 const Page = () => {
   const param = useSearchParams();

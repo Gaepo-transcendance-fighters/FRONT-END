@@ -6,17 +6,6 @@ import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useFriend } from "@/context/FriendContext";
 
-export interface IFriend {
-  friendNickname: string;
-  friendIdx: number;
-  isOnline: boolean;
-}
-
-export interface IBlock {
-  targetNickname: string;
-  targetIdx: number;
-}
-
 const selectedButton = {
   backgroundColor: main.main1,
   color: "white",
@@ -47,36 +36,34 @@ const unselectedButton = {
   flex: 1,
 };
 
-interface IUserProp {
+
+export interface IFriend {
   friendNickname: string;
   friendIdx: number;
   isOnline: boolean;
+}
+
+export interface IBlock {
+  targetNickname: string;
+  targetIdx: number;
+}
+
+interface IUserProp {
+  friendNickname?: string;
+  friendIdx?: number;
+  isOnline?: boolean;
   targetNickname?: string;
   targetIdx?: number;
 }
 
-const MockFriendList: IUserProp[] = [
-  {
-    friendNickname: "haryu",
-    friendIdx: 1,
-    isOnline: true,
-  },
-  {
-    friendNickname: "paul",
-    friendIdx: 2,
-    isOnline: false,
-  },
-];
-
 const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
-  const [showlist, setShowlist] = useState<IFriend[] | IBlock[]>([]);
+  const [showlist, setShowlist] = useState<IUserProp[]>([]);
   const { friendState } = useFriend();
 
   useEffect(() => {
     const cur = select ? friendState.blockList : friendState.friendList;
-    // setShowlist(cur);
-    setShowlist(MockFriendList);
+    setShowlist(cur);
   }, [friendState.friendList, friendState.blockList, select]);
 
   return (
