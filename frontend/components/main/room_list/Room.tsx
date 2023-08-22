@@ -180,10 +180,10 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     if (roomState.currentRoom && roomState.currentRoom.mode !== Mode.PRIVATE) {
       socket.emit(
         "chat_goto_lobby",
-        JSON.stringify({
+        {
           channelIdx: roomState.currentRoom.channelIdx,
           userIdx: userState.userIdx,
-        }),
+        },
         (ret: number | string) => {
           console.log("chat_goto_lobby ret : ", ret);
         }
@@ -200,9 +200,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       else if (room.mode === Mode.PRIVATE) {
         socket.emit(
           "chat_get_DM",
-          JSON.stringify({
+          {
             channelIdx: room.channelIdx,
-          }),
+          },
           (ret: number) => {
             if (ret === 200) {
               RoomEnter(room);
@@ -212,11 +212,11 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       } else {
         socket.emit(
           "chat_enter",
-          JSON.stringify({
+          {
             userNickname: userState.nickname,
             userIdx: userState.userIdx,
             channelIdx: room.channelIdx,
-          }),
+          },
           (ret: number) => {
             if (ret === 200) {
               RoomEnter(room);

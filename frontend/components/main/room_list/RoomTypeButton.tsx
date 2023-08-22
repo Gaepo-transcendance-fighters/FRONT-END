@@ -48,10 +48,10 @@ export default function RoomTypeButton() {
   const DmBtnClick = () => {
     socket.emit(
       "chat_get_DMList",
-      JSON.stringify({
+      {
         userNickname: userState.nickname,
         userIdx: userState.userIdx,
-      }),
+      },
       (ret: number) => {
         console.log(ret);
       }
