@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
+import { gameSocket } from "../layout";
 import { io } from "socket.io-client";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
@@ -47,12 +48,12 @@ interface IGameOption {
 }
 
 // export const gameSocket = io("http://localhost:4000/game", {
-const userId =
-  typeof window !== "undefined" ? localStorage.getItem("idx") : null;
+// const userId =
+//   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 
-export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
-  query: { userId: userId },
-});
+// export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
+//   query: { userId: userId },
+// });
 
 const OptionSelect = () => {
   const router = useRouter();
@@ -103,19 +104,17 @@ const OptionSelect = () => {
   }, [countdown]);
 
   const cntRedir = () => {
-    if (!gameSocket || !userId) return;
+    if (!gameSocket) return;
     gameDispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
-    authDispatch({type: "SET_ID", value: parseInt(userId)})
 
-    console.log(authState.id)
-    console.log(userId)
+    console.log(authState.id);
 
     gameSocket.emit(
       "game_option",
       {
         gameType: gameState.gameMode,
-        userIdx: userId,
+        userIdx: authState.id,
         speed: selectedSpeedOption,
         mapNumber: selectedMapOption,
       },
@@ -125,11 +124,11 @@ const OptionSelect = () => {
           console.log("queue regist start");
           console.log(authState.id);
           console.log(Date.now());
-          
+
           gameSocket.emit(
             "game_queue_regist",
             {
-              userIdx: userId,
+              userIdx: authState.id,
               queueDate: Date.now(),
             },
             (res: { code: number; msg: string }) => {
@@ -148,6 +147,7 @@ const OptionSelect = () => {
 
   useEffect(() => {
     setClient(true);
+    gameSocket.connect();
   }, []);
 
   if (!client) return <></>;

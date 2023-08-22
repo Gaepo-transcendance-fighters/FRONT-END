@@ -9,6 +9,7 @@ import PingPong from "@/components/game/ingame/PingPong";
 import { useGame } from "@/context/GameContext";
 import useModal from "@/hooks/useModal";
 import Modals from "@/components/public/Modals";
+import { gameSocket } from "../layout";
 
 const GamePlaying = () => {
   const router = useRouter();
@@ -19,8 +20,10 @@ const GamePlaying = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const backToMain = () => {
-    router.replace("/");
     gameDispatch({ type: "SCORE_RESET" });
+    gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
+    gameSocket.disconnect();
+    router.replace("/");
   };
 
   useEffect(() => {

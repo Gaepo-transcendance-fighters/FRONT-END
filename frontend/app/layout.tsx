@@ -2,13 +2,15 @@
 
 import { Inter } from "next/font/google";
 import "@/app/style.css";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { RoomProvider } from "@/context/RoomContext";
 import { FriendProvider } from "@/context/FriendContext";
 import { GameProvider } from "@/context/GameContext";
 import { UserProvider } from "@/context/UserContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { io } from "socket.io-client";
+import { use, useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +26,32 @@ const font = createTheme({
   },
 });
 
+const userId =
+  typeof window !== "undefined" ? localStorage.getItem("idx") : null;
+
+// export const socket = io("http://localhost:4000/chat", {
+// haryu's server
+export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
+  query: { userId: userId },
+});
+
+export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
+  query: { userId: userId },
+});
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  useRequireAuth();
+  const { authDispatch } = useAuth();
+
+  useEffect(() => {
+    if (!userId) return;
+    authDispatch({ type: "SET_ID", value: parseInt(userId) });
+  }, []);
+
+  // useRequireAuth();
 
   return (
     <ThemeProvider theme={font}>
