@@ -5,7 +5,7 @@ import GamePaddle from "./GamePaddle";
 import { useCallback, useEffect, useState, useRef } from "react";
 import GameBall from "./GameBall";
 import { useGame, resetGameContextData } from "@/context/GameContext";
-import { gameSocket } from "@/app/optionselect/page";
+import { gameSocket } from "@/app/page";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { IPaddle, IBall } from "@/type/type";
@@ -25,14 +25,15 @@ function debounce(func: (...args: any[]) => void, wait: number) {
 }
 
 const PingPong = () => {
+  const [client, setClient] = useState(false)
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
   const requireAnimationRef = useRef(0);
 
   const [ready, setReady] = useState(false);
-  const [myPaddle, setMyPaddle] = useState<IPaddle>({ x: -470, y: 0 });
-  const [enemyPaddle, setEnemyPaddle] = useState<IPaddle>({ x: 470, y: 0 });
+  const [myPaddle, setMyPaddle] = useState<IPaddle>({ x: 0, y: 0 });
+  const [enemyPaddle, setEnemyPaddle] = useState<IPaddle>({ x: 0, y: 0 });
   const [ball, setBall] = useState<IBall>({ x: 0, y: 0 });
   const [direction, setDirection] = useState({ x: 1, y: 1 });
   const [ballStandard, setBallStandard] = useState(0);
@@ -251,6 +252,14 @@ const PingPong = () => {
   }, [ball]);
 
   useEffect(() => {
+    setClient(true)
+    if (gameState.aPlayer.id === authState.id) {
+      setMyPaddle({x: 470, y: 0})
+      setEnemyPaddle({x: -470, y: 0})
+    } else if (gameState.bPlayer.id === authState.id) {
+      setMyPaddle({x: -470, y: 0})
+      setEnemyPaddle({x: 470, y: 0})
+    }
     gameSocket.on(
       "game_predict_ball",
       ({
@@ -296,7 +305,7 @@ const PingPong = () => {
   }, [gameState.aScore, gameState.bScore]);
 
   useEffect(() => {
-    gameDispatch({ type: "SET_LATENCY", value: gameState.latency });
+    gameDispatch({ type: "SET_LATENCY", value: gameState.latency / 2 });
     if (!ready) return gameStart();
 
     window.addEventListener("keydown", handlePaddle);
@@ -311,6 +320,8 @@ const PingPong = () => {
       cancelAnimationFrame(requireAnimationRef.current);
     };
   }, [ready, ballMove]);
+
+  if (!client) return <></>
 
   return (
     <>

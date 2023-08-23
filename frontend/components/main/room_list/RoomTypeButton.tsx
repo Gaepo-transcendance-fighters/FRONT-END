@@ -5,7 +5,7 @@ import Rooms from "./Rooms";
 import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
-import { IChatRoom } from "@/type/type";
+import { IChatRoom, ReturnMsgDto } from "@/type/type";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();
@@ -41,18 +41,18 @@ export default function RoomTypeButton() {
   }, []);
 
   const NonDmBtnClick = () => {
-    socket.emit("chat_get_roomList", (ret: number) => {});
+    socket.emit("chat_get_roomList", (ret: ReturnMsgDto) => {});
     OnClick(true);
   };
 
   const DmBtnClick = () => {
     socket.emit(
       "chat_get_DMList",
-      JSON.stringify({
+      {
         userNickname: userState.nickname,
         userIdx: userState.userIdx,
-      }),
-      (ret: number) => {
+      },
+      (ret: ReturnMsgDto) => {
         console.log(ret);
       }
     );

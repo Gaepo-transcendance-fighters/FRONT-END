@@ -67,7 +67,8 @@ import React, { useEffect, useState, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
-import { CssOutlined } from "@mui/icons-material";
+
+import SecondAuth from "@/components/main/myprofile/SecondAuth";
 
 export default function PageRedir() {
   const router = useRouter();
@@ -81,8 +82,11 @@ export default function PageRedir() {
     email: "",
   });
 
-  // const [openModal, setOpenModal] = useState<boolean>(false);
-  const [verified, setVerified] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
+  const [verified, setVerified] = useState<string | null>(
+    localStorage.getItem("check2Auth")
+  );
   const [inputName, setInputName] = useState<string>("");
 
   const [reload, setReload] = useState<boolean>(false);
@@ -187,92 +191,9 @@ export default function PageRedir() {
     setReload((curr) => !curr);
   };
 
-  const onChangeSecondAuth = async () => {
-    if (verified == true) setVerified(false);
-    else setVerified(true);
-
-    try {
-      const response = await axios({
-        method: "PATCH",
-        url: "http://localhost:4000/users/profile/:my_nickname",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify({
-          // userNickName: userData?.nickname,
-          check2Auth: verified,
-        }),
-      });
-    } catch (error) {
-      console.log("2차인증 시 에러발생");
-    }
-  };
-
-  const SecondAuthModal = () => {
-    if (verified == true) setVerified(false);
-    else setVerified(true);
-    console.log("@@@");
-    {
-      handleOpenModal();
-
-      <>
-        <Modal open={openModal} onClose={handleCloseModal}>
-          <Box
-            sx={{
-              position: "absolute" as "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 100,
-              height: 150,
-              bgcolor: "#65d9f9",
-              border: "2px solid #000",
-              boxShadow: 24,
-              p: 4,
-            }}
-            borderRadius={"10px"}
-          >
-            <Card
-              sx={{
-                backgroundColor: main.main4,
-                height: "170px",
-                margin: -1,
-              }}
-            >
-              <Stack direction={"row"}>
-                <Card
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  sx={{
-                    margin: 1,
-                    width: "100%",
-                    height: "120px",
-                    backgroundColor: main.main1,
-                    overflow: "scroll",
-                  }}
-                >
-                  asd
-                </Card>
-              </Stack>
-            </Card>
-          </Box>
-        </Modal>
-      </>;
-    }
-  };
-
-  const [openModal, setOpenModal] = useState<Modals>({
-    nickNameModal: false,
-    authModal: false,
-  });
-
-  const handleOpenModal = (modalname) => {
+  const handleOpenModal = () => {
     setOpenModal(true);
   };
-
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -400,7 +321,7 @@ export default function PageRedir() {
                       </Typography>
 
                       <CardContent style={{ width: "100%" }}>
-                        {verified == true ? (
+                        {verified === "true" ? (
                           <Typography style={{ fontSize: "1.5rem" }}>
                             2차인증 여부 : Y
                           </Typography>
@@ -443,15 +364,7 @@ export default function PageRedir() {
                             onChange={handleChange}
                           />
                         </form>
-                        {/* <form>
-                          <input
-                            type="file"
-                            id="profile-upload"
-                            accept="image/png, image/jpg, image/jpeg"
-                            style={{ display: "none" }}
-                          />
-                        </form> */}
-                        {/* 123 */}
+
                         <Button
                           type="submit"
                           style={{
@@ -526,21 +439,7 @@ export default function PageRedir() {
                             </Card>
                           </Box>
                         </Modal>
-                        <Button
-                          type="button"
-                          style={{
-                            minWidth: "max-content",
-                          }}
-                          variant="contained"
-                          // onClick={SecondAuthModal}
-                          onClick={handleOpenModal}
-                        >
-                          {verified == true ? (
-                            <>2차인증 활성화</>
-                          ) : (
-                            <>2차인증 비활성화</>
-                          )}
-                        </Button>
+                        <SecondAuth />
                       </Stack>
                     </Stack>
                   </Card>

@@ -13,7 +13,7 @@ import { useRoom } from "@/context/RoomContext";
 import { useUser } from "@/context/UserContext";
 import { useFriend } from "@/context/FriendContext";
 import { socket } from "@/app/page";
-import { IMaindata } from "@/type/type";
+import { IMaindata, ReturnMsgDto } from "@/type/type";
 
 const Layout = () => {
   const { authState } = useAuth();
@@ -41,21 +41,16 @@ const Layout = () => {
       socket.off("main_enter", MainEnter);
     };
   }, []);
-  //chatSocket에서 값을 받아와도 dispatch 하는 시간동안 값은 비어있으므로 내부에서 값을 찍어도 안나옴.
-  //미세한 찰나일 것임.!
-
   useEffect(() => {
-    if (localStorage.getItem("loggedIn")) {
-      console.log(userState.nickname);
-      socket.emit(
-        "main_enter",
-        JSON.stringify({ intra: localStorage.getItem("intra") }),
-        (ret: number) => {
-          if (ret === 200) {
-          }
+    console.log(userState.nickname);
+    socket.emit(
+      "main_enter",
+      { intra: localStorage.getItem("intra") },
+      (ret: ReturnMsgDto) => {
+        if (ret.code === 200) {
         }
-      );
-    }
+      }
+    );
   }, []);
 
   return (
