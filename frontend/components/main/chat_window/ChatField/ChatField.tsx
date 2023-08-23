@@ -1,5 +1,6 @@
 "use client";
 
+import { useRoom } from "@/context/RoomContext";
 import { Box, Typography } from "@mui/material";
 
 interface IChat {
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const ChatField = ({ msgs }: Props) => {
+  const {roomState} = useRoom()
   // console.log(msgs);
   return (
     <Box
@@ -43,7 +45,7 @@ const ChatField = ({ msgs }: Props) => {
               {/* {value.name + ": " + value.message} */}
               {
                 <Typography variant="h6">
-                  {value.senderIdx + ": " + value.msg}
+                  {roomState.currentRoomMemberList!.find((mem) =>  mem.userIdx === value.senderIdx)?.nickname + ": " + value.msg}
                 </Typography>
               }
             </li>

@@ -26,6 +26,7 @@ const BottomField = ({ setMsgs }: Props) => {
   const [msg, setMsg] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const { roomState } = useRoom();
+  const {authState} = useAuth()
 
   const changeMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(event.target.value);
@@ -53,7 +54,7 @@ const BottomField = ({ setMsgs }: Props) => {
       event.preventDefault();
       const payload = {
         channelIdx: roomState.currentRoom?.channelIdx,
-        senderIdx: 98364,
+        senderIdx: authState.id,
         msg: msg,
       };
       console.log("payload", payload);

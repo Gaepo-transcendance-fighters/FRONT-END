@@ -130,26 +130,28 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   };
 
   const addFriend = async () => {
+    console.log("add friend")
     const friendReqData: FriendReqData = {
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
     };
     await axios({
       method: "post",
-      url: "http://localhost:3000/users/follow",
-      data: JSON.stringify(friendReqData),
+      url: "http://paulryu9309.ddns.net:4000/users/follow",
+      data: friendReqData,
     })
       .then((res) => {
-        console.log(res.data);
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
       })
       .catch((err) => {
         console.log(err);
       });
+    handleCloseMenu();
     handleCloseModal();
   };
 
   const deleteFriend = async () => {
+    console.log("delete friend")
     const friendReqData: FriendReqData = {
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
@@ -157,16 +159,16 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
 
     await axios({
       method: "delete",
-      url: "http://localhost:3000/users/unfollow",
-      data: JSON.stringify(friendReqData),
+      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      data: friendReqData,
     })
       .then((res) => {
-        console.log(res.data);
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
       })
       .catch((err) => {
         console.log(err);
       });
+    handleCloseMenu();
     handleCloseModal();
   };
 
@@ -253,7 +255,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                   MenuListProps={{ sx: { py: 0 } }}
                 >
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                    <MenuItem onClick={addFriend}>Add</MenuItem>
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                     <MenuItem>Block</MenuItem>
                   </Stack>
