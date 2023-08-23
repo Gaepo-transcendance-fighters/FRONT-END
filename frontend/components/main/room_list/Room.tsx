@@ -225,7 +225,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
             userNickname: userState.nickname,
             userIdx: userState.userIdx,
             channelIdx: room.channelIdx,
-          }),
+          },
           (ret: ReturnMsgDto) => {
       console.log("[RoomClick 일반 방 입장 ret 200]")
             if (ret.code === 200) {
