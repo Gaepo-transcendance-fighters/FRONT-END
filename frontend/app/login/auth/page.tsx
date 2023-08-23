@@ -41,9 +41,9 @@ const Auth = () => {
   }
   const postCode = async (code: string) => {
     // dev original
-    // await fetch("http://localhost:4000/login/auth", {
-    // haryu's server
-    await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
+    await fetch("http://localhost:4000/login/auth", {
+      // haryu's server
+      // await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",

@@ -19,6 +19,7 @@ import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";
 import { IMember } from "@/type/type";
+import { useInitMsg } from "@/context/InitMsgContext";
 
 export interface ILeftMember {
   userNickname: string;
@@ -33,6 +34,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [newMem, setNewMem] = useState("");
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
+  const { initMsgDispatch } = useInitMsg();
 
   // userIdx: number | undefined;
   // nickname: string | undefined;
@@ -135,6 +137,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const ChatDmEnter = (payload: IChatDmEnter) => {
+      console.log("chat_get_dm 응답 받았어.")
       roomDispatch({
         type: "SET_CUR_DM_MEM",
         value: {
@@ -146,6 +149,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           imgUri: payload.imgUri,
         },
       });
+      initMsgDispatch({ type: "SET_INIT_MSG", value: payload });
     };
     socket.on("chat_get_DM", ChatDmEnter);
 
@@ -179,6 +183,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   const RoomEnter = (room: IChatRoom) => {
     if (roomState.currentRoom && roomState.currentRoom.mode !== Mode.PRIVATE) {
+      console.log("[RoomEnter 조건문 안에 들어왔따. ]")
       socket.emit(
         "chat_goto_lobby",
         {
@@ -197,11 +202,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const RoomClick = (room: IChatRoom) => {
     console.log("[RoomClick] 시작한다.", room);
     if (roomState.currentRoom?.channelIdx !== room.channelIdx) {
-    console.log("[RoomClick] 시작한다22.");
-    // TODO : 누른 버튼 색 다르게 해보기
+      // TODO : 누른 버튼 색 다르게 해보기
       if (room.mode === Mode.PROTECTED) handleOpen();
       else if (room.mode === Mode.PRIVATE) {
-              console.log("[RoomClick] protected emit 보내고있다..");
         socket.emit(
           "chat_get_DM",
           {
@@ -215,8 +218,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           }
         );
       } else {
-              console.log("[RoomClick] public 방 emit 보내고있다..");
-          socket.emit(
+      console.log("[RoomClick 일반 방 입장 emit]")
+        socket.emit(
           "chat_enter",
           {
             userNickname: userState.nickname,
@@ -224,6 +227,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
             channelIdx: room.channelIdx,
           },
           (ret: ReturnMsgDto) => {
+      console.log("[RoomClick 일반 방 입장 ret 200]")
             if (ret.code === 200) {
               RoomEnter(room);
             }

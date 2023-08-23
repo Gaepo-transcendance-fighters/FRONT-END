@@ -8,6 +8,7 @@ import { RoomProvider } from "@/context/RoomContext";
 import { FriendProvider } from "@/context/FriendContext";
 import { GameProvider } from "@/context/GameContext";
 import { UserProvider } from "@/context/UserContext";
+import { InitMsgProvider } from "@/context/InitMsgContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { io } from "socket.io-client";
 import { use, useEffect } from "react";
@@ -41,20 +42,22 @@ export default function RootLayout({
           <GameProvider>
             <RoomProvider>
               <FriendProvider>
-                <html lang="en">
-                  <body className={inter.className}>
-                    <div
-                      style={{
-                        backgroundImage: `url("/background.png")`,
-                        width: "100%",
-                        backgroundRepeat: "repeat",
-                        height: "100vh",
-                      }}
-                    >
-                      {children}
-                    </div>
-                  </body>
-                </html>
+                <InitMsgProvider>
+                  <html lang="en">
+                    <body className={inter.className}>
+                      <div
+                        style={{
+                          backgroundImage: `url("/background.png")`,
+                          width: "100%",
+                          backgroundRepeat: "repeat",
+                          height: "100vh",
+                        }}
+                      >
+                        {children}
+                      </div>
+                    </body>
+                  </html>
+                </InitMsgProvider>
               </FriendProvider>
             </RoomProvider>
           </GameProvider>
