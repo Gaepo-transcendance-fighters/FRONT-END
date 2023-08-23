@@ -127,7 +127,7 @@ export default function PageRedir() {
     try {
       await axios({
         method: "PUT",
-        url: `http://localhost:4000/users/profile/:${userData?.nickname}`,
+        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -174,15 +174,15 @@ export default function PageRedir() {
     try {
       const response = await axios({
         method: "PATCH",
-        url: `http://localhost:4000/users/profile/:${userData?.nickname}`,
+        url: `http://localhost:4000/users/profile/${userData.nickname}`,
 
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: {
-          userNickname: inputName,
-          // ChangedNickname: inputName,
+          // userNickname: inputName,
+          ChangedNickname: inputName,
         },
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
