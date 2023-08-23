@@ -20,6 +20,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import { main } from "@/type/type";
+import { useFriend } from "@/context/FriendContext";
+import axios from "axios";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -61,7 +63,6 @@ interface IFriendData {
 }
 
 interface FriendReqData {
-  userIdx: number;
   targetNickname: string;
   targetIdx: number;
 }
@@ -77,10 +78,29 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     Lose: 0,
     isOnline: false,
   });
-
+  const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
+  const { friendDispatch } = useFriend();
+
+  const RankSrc =
+    friendData.rank < 800
+      ? "./rank/exp_medal_bronze.png"
+      : friendData.rank >= 800 && friendData.rank < 1100
+      ? "./rank/exp_medal_silver.png"
+      : "./rank/exp_medal_gold.png";
 
   const handleOpenModal = () => {
+    socket.emit(
+      "user_profile",
+      {
+        userIdx: userState.userIdx,
+        targetNickname: prop.friendNickname,
+        targetIdx: prop.friendIdx,
+      },
+      () => {
+        console.log("유저프로필에 데이터 보냄");
+      }
+    );
     setOpenModal(true);
   };
 
@@ -96,33 +116,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    const UserProfile = (data: IFriendData) => {
-      setFriendData(data);
-    };
-
-    // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
-    const ReqData = {
-      //값 변경 필요
-      userIdx: userState.userIdx,
-      targetNickname: prop.friendNickname,
-      targetIdx: prop.friendIdx,
-    };
-    socket.emit("user_profile", ReqData);
-
-    socket.on("user_profile", UserProfile);
-  });
-
-  const RankImgSelect = (data: IFriendData) => {
-    if (data.rank < 800) return "./rank/exp_medal_bronze.png";
-    else if (data.rank >= 800 && data.rank < 1100)
-      return "./rank/exp_medal_silver.png";
-    else if (data.rank >= 1100) return "./rank/exp_medal_gold.png";
-  };
-
-  const RankSrc = RankImgSelect(friendData);
-  const { roomState, roomDispatch } = useRoom();
-
   //0820기준 수정필요z
   const CheckDm = (data: IFriend) => {
     const matchedRoom = roomState.dmRooms.find(
@@ -136,6 +129,57 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     handleCloseModal();
   };
 
+  const addFriend = async () => {
+    const friendReqData: FriendReqData = {
+      targetNickname: prop.friendNickname,
+      targetIdx: prop.friendIdx,
+    };
+    await axios({
+      method: "post",
+      url: "http://localhost:3000/users/follow",
+      data: JSON.stringify(friendReqData),
+    })
+      .then((res) => {
+        console.log(res.data);
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseModal();
+  };
+
+  const deleteFriend = async () => {
+    const friendReqData: FriendReqData = {
+      targetNickname: prop.friendNickname,
+      targetIdx: prop.friendIdx,
+    };
+
+    await axios({
+      method: "delete",
+      url: "http://localhost:3000/users/unfollow",
+      data: JSON.stringify(friendReqData),
+    })
+      .then((res) => {
+        console.log(res.data);
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseModal();
+  };
+
+  useEffect(() => {
+    const userProfile = (data: IFriendData) => {
+      setFriendData(data);
+    };
+
+    socket.on("user_profile", userProfile);
+    return () => {
+      socket.off("user_profile");
+    };
+  }, []);
   return (
     <>
       <Button type="button" onClick={handleOpenModal}>
@@ -209,8 +253,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                   MenuListProps={{ sx: { py: 0 } }}
                 >
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                    <MenuItem>Add</MenuItem>
-                    <MenuItem>Delete</MenuItem>
+                    <MenuItem onClick={addFriend}>Add</MenuItem>
+                    <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                     <MenuItem>Block</MenuItem>
                   </Stack>
                 </Menu>
