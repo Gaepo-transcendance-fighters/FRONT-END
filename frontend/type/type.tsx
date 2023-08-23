@@ -177,3 +177,8 @@ export interface ICor {
 export interface IPaddle extends ICor {}
 
 export interface IBall extends ICor {}
+
+export interface ReturnMsgDto {
+  code: number,
+  msg: string,
+}
