@@ -2,7 +2,7 @@
 
 import { Box, Card, CircularProgress, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useUser } from "@/context/UserContext";
 
@@ -21,6 +21,7 @@ const modalStyle = {
 const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
+  const [client, setClient] = useState(false);
   const { userDispatch } = useUser();
 
   interface Data {
@@ -72,6 +73,12 @@ const Auth = () => {
 
     postCode(code);
   }, []);
+
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
+  if (!client) return <></>;
 
   return (
     <Box>

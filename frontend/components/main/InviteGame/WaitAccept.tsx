@@ -3,6 +3,7 @@ import { Box, Button, Card, CardContent, Modal } from "@mui/material";
 import { useState } from "react";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
+import { socket } from "@/app/page";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -22,6 +23,10 @@ const WaitAccept = () => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const handleOpenModal = () => {
+    // socket.emit("chat_invite_ask", {
+    //   myUserIdx: ,
+    //   targetUserIdx: ,
+    // })
     setOpenModal(true);
   };
 
