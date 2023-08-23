@@ -305,7 +305,7 @@ const PingPong = () => {
   }, [gameState.aScore, gameState.bScore]);
 
   useEffect(() => {
-    gameDispatch({ type: "SET_LATENCY", value: gameState.latency });
+    gameDispatch({ type: "SET_LATENCY", value: gameState.latency / 2 });
     if (!ready) return gameStart();
 
     window.addEventListener("keydown", handlePaddle);
