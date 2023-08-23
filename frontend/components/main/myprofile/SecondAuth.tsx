@@ -36,15 +36,19 @@ const myProfileStyle = {
 };
 
 import { main } from "@/type/type";
-import React, { useState, useRef } from "react";
-import { LocalGasStationRounded } from "@mui/icons-material";
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 
 export default function SecondAuth() {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [verified, setVerified] = useState<string | null>(
-    localStorage.getItem("check2Auth")
-  );
+  const [verified, setVerified] = useState<string>("");
+
+  useEffect(() => {
+    const verified = localStorage.getItem("check2Auth");
+    if (!verified) return;
+    setVerified(verified);
+  }, []);
 
   //값을 서버에서 받아오므로, useRef는 받아온 값으로 변경되어야할것.
   //useState로 초기값 설정해주고, 바뀐값을 전달만해줌?
@@ -66,21 +70,26 @@ export default function SecondAuth() {
       localStorage.setItem("check2Auth", "true");
     }
 
-    // try {
-    //   const response = await axios({
-    //     method: "PATCH",
-    //     url: "http://localhost:4000/users/profile/:my_nickname",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     data: JSON.stringify({
-    //       // userNickName: userData?.nickname,
-    //       check2Auth: verifiedied,
-    //     }),
-    //   });
-    // } catch (error) {
-    //   console.log("2차인증 시 에러발생");
-    // }
+    try {
+      let boolval;
+      if (verified === "true") boolval = true;
+      else if (verified === "false") boolval = false;
+      else throw new Error("Invalue check2Auth value");
+
+      const response = await axios({
+        method: "PATCH",
+        url: "http://localhost:4000/users/profile/:my_nickname",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({
+          // userNickName: userData?.nickname,
+          check2Auth: boolval,
+        }),
+      });
+    } catch (error) {
+      console.log("2차인증 시 에러발생");
+    }
 
     location.reload();
     // setOpenModal(false);
@@ -167,6 +176,7 @@ export default function SecondAuth() {
                   backgroundColor: "#49EC62",
                   border: "1px solid black",
                 }}
+                disabled={verified === "true" ? true : false}
                 onClick={onChangeSecondAuth}
               >
                 활성화
@@ -181,6 +191,7 @@ export default function SecondAuth() {
                   backgroundColor: "#FF6364",
                   border: "1px solid black",
                 }}
+                disabled={verified === "false" ? true : false}
                 onClick={onChangeSecondAuth}
               >
                 비활성화

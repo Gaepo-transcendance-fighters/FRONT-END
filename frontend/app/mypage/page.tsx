@@ -84,15 +84,18 @@ export default function PageRedir() {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
-  const [verified, setVerified] = useState<string | null>(
-    localStorage.getItem("check2Auth")
-  );
+
+  const [verified, setVerified] = useState<string>("");
+
   const [inputName, setInputName] = useState<string>("");
 
   const [reload, setReload] = useState<boolean>(false);
 
   useEffect(() => {
     // const getData = () => {
+    const verified = localStorage.getItem("check2Auth");
+    if (!verified) return;
+    setVerified(verified);
     const headers = {
       Authorization: "Bearer " + localStorage.getItem("authorization"),
     };
@@ -103,7 +106,7 @@ export default function PageRedir() {
       });
     // };
     console.log("API REQUEST");
-  }, [reload]);
+  }, [reload, verified]);
 
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
@@ -124,13 +127,14 @@ export default function PageRedir() {
     try {
       await axios({
         method: "PUT",
-        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
+        url: `http://localhost:4000/users/profile/:${userData?.nickname}`,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
-          imgUri: dataUrl,
+          imgData: dataUrl,
+          // imgUri: dataUrl,
         }),
       });
       console.log("업로드 완료");
@@ -170,15 +174,16 @@ export default function PageRedir() {
     try {
       const response = await axios({
         method: "PATCH",
-        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
+        url: `http://localhost:4000/users/profile/:${userData?.nickname}`,
 
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
-        data: JSON.stringify({
-          changedNickname: inputName,
-        }),
+        data: {
+          userNickname: inputName,
+          // ChangedNickname: inputName,
+        },
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
