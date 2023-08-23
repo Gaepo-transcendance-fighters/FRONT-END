@@ -13,7 +13,7 @@ import "./ProtectedModal.css";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom, Mode } from "@/type/type";
+import { IChatRoom, Mode, ReturnMsgDto } from "@/type/type";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 
@@ -68,14 +68,14 @@ export default function ProtectedModal({
     setFail(false);
     socket.emit(
       "chat_enter",
-      JSON.stringify({
+      {
         userNickname: userState.nickname,
         userIdx: userState.userIdx,
         channelIdx: room.channelIdx,
         password: pwRef.current,
-      }),
-      (ret: number) => {
-        if (ret === 200) {
+      },
+      (ret: ReturnMsgDto) => {
+        if (ret.code === 200) {
           RoomEnter(room);
           handleClose();
           setFail(false);
@@ -92,14 +92,14 @@ export default function ProtectedModal({
       setFail(false);
       socket.emit(
         "chat_enter",
-        JSON.stringify({
+        {
           userNickname: userState.nickname,
           userIdx: userState.userIdx,
           channelIdx: room.channelIdx,
           password: pwRef.current,
-        }),
-        (ret: number) => {
-          if (ret === 200) {
+        },
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
             RoomEnter(room);
             handleClose();
             setFail(false);

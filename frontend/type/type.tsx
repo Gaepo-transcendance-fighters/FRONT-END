@@ -44,9 +44,9 @@ export interface IBlock {
 }
 
 export interface IUserProp {
-  friendNickname: string;
-  friendIdx: number;
-  isOnline: boolean;
+  friendNickname?: string;
+  friendIdx?: number;
+  isOnline?: boolean;
   targetNickname?: string;
   targetIdx?: number;
 }
@@ -177,3 +177,8 @@ export interface ICor {
 export interface IPaddle extends ICor {}
 
 export interface IBall extends ICor {}
+
+export interface ReturnMsgDto {
+  code: number,
+  msg: string,
+}

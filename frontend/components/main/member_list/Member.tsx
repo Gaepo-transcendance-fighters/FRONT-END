@@ -13,6 +13,7 @@ import {
   IChatRoomAdmin,
   IMember,
   Permission,
+  ReturnMsgDto,
   alert,
 } from "@/type/type";
 import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
@@ -116,11 +117,11 @@ export default function Member({
   const SetAdmin = () => {
     socket.emit(
       "chat_room_admin",
-      JSON.stringify({
+      {
         channelIdx: roomState.currentRoom?.channelIdx,
         userIdx: person.userIdx,
         grant: !isAuthorized,
-      }),
+      },
       (ret: string | number) => {
         console.log("SetAdmin ret : ", ret);
         setIsAuthorized((prev) => !prev); //
@@ -149,14 +150,11 @@ export default function Member({
   });
 
   const Mute = () => {
-    socket.emit(
-      "chat_mute",
-      JSON.stringify({
-        channelIdx: roomState.currentRoom?.channelIdx,
-        targetNickname: person.nickname,
-        targetIdx: person.userIdx,
-      })
-    );
+    socket.emit("chat_mute", {
+      channelIdx: roomState.currentRoom?.channelIdx,
+      targetNickname: person.nickname,
+      targetIdx: person.userIdx,
+    });
     setShowAlert(true);
     setString(strings[2]);
   };
@@ -187,11 +185,11 @@ export default function Member({
   const Kick = () => {
     socket.emit(
       "chat_kick",
-      JSON.stringify({
+      {
         channelIdx: roomState.currentRoom?.channelIdx,
         targetNickname: person.nickname,
         targetIdx: person.userIdx,
-      }),
+      },
       (ret: string | number) => {
         console.log("ret : ", ret);
         // if (ret === 200) {
@@ -228,14 +226,14 @@ export default function Member({
   const Ban = () => {
     socket.emit(
       "chat_ban",
-      JSON.stringify({
+      {
         channelIdx: roomState.currentRoom?.channelIdx,
         targetNickname: person.nickname,
         targetIdx: person.userIdx,
-      }),
-      (ret: string | number) => {
+      },
+      (ret: ReturnMsgDto) => {
         console.log("Ban : ", ret);
-        if (ret === 200) {
+        if (ret.code === 200) {
           setShowAlert(true);
           setString(strings[4]);
         }

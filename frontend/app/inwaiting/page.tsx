@@ -30,7 +30,7 @@ const modalStyle = {
 import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
-import { gameSocket } from "../optionselect/page";
+import { gameSocket } from "../page";
 import { useAuth } from "@/context/AuthContext";
 
 enum SpeedOption {
@@ -173,7 +173,15 @@ const Inwaiting = () => {
             type: "A_PLAYER",
             value: { nick: userNicknameFirst, id: userIdxFirst },
           });
+          gameDispatch({
+            type: "B_PLAYER",
+            value: { nick: userNicknameSecond, id: userIdxSecond },
+          });
         } else if (authState.id === userIdxSecond) {
+          gameDispatch({
+            type: "A_PLAYER",
+            value: { nick: userNicknameFirst, id: userIdxFirst },
+          });
           gameDispatch({
             type: "B_PLAYER",
             value: { nick: userNicknameSecond, id: userIdxSecond },

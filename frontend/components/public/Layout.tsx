@@ -13,7 +13,7 @@ import { useRoom } from "@/context/RoomContext";
 import { useUser } from "@/context/UserContext";
 import { useFriend } from "@/context/FriendContext";
 import { socket } from "@/app/page";
-import { IMaindata } from "@/type/type";
+import { IMaindata, ReturnMsgDto } from "@/type/type";
 
 const Layout = () => {
   const { authState } = useAuth();
@@ -42,17 +42,15 @@ const Layout = () => {
     };
   }, []);
   useEffect(() => {
-    if (localStorage.getItem("loggedIn")) {
       console.log(userState.nickname);
       socket.emit(
         "main_enter",
-        JSON.stringify({ intra: localStorage.getItem("intra") }),
-        (ret: number) => {
-          if (ret === 200) {
+        { intra: localStorage.getItem("intra") },
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
           }
         }
       );
-    }
   }, []);
 
   return (

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useUser } from "@/context/UserContext";
+import { useAuth } from "@/context/AuthContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -23,6 +24,7 @@ const Auth = () => {
   const router = useRouter();
   const [client, setClient] = useState(false);
   const { userDispatch } = useUser();
+  const { authDispatch } = useAuth();
 
   interface Data {
     userIdx: number;
@@ -35,8 +37,8 @@ const Auth = () => {
   const postCode = async (code: string) => {
     // dev original
     // await fetch("http://localhost:4000/login/auth", {
-      // haryu's server
-      await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
+    // haryu's server
+    await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
