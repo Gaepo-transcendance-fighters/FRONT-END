@@ -97,7 +97,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
       channelIdx: roomState.currentRoom?.channelIdx,
       userIdx: userState.userIdx, // [작업필요] 추후 나의 userIdx로 교체필요
     };
-    socket.emit("chat_goto_lobby", JSON.stringify(payload));
+    socket.emit("chat_goto_lobby", payload);
     console.log("[RoomTItleField] click leaveroom");
   };
 

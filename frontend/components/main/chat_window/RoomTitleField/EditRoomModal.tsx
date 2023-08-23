@@ -33,7 +33,7 @@ export default function EditRoomModal({ prop }: { prop: () => void }) {
 
   const handleClose = () => {
     prop();
-    socket.emit("BR_chat_room_password", JSON.stringify(payload));
+    socket.emit("BR_chat_room_password", payload);
     console.log("방설정변경 pw: ", value);
   };
 
