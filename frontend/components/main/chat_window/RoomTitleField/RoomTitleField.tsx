@@ -15,16 +15,24 @@ import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { IChat } from "../ChatWindow";
 
-interface Props {
-  setMsgs: Dispatch<SetStateAction<IChat[]>>;
-}
+// interface Props {
+//   setMsgs: Dispatch<SetStateAction<IChat[]>>;
+// }
 export enum Mode {
   PRIVATE = "private",
   PUBLIC = "public",
   PROTECTED = "protected",
 }
 
-const RoomTitleField = ({ setMsgs }: Props) => {
+const RoomTitleField = ({
+  setMsgs,
+  showAlert,
+  setShowAlert,
+}: {
+  setMsgs: Dispatch<SetStateAction<IChat[]>>;
+  showAlert: boolean;
+  setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -122,7 +130,12 @@ const RoomTitleField = ({ setMsgs }: Props) => {
           ) : null}
         </div>
         <div className="room_setting">
-          {roomState.currentRoom?.mode === "private" ? null : <SettingIconButton />}
+          {roomState.currentRoom?.mode === "private" ? null : (
+            <SettingIconButton
+              showAlert={showAlert}
+              setShowAlert={setShowAlert}
+            />
+          )}
         </div>
         <div className="room_exit">
           <IconButton aria-label="leave room" onClick={leaveRoom}>
