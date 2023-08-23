@@ -133,17 +133,15 @@ export interface IDmMemList {
   imgUri: string;
 }
 
-export interface IChatDmEnter {
-  // Message[] {
-  // 	message {
-  // 		sender : string,
-  // 		msg : string
-  // 	},
-  // 	...
-  // }, 이 부분은 주전님이 타입 정해주세요
-  // channelIdx : number; currentRoom이 있어서 필요성을 느끼지 못하지만,
-  //  이 부분도 필요하시면 주석해제하시고요!
+export interface IDMChatFromServer {
+  msg: string,
+  msgDate: Date,
+  sender: string, // 원래는 IDX하기로했는데 백엔드 로직상 dm에서만 string
+}
 
+export interface IChatDmEnter {
+  message: IDMChatFromServer[]
+  channelIdx: number; 
   userIdx1: number;
   userIdx2: number;
   userNickname1: string;

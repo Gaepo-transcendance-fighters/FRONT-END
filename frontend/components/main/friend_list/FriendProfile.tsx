@@ -96,12 +96,16 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     setAnchorEl(null);
   };
 
+  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
   useEffect(() => {
     const UserProfile = (data: IFriendData) => {
       setFriendData(data);
     };
-
     // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
+    socket.on("user_profile", UserProfile);
+  });
+
+  useEffect(() => {
     const ReqData = {
       //값 변경 필요
       userIdx: userState.userIdx,
@@ -109,9 +113,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       targetIdx: prop.friendIdx,
     };
     socket.emit("user_profile", ReqData);
-
-    socket.on("user_profile", UserProfile);
-  });
+  }, [])
 
   const RankImgSelect = (data: IFriendData) => {
     if (data.rank < 800) return "./rank/exp_medal_bronze.png";
