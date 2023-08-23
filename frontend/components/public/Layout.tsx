@@ -45,17 +45,15 @@ const Layout = () => {
   //미세한 찰나일 것임.!
 
   useEffect(() => {
-    if (localStorage.getItem("loggedIn")) {
       console.log(userState.nickname);
       socket.emit(
         "main_enter",
-        JSON.stringify({ intra: localStorage.getItem("intra") }),
+        { intra: localStorage.getItem("intra") },
         (ret: number) => {
           if (ret === 200) {
           }
         }
       );
-    }
   }, []);
 
   return (
