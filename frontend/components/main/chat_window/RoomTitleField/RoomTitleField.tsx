@@ -122,7 +122,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
           ) : null}
         </div>
         <div className="room_setting">
-          <SettingIconButton />
+          {roomState.currentRoom?.mode === "private" ? null : <SettingIconButton />}
         </div>
         <div className="room_exit">
           <IconButton aria-label="leave room" onClick={leaveRoom}>
