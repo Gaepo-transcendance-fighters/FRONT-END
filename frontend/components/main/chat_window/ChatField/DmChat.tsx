@@ -155,7 +155,7 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
           </ul>
         );
       })}
-      <div ref={observerTarget}>"여기가 타겟자리"</div>
+      <div ref={observerTarget}></div>
 
       {loading === true && (
         <Typography style={{ color: "white" }} component={"div"}>
