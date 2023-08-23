@@ -37,7 +37,10 @@ const SecondAuth = () => {
       method: "POST",
       url: `http://localhost:4000/users/second`,
       data: {
-        userIdx: Number(localStorage.getItem("idx")),
+
+        userIdx: localStorage.getItem("idx"),
+        // userIdx: Number(localStorage.getItem("idx")),
+
         email: localStorage.getItem("email"),
       },
     });
@@ -52,8 +55,10 @@ const SecondAuth = () => {
       method: "PATCH",
       url: `http://localhost:4000/users/second`,
       data: {
+
         userIdx: Number(localStorage.getItem("idx")),
         code: Number(inputnumber),
+
       },
     });
     if (response.status == 200) console.log("success in check 2 auth");

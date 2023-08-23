@@ -62,15 +62,13 @@ import React, { useEffect, useState, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
+import { CssOutlined } from "@mui/icons-material";
+
+import SecondAuth from "@/components/main/myprofile/SecondAuth";
 
 export default function PageRedir() {
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const nickname = searchParams.toString();
-
   const { userState } = useUser();
-  const [checked, setChecked] = useState(true);
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
     imgUrl: "",
@@ -79,9 +77,8 @@ export default function PageRedir() {
     rank: 0,
     email: "",
   });
-  const [message, setMessage] = useState("");
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  // const [openModal, setOpenModal] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);
   const [inputName, setInputName] = useState<string>("");
 
@@ -179,7 +176,8 @@ export default function PageRedir() {
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
         console.log("Sucess");
-        handleCloseModal();
+        // handleCloseModal();
+        nicknameModal.close;
       }
     } catch (error) {
       console.log("닉네임 변경중 문제가 발생");
@@ -191,38 +189,104 @@ export default function PageRedir() {
     if (verified == true) setVerified(false);
     else setVerified(true);
 
-    try {
-      const response = await axios({
-        method: "PATCH",
-        url: "http://localhost:4000/users/profile/:my_nickname",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify({
-          // userNickName: userData?.nickname,
-          check2Auth: verified,
-        }),
-      });
-    } catch (error) {
-      console.log("2차인증 시 에러발생");
+    // try {
+    //   const response = await axios({
+    //     method: "PATCH",
+    //     url: "http://localhost:4000/users/profile/:my_nickname",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     data: JSON.stringify({
+    //       // userNickName: userData?.nickname,
+    //       check2Auth: verified,
+    //     }),
+    //   });
+    // } catch (error) {
+    //   console.log("2차인증 시 에러발생");
+    // }
+  };
+
+  const SecondAuthModal = () => {
+    if (verified == true) setVerified(false);
+    else setVerified(true);
+    console.log("@@@");
+    {
+      // handleOpenModal();
+      authModal.open;
+
+      <>
+        {/* <Modal open={openModal} onClose={handleCloseModal}> */}
+        <Modal open={authModal.isOpen} onClose={authModal.close}>
+          <Box
+            sx={{
+              position: "absolute" as "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 100,
+              height: 150,
+              bgcolor: "#65d9f9",
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
+            }}
+            borderRadius={"10px"}
+          >
+            <Card
+              sx={{
+                backgroundColor: main.main4,
+                height: "170px",
+                margin: -1,
+              }}
+            >
+              <Stack direction={"row"}>
+                <Card
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  sx={{
+                    margin: 1,
+                    width: "100%",
+                    height: "120px",
+                    backgroundColor: main.main1,
+                    overflow: "scroll",
+                  }}
+                >
+                  asdasdasd
+                </Card>
+              </Stack>
+            </Card>
+          </Box>
+        </Modal>
+      </>;
     }
   };
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
+  const [openModal, setOpenModal] = useState<Modals>({
+    nickNameModal: false,
+    authModal: false,
+  });
+
+  const getModalHanlder = (modalName: ModalNames) => {
+    return {
+      isOpen: openModal[modalName],
+      open: () => setOpenModal((state) => ({ ...state, [modalName]: true })),
+      close: () => setOpenModal((state) => ({ ...state, [modalName]: false })),
+    };
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  const nicknameModal = getModalHanlder("nickNameModal");
+  const authModal = getModalHanlder("authModal");
 
-  const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
+  // const handleOpenModal = (modalname) => {
+  //   setOpenModal(true);
+  // };
 
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
+  // const handleCloseModal = () => {
+  //   setOpenModal(false);
+  // };
 
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, "");
@@ -390,26 +454,22 @@ export default function PageRedir() {
                             onChange={handleChange}
                           />
                         </form>
-                        {/* <form>
-                          <input
-                            type="file"
-                            id="profile-upload"
-                            accept="image/png, image/jpg, image/jpeg"
-                            style={{ display: "none" }}
-                          />
-                        </form> */}
-                        {/* 123 */}
+
                         <Button
                           type="submit"
                           style={{
                             minWidth: "max-content",
                           }}
                           variant="contained"
-                          onClick={handleOpenModal}
+                          onClick={nicknameModal.open}
                         >
                           닉네임변경
                         </Button>
-                        <Modal open={openModal} onClose={handleCloseModal}>
+                        {/* <Modal open={openModal} onClose={handleCloseModal}> */}
+                        <Modal
+                          open={nicknameModal.isOpen}
+                          onClose={nicknameModal.close}
+                        >
                           <Box sx={modalStyle} borderRadius={"10px"}>
                             <Card
                               sx={{
@@ -473,20 +533,7 @@ export default function PageRedir() {
                             </Card>
                           </Box>
                         </Modal>
-                        <Button
-                          type="button"
-                          style={{
-                            minWidth: "max-content",
-                          }}
-                          variant="contained"
-                          onClick={onChangeSecondAuth}
-                        >
-                          {verified == true ? (
-                            <>2차인증 비활성화</>
-                          ) : (
-                            <>2차인증 활성화</>
-                          )}
-                        </Button>
+                        <SecondAuth />
                       </Stack>
                     </Stack>
                   </Card>
