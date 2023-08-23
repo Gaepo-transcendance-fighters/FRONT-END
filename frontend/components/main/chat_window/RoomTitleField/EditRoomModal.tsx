@@ -6,6 +6,7 @@ import { IChatRoom } from "@/type/type";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { socket } from "@/app/page";
+import { useUser } from "@/context/UserContext";
 
 const style = {
   position: "absolute" as "absolute",
@@ -23,9 +24,10 @@ const style = {
 export default function EditRoomModal({ prop }: { prop: () => void }) {
   const { roomState, roomDispatch } = useRoom();
   const [value, setValue] = useState("");
+  const { userState } = useUser();
   const payload = {
     channelIdx: roomState.currentRoom?.channelIdx,
-    senderIdx: 98029, // [번경필요]나중에 나의 userIdx 로 변경필요
+    senderIdx: userState.userIdx, // [번경필요]나중에 나의 userIdx 로 변경필요
     changedPassword: value,
   };
 
