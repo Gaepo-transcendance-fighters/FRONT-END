@@ -186,12 +186,12 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       console.log("[RoomEnter 조건문 안에 들어왔따. ]")
       socket.emit(
         "chat_goto_lobby",
-        JSON.stringify({
+        {
           channelIdx: roomState.currentRoom.channelIdx,
           userIdx: userState.userIdx,
-        }),
+        },
         (ret: ReturnMsgDto) => {
-          console.log("chat_goto_lobby ret : ", ret);
+          console.log("chat_goto_lobby ret : ", ret.code);
         }
       );
     }
@@ -200,20 +200,19 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   };
 
   const RoomClick = (room: IChatRoom) => {
+    console.log("[RoomClick] 시작한다.", room);
     if (roomState.currentRoom?.channelIdx !== room.channelIdx) {
       // TODO : 누른 버튼 색 다르게 해보기
-      console.log("[RoomClick 시작]")
       if (room.mode === Mode.PROTECTED) handleOpen();
       else if (room.mode === Mode.PRIVATE) {
-      console.log("[RoomClick dm 방 입장 emit]")
         socket.emit(
           "chat_get_DM",
-          JSON.stringify({
+          {
             channelIdx: room.channelIdx,
-          }),
+          },
           (ret: ReturnMsgDto) => {
             if (ret.code === 200) {
-      console.log("[RoomClick dm ret 200 ]")
+              console.log("[RoomClick] ret == 200 받았다.");
               RoomEnter(room);
             }
           }
@@ -222,7 +221,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       console.log("[RoomClick 일반 방 입장 emit]")
         socket.emit(
           "chat_enter",
-          JSON.stringify({
+          {
             userNickname: userState.nickname,
             userIdx: userState.userIdx,
             channelIdx: room.channelIdx,

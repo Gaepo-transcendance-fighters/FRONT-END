@@ -48,10 +48,10 @@ export default function CreateRoomModal({
       ) {
         socket.emit(
           "chat_goto_lobby",
-          JSON.stringify({
+          {
             channelIdx: roomState.currentRoom.channelIdx,
             userIdx: userState.userIdx,
-          }),
+          },
           (ret: number | string) => {
             console.log("chat_goto_lobby ret : ", ret);
           }
@@ -81,13 +81,9 @@ export default function CreateRoomModal({
   }, [userState.userIdx, roomState.currentRoom]);
 
   const OnClick = () => {
-    socket.emit(
-      "BR_chat_create_room",
-      JSON.stringify({ password: value }),
-      (ret: number) => {
-        // if (ret === 200)
-      }
-    );
+    socket.emit("BR_chat_create_room", { password: value }, (ret: number) => {
+      // if (ret === 200)
+    });
   };
 
   return (

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useUser } from "@/context/UserContext";
+import { useAuth } from "@/context/AuthContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -23,10 +24,13 @@ const Auth = () => {
   const router = useRouter();
   const [client, setClient] = useState(false);
   const { userDispatch } = useUser();
+  const { authDispatch } = useAuth();
 
   interface Data {
     token: string;
     jwt: string;
+    userIdx: number;
+    intra: string;
     user: {
       userIdx: number;
       intra: string;
@@ -51,12 +55,14 @@ const Auth = () => {
     })
       .then(async (res) => {
         if (res.status === 200) {
-          localStorage.setItem("loggedIn", "true");
+          // localStorage.setItem("loggedIn", "true");
           const data: Data = await res.json();
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
           localStorage.setItem("token", data.jwt);
-          localStorage.setItem("intra", data.user.intra);
-          localStorage.setItem("idx", data.user.userIdx.toString());
+          localStorage.setItem("intra", data.intra);
+          localStorage.setItem("idx", data.userIdx.toString());
+          authDispatch({ type: "SET_ID", value: data.userIdx });
+
           return router.push(`/`);
         }
       })

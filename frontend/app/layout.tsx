@@ -2,7 +2,7 @@
 
 import { Inter } from "next/font/google";
 import "@/app/style.css";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { RoomProvider } from "@/context/RoomContext";
 import { FriendProvider } from "@/context/FriendContext";
@@ -10,6 +10,8 @@ import { GameProvider } from "@/context/GameContext";
 import { UserProvider } from "@/context/UserContext";
 import { InitMsgProvider } from "@/context/InitMsgContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { io } from "socket.io-client";
+import { use, useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +26,7 @@ const font = createTheme({
     fontFamily: "neodgm",
   },
 });
+
 
 export default function RootLayout({
   children,

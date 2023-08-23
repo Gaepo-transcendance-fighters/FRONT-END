@@ -41,17 +41,17 @@ export default function RoomTypeButton() {
   }, []);
 
   const NonDmBtnClick = () => {
-    socket.emit("chat_get_roomList", (ret: number) => {});
+    socket.emit("chat_get_roomList", (ret: ReturnMsgDto) => {});
     OnClick(true);
   };
 
   const DmBtnClick = () => {
     socket.emit(
       "chat_get_DMList",
-      JSON.stringify({
+      {
         userNickname: userState.nickname,
         userIdx: userState.userIdx,
-      }),
+      },
       (ret: ReturnMsgDto) => {
         console.log(ret);
       }

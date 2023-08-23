@@ -68,12 +68,12 @@ export default function ProtectedModal({
     setFail(false);
     socket.emit(
       "chat_enter",
-      JSON.stringify({
+      {
         userNickname: userState.nickname,
         userIdx: userState.userIdx,
         channelIdx: room.channelIdx,
         password: pwRef.current,
-      }),
+      },
       (ret: ReturnMsgDto) => {
         if (ret.code === 200) {
           RoomEnter(room);
@@ -92,12 +92,12 @@ export default function ProtectedModal({
       setFail(false);
       socket.emit(
         "chat_enter",
-        JSON.stringify({
+        {
           userNickname: userState.nickname,
           userIdx: userState.userIdx,
           channelIdx: room.channelIdx,
           password: pwRef.current,
-        }),
+        },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
             RoomEnter(room);

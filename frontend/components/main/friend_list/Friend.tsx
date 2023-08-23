@@ -39,8 +39,8 @@ const Friend = ({ prop }: { prop: IUserProp }) => {
             </Typography>
           </Tooltip>
           <Stack direction={"row"} alignItems={"center"}>
-            {prop.isOnline ? loginOn :  loginOff}
-            <FriendProfile prop={prop} />
+            {prop.isOnline ?? prop.isOnline ? loginOn :  loginOff}
+            <FriendProfile prop={prop as IFriend} />
           </Stack>
         </Stack>
       </Card>
