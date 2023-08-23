@@ -2,7 +2,7 @@
 
 import { Box, Card, CircularProgress, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useUser } from "@/context/UserContext";
 
@@ -21,6 +21,7 @@ const modalStyle = {
 const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
+  const [client, setClient] = useState(false);
   const { userDispatch } = useUser();
 
   interface Data {
@@ -33,9 +34,9 @@ const Auth = () => {
   }
   const postCode = async (code: string) => {
     // dev original
-    await fetch("http://localhost:4000/login/auth", {
+    // await fetch("http://localhost:4000/login/auth", {
       // haryu's server
-      // await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
+      await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -51,10 +52,11 @@ const Auth = () => {
           console.log("data : ", data);
           localStorage.setItem("loggedIn", "true");
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
-          // localStorage.setItem("token", data.jwt);
+          localStorage.setItem("imgUri", data.imgUri);
           localStorage.setItem("intra", data.intra);
           localStorage.setItem("idx", data.userIdx.toString());
           localStorage.setItem("email", data.email); // <- 0820 21시 30분경 추가
+          localStorage.setItem("check2Auth", data.check2Auth.toString());
           return router.push(`/`);
         }
       })
@@ -71,6 +73,12 @@ const Auth = () => {
 
     postCode(code);
   }, []);
+
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
+  if (!client) return <></>;
 
   return (
     <Box>

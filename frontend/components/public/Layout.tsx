@@ -16,12 +16,10 @@ import { socket } from "@/app/page";
 import { IMaindata } from "@/type/type";
 
 const Layout = () => {
-  const { state } = useAuth();
+  const { authState } = useAuth();
   const { roomState, roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
-
-  useRequireAuth();
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
@@ -43,7 +41,6 @@ const Layout = () => {
       socket.off("main_enter", MainEnter);
     };
   }, []);
-
   useEffect(() => {
     if (localStorage.getItem("loggedIn")) {
       console.log(userState.nickname);

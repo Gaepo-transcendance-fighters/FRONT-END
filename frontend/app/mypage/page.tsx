@@ -56,13 +56,6 @@ interface IUserData {
   email: string;
 }
 
-type Modals = {
-  nickNameModal: boolean;
-  authModal: boolean;
-};
-
-type ModalNames = "nickNameModal" | "authModal";
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { main } from "@/type/type";
 import React, { useEffect, useState, ChangeEvent } from "react";

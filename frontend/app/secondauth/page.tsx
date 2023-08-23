@@ -37,8 +37,10 @@ const SecondAuth = () => {
       method: "POST",
       url: `http://localhost:4000/users/second`,
       data: {
+
         userIdx: localStorage.getItem("idx"),
         // userIdx: Number(localStorage.getItem("idx")),
+
         email: localStorage.getItem("email"),
       },
     });
@@ -53,11 +55,13 @@ const SecondAuth = () => {
       method: "PATCH",
       url: `http://localhost:4000/users/second`,
       data: {
-        userIdx: localStorage.getItem("idx"),
-        code: inputnumber,
+
+        userIdx: Number(localStorage.getItem("idx")),
+        code: Number(inputnumber),
+
       },
     });
-    if (response.status == 200) console.log("sucess in check 2 auth");
+    if (response.status == 200) console.log("success in check 2 auth");
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
     else console.log("fail");
     //재입력 필요
