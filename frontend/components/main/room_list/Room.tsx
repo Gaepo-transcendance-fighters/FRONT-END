@@ -13,6 +13,7 @@ import {
   alert,
   lock,
   clickedLock,
+  ReturnMsgDto,
 } from "@/type/type";
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
@@ -184,8 +185,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           channelIdx: roomState.currentRoom.channelIdx,
           userIdx: userState.userIdx,
         },
-        (ret: number | string) => {
-          console.log("chat_goto_lobby ret : ", ret);
+        (ret: ReturnMsgDto) => {
+          console.log("chat_goto_lobby ret : ", ret.code);
         }
       );
     }
@@ -194,31 +195,36 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   };
 
   const RoomClick = (room: IChatRoom) => {
+    console.log("[RoomClick] 시작한다.", room);
     if (roomState.currentRoom?.channelIdx !== room.channelIdx) {
-      // TODO : 누른 버튼 색 다르게 해보기
+    console.log("[RoomClick] 시작한다22.");
+    // TODO : 누른 버튼 색 다르게 해보기
       if (room.mode === Mode.PROTECTED) handleOpen();
       else if (room.mode === Mode.PRIVATE) {
+              console.log("[RoomClick] protected emit 보내고있다..");
         socket.emit(
           "chat_get_DM",
           {
             channelIdx: room.channelIdx,
           },
-          (ret: number) => {
-            if (ret === 200) {
+          (ret: ReturnMsgDto) => {
+            if (ret.code === 200) {
+              console.log("[RoomClick] ret == 200 받았다.");
               RoomEnter(room);
             }
           }
         );
       } else {
-        socket.emit(
+              console.log("[RoomClick] public 방 emit 보내고있다..");
+          socket.emit(
           "chat_enter",
           {
             userNickname: userState.nickname,
             userIdx: userState.userIdx,
             channelIdx: room.channelIdx,
           },
-          (ret: number) => {
-            if (ret === 200) {
+          (ret: ReturnMsgDto) => {
+            if (ret.code === 200) {
               RoomEnter(room);
             }
           }
