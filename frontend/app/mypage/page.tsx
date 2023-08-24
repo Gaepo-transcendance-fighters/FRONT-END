@@ -21,6 +21,13 @@ const font = createTheme({
   },
 });
 
+interface UserEditprofileDto {
+  userIdx : number;
+  userNickname: string;
+  imgData: any;
+}
+
+
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -49,7 +56,7 @@ const myProfileStyle = {
 
 interface IUserData {
   nickname: string;
-  imgUrl: string;
+  imgData: string;
   Win: number;
   Lose: number;
   rank: number;
@@ -73,7 +80,7 @@ export default function PageRedir() {
   const [checked, setChecked] = useState(true);
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
-    imgUrl: "",
+    imgData: "",
     Win: 0,
     Lose: 0,
     rank: 0,
@@ -117,24 +124,61 @@ export default function PageRedir() {
   const uploadImage = async (file: File) => {
     // readAsDataURL을 사용해 이미지를 base64로 변환
     const dataUrl: string = await readFileAsDataURL(file);
+    
+    const formData = new FormData();
+    formData.append("userIdx", Number(localStorage.getItem("idx")).toString());
+    formData.append("userNickname",'');
+    formData.append("imgData", dataUrl);
+    console.log("formData", formData);
+    
     try {
       await axios({
-        method: "PUT",
-        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
+        method: "POST",
+        url: `http://localhost:4000/users/profile`,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
-        data: JSON.stringify({
-          imgUri: dataUrl,
-        }),
+        data: formData,
       });
-      console.log("업로드 완료");
     } catch (error) {
       console.error("업로드 실패", error);
     }
     setReload((curr) => !curr);
   };
+/*
+      await axios({
+        method: "PATCH",
+        url: `http://localhost:4000/users/profile`,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + localStorage.getItem("authorization"),
+        },
+        data: formData,
+        // data: JSON.stringify({
+        //   userIdx: Number(localStorage.getItem("idx")),
+        //   userNickname: '',
+        //   imgData: dataUrl,
+        // }),
+      });
+      console.log("업로드 완료");
+*/
+      // const response = await fetch(
+      //   `http://localhost:4000/users/profile`,
+      //   {
+      //     method: 'PATCH',
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem("authorization")}`,
+      //       'Content-Type': 'multipart/form-data',
+      //     },
+      //     body: formData,
+      //   },
+      // );
+  //   } catch (error) {
+  //     console.error("업로드 실패", error);
+  //   }
+  //   setReload((curr) => !curr);
+  // };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -165,15 +209,17 @@ export default function PageRedir() {
 
     try {
       const response = await axios({
-        method: "PATCH",
-        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
+        method: "POST",
+        url: `http://localhost:4000/users/profile`,
 
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
-          changedNickname: inputName,
+          userIdx: Number(localStorage.getItem("idx")),
+          userNickname: inputName,
+          imgData: localStorage.getItem("imgUri"),
         }),
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
@@ -321,7 +367,7 @@ export default function PageRedir() {
                     >
                       <Avatar
                         // src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
-                        src={userData?.imgUrl}
+                        src={userData?.imgData}
                         style={{
                           width: "100%",
                           height: "75%",

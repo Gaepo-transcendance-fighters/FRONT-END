@@ -137,7 +137,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     };
     await axios({
       method: "post",
-      url: "http://paulryu9309.ddns.net:4000/users/follow",
+      url: "localhost:4000/users/follow",
+      // url: "http://paulryu9309.ddns.net:4000/users/follow",
       data: friendReqData,
     })
       .then((res) => {
@@ -159,7 +160,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
 
     await axios({
       method: "delete",
-      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      url: "localhost:4000/users/unfollow",
+      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
       data: friendReqData,
     })
       .then((res) => {
