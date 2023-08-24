@@ -4,7 +4,7 @@ import Stack from "./RoomNameStack";
 import Typography from "@mui/material/Typography";
 import VpnKeyTwoToneIcon from "@mui/icons-material/VpnKeyTwoTone";
 import "./RoomTitleField.css";
-import { IconButton } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
 import SettingIconButton from "./SettingIconButton";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -138,9 +138,10 @@ const RoomTitleField = ({
           )}
         </div>
         <div className="room_exit">
-          <IconButton aria-label="leave room" onClick={leaveRoom}>
+          {/* <IconButton aria-label="leave room" onClick={leaveRoom}>
             <DeleteForeverIcon />
-          </IconButton>
+          </IconButton> */}
+          <Button variant="contained" size="small" onClick={leaveRoom}>lobby</Button>
         </div>
       </div>
     </div>
