@@ -13,15 +13,14 @@ import {
 import { useEffect, useState } from "react";
 import { IFriend } from "./FriendList";
 import Image from "next/image";
-import WaitAccept from "../InviteGame/WaitAccept";
 import MyGameLog from "../myprofile/MyGameLog";
 import { socket } from "@/app/page";
-import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import { main } from "@/type/type";
 import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
+import FriendGameButton from "../InviteGame/FriendGameButton";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -231,7 +230,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 {friendData.isOnline === true ? <>Online</> : <>Offline</>}
               </Typography>
               <Stack direction={"row"} spacing={2}>
-                <WaitAccept />
+                <FriendGameButton prop={prop} />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
