@@ -36,7 +36,6 @@ const unselectedButton = {
   flex: 1,
 };
 
-
 export interface IFriend {
   friendNickname: string;
   friendIdx: number;

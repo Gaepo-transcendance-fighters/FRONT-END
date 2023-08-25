@@ -69,10 +69,12 @@ import { useUser } from "@/context/UserContext";
 import axios from "axios";
 
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
+import { useAuth } from "@/context/AuthContext";
 
 export default function PageRedir() {
   const router = useRouter();
   const { userState } = useUser();
+  const { authState } = useAuth();
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
     imgUrl: "",
@@ -124,16 +126,20 @@ export default function PageRedir() {
   const uploadImage = async (file: File) => {
     // readAsDataURL을 사용해 이미지를 base64로 변환
     const dataUrl: string = await readFileAsDataURL(file);
+    console.log(dataUrl);
     try {
       await axios({
         method: "PUT",
         url: `http://localhost:4000/users/profile/${userData?.nickname}`,
         headers: {
-          "Content-Type": "multipart/form-data",
+          // "Content-Type": "multipart/form-data",
+          "Content-type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
+          userIdx: authState.id,
           imgData: dataUrl,
+          userNickname: "",
           // imgUri: dataUrl,
         }),
       });
@@ -172,17 +178,22 @@ export default function PageRedir() {
     }
 
     try {
+      let idx: number = Number(localStorage.getItem("id"));
       const response = await axios({
         method: "PATCH",
-        url: `http://localhost:4000/users/profile/${userData.nickname}`,
+        url: `http://localhost:4000/users/profile`,
 
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: {
-          // userNickname: inputName,
-          ChangedNickname: inputName,
+          // userIdx: Number(localStorage.getItem("id")), //<- 안되는예제
+          // userIdx: 98100, //<-되는예제
+          userIdx: idx, //<-되는예제
+          userNickname: inputName,
+          imgData: "",
         },
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
