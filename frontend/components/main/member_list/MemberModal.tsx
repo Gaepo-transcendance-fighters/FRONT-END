@@ -18,6 +18,7 @@ import { IChatDmEnter, IMember } from "@/type/type";
 import { useFriend } from "@/context/FriendContext";
 import { socket } from "@/app/page";
 import axios from "axios";
+import MemberGameButton from "../InviteGame/MemberGameButton";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -203,13 +204,7 @@ export default function MemberModal({
               상태: {curFriend?.isOnline ? loginOn : loginOff}
             </Typography>
             <Stack direction={"row"} spacing={2}>
-              <Button
-                type="button"
-                sx={{ minWidth: "max-content" }}
-                variant="contained"
-              >
-                친선전
-              </Button>
+              <MemberGameButton prop={person} />
               <Button
                 type="button"
                 sx={{ minWidth: "max-content" }}
