@@ -68,6 +68,14 @@ const RoomTitleField = ({
       } else
         console.log("[RoomTItleField] there isn't roomState.currentRoom case");
     };
+    socket.on("chat_goto_lobby", leaveHandler);
+
+    return () => {
+      socket.off("chat_goto_lobby", leaveHandler);
+    };
+  }, []);
+
+  useEffect(() => {
     const leaveAndDeleteHandler = (channels: IChatRoom[]) => {
       console.log(
         "[RoomTItleField] leaveAndDeleteHandler on! chanel : ",
@@ -80,11 +88,9 @@ const RoomTitleField = ({
       } else
         console.log("[RoomTItleField] there isn't roomState.currentRoom case");
     };
-    socket.on("chat_goto_lobby", leaveHandler);
     socket.on("BR_chat_room_delete", leaveAndDeleteHandler);
 
     return () => {
-      socket.off("chat_goto_lobby", leaveHandler);
       socket.off("BR_chat_room_delete", leaveAndDeleteHandler);
     };
   });
@@ -101,12 +107,17 @@ const RoomTitleField = ({
   }, [userState.nickname]);
 
   const leaveRoom = () => {
-    const payload = {
-      channelIdx: roomState.currentRoom?.channelIdx,
-      userIdx: userState.userIdx, // [작업필요] 추후 나의 userIdx로 교체필요
-    };
-    socket.emit("chat_goto_lobby", payload);
     console.log("[RoomTItleField] click leaveroom");
+    if (roomState.currentRoom?.mode !== "private") {
+      const payload = {
+        channelIdx: roomState.currentRoom?.channelIdx,
+        userIdx: userState.userIdx, // [작업필요] 추후 나의 userIdx로 교체필요
+      };
+      socket.emit("chat_goto_lobby", payload);
+    } else {
+      roomDispatch({ type: "SET_CUR_ROOM", value: null });
+      roomDispatch({ type: "SET_IS_OPEN", value: false });
+    }
   };
 
   return (
@@ -141,7 +152,9 @@ const RoomTitleField = ({
           {/* <IconButton aria-label="leave room" onClick={leaveRoom}>
             <DeleteForeverIcon />
           </IconButton> */}
-          <Button variant="contained" size="small" onClick={leaveRoom}>lobby</Button>
+          <Button variant="contained" size="small" onClick={leaveRoom}>
+            lobby
+          </Button>
         </div>
       </div>
     </div>
