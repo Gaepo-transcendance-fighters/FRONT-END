@@ -19,8 +19,8 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const router = useRouter();
   const [isInvite, setIsInvite] = useState(false);
   const { authState } = useAuth();
-
   const [openModal, setOpenModal] = useState<boolean>(false);
+
   const handleOpenModal = () => {
     socket.emit("chat_invite_ask", {
       myUserIdx: authState.id,
