@@ -22,7 +22,7 @@ const font = createTheme({
 });
 
 interface UserEditprofileDto {
-  userIdx : number;
+  userIdx: number;
   userNickname: string;
   imgData: any;
 }
