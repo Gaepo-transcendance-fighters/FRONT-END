@@ -22,7 +22,7 @@ const font = createTheme({
 });
 
 interface UserEditprofileDto {
-  userIdx: number;
+  userIdx : number;
   userNickname: string;
   imgData: any;
 }
@@ -144,8 +144,7 @@ export default function PageRedir() {
         method: "POST",
         url: `http://localhost:4000/users/profile`,
         headers: {
-          // "Content-Type": "multipart/form-data",
-          "Content-type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: formData,
@@ -155,39 +154,6 @@ export default function PageRedir() {
     }
     setReload((curr) => !curr);
   };
-  /*
-      await axios({
-        method: "PATCH",
-        url: `http://localhost:4000/users/profile`,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + localStorage.getItem("authorization"),
-        },
-        data: formData,
-        // data: JSON.stringify({
-        //   userIdx: Number(localStorage.getItem("idx")),
-        //   userNickname: '',
-        //   imgData: dataUrl,
-        // }),
-      });
-      console.log("업로드 완료");
-*/
-  // const response = await fetch(
-  //   `http://localhost:4000/users/profile`,
-  //   {
-  //     method: 'PATCH',
-  //     headers: {
-  //       Authorization: `Bearer ${localStorage.getItem("authorization")}`,
-  //       'Content-Type': 'multipart/form-data',
-  //     },
-  //     body: formData,
-  //   },
-  // );
-  //   } catch (error) {
-  //     console.error("업로드 실패", error);
-  //   }
-  //   setReload((curr) => !curr);
-  // };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -223,8 +189,7 @@ export default function PageRedir() {
         url: `http://localhost:4000/users/profile`,
 
         headers: {
-          // "Content-Type": "application/json",
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "Application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
@@ -235,7 +200,7 @@ export default function PageRedir() {
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
-        console.log("Sucess");
+        console.log("Success");
         handleCloseModal();
       }
     } catch (error) {
@@ -347,7 +312,6 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        // src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
                         src={userData?.imgData}
                         style={{
                           width: "100%",
