@@ -1,10 +1,8 @@
 "use client";
 
 import { Box, Typography } from "@mui/material";
-import Chats from "./Chats(Infinitiy,no_used)";
 import { useRoom } from "@/context/RoomContext";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { socket } from "@/app/page";
 import { Dispatch, SetStateAction } from "react";
 import { IChat } from "../ChatWindow";
 import axios from "axios";
@@ -21,6 +19,46 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
   const observerTarget = useRef(null);
   const [lastDate, setLastDate] = useState<string>();
   const { initMsgState } = useInitMsg();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setLoading(true);
+          callHistory();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (observerTarget.current) observer.observe(observerTarget.current);
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [observerTarget, loading]);
+
+  const callHistory = useCallback(async () => {
+    console.log("callHistory start lastDate", lastDate);
+    if (!lastDate) {
+      setLoading(false);
+      return;
+    }
+    await axios
+      .get(
+        `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
+      )
+      .then((res) => {
+        const newData = Array.isArray(res.data) ? res.data : [res.data];
+        setMsgs((prevMsgs) => [...prevMsgs, ...newData]);
+        setLoading(false);
+        const lastIdx = msgs.length - 1;
+        const lastElement = msgs[lastIdx];
+        setLastDate((prev) => lastElement.msgDate);
+      });
+  }, [lastDate, loading, msgs]);
 
   // 첫 메세지 20개 불러오는 로직
   useEffect(() => {
@@ -46,76 +84,19 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
     });
   }, [initMsgState]);
 
-  useEffect(() => {
-    console.log(msgs);
-  }, [msgs, setMsgs]);
-
-  // 무한 스크롤 요청 부분
-  // observe 시작 해주는 로직
-  // 이전대화기록의 마지막을 보게되면 이전 대화기록을 요청한다.
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        console.log("!!!");
-        if (entries[0].isIntersecting) {
-          console.log("이전대화기록 불러오는 부분 이미 들어왔어.");
-          console.log("그런데 현재 lastDate는", lastDate);
-          setTimeout(() => {
-            callHistory();
-          }, 500);
-          setLoading(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
-
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
-  }, [observerTarget.current, lastDate]);
-
-  const callHistory = useCallback(async () => {
-    if (!lastDate) {
-      return;
-    }
-    console.log("요청하는 lastDate", lastDate);
-    await axios
-      .get(
-        `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
-      )
-      .then((res) => {
-        const newData = Array.isArray(res.data) ? res.data : [res.data];
-        setMsgs((prevMsgs) => [...prevMsgs, ...newData]);
-        setLoading(false);
-        const lastIdx = msgs.length - 1;
-        const lastElement = msgs[lastIdx];
-        setLastDate(lastElement.msgDate);
-      });
-  }, [lastDate, msgs]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     callHistory();
-  //   }, 500);
-  //   setLoading(true);
-  // }, [pageNum]);
-
   // 이전 대화기록을 불러오거나, 새로 채팅을 송수신하게되면 그때마다 불러와진 대화기록 중 제일 오래된 메세지의 Date를 가져온다.
   useEffect(() => {
+    console.log("!!!")
     if (msgs.length > 0) {
       const lastIdx = msgs.length - 1;
+      console.log("lastidx", lastIdx)
       const lastElement = msgs[lastIdx];
-      setLastDate(lastElement.msgDate);
-      console.log("메세지 갱신됐어, 라스트 데이트도 업뎃함");
-      console.log(lastDate);
+      console.log("lastIdxMsg", lastElement)
+      setLastDate(() => lastElement.msgDate);
+      // console.log("메세지 갱신됐어, 라스트 데이트도 업뎃함");
+      // console.log(Date.now(), lastDate);
     }
-  }, [lastDate, msgs]);
+  }, [msgs, lastDate]);
 
   return (
     <Box
@@ -155,8 +136,10 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
           </ul>
         );
       })}
-      <div ref={observerTarget}></div>
-
+      <div ref={observerTarget}> </div>
+      <Typography style={{ color: "white" }} component={"div"} align="center">
+        this is top of the chat list...
+      </Typography>
       {loading === true && (
         <Typography style={{ color: "white" }} component={"div"}>
           loading...
