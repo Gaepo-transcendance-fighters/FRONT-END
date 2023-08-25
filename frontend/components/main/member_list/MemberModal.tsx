@@ -17,6 +17,7 @@ import { IFriend } from "../friend_list/FriendList";
 import { IChatDmEnter, IMember } from "@/type/type";
 import { useFriend } from "@/context/FriendContext";
 import { useRoom } from "@/context/RoomContext";
+import axios from "axios";
 import { socket } from "@/app/page";
 
 const modalStyle = {
@@ -32,10 +33,18 @@ const modalStyle = {
   p: 4,
 };
 
-const loginOn = <Image src="/logon1.png" alt="online" width={10} height={10} />;
-const loginOff = (
-  <Image src="/logoff.png" alt="offline" width={10} height={10} />
+const loginOn = (
+  <Image src="/status/logon.png" alt="online" width={10} height={10} />
 );
+
+const loginOff = (
+  <Image src="/status/logoff.png" alt="offline" width={10} height={10} />
+);
+
+interface FriendReqData {
+  targetNickname: string;
+  targetIdx: number;
+}
 
 export default function MemberModal({
   setOpenModal,
@@ -46,15 +55,16 @@ export default function MemberModal({
   openModal: boolean;
   person: IMember;
 }) {
-  // console.log("MemberModal : ", person);
   const { friendState } = useFriend();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [curFriend, setCurFriend] = useState<IFriend | null>(null);
   const { roomState, roomDispatch } = useRoom();
+  const { friendDispatch } = useFriend();
 
   useEffect(() => {
     setCurFriend({
       friendNickname: person.nickname!,
+      friendIdx: person.userIdx!,
       isOnline: true,
     });
     // friendState.friendList.map((friend) => {
@@ -72,6 +82,47 @@ export default function MemberModal({
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
+  };
+
+  const addFriend = async () => {
+    const friendReqData: FriendReqData = {
+      targetNickname: person.nickname!,
+      targetIdx: person.userIdx!,
+    };
+    await axios({
+      method: "post",
+      url: "http://localhost:3000/users/follow",
+      data: JSON.stringify(friendReqData),
+    })
+      .then((res) => {
+        console.log(res.data);
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseModal();
+  };
+
+  const deleteFriend = async () => {
+    const friendReqData: FriendReqData = {
+      targetNickname: person.nickname!,
+      targetIdx: person.userIdx!,
+    };
+
+    await axios({
+      method: "delete",
+      url: "http://localhost:3000/users/unfollow",
+      data: JSON.stringify(friendReqData),
+    })
+      .then((res) => {
+        console.log(res.data);
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseModal();
   };
 
   useEffect(() => {
@@ -115,7 +166,7 @@ export default function MemberModal({
             mx={5}
           >
             <Image
-              src="https://dummyimage.com/100x100/1f0c1f/edeeff.png&text=user+img"
+              src={person.imgUri!}
               alt="user img"
               width={100}
               height={100}
@@ -169,8 +220,8 @@ export default function MemberModal({
                 MenuListProps={{ sx: { py: 0 } }}
               >
                 <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                  <MenuItem>Add</MenuItem>
-                  <MenuItem>Delete</MenuItem>
+                  <MenuItem onClick={addFriend}>Add</MenuItem>
+                  <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                   <MenuItem>Block</MenuItem>
                 </Stack>
               </Menu>
