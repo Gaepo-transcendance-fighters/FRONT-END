@@ -189,8 +189,7 @@ export default function PageRedir() {
         url: `http://localhost:4000/users/profile`,
 
         headers: {
-          // "Content-Type": "application/json",
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "Application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
@@ -201,7 +200,7 @@ export default function PageRedir() {
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
-        console.log("Sucess");
+        console.log("Success");
         handleCloseModal();
       }
     } catch (error) {
