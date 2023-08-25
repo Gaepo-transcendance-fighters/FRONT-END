@@ -63,6 +63,11 @@ interface IUserData {
   email: string;
 }
 
+interface Modals {
+  nickNameModal: boolean;
+  authModal: boolean;
+}
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { main } from "@/type/type";
 import React, { useEffect, useState, ChangeEvent } from "react";
@@ -70,14 +75,11 @@ import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
 
+import SecondAuth from "@/components/main/myprofile/SecondAuth";
+
 export default function PageRedir() {
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const nickname = searchParams.toString();
-
   const { userState } = useUser();
-  const [checked, setChecked] = useState(true);
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
     imgData: "",
@@ -86,16 +88,21 @@ export default function PageRedir() {
     rank: 0,
     email: "",
   });
-  const [message, setMessage] = useState("");
+
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [verified, setVerified] = useState<boolean>(false);
+  //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
+
+  const [verified, setVerified] = useState<string>("");
+
   const [inputName, setInputName] = useState<string>("");
 
   const [reload, setReload] = useState<boolean>(false);
 
   useEffect(() => {
     // const getData = () => {
+    const verified = localStorage.getItem("check2Auth");
+    if (!verified) return;
+    setVerified(verified);
     const headers = {
       Authorization: "Bearer " + localStorage.getItem("authorization"),
     };
@@ -106,7 +113,7 @@ export default function PageRedir() {
       });
     // };
     console.log("API REQUEST");
-  }, [reload]);
+  }, [reload, verified]);
 
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
@@ -233,41 +240,11 @@ export default function PageRedir() {
     setReload((curr) => !curr);
   };
 
-  const onChangeSecondAuth = async () => {
-    if (verified == true) setVerified(false);
-    else setVerified(true);
-
-    try {
-      const response = await axios({
-        method: "PATCH",
-        url: "http://localhost:4000/users/profile/:my_nickname",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify({
-          // userNickName: userData?.nickname,
-          check2Auth: verified,
-        }),
-      });
-    } catch (error) {
-      console.log("2차인증 시 에러발생");
-    }
-  };
-
   const handleOpenModal = () => {
     setOpenModal(true);
   };
-
   const handleCloseModal = () => {
     setOpenModal(false);
-  };
-
-  const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
   };
 
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -393,7 +370,7 @@ export default function PageRedir() {
                       </Typography>
 
                       <CardContent style={{ width: "100%" }}>
-                        {verified == true ? (
+                        {verified === "true" ? (
                           <Typography style={{ fontSize: "1.5rem" }}>
                             2차인증 여부 : Y
                           </Typography>
@@ -436,15 +413,7 @@ export default function PageRedir() {
                             onChange={handleChange}
                           />
                         </form>
-                        {/* <form>
-                          <input
-                            type="file"
-                            id="profile-upload"
-                            accept="image/png, image/jpg, image/jpeg"
-                            style={{ display: "none" }}
-                          />
-                        </form> */}
-                        {/* 123 */}
+
                         <Button
                           type="submit"
                           style={{
@@ -519,20 +488,7 @@ export default function PageRedir() {
                             </Card>
                           </Box>
                         </Modal>
-                        <Button
-                          type="button"
-                          style={{
-                            minWidth: "max-content",
-                          }}
-                          variant="contained"
-                          onClick={onChangeSecondAuth}
-                        >
-                          {verified == true ? (
-                            <>2차인증 비활성화</>
-                          ) : (
-                            <>2차인증 활성화</>
-                          )}
-                        </Button>
+                        <SecondAuth />
                       </Stack>
                     </Stack>
                   </Card>

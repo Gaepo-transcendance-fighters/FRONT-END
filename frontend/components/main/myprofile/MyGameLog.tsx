@@ -134,7 +134,9 @@ const MyGameLog = () => {
           );
         })}
         <div ref={observerTarget}></div>
-        {loading === true && <p>loading...</p>}
+        {loading === true && (
+          <Typography component={"div"}>loading...</Typography>
+        )}
       </div>
     </>
   );

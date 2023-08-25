@@ -34,11 +34,12 @@ const Auth = () => {
     email: string;
     check2Auth: boolean;
   }
+
   const postCode = async (code: string) => {
     // dev original
-    await fetch("http://localhost:4000/login/auth", {
-    // haryu's server
-    // await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
+    await fetch(`http://localhost:4000/login/auth`, {
+      // haryu's server
+      // await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -50,14 +51,14 @@ const Auth = () => {
     })
       .then(async (res) => {
         if (res.status === 200) {
-          // localStorage.setItem("loggedIn", "true");
           const data: Data = await res.json();
-          console.log(data);
+          console.log("data : ", data);
+          localStorage.setItem("loggedIn", "true");
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
+          localStorage.setItem("imgUri", data.imgUri);
           localStorage.setItem("intra", data.intra);
           localStorage.setItem("idx", data.userIdx.toString());
-          localStorage.setItem("imgUri", data.imgUri);
-          localStorage.setItem("email", data.email);
+          localStorage.setItem("email", data.email); // <- 0820 21시 30분경 추가
           localStorage.setItem("check2Auth", data.check2Auth.toString());
           authDispatch({ type: "SET_ID", value: data.userIdx });
 
