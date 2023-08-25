@@ -65,8 +65,8 @@ export default function MemberModal({
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [curFriend, setCurFriend] = useState<IFriend | null>(null);
-  const { friendState, friendDispatch } = useFriend()
-  const [isFriend, setIsFriend] = useState(false)
+  const { friendState, friendDispatch } = useFriend();
+  const [isFriend, setIsFriend] = useState(false);
 
   useEffect(() => {
     setCurFriend({
@@ -88,10 +88,55 @@ export default function MemberModal({
     setAnchorEl(null);
   };
 
+  const addFriend = async () => {
+    const friendReqData: FriendReqData = {
+      targetNickname: person.nickname!,
+      targetIdx: person.userIdx!,
+    };
+    await axios({
+      method: "post",
+      url: "http://localhost:3000/users/follow",
+      data: JSON.stringify(friendReqData),
+    })
+      .then((res) => {
+        console.log(res.data);
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseModal();
+  };
+
+  const deleteFriend = async () => {
+    const friendReqData: FriendReqData = {
+      targetNickname: person.nickname!,
+      targetIdx: person.userIdx!,
+    };
+
+    await axios({
+      method: "delete",
+      url: "http://localhost:3000/users/unfollow",
+      data: JSON.stringify(friendReqData),
+    })
+      .then((res) => {
+        console.log(res.data);
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseModal();
+  };
+
   useEffect(() => {
-    if (friendState.friendList.find((friend) => friend.friendNickname === person.nickname))
-      setIsFriend(true)
-  }, [isFriend])
+    if (
+      friendState.friendList.find(
+        (friend) => friend.friendNickname === person.nickname
+      )
+    )
+      setIsFriend(true);
+  }, [isFriend]);
 
   useEffect(() => {
     socket.on("check_dm", () => {});
@@ -114,49 +159,6 @@ export default function MemberModal({
     );
   };
 
-  const addFriend = async () => {
-    console.log("add friend")
-    const friendReqData: FriendReqData = {
-      targetNickname: person.nickname!,
-      targetIdx: person.userIdx!,
-    };
-    await axios({
-      method: "post",
-      url: "http://paulryu9309.ddns.net:4000/users/follow",
-      data: friendReqData,
-    })
-      .then((res) => {
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    handleCloseMenu();
-    handleCloseModal();
-  };
-
-  const deleteFriend = async () => {
-    console.log("delete friend")
-    const friendReqData: FriendReqData = {
-      targetNickname: person.nickname!,
-      targetIdx: person.userIdx!,
-    };
-
-    await axios({
-      method: "delete",
-      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
-      data: friendReqData,
-    })
-      .then((res) => {
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    handleCloseMenu();
-    handleCloseModal();
-  };
-
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
       <Box sx={modalStyle} borderRadius={"10px"}>
@@ -177,7 +179,7 @@ export default function MemberModal({
             mx={5}
           >
             <Image
-              src="https://dummyimage.com/100x100/1f0c1f/edeeff.png&text=user+img"
+              src={person.imgUri!}
               alt="user img"
               width={100}
               height={100}
@@ -232,7 +234,9 @@ export default function MemberModal({
               >
                 <Stack sx={{ backgroundColor: "#48a0ed" }}>
                   {!isFriend && <MenuItem onClick={addFriend}>Add</MenuItem>}
-                  {isFriend && <MenuItem onClick={deleteFriend}>Delete</MenuItem>}
+                  {isFriend && (
+                    <MenuItem onClick={deleteFriend}>Delete</MenuItem>
+                  )}
                   <MenuItem>Block</MenuItem>
                 </Stack>
               </Menu>

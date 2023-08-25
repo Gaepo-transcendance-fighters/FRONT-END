@@ -180,7 +180,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     return () => {
       socket.off("user_profile");
     };
-  }, []);
+  }, [friendData]);
+
   return (
     <>
       <Button type="button" onClick={handleOpenModal}>
@@ -226,8 +227,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 닉네임: {friendData?.targetNickname}
               </Typography>
               <Typography>
-                상태:{" "}
-                {friendData.isOnline === true ? <>Online</> : <>Offline</>}
+                상태: {friendData?.isOnline ? loginOn : loginOff}
               </Typography>
               <Stack direction={"row"} spacing={2}>
                 <FriendGameButton prop={prop} />
