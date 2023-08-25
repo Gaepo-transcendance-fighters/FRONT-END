@@ -8,6 +8,7 @@ import InviteGame from "./InviteGame";
 import WaitAccept from "./WaitAccept";
 import { IFriend } from "@/type/type";
 import { useAuth } from "@/context/AuthContext";
+import { useModalContext } from "@/context/ModalContext";
 
 const Bar = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
@@ -15,40 +16,37 @@ const Bar = forwardRef((props: any, ref: any) => (
   </span>
 ));
 
-
 const FriendGameButton = ({ prop }: { prop: IFriend }) => {
   const router = useRouter();
-  const [isInvite, setIsInvite] = useState(false)
-  const {authState} = useAuth()
+  const { authState } = useAuth();
+  const { openModal } = useModalContext();
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const handleOpenModal = () => {
     socket.emit("chat_invite_ask", {
       myUserIdx: authState.id,
       targetUserIdx: prop.friendIdx,
-    })
-    setIsInvite(true)
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
+    });
+    openModal({
+      children: <WaitAccept />,
+    });
   };
 
   useEffect(() => {
-    const askInvite = ({myUserIdx, targetUserIdx}: {
+    const askInvite = ({
+      myUserIdx,
+      targetUserIdx,
+    }: {
       myUserIdx: number;
       targetUserIdx: number;
     }) => {
-      console.log("초대 받음")
-      handleOpenModal()
-    }
-    socket.on("chat_invite_ask", askInvite)
+      handleOpenModal();
+    };
+    socket.on("chat_invite_ask", askInvite);
 
-    return (() => {
-      socket.off("chat_invite_ask")
-    })
-  }, [])
+    return () => {
+      socket.off("chat_invite_ask");
+    };
+  }, []);
 
   return (
     <>
@@ -60,9 +58,6 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
       >
         친선전
       </Button>
-      <Bar>
-        {!isInvite ? <InviteGame open={openModal} /> : <WaitAccept open={openModal} />}
-      </Bar>
     </>
   );
 };

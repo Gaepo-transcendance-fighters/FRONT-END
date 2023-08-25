@@ -10,7 +10,6 @@ import { IFriend, IMember } from "@/type/type";
 import { useAuth } from "@/context/AuthContext";
 import { useModalContext } from "@/context/ModalContext";
 
-
 const Bar = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
     {props.children}
@@ -27,10 +26,10 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       myUserIdx: authState.id,
       targetUserIdx: prop.userIdx,
     });
-    console.log("open")
+    console.log("open");
     openModal({
-      children: <WaitAccept/>,
-    })
+      children: <WaitAccept />,
+    });
   };
 
   useEffect(() => {
@@ -56,17 +55,10 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
         type="button"
         sx={{ minWidth: "max-content" }}
         variant="contained"
-        onClick={() => handleOpenModal()}
+        onClick={handleOpenModal}
       >
         친선전
       </Button>
-      {/* <Bar>
-        {!isInvite ? (
-          <InviteGame open={openModal} />
-        ) : (
-          <WaitAccept open={openModal} />
-        )}
-      </Bar> */}
     </>
   );
 };
