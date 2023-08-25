@@ -29,7 +29,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
     });
     console.log("open")
     openModal({
-      children: <WaitAccept open={true} />,
+      children: <WaitAccept/>,
     })
   };
 

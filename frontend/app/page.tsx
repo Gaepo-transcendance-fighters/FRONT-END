@@ -60,7 +60,7 @@ const Page = () => {
     socket.on("chat_invite_answer", () => {
       console.log("invite_come")
       openModal({
-        children: <InviteGame open={true} />,
+        children: <InviteGame />,
       })
     })
     return (() => {
