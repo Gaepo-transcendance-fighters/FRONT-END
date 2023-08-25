@@ -39,6 +39,17 @@ const ChatWindow = () => {
   }, [roomState.currentRoom?.channelIdx]);
 
   // useEffect(() => {
+  //   console.log("!!!", roomState.currentRoom?.channelIdx);
+  //   if (!roomState.currentRoom?.channelIdx) return;
+  //   console.log("prev", prevRoom);
+  //   console.log("channel", roomState.currentRoom.channelIdx);
+  //   if (!roomState.currentRoom) setMsgs([]);
+  //   // else if (roomState.currentRoom.channelIdx !== prevRoom) setMsgs([]);
+  //   setPrevRoom(roomState.currentRoom?.channelIdx);
+  //   console.log("[ChatWindow:33] last content of 방전환시 채팅내역 초기화");
+  // }, [roomState.currentRoom?.channelIdx]);
+
+  // useEffect(() => {
   //   console.log("chatwindow", msgs);
   // }, [msgs]);
 
