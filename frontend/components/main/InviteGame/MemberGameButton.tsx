@@ -9,17 +9,19 @@ import WaitAccept from "./WaitAccept";
 import { IFriend, IMember } from "@/type/type";
 import { useAuth } from "@/context/AuthContext";
 import { useModalContext } from "@/context/ModalContext";
+import { useGame } from "@/context/GameContext";
 
-const Bar = forwardRef((props: any, ref: any) => (
-  <span {...props} ref={ref}>
-    {props.children}
-  </span>
-));
+enum GameType {
+  FRIEND,
+  NORMAL,
+  RANK,
+}
 
 const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const router = useRouter();
   const { authState } = useAuth();
   const { openModal, closeModal } = useModalContext();
+  const { gameDispatch } = useGame();
 
   const handleOpenModal = () => {
     socket.emit("chat_invite_ask", {
@@ -47,7 +49,10 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       answer: number;
     }) => {
       if (answer === 0) closeModal();
-      else if (answer === 1) router.push("./optionselect");
+      else if (answer === 1) {
+        gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
+        router.push("./optionselect");
+      }
     };
     socket.on("chat_invite_answer", recieveInvite);
 
