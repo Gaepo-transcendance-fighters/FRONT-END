@@ -21,7 +21,7 @@ const modalStyle = {
   p: 4,
 };
 
-const InviteGame = ({ prop }: { prop: string }) => {
+const InviteGame = ({ nickname, idx }: { nickname: string, idx: number }) => {
   const { closeModal } = useModalContext();
   const { authState } = useAuth();
   const router = useRouter();
@@ -40,9 +40,11 @@ const InviteGame = ({ prop }: { prop: string }) => {
       targetUserNickname: string;
       answer: number;
     }) => {
+      console.log("recieve invite", answer)
       if (answer === 0) closeModal();
       else if (answer === 1) router.push("./optionselect");
     };
+    socket.on("chat_receive_answer", recieveInvite)
     socket.on("chat_invite_answer", recieveInvite);
 
     return () => {
@@ -51,18 +53,24 @@ const InviteGame = ({ prop }: { prop: string }) => {
   }, []);
 
   const handleYes = () => {
+    console.log("yes")
     socket.emit("chat_invite_answer", {
-      inviteUserIdx: prop,
+      inviteUserIdx: idx,
       targetUserIdx: authState.id,
       answer: 1,
+    }, (res: any) => {
+      console.log(res)
     });
   };
 
   const handleNo = () => {
+    console.log("no")
     socket.emit("chat_invite_answer", {
-      inviteUserIdx: prop,
+      inviteUserIdx: idx,
       targetUserIdx: authState.id,
       answer: 0,
+    }, (res: any) => {
+      console.log(res)
     });
   };
   return (
@@ -110,7 +118,7 @@ const InviteGame = ({ prop }: { prop: string }) => {
             alignItems: "center",
           }}
         >
-          {prop} 님께서 친선전 경기를 요청하셨습니다.
+          {nickname} 님께서 친선전 경기를 요청하셨습니다.
         </CardContent>
         <CardContent
           style={{

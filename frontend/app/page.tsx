@@ -65,12 +65,12 @@ const Page = () => {
       userNickname: string;
     }) => {
       openModal({
-        children: <InviteGame prop={userNickname} />,
+        children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
     };
-    socket.on("chat_invite_ask", askInvite);
+    socket.on("chat_invite_answer", askInvite);
     return () => {
-      socket.off("chat_invite_ask");
+      socket.off("chat_invite_answer");
     };
   }, []);
 

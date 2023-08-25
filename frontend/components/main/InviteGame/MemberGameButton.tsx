@@ -48,12 +48,15 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       targetUserNickname: string;
       answer: number;
     }) => {
+      console.log("receive invite", answer)
       if (answer === 0) closeModal();
       else if (answer === 1) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
+        closeModal()
         router.push("./optionselect");
       }
     };
+    socket.on("chat_receive_answer", recieveInvite)
     socket.on("chat_invite_answer", recieveInvite);
 
     socket.on("chat_invite_ask", () => {});
