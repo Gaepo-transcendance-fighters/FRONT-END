@@ -18,7 +18,7 @@ const modalStyle = {
 };
 
 const WaitAccept = () => {
-  const {closeModal} = useModalContext()
+  const { closeModal } = useModalContext();
   return (
     <>
       <Card
@@ -77,22 +77,7 @@ const WaitAccept = () => {
             flexDirection: "row",
           }}
           sx={{ display: "flex", gap: "20%", flexDirection: "row" }}
-        >
-          <Button
-            style={{
-              width: "50%",
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "#FF6364",
-              border: "1px solid black",
-            }}
-            onClick={closeModal}
-          >
-            취소
-          </Button>
-        </CardContent>
+        ></CardContent>
       </Card>
     </>
   );

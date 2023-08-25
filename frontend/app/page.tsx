@@ -57,15 +57,21 @@ const Page = () => {
   useEffect(() => {
     setClient(true);
     socket.connect();
-    socket.on("chat_invite_answer", () => {
-      console.log("invite_come")
+    const askInvite = ({
+      userIdx,
+      userNickname,
+    }: {
+      userIdx: number;
+      userNickname: string;
+    }) => {
       openModal({
-        children: <InviteGame />,
-      })
-    })
-    return (() => {
-        socket.off("chat_invite_answer")
-    })
+        children: <InviteGame prop={userNickname} />,
+      });
+    };
+    socket.on("chat_invite_ask", askInvite);
+    return () => {
+      socket.off("chat_invite_ask");
+    };
   }, []);
 
   if (!client) return <></>;

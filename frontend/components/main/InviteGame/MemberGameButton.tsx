@@ -19,7 +19,7 @@ const Bar = forwardRef((props: any, ref: any) => (
 const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const router = useRouter();
   const { authState } = useAuth();
-  const { openModal } = useModalContext();
+  const { openModal, closeModal } = useModalContext();
 
   const handleOpenModal = () => {
     socket.emit("chat_invite_ask", {
@@ -33,19 +33,29 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
   };
 
   useEffect(() => {
-    const askInvite = ({
-      myUserIdx,
+    const recieveInvite = ({
+      inviteUserIdx,
+      inviteUserNickname,
       targetUserIdx,
+      targetUserNickname,
+      answer,
     }: {
-      myUserIdx: number;
+      inviteUserIdx: number;
+      inviteUserNickname: string;
       targetUserIdx: number;
+      targetUserNickname: string;
+      answer: number;
     }) => {
-      handleOpenModal();
+      if (answer === 0) closeModal();
+      else if (answer === 1) router.push("./optionselect");
     };
-    socket.on("chat_invite_ask", askInvite);
+    socket.on("chat_invite_answer", recieveInvite);
+
+    socket.on("chat_invite_ask", () => {});
 
     return () => {
       socket.off("chat_invite_ask");
+      socket.off("chat_invite_answer");
     };
   }, []);
 
