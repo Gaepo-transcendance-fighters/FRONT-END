@@ -198,7 +198,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       socket.off("user_profile");
     };
   }, []);
-
+  console.log("friend data : ", friendData);
   return (
     <>
       <Button type="button" onClick={handleOpenNdataModal}>
