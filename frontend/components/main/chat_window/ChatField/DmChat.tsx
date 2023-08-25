@@ -86,17 +86,21 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
 
   // 이전 대화기록을 불러오거나, 새로 채팅을 송수신하게되면 그때마다 불러와진 대화기록 중 제일 오래된 메세지의 Date를 가져온다.
   useEffect(() => {
-    console.log("!!!")
+    console.log("!!!");
     if (msgs.length > 0) {
       const lastIdx = msgs.length - 1;
-      console.log("lastidx", lastIdx)
+      console.log("lastidx", lastIdx);
       const lastElement = msgs[lastIdx];
-      console.log("lastIdxMsg", lastElement)
+      console.log("lastIdxMsg", lastElement);
       setLastDate(() => lastElement.msgDate);
       // console.log("메세지 갱신됐어, 라스트 데이트도 업뎃함");
       // console.log(Date.now(), lastDate);
     }
   }, [msgs, lastDate]);
+
+  useEffect(() => {
+    console.log(msgs);
+  }, [msgs]);
 
   return (
     <Box
@@ -129,7 +133,12 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
             >
               {
                 <Typography variant="h6">
-                  {value.sender + ": " + value.msg}
+                  {value.senderIdx ===
+                  roomState.currentDmRoomMemberList?.userIdx1
+                    ? roomState.currentDmRoomMemberList?.userNickname1
+                    : roomState.currentDmRoomMemberList?.userNickname2 +
+                      ": " +
+                      value.msg}
                 </Typography>
               }
             </div>
