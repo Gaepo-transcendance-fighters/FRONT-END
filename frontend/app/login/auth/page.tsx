@@ -52,14 +52,14 @@ const Auth = () => {
       .then(async (res) => {
         if (res.status === 200) {
           const data: Data = await res.json();
-          console.log("data : ", data);
-          localStorage.setItem("loggedIn", "true");
+          console.log(data);
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
-          localStorage.setItem("imgUri", data.imgUri);
           localStorage.setItem("intra", data.intra);
           localStorage.setItem("idx", data.userIdx.toString());
-          localStorage.setItem("email", data.email); // <- 0820 21시 30분경 추가
+          localStorage.setItem("imgUri", data.imgUri);
+          localStorage.setItem("email", data.email);
           localStorage.setItem("check2Auth", data.check2Auth.toString());
+          authDispatch({ type: "SET_ID", value: data.userIdx });
 
           if (data.check2Auth === true) return router.push("./secondauth");
           else return router.push(`/`);

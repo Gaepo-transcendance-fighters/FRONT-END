@@ -1,9 +1,10 @@
 "use client";
 import { Box, Button, Card, CardContent, Modal } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/page";
+import { useAuth } from "@/context/AuthContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -18,15 +19,11 @@ const modalStyle = {
   p: 4,
 };
 
-const WaitAccept = () => {
-  const router = useRouter();
-
+const WaitAccept = ({open}: {open: boolean}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const {authState} = useAuth()
+
   const handleOpenModal = () => {
-    // socket.emit("chat_invite_ask", {
-    //   myUserIdx: ,
-    //   targetUserIdx: ,
-    // })
     setOpenModal(true);
   };
 
@@ -34,16 +31,13 @@ const WaitAccept = () => {
     setOpenModal(false);
   };
 
+  useEffect(() => {
+    if (open)
+      handleOpenModal()
+  }, [open])
+
   return (
     <>
-      <Button
-        type="button"
-        sx={{ minWidth: "max-content" }}
-        variant="contained"
-        onClick={handleOpenModal}
-      >
-        친선전
-      </Button>
       <Modal open={openModal}>
         <Box sx={modalStyle} borderRadius={"10px"}>
           <Card

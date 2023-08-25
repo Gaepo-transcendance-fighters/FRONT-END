@@ -16,8 +16,9 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
 import { IChatDmEnter, IMember } from "@/type/type";
 import { useFriend } from "@/context/FriendContext";
-import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
+import axios from "axios";
+import MemberGameButton from "../InviteGame/MemberGameButton";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -32,10 +33,27 @@ const modalStyle = {
   p: 4,
 };
 
-const loginOn = <Image src="/logon1.png" alt="online" width={10} height={10} />;
-const loginOff = (
-  <Image src="/logoff.png" alt="offline" width={10} height={10} />
+const loginOn = (
+  <Image src="/status/logon.png" alt="online" width={10} height={10} />
 );
+
+const loginOff = (
+  <Image src="/status/logoff.png" alt="offline" width={10} height={10} />
+);
+
+interface IFriendData {
+  targetNickname: string;
+  imgUri: string;
+  rank: number;
+  Win: number;
+  Lose: number;
+  isOnline: boolean;
+}
+
+interface FriendReqData {
+  targetNickname: string;
+  targetIdx: number;
+}
 
 export default function MemberModal({
   setOpenModal,
@@ -46,20 +64,17 @@ export default function MemberModal({
   openModal: boolean;
   person: IMember;
 }) {
-  // console.log("MemberModal : ", person);
-  const { friendState } = useFriend();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [curFriend, setCurFriend] = useState<IFriend | null>(null);
-  const { roomState, roomDispatch } = useRoom();
+  const { friendState, friendDispatch } = useFriend();
+  const [isFriend, setIsFriend] = useState(false);
 
   useEffect(() => {
     setCurFriend({
       friendNickname: person.nickname!,
+      friendIdx: person.userIdx!,
       isOnline: true,
     });
-    // friendState.friendList.map((friend) => {
-    //   friend.friendNickname === person.nickname ? setCurFriend(friend) : null;
-    // });
   }, []);
 
   const handleCloseModal = () => {
@@ -75,7 +90,16 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    socket.on("check_dm", (payload: IChatDmEnter) => {});
+    if (
+      friendState.friendList.find(
+        (friend) => friend.friendNickname === person.nickname
+      )
+    )
+      setIsFriend(true);
+  }, [isFriend]);
+
+  useEffect(() => {
+    socket.on("check_dm", () => {});
     socket.on("create_dm", () => {});
     return () => {
       socket.off("check_dm", () => {});
@@ -93,6 +117,51 @@ export default function MemberModal({
         }
       }
     );
+  };
+
+  const addFriend = async () => {
+    console.log("add friend");
+    const friendReqData: FriendReqData = {
+      targetNickname: person.nickname!,
+      targetIdx: person.userIdx!,
+    };
+    await axios({
+      method: "post",
+      url: "localhost:4000/users/follow",
+      // url: "http://paulryu9309.ddns.net:4000/users/follow",
+      data: friendReqData,
+    })
+      .then((res) => {
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseMenu();
+    handleCloseModal();
+  };
+
+  const deleteFriend = async () => {
+    console.log("delete friend");
+    const friendReqData: FriendReqData = {
+      targetNickname: person.nickname!,
+      targetIdx: person.userIdx!,
+    };
+
+    await axios({
+      method: "delete",
+      url: "localhost:4000/users/unfollow",
+      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      data: friendReqData,
+    })
+      .then((res) => {
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseMenu();
+    handleCloseModal();
   };
 
   return (
@@ -115,7 +184,7 @@ export default function MemberModal({
             mx={5}
           >
             <Image
-              src="https://dummyimage.com/100x100/1f0c1f/edeeff.png&text=user+img"
+              src={person.imgUri!}
               alt="user img"
               width={100}
               height={100}
@@ -139,13 +208,7 @@ export default function MemberModal({
               상태: {curFriend?.isOnline ? loginOn : loginOff}
             </Typography>
             <Stack direction={"row"} spacing={2}>
-              <Button
-                type="button"
-                sx={{ minWidth: "max-content" }}
-                variant="contained"
-              >
-                친선전
-              </Button>
+              <MemberGameButton prop={person} />
               <Button
                 type="button"
                 sx={{ minWidth: "max-content" }}
@@ -169,8 +232,10 @@ export default function MemberModal({
                 MenuListProps={{ sx: { py: 0 } }}
               >
                 <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                  <MenuItem>Add</MenuItem>
-                  <MenuItem>Delete</MenuItem>
+                  {!isFriend && <MenuItem onClick={addFriend}>Add</MenuItem>}
+                  {isFriend && (
+                    <MenuItem onClick={deleteFriend}>Delete</MenuItem>
+                  )}
                   <MenuItem>Block</MenuItem>
                 </Stack>
               </Menu>

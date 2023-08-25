@@ -1,6 +1,6 @@
 "use client";
 import { Box, Button, Card, CardContent, Modal } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 
@@ -17,7 +17,7 @@ const modalStyle = {
   p: 4,
 };
 
-const InviteGame = () => {
+const InviteGame = ({open}: {open: boolean}) => {
   const router = useRouter();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -29,16 +29,13 @@ const InviteGame = () => {
     setOpenModal(false);
   };
 
+  useEffect(() => {
+    if (open)
+      handleOpenModal()
+  }, [open])
+
   return (
     <>
-      <Button
-        type="button"
-        sx={{ minWidth: "max-content" }}
-        variant="contained"
-        onClick={handleOpenModal}
-      >
-        친선전승락모달
-      </Button>
       <Modal open={openModal}>
         <Box sx={modalStyle} borderRadius={"10px"}>
           <Card

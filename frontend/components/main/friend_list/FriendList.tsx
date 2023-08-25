@@ -36,7 +36,6 @@ const unselectedButton = {
   flex: 1,
 };
 
-
 export interface IFriend {
   friendNickname: string;
   friendIdx: number;
@@ -60,11 +59,15 @@ const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
   const [showlist, setShowlist] = useState<IUserProp[]>([]);
   const { friendState } = useFriend();
+  // const [client, setClient] = useState(false);
 
   useEffect(() => {
+    // setClient(true);
     const cur = select ? friendState.blockList : friendState.friendList;
     setShowlist(cur);
   }, [friendState.friendList, friendState.blockList, select]);
+
+  // if (!client) return <></>;
 
   return (
     <Card

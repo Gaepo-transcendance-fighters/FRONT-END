@@ -10,7 +10,7 @@ import { SetStateAction } from "react";
 import { useRoom } from "@/context/RoomContext";
 import { IChat } from "../ChatWindow";
 import { useUser } from "@/context/UserContext";
-
+import { useAuth } from "@/context/AuthContext";
 interface IPayload {
   channelIdx: number | undefined;
   senderIdx: number;
@@ -26,6 +26,7 @@ const BottomField = ({ setMsgs }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { roomState } = useRoom();
   const { userState } = useUser();
+  const { authState } = useAuth();
 
   const changeMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(event.target.value);
@@ -36,28 +37,32 @@ const BottomField = ({ setMsgs }: Props) => {
       if (roomState.currentRoom?.mode === "private") {
         const chat = {
           channelIdx: chatFromServer.channelIdx,
-          senderIdx: chatFromServer.sender === roomState.currentDmRoomMemberList?.userIdx1
-            ? roomState.currentDmRoomMemberList?.userIdx1
-            : roomState.currentDmRoomMemberList?.userIdx2,
+          senderIdx:
+            chatFromServer.sender ===
+            roomState.currentDmRoomMemberList?.userIdx1
+              ? roomState.currentDmRoomMemberList?.userIdx1
+              : roomState.currentDmRoomMemberList?.userIdx2,
           sender: chatFromServer.sender,
           msg: chatFromServer.msg,
-          msgDate: chatFromServer.msgDate, }
+          msgDate: chatFromServer.msgDate,
+        };
         setMsgs((prevChats: any) => [chat, ...prevChats]); // <----- any type 나중 변경 필요.
         console.log(chat);
       } else {
-          const result = roomState.currentRoomMemberList.find(person => person.userIdx === chatFromServer.senderIdx)
+        const result = roomState.currentRoomMemberList.find(
+          (person) => person.userIdx === chatFromServer.senderIdx
+        );
         if (result?.nickname) {
           const chat = {
             channelIdx: chatFromServer.channelIdx,
             senderIdx: chatFromServer.senderIdx,
             sender: result?.nickname,
             msg: chatFromServer.msg,
-            msgDate: chatFromServer.msgDate, 
-          }
+            msgDate: chatFromServer.msgDate,
+          };
           setMsgs((prevChats: any) => [...prevChats, chat]); // <----- any type 나중 변경 필요.
-        }
-        else {
-          console.log("[ERROR] there aren't nickname from data")
+        } else {
+          console.log("[ERROR] there aren't nickname from data");
         }
       }
       setMsg("");
@@ -75,7 +80,7 @@ const BottomField = ({ setMsgs }: Props) => {
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
-        event.preventDefault();
+      event.preventDefault();
       let payload: IPayload | undefined = undefined;
       if (
         roomState.currentRoom?.mode === "private" &&
@@ -92,8 +97,8 @@ const BottomField = ({ setMsgs }: Props) => {
               : roomState.currentDmRoomMemberList?.userIdx1, // <------------------ 현재 채널의 모든 사용자들의 인덱스를 알아야한다.
         };
       } else if (
-        (roomState.currentRoom?.mode === "public" ||
-          roomState.currentRoom?.mode === "protected")
+        roomState.currentRoom?.mode === "public" ||
+        roomState.currentRoom?.mode === "protected"
       ) {
         payload = {
           channelIdx: roomState.currentRoom?.channelIdx,
@@ -101,7 +106,7 @@ const BottomField = ({ setMsgs }: Props) => {
           msg: msg, // <------------------ 현재 채널의 모든 사용자들의 인덱스를 알아야한다.
         };
       }
-        socket.emit("chat_send_msg", payload);
+      socket.emit("chat_send_msg", payload);
       inputRef.current?.focus();
     },
     [msg]

@@ -25,7 +25,7 @@ function debounce(func: (...args: any[]) => void, wait: number) {
 }
 
 const PingPong = () => {
-  const [client, setClient] = useState(false)
+  const [client, setClient] = useState(false);
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
@@ -252,13 +252,13 @@ const PingPong = () => {
   }, [ball]);
 
   useEffect(() => {
-    setClient(true)
+    setClient(true);
     if (gameState.aPlayer.id === authState.id) {
-      setMyPaddle({x: 470, y: 0})
-      setEnemyPaddle({x: -470, y: 0})
+      setMyPaddle({ x: 470, y: 0 });
+      setEnemyPaddle({ x: -470, y: 0 });
     } else if (gameState.bPlayer.id === authState.id) {
-      setMyPaddle({x: -470, y: 0})
-      setEnemyPaddle({x: 470, y: 0})
+      setMyPaddle({ x: -470, y: 0 });
+      setEnemyPaddle({ x: 470, y: 0 });
     }
     gameSocket.on(
       "game_predict_ball",
@@ -321,7 +321,7 @@ const PingPong = () => {
     };
   }, [ready, ballMove]);
 
-  if (!client) return <></>
+  if (!client) return <></>;
 
   return (
     <>
