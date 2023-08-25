@@ -2,6 +2,7 @@ import { ReactNode, createContext, useContext, useReducer } from "react";
 
 interface IFriend {
   friendNickname: string;
+  friendIdx?: number;
   isOnline: boolean;
 }
 

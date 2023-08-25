@@ -16,9 +16,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
 import { IChatDmEnter, IMember } from "@/type/type";
 import { useFriend } from "@/context/FriendContext";
-import { useRoom } from "@/context/RoomContext";
-import axios from "axios";
 import { socket } from "@/app/page";
+import axios from "axios";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -41,6 +40,15 @@ const loginOff = (
   <Image src="/status/logoff.png" alt="offline" width={10} height={10} />
 );
 
+interface IFriendData {
+  targetNickname: string;
+  imgUri: string;
+  rank: number;
+  Win: number;
+  Lose: number;
+  isOnline: boolean;
+}
+
 interface FriendReqData {
   targetNickname: string;
   targetIdx: number;
@@ -55,11 +63,10 @@ export default function MemberModal({
   openModal: boolean;
   person: IMember;
 }) {
-  const { friendState } = useFriend();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [curFriend, setCurFriend] = useState<IFriend | null>(null);
-  const { roomState, roomDispatch } = useRoom();
-  const { friendDispatch } = useFriend();
+  const { friendState, friendDispatch } = useFriend();
+  const [isFriend, setIsFriend] = useState(false);
 
   useEffect(() => {
     setCurFriend({
@@ -67,9 +74,6 @@ export default function MemberModal({
       friendIdx: person.userIdx!,
       isOnline: true,
     });
-    // friendState.friendList.map((friend) => {
-    //   friend.friendNickname === person.nickname ? setCurFriend(friend) : null;
-    // });
   }, []);
 
   const handleCloseModal = () => {
@@ -126,7 +130,16 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    socket.on("check_dm", (payload: IChatDmEnter) => {});
+    if (
+      friendState.friendList.find(
+        (friend) => friend.friendNickname === person.nickname
+      )
+    )
+      setIsFriend(true);
+  }, [isFriend]);
+
+  useEffect(() => {
+    socket.on("check_dm", () => {});
     socket.on("create_dm", () => {});
     return () => {
       socket.off("check_dm", () => {});
@@ -220,8 +233,10 @@ export default function MemberModal({
                 MenuListProps={{ sx: { py: 0 } }}
               >
                 <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                  <MenuItem onClick={addFriend}>Add</MenuItem>
-                  <MenuItem onClick={deleteFriend}>Delete</MenuItem>
+                  {!isFriend && <MenuItem onClick={addFriend}>Add</MenuItem>}
+                  {isFriend && (
+                    <MenuItem onClick={deleteFriend}>Delete</MenuItem>
+                  )}
                   <MenuItem>Block</MenuItem>
                 </Stack>
               </Menu>
