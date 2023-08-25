@@ -96,7 +96,7 @@ export default function MemberModal({
     };
     await axios({
       method: "post",
-      url: "http://localhost:3000/users/follow",
+      url: "http://paulryu9309.ddns.net:4000/users/follow",
       data: JSON.stringify(friendReqData),
     })
       .then((res) => {
@@ -117,7 +117,7 @@ export default function MemberModal({
 
     await axios({
       method: "delete",
-      url: "http://localhost:3000/users/unfollow",
+      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
       data: JSON.stringify(friendReqData),
     })
       .then((res) => {

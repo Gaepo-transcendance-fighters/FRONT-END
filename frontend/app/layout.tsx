@@ -11,6 +11,7 @@ import { UserProvider } from "@/context/UserContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { io } from "socket.io-client";
 import { use, useEffect } from "react";
+import { ModalContextProvider } from "@/context/ModalContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,6 +37,7 @@ export default function RootLayout({
 
   return (
     <ThemeProvider theme={font}>
+      <ModalContextProvider>
       <AuthProvider>
         <UserProvider>
           <GameProvider>
@@ -43,6 +45,7 @@ export default function RootLayout({
               <FriendProvider>
                 <html lang="en">
                   <body className={inter.className}>
+                    <div id="modal-root"></div>
                     <div
                       style={{
                         backgroundImage: `url("/background.png")`,
@@ -60,6 +63,7 @@ export default function RootLayout({
           </GameProvider>
         </UserProvider>
       </AuthProvider>
+      </ModalContextProvider>
     </ThemeProvider>
   );
 }

@@ -1,8 +1,11 @@
 "use client";
+
 import { Box, Button, Card, CardContent, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
+import { useModalContext } from "@/context/ModalContext";
+
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -17,27 +20,11 @@ const modalStyle = {
   p: 4,
 };
 
-const InviteGame = ({open}: {open: boolean}) => {
+const InviteGame = () => {
+  const {closeModal} = useModalContext()
   const router = useRouter();
-
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  useEffect(() => {
-    if (open)
-      handleOpenModal()
-  }, [open])
-
   return (
-    <>
-      <Modal open={openModal}>
-        <Box sx={modalStyle} borderRadius={"10px"}>
+        <>
           <Card
             style={{
               width: "100%",
@@ -120,20 +107,14 @@ const InviteGame = ({open}: {open: boolean}) => {
                   backgroundColor: "#FF6364",
                   border: "1px solid black",
                 }}
-                onClick={handleCloseModal}
+                onClick={closeModal}
               >
                 거절
               </Button>
             </CardContent>
           </Card>
-        </Box>
-      </Modal>
-    </>
-  );
+        </>
+  )
 };
 
 export default InviteGame;
-
-// display: "flex",
-// alignItems: "center",
-// justifyContent: "center",

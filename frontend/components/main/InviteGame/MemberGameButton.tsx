@@ -8,6 +8,8 @@ import InviteGame from "./InviteGame";
 import WaitAccept from "./WaitAccept";
 import { IFriend, IMember } from "@/type/type";
 import { useAuth } from "@/context/AuthContext";
+import { useModalContext } from "@/context/ModalContext";
+
 
 const Bar = forwardRef((props: any, ref: any) => (
   <span {...props} ref={ref}>
@@ -17,21 +19,18 @@ const Bar = forwardRef((props: any, ref: any) => (
 
 const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const router = useRouter();
-  const [isInvite, setIsInvite] = useState(false);
   const { authState } = useAuth();
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const { openModal } = useModalContext();
 
   const handleOpenModal = () => {
     socket.emit("chat_invite_ask", {
       myUserIdx: authState.id,
       targetUserIdx: prop.userIdx,
     });
-    setIsInvite(true);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
+    console.log("open")
+    openModal({
+      children: <WaitAccept open={true} />,
+    })
   };
 
   useEffect(() => {
@@ -42,7 +41,6 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       myUserIdx: number;
       targetUserIdx: number;
     }) => {
-      console.log("초대 받음");
       handleOpenModal();
     };
     socket.on("chat_invite_ask", askInvite);
@@ -58,23 +56,19 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
         type="button"
         sx={{ minWidth: "max-content" }}
         variant="contained"
-        onClick={handleOpenModal}
+        onClick={() => handleOpenModal()}
       >
         친선전
       </Button>
-      <Bar>
+      {/* <Bar>
         {!isInvite ? (
           <InviteGame open={openModal} />
         ) : (
           <WaitAccept open={openModal} />
         )}
-      </Bar>
+      </Bar> */}
     </>
   );
 };
 
 export default MemberGameButton;
-
-// display: "flex",
-// alignItems: "center",
-// justifyContent: "center",
