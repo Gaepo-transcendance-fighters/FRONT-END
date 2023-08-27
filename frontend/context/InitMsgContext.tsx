@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, ReactNode } from "react";
-import { IChatDmEnter } from "@/type/type";
+import { IChatDmEnter } from "@/type/RoomType";
 
 interface InitMsgContextData {
   dmEnterEntry: IChatDmEnter | null;

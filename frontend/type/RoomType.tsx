@@ -84,16 +84,8 @@ export interface IDmMemList {
 }
 
 export interface IChatDmEnter {
-  // Message[] {
-  // 	message {
-  // 		sender : string,
-  // 		msg : string
-  // 	},
-  // 	...
-  // }, 이 부분은 주전님이 타입 정해주세요
-  // channelIdx : number; currentRoom이 있어서 필요성을 느끼지 못하지만,
-  //  이 부분도 필요하시면 주석해제하시고요!
-
+  message: IDMChatFromServer[]
+  channelIdx: number; 
   userIdx1: number;
   userIdx2: number;
   userNickname1: string;
@@ -123,4 +115,15 @@ export interface ILeftMember {
   userNickname: string;
   userIdx: number;
   imgUri: string;
+}
+
+export interface ReturnMsgDto {
+  code: number,
+  msg: string,
+}
+
+export interface IDMChatFromServer {
+  msg: string,
+  msgDate: string,
+  sender: string, // 원래는 IDX하기로했는데 백엔드 로직상 dm에서만 string
 }

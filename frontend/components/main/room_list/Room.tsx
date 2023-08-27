@@ -20,7 +20,6 @@ import {
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";
-import { IMember } from "@/type/type";
 import { useInitMsg } from "@/context/InitMsgContext";
 
 

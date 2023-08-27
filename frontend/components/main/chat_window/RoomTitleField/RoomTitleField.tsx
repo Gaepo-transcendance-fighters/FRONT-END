@@ -8,7 +8,7 @@ import { IconButton, Button } from "@mui/material";
 import SettingIconButton from "./SettingIconButton";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { IChatRoom, ReturnMsgDto } from "@/type/type";
+import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
 import { socket } from "@/app/page";

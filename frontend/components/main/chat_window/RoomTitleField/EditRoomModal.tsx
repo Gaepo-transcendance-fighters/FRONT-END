@@ -2,7 +2,7 @@
 
 import "@/components/main/room_list/RoomList.css";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom, ReturnMsgDto } from "@/type/type";
+import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { socket } from "@/app/page";
