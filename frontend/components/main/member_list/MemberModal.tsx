@@ -14,10 +14,12 @@ import {
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
-import { IChatDmEnter, IMember } from "@/type/type";
+import { IChatDmEnter, IChatRoom, IMember, ReturnMsgDto } from "@/type/type";
 import { useFriend } from "@/context/FriendContext";
 import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
+import RoomEnter from "@/external_functions/RoomEnter";
+import { useUser } from "@/context/UserContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -51,10 +53,12 @@ export default function MemberModal({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [curFriend, setCurFriend] = useState<IFriend | null>(null);
   const { roomState, roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   useEffect(() => {
     setCurFriend({
       friendNickname: person.nickname!,
+      friendIdx: person.userIdx!,
       isOnline: true,
     });
     // friendState.friendList.map((friend) => {
@@ -75,21 +79,58 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    socket.on("check_dm", (payload: IChatDmEnter) => {});
-    socket.on("create_dm", () => {});
+    const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
+      payload ? roomDispatch({ type: "SET_DM_ROOMS", value: payload }) : null;
+      handleCloseModal();
+    };
+
+    socket.on("create_dm", ChatGetDmRoomList);
     return () => {
-      socket.off("check_dm", () => {});
-      socket.off("create_dm", () => {});
+      socket.off("create_dm", ChatGetDmRoomList);
     };
   }, []);
 
   const sendDM = () => {
+    const existingRoom = roomState.dmRooms.find(
+      (element) => element.targetNickname === person.nickname
+    );
+    if (existingRoom) {
+      // 이미 dm 방이 존재. 그럼 기존 방 리디렉션
+      socket.emit(
+        "chat_get_DM",
+        {
+          channelIdx: existingRoom.channelIdx,
+        },
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
+            RoomEnter(existingRoom, roomState, userState, roomDispatch);
+            handleCloseModal();
+          } else {
+            console.log(ret.msg);
+            return;
+          }
+        }
+      );
+    } else {
+      // 방이 존재하지 않는다. 그럼 새로운 방만들기
+      socket.emit("create_DM", {
+        targetNickname : person.nickname,
+        targetIdx : person.userIdx,
+      }, (ret: ReturnMsgDto) => {
+        if (ret.code === 200) {
+          console.log(ret.msg);
+        } else {
+          console.log(ret.msg);
+          return ;
+        }
+      })
+    }
     socket.emit(
-      "check_dm",
+      "create_dm",
       { targetNickname: person.nickname, targetIdx: person.userIdx },
-      (res: number) => {
-        if (res === 200) return;
-        else if (res !== 200) {
+      (res: ReturnMsgDto) => {
+        if (res.code === 200) {
+        } else if (res.code !== 200) {
         }
       }
     );
