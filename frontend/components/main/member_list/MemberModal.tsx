@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
-import { IChatDmEnter, IMember } from "@/type/type";
+import { IChatDmEnter, IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
 import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
@@ -55,6 +55,7 @@ export default function MemberModal({
   useEffect(() => {
     setCurFriend({
       friendNickname: person.nickname!,
+      friendIdx: person.userIdx!,
       isOnline: true,
     });
     // friendState.friendList.map((friend) => {

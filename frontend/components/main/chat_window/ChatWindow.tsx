@@ -7,7 +7,7 @@ import LobbyWindow from "./LobbyWindow";
 import { Box } from "@mui/material";
 import { useRoom } from "@/context/RoomContext";
 import { useEffect, useState } from "react";
-import { alert } from "@/type/type";
+import { alert } from "@/type/RoomType";
 import Alert from "@mui/material/Alert";
 
 export interface IChat {
