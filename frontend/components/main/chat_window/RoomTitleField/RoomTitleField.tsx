@@ -4,7 +4,7 @@ import Stack from "./RoomNameStack";
 import Typography from "@mui/material/Typography";
 import VpnKeyTwoToneIcon from "@mui/icons-material/VpnKeyTwoTone";
 import "./RoomTitleField.css";
-import { IconButton } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
 import SettingIconButton from "./SettingIconButton";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -15,16 +15,24 @@ import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { IChat } from "../ChatWindow";
 
-interface Props {
-  setMsgs: Dispatch<SetStateAction<IChat[]>>;
-}
+// interface Props {
+//   setMsgs: Dispatch<SetStateAction<IChat[]>>;
+// }
 export enum Mode {
   PRIVATE = "private",
   PUBLIC = "public",
   PROTECTED = "protected",
 }
 
-const RoomTitleField = ({ setMsgs }: Props) => {
+const RoomTitleField = ({
+  setMsgs,
+  showAlert,
+  setShowAlert,
+}: {
+  setMsgs: Dispatch<SetStateAction<IChat[]>>;
+  showAlert: boolean;
+  setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -60,6 +68,14 @@ const RoomTitleField = ({ setMsgs }: Props) => {
       } else
         console.log("[RoomTItleField] there isn't roomState.currentRoom case");
     };
+    socket.on("chat_goto_lobby", leaveHandler);
+
+    return () => {
+      socket.off("chat_goto_lobby", leaveHandler);
+    };
+  }, []);
+
+  useEffect(() => {
     const leaveAndDeleteHandler = (channels: IChatRoom[]) => {
       console.log(
         "[RoomTItleField] leaveAndDeleteHandler on! chanel : ",
@@ -72,11 +88,9 @@ const RoomTitleField = ({ setMsgs }: Props) => {
       } else
         console.log("[RoomTItleField] there isn't roomState.currentRoom case");
     };
-    socket.on("chat_goto_lobby", leaveHandler);
     socket.on("BR_chat_room_delete", leaveAndDeleteHandler);
 
     return () => {
-      socket.off("chat_goto_lobby", leaveHandler);
       socket.off("BR_chat_room_delete", leaveAndDeleteHandler);
     };
   });
@@ -93,12 +107,17 @@ const RoomTitleField = ({ setMsgs }: Props) => {
   }, [userState.nickname]);
 
   const leaveRoom = () => {
-    const payload = {
-      channelIdx: roomState.currentRoom?.channelIdx,
-      userIdx: userState.userIdx, // [작업필요] 추후 나의 userIdx로 교체필요
-    };
-    socket.emit("chat_goto_lobby", payload);
     console.log("[RoomTItleField] click leaveroom");
+    if (roomState.currentRoom?.mode !== "private") {
+      const payload = {
+        channelIdx: roomState.currentRoom?.channelIdx,
+        userIdx: userState.userIdx, // [작업필요] 추후 나의 userIdx로 교체필요
+      };
+      socket.emit("chat_goto_lobby", payload);
+    } else {
+      roomDispatch({ type: "SET_CUR_ROOM", value: null });
+      roomDispatch({ type: "SET_IS_OPEN", value: false });
+    }
   };
 
   return (
@@ -122,12 +141,20 @@ const RoomTitleField = ({ setMsgs }: Props) => {
           ) : null}
         </div>
         <div className="room_setting">
-          {roomState.currentRoom?.mode === "private" ? null : <SettingIconButton />}
+          {roomState.currentRoom?.mode === "private" ? null : (
+            <SettingIconButton
+              showAlert={showAlert}
+              setShowAlert={setShowAlert}
+            />
+          )}
         </div>
         <div className="room_exit">
-          <IconButton aria-label="leave room" onClick={leaveRoom}>
+          {/* <IconButton aria-label="leave room" onClick={leaveRoom}>
             <DeleteForeverIcon />
-          </IconButton>
+          </IconButton> */}
+          <Button variant="contained" size="small" onClick={leaveRoom}>
+            lobby
+          </Button>
         </div>
       </div>
     </div>

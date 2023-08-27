@@ -135,7 +135,7 @@ export interface IDmMemList {
 
 export interface IDMChatFromServer {
   msg: string,
-  msgDate: Date,
+  msgDate: string,
   sender: string, // 원래는 IDX하기로했는데 백엔드 로직상 dm에서만 string
 }
 
