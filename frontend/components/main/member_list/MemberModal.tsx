@@ -55,6 +55,7 @@ export default function MemberModal({
   useEffect(() => {
     setCurFriend({
       friendNickname: person.nickname!,
+      friendIdx: person.userIdx!,
       isOnline: true,
     });
     // friendState.friendList.map((friend) => {

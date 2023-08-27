@@ -8,7 +8,7 @@ import { IconButton } from "@mui/material";
 import SettingIconButton from "./SettingIconButton";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { IChatRoom } from "@/type/type";
+import { IChatRoom, ReturnMsgDto } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
 import { socket } from "@/app/page";
@@ -31,73 +31,63 @@ const RoomTitleField = ({ setMsgs }: Props) => {
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
 
-  const updateChannels = (
-    targetChannelIdx: number,
-    updatedChannel: IChatRoom
-  ) => {
-    const updatedArray = roomState.nonDmRooms.map((item) => {
-      if (item.channelIdx === targetChannelIdx) {
-        return {
-          ...item,
-          owner: updatedChannel.owner,
-        };
-      }
-      return item;
-    });
-    // console.log("[RoomTItleField] before updateChanels : " + roomState.nonDmRooms);
-    roomDispatch({ type: "SET_NON_DM_ROOMS", value: updatedArray });
-  };
-
   useEffect(() => {
-    const leaveHandler = (channel: IChatRoom) => {
-      console.log(
-        "[RoomTItleField] receive from chat_goto_lobby API : " + channel
-      );
-      if (roomState.currentRoom) {
-        updateChannels(roomState.currentRoom?.channelIdx, channel);
+    const leaveHandler = (channel: IChatRoom[]) => {
+      console.log("leaveHandler roomState.isLobbyBtn", roomState.isLobbyBtn);
+      if (roomState.currentRoom && roomState.isLobbyBtn) {
         roomDispatch({ type: "SET_IS_OPEN", value: false });
         roomDispatch({ type: "SET_CUR_ROOM", value: null });
-      } else
-        console.log("[RoomTItleField] there isn't roomState.currentRoom case");
-    };
-    const leaveAndDeleteHandler = (channels: IChatRoom[]) => {
-      console.log(
-        "[RoomTItleField] leaveAndDeleteHandler on! chanel : ",
-        channels
-      );
-      if (roomState.currentRoom) {
-        roomDispatch({ type: "SET_IS_OPEN", value: false });
-        roomDispatch({ type: "SET_CUR_ROOM", value: null });
-        roomDispatch({ type: "SET_NON_DM_ROOMS", value: channels });
+        roomDispatch({ type: "SET_IS_LOBBY_BTN", value: false });
       } else
         console.log("[RoomTItleField] there isn't roomState.currentRoom case");
     };
     socket.on("chat_goto_lobby", leaveHandler);
-    socket.on("BR_chat_room_delete", leaveAndDeleteHandler);
 
     return () => {
       socket.off("chat_goto_lobby", leaveHandler);
-      socket.off("BR_chat_room_delete", leaveAndDeleteHandler);
     };
-  });
+  }, [roomState.isLobbyBtn]);
 
-  useEffect(() => {
-    console.log(
-      "[RoomTItleField] show current nonDmchannels has been changed : ",
-      roomState.nonDmRooms
-    );
-  }, [roomState.nonDmRooms]);
+  // useEffect(() => {
+  //   const leaveAndDeleteHandler = (channels: IChatRoom[]) => {
+  //     console.log(
+  //       "[RoomTItleField] leaveAndDeleteHandler on! chanel : ",
+  //       channels
+  //     );
+  //     if (roomState.currentRoom) {
+  //       roomDispatch({ type: "SET_IS_OPEN", value: false });
+  //       roomDispatch({ type: "SET_CUR_ROOM", value: null });
+  //       roomDispatch({ type: "SET_NON_DM_ROOMS", value: channels });
+  //     } else
+  //       console.log("[RoomTItleField] there isn't roomState.currentRoom case");
+  //   };
+  //   socket.on("BR_chat_room_delete", leaveAndDeleteHandler);
 
-  useEffect(() => {
-    console.log("userState.nickname : " + userState);
-  }, [userState.nickname]);
+  //   return () => {
+  //     socket.off("BR_chat_room_delete", leaveAndDeleteHandler);
+  //   };
+  // });
+
+  // useEffect(() => {
+  //   console.log(
+  //     "[RoomTItleField] show current nonDmchannels has been changed : ",
+  //     roomState.nonDmRooms
+  //   );
+  // }, [roomState.nonDmRooms]);
+
+  // useEffect(() => {
+  //   console.log("userState.nickname : " + userState);
+  // }, [userState.nickname]);
 
   const leaveRoom = () => {
     const payload = {
       channelIdx: roomState.currentRoom?.channelIdx,
       userIdx: userState.userIdx, // [작업필요] 추후 나의 userIdx로 교체필요
     };
-    socket.emit("chat_goto_lobby", payload);
+    roomDispatch({ type: "SET_IS_LOBBY_BTN", value: true });
+    socket.emit("chat_goto_lobby", payload, (ret: ReturnMsgDto) => {
+      console.log("leaveRoom chat_goto_lobby ret : ", ret);
+    });
     console.log("[RoomTItleField] click leaveroom");
   };
 
@@ -122,7 +112,9 @@ const RoomTitleField = ({ setMsgs }: Props) => {
           ) : null}
         </div>
         <div className="room_setting">
-          {roomState.currentRoom?.mode === "private" ? null : <SettingIconButton />}
+          {roomState.currentRoom?.mode === "private" ? null : (
+            <SettingIconButton />
+          )}
         </div>
         <div className="room_exit">
           <IconButton aria-label="leave room" onClick={leaveRoom}>

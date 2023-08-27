@@ -1,11 +1,5 @@
 import { IChatRoom, IDmMemList, IMember } from "@/type/type";
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-} from "react";
+import { ReactNode, createContext, useContext, useReducer } from "react";
 
 interface RoomContextData {
   dmRooms: IChatRoom[];
@@ -15,6 +9,7 @@ interface RoomContextData {
   isOpen: boolean;
   currentDmRoomMemberList: IDmMemList | null;
   adminAry: { nickname: string }[];
+  isLobbyBtn: boolean;
 }
 
 type RoomAction =
@@ -25,7 +20,8 @@ type RoomAction =
   | { type: "SET_IS_OPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom }
   | { type: "SET_CUR_DM_MEM"; value: IDmMemList }
-  | { type: "SET_ADMIN_ARY"; value: { nickname: string }[] };
+  | { type: "SET_ADMIN_ARY"; value: { nickname: string }[] }
+  | { type: "SET_IS_LOBBY_BTN"; value: boolean };
 
 const initialState: RoomContextData = {
   dmRooms: [],
@@ -35,6 +31,7 @@ const initialState: RoomContextData = {
   isOpen: false,
   currentDmRoomMemberList: null,
   adminAry: [],
+  isLobbyBtn: false,
 };
 
 const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
@@ -58,6 +55,8 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
       return { ...roomState, currentDmRoomMemberList: action.value };
     case "SET_ADMIN_ARY":
       return { ...roomState, adminAry: action.value };
+    case "SET_IS_LOBBY_BTN":
+      return { ...roomState, isLobbyBtn: action.value };
     default:
       return roomState;
   }
