@@ -14,6 +14,12 @@ export const main = {
   main8: "#64D9F9",
 };
 
+export enum GameType {
+  FRIEND,
+  NORMAL,
+  RANK,
+}
+
 export interface IFriend {
   friendNickname: string;
   friendIdx: number;
@@ -21,6 +27,20 @@ export interface IFriend {
 }
 
 export interface IBlock {
+  targetNickname: string;
+  targetIdx: number;
+}
+
+export interface IFriendData {
+  targetNickname: string;
+  imgUri: string;
+  rank: number;
+  Win: number;
+  Lose: number;
+  isOnline: boolean;
+}
+
+export interface FriendReqData {
   targetNickname: string;
   targetIdx: number;
 }

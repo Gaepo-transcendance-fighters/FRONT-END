@@ -119,11 +119,16 @@ const OptionSelect = () => {
         mapNumber: selectedMapOption,
       },
       (res: { code: number; msg: string }) => {
-        console.log(res);
         if (res.code === 200) {
           console.log("queue regist start");
-          console.log(authState.id);
-          console.log(Date.now());
+
+          if (gameState.gameMode === GameType.FRIEND) {
+            console.log("친구게임");
+            setTimeout(() => {
+              router.replace("./inwaiting");
+            }, 300);
+            return;
+          }
 
           gameSocket.emit(
             "game_queue_regist",

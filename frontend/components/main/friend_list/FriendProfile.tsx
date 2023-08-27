@@ -13,13 +13,14 @@ import {
 import { useEffect, useState } from "react";
 import { IFriend } from "./FriendList";
 import Image from "next/image";
-import WaitAccept from "../InviteGame/WaitAccept";
 import MyGameLog from "../myprofile/MyGameLog";
 import { socket } from "@/app/page";
-import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import { main } from "@/type/type";
+import { useFriend } from "@/context/FriendContext";
+import axios from "axios";
+import FriendGameButton from "../InviteGame/FriendGameButton";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -61,7 +62,6 @@ interface IFriendData {
 }
 
 interface FriendReqData {
-  userIdx: number;
   targetNickname: string;
   targetIdx: number;
 }
@@ -77,10 +77,29 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     Lose: 0,
     isOnline: false,
   });
-
+  const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
+  const { friendDispatch } = useFriend();
+
+  const RankSrc =
+    friendData.rank < 800
+      ? "./rank/exp_medal_bronze.png"
+      : friendData.rank >= 800 && friendData.rank < 1100
+      ? "./rank/exp_medal_silver.png"
+      : "./rank/exp_medal_gold.png";
 
   const handleOpenModal = () => {
+    socket.emit(
+      "user_profile",
+      {
+        userIdx: userState.userIdx,
+        targetNickname: prop.friendNickname,
+        targetIdx: prop.friendIdx,
+      },
+      () => {
+        console.log("유저프로필에 데이터 보냄");
+      }
+    );
     setOpenModal(true);
   };
 
@@ -113,17 +132,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       targetIdx: prop.friendIdx,
     };
     socket.emit("user_profile", ReqData);
-  }, [])
-
-  const RankImgSelect = (data: IFriendData) => {
-    if (data.rank < 800) return "./rank/exp_medal_bronze.png";
-    else if (data.rank >= 800 && data.rank < 1100)
-      return "./rank/exp_medal_silver.png";
-    else if (data.rank >= 1100) return "./rank/exp_medal_gold.png";
-  };
-
-  const RankSrc = RankImgSelect(friendData);
-  const { roomState, roomDispatch } = useRoom();
+  }, []);
 
   //0820기준 수정필요z
   const CheckDm = (data: IFriend) => {
@@ -137,6 +146,60 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     }
     handleCloseModal();
   };
+
+  const addFriend = async () => {
+    console.log("add friend");
+    const friendReqData: FriendReqData = {
+      targetNickname: prop.friendNickname,
+      targetIdx: prop.friendIdx,
+    };
+    await axios({
+      method: "post",
+      url: "http://paulryu9309.ddns.net:4000/users/follow",
+      data: friendReqData,
+    })
+      .then((res) => {
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseMenu();
+    handleCloseModal();
+  };
+
+  const deleteFriend = async () => {
+    console.log("delete friend");
+    const friendReqData: FriendReqData = {
+      targetNickname: prop.friendNickname,
+      targetIdx: prop.friendIdx,
+    };
+
+    await axios({
+      method: "delete",
+      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      data: friendReqData,
+    })
+      .then((res) => {
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseMenu();
+    handleCloseModal();
+  };
+
+  useEffect(() => {
+    const userProfile = (data: IFriendData) => {
+      setFriendData(data);
+    };
+
+    socket.on("user_profile", userProfile);
+    return () => {
+      socket.off("user_profile");
+    };
+  }, [friendData]);
 
   return (
     <>
@@ -183,11 +246,10 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 닉네임: {friendData?.targetNickname}
               </Typography>
               <Typography>
-                상태:{" "}
-                {friendData.isOnline === true ? <>Online</> : <>Offline</>}
+                상태: {friendData?.isOnline ? loginOn : loginOff}
               </Typography>
               <Stack direction={"row"} spacing={2}>
-                <WaitAccept />
+                <FriendGameButton prop={prop} />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
@@ -211,8 +273,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                   MenuListProps={{ sx: { py: 0 } }}
                 >
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                    <MenuItem>Add</MenuItem>
-                    <MenuItem>Delete</MenuItem>
+                    <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                     <MenuItem>Block</MenuItem>
                   </Stack>
                 </Menu>

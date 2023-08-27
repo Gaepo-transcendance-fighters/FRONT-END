@@ -93,7 +93,7 @@ export default function PageRedir() {
       Authorization: "Bearer " + localStorage.getItem("authorization"),
     };
     axios
-      .get("http://localhost:4000/users/profile", { headers })
+      .get("http://paulryu9309.ddns.net:4000/users/profile", { headers })
       .then((response) => {
         setUserData(response.data);
       });
@@ -120,7 +120,7 @@ export default function PageRedir() {
     try {
       await axios({
         method: "PUT",
-        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
+        url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -166,7 +166,7 @@ export default function PageRedir() {
     try {
       const response = await axios({
         method: "PATCH",
-        url: `http://localhost:4000/users/profile/${userData?.nickname}`,
+        url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
 
         headers: {
           "Content-Type": "application/json",
@@ -194,7 +194,7 @@ export default function PageRedir() {
     try {
       const response = await axios({
         method: "PATCH",
-        url: "http://localhost:4000/users/profile/:my_nickname",
+        url: "http://paulryu9309.ddns.net:4000/users/profile/:my_nickname",
         headers: {
           "Content-Type": "application/json",
         },
