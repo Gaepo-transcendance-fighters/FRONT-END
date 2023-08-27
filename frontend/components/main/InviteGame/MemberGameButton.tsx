@@ -6,16 +6,11 @@ import { useRouter } from "next/navigation";
 import { socket } from "@/app/page";
 import InviteGame from "./InviteGame";
 import WaitAccept from "./WaitAccept";
-import { IFriend, IMember } from "@/type/type";
+import { IMember } from "@/type/RoomType";
 import { useAuth } from "@/context/AuthContext";
 import { useModalContext } from "@/context/ModalContext";
 import { useGame } from "@/context/GameContext";
-
-enum GameType {
-  FRIEND,
-  NORMAL,
-  RANK,
-}
+import { GameType } from "@/type/type";
 
 const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const router = useRouter();
@@ -48,15 +43,15 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       targetUserNickname: string;
       answer: number;
     }) => {
-      console.log("receive invite", answer)
+      console.log("receive invite", answer);
       if (answer === 0) closeModal();
       else if (answer === 1) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
-        closeModal()
+        closeModal();
         router.push("./optionselect");
       }
     };
-    socket.on("chat_receive_answer", recieveInvite)
+    socket.on("chat_receive_answer", recieveInvite);
     socket.on("chat_invite_answer", recieveInvite);
 
     socket.on("chat_invite_ask", () => {});

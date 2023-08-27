@@ -1,7 +1,7 @@
 "use client";
 
-import { Box, Button, Card, CardContent, Modal } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Button, Card, CardContent } from "@mui/material";
+import { useEffect } from "react";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useModalContext } from "@/context/ModalContext";
@@ -21,7 +21,7 @@ const modalStyle = {
   p: 4,
 };
 
-const InviteGame = ({ nickname, idx }: { nickname: string, idx: number }) => {
+const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   const { closeModal } = useModalContext();
   const { authState } = useAuth();
   const router = useRouter();
@@ -40,38 +40,47 @@ const InviteGame = ({ nickname, idx }: { nickname: string, idx: number }) => {
       targetUserNickname: string;
       answer: number;
     }) => {
-      console.log("recieve invite", answer)
+      console.log("recieve invite", answer);
       if (answer === 0) closeModal();
       else if (answer === 1) router.push("./optionselect");
     };
-    socket.on("chat_receive_answer", recieveInvite)
+    socket.on("chat_receive_answer", recieveInvite);
     socket.on("chat_invite_answer", recieveInvite);
 
     return () => {
       socket.off("chat_invite_answer");
+      socket.off("chat_receive_answer");
     };
   }, []);
 
   const handleYes = () => {
-    console.log("yes")
-    socket.emit("chat_invite_answer", {
-      inviteUserIdx: idx,
-      targetUserIdx: authState.id,
-      answer: 1,
-    }, (res: any) => {
-      console.log(res)
-    });
+    console.log("yes");
+    socket.emit(
+      "chat_invite_answer",
+      {
+        inviteUserIdx: idx,
+        targetUserIdx: authState.id,
+        answer: 1,
+      },
+      (res: any) => {
+        console.log(res);
+      }
+    );
   };
 
   const handleNo = () => {
-    console.log("no")
-    socket.emit("chat_invite_answer", {
-      inviteUserIdx: idx,
-      targetUserIdx: authState.id,
-      answer: 0,
-    }, (res: any) => {
-      console.log(res)
-    });
+    console.log("no");
+    socket.emit(
+      "chat_invite_answer",
+      {
+        inviteUserIdx: idx,
+        targetUserIdx: authState.id,
+        answer: 0,
+      },
+      (res: any) => {
+        console.log(res);
+      }
+    );
   };
   return (
     <>
