@@ -1,6 +1,5 @@
 import { useModalContext } from "@/context/ModalContext";
-import { Dialog,DialogContent, Portal } from "@mui/material";
-
+import { Dialog, DialogContent, Portal } from "@mui/material";
 
 export const ModalPortal = () => {
   const { isOpen, modalData, closeModal } = useModalContext();
@@ -9,17 +8,7 @@ export const ModalPortal = () => {
     return <></>;
   }
 
-  const { children, onCancel, onSubmit } = modalData;
-
-  const onCancelInternal = () => {
-    onCancel?.();
-    closeModal();
-  };
-
-  const onSubmitInternal = () => {
-    onSubmit?.();
-    closeModal();
-  };
+  const { children } = modalData;
 
   return (
     <Dialog open={isOpen} onClose={closeModal}>

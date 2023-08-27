@@ -31,6 +31,20 @@ export interface IBlock {
   targetIdx: number;
 }
 
+export interface IFriendData {
+  targetNickname: string;
+  imgUri: string;
+  rank: number;
+  Win: number;
+  Lose: number;
+  isOnline: boolean;
+}
+
+export interface FriendReqData {
+  targetNickname: string;
+  targetIdx: number;
+}
+
 export interface IUserProp {
   friendNickname?: string;
   friendIdx?: number;

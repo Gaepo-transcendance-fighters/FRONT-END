@@ -14,11 +14,12 @@ import {
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
-import { IChatDmEnter, IMember } from "@/type/RoomType";
+import { IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
 import { socket } from "@/app/page";
 import axios from "axios";
 import MemberGameButton from "../InviteGame/MemberGameButton";
+import { FriendReqData } from "@/type/type";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -40,20 +41,6 @@ const loginOn = (
 const loginOff = (
   <Image src="/status/logoff.png" alt="offline" width={10} height={10} />
 );
-
-interface IFriendData {
-  targetNickname: string;
-  imgUri: string;
-  rank: number;
-  Win: number;
-  Lose: number;
-  isOnline: boolean;
-}
-
-interface FriendReqData {
-  targetNickname: string;
-  targetIdx: number;
-}
 
 export default function MemberModal({
   setOpenModal,
