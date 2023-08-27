@@ -15,6 +15,7 @@ export interface RoomContextData {
   isOpen: boolean;
   currentDmRoomMemberList: IDmMemList | null;
   adminAry: { nickname: string }[];
+  hasNewDmRoomAlert: boolean;
 }
 
 export type RoomAction =
@@ -25,7 +26,8 @@ export type RoomAction =
   | { type: "SET_IS_OPEN"; value: boolean }
   | { type: "ADD_ROOM"; value: IChatRoom }
   | { type: "SET_CUR_DM_MEM"; value: IDmMemList }
-  | { type: "SET_ADMIN_ARY"; value: { nickname: string }[] };
+  | { type: "SET_ADMIN_ARY"; value: { nickname: string }[] }
+  | { type: "SET_NEW_DM_ROOM_ALERT"; value: boolean };
 
 const initialState: RoomContextData = {
   dmRooms: [],
@@ -35,6 +37,7 @@ const initialState: RoomContextData = {
   isOpen: false,
   currentDmRoomMemberList: null,
   adminAry: [],
+  hasNewDmRoomAlert: false,
 };
 
 const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
@@ -58,6 +61,8 @@ const RoomReducer = (roomState: RoomContextData, action: RoomAction) => {
       return { ...roomState, currentDmRoomMemberList: action.value };
     case "SET_ADMIN_ARY":
       return { ...roomState, adminAry: action.value };
+    case "SET_NEW_DM_ROOM_ALERT":
+      return { ...roomState, hasNewDmRoomAlert: action.value };
     default:
       return roomState;
   }

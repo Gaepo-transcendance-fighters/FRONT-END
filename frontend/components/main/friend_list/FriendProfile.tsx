@@ -131,6 +131,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       if (payload) {
         roomDispatch({ type: "SET_DM_ROOMS", value: payload });
         handleCloseModal();
+        roomDispatch({ type: "SET_NEW_DM_ROOM_ALERT", value: true });
       }
     };
 

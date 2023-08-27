@@ -82,6 +82,7 @@ export default function MemberModal({
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
       payload ? roomDispatch({ type: "SET_DM_ROOMS", value: payload }) : null;
       handleCloseModal();
+      roomDispatch({ type: "SET_NEW_DM_ROOM_ALERT", value: true });
     };
 
     socket.on("create_dm", ChatGetDmRoomList);
@@ -113,17 +114,21 @@ export default function MemberModal({
       );
     } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
-      socket.emit("create_DM", {
-        targetNickname : person.nickname,
-        targetIdx : person.userIdx,
-      }, (ret: ReturnMsgDto) => {
-        if (ret.code === 200) {
-          console.log(ret.msg);
-        } else {
-          console.log(ret.msg);
-          return ;
+      socket.emit(
+        "create_DM",
+        {
+          targetNickname: person.nickname,
+          targetIdx: person.userIdx,
+        },
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
+            console.log(ret.msg);
+          } else {
+            console.log(ret.msg);
+            return;
+          }
         }
-      })
+      );
     }
     socket.emit(
       "create_dm",
