@@ -5,8 +5,8 @@ import Rooms from "./Rooms";
 import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
-import { IChatRoom, ReturnMsgDto, alert } from "@/type/type";
-import Alert from "@mui/material/Alert";
+import { IChatRoom, ReturnMsgDto, alert } from "@/type/RoomType";
+import { Alert } from "@mui/material";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();

@@ -7,7 +7,7 @@ import { Dispatch, SetStateAction } from "react";
 import { IChat } from "../ChatWindow";
 import axios from "axios";
 import { useInitMsg } from "@/context/InitMsgContext";
-import {IDMChatFromServer} from "@/type/type"
+import { IDMChatFromServer } from "@/type/RoomType";
 
 interface Props {
   msgs: IChat[];
