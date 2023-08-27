@@ -7,7 +7,7 @@ import {
   useReducer,
 } from "react";
 
-interface RoomContextData {
+export interface RoomContextData {
   dmRooms: IChatRoom[];
   nonDmRooms: IChatRoom[];
   currentRoom: IChatRoom | null;
@@ -17,7 +17,7 @@ interface RoomContextData {
   adminAry: { nickname: string }[];
 }
 
-type RoomAction =
+export type RoomAction =
   | { type: "SET_DM_ROOMS"; value: IChatRoom[] }
   | { type: "SET_NON_DM_ROOMS"; value: IChatRoom[] }
   | { type: "SET_CUR_ROOM"; value: IChatRoom | null }

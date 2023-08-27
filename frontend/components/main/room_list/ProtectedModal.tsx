@@ -16,6 +16,8 @@ import { useRoom } from "@/context/RoomContext";
 import { IChatRoom, Mode, ReturnMsgDto } from "@/type/type";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
+import { RoomContextData, RoomAction } from "@/context/RoomContext";
+import { UserContextData } from "@/context/UserContext";
 
 const box = {
   position: "absolute" as "absolute",
@@ -53,7 +55,12 @@ export default function ProtectedModal({
   room: IChatRoom;
   setFail: Dispatch<SetStateAction<boolean>>;
   fail: boolean;
-  RoomEnter: (room: IChatRoom) => void;
+  RoomEnter: (
+    room: IChatRoom,
+    roomState : RoomContextData,
+    userState : UserContextData,
+    roomDispatch : Dispatch<RoomAction>,
+  ) => void; // <==================== 삭제필요
 }) {
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
@@ -76,7 +83,8 @@ export default function ProtectedModal({
       },
       (ret: ReturnMsgDto) => {
         if (ret.code === 200) {
-          RoomEnter(room);
+          // RoomEnter(room);
+          RoomEnter(room, roomState, userState, roomDispatch);
           handleClose();
           setFail(false);
         } else {
@@ -100,7 +108,8 @@ export default function ProtectedModal({
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            RoomEnter(room);
+            // RoomEnter(room);
+            RoomEnter(room, roomState, userState, roomDispatch);
             handleClose();
             setFail(false);
           } else {
