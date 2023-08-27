@@ -115,6 +115,25 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     setAnchorEl(null);
   };
 
+  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
+  useEffect(() => {
+    const UserProfile = (data: IFriendData) => {
+      setFriendData(data);
+    };
+    // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
+    socket.on("user_profile", UserProfile);
+  });
+
+  useEffect(() => {
+    const ReqData = {
+      //값 변경 필요
+      userIdx: userState.userIdx,
+      targetNickname: prop.friendNickname,
+      targetIdx: prop.friendIdx,
+    };
+    socket.emit("user_profile", ReqData);
+  }, []);
+
   //0820기준 수정필요z
   const CheckDm = (data: IFriend) => {
     const matchedRoom = roomState.dmRooms.find(
@@ -129,7 +148,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   };
 
   const addFriend = async () => {
-    console.log("add friend")
+    console.log("add friend");
     const friendReqData: FriendReqData = {
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
@@ -150,7 +169,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   };
 
   const deleteFriend = async () => {
-    console.log("delete friend")
+    console.log("delete friend");
     const friendReqData: FriendReqData = {
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,

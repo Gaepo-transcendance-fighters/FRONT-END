@@ -13,7 +13,7 @@ import "./ProtectedModal.css";
 import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom, Mode, ReturnMsgDto } from "@/type/type";
+import { IChatRoom, Mode, ReturnMsgDto } from "@/type/RoomType";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 

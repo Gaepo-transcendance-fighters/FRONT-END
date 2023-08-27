@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IFriend } from "../friend_list/FriendList";
-import { IChatDmEnter, IMember } from "@/type/type";
+import { IChatDmEnter, IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
 import { socket } from "@/app/page";
 import axios from "axios";
