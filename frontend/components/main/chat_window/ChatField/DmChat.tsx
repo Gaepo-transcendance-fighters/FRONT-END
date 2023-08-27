@@ -7,6 +7,7 @@ import { Dispatch, SetStateAction } from "react";
 import { IChat } from "../ChatWindow";
 import axios from "axios";
 import { useInitMsg } from "@/context/InitMsgContext";
+import {IDMChatFromServer} from "@/type/type"
 
 interface Props {
   msgs: IChat[];
@@ -63,12 +64,12 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
   // 첫 메세지 20개 불러오는 로직
   useEffect(() => {
     if (!initMsgState.dmEnterEntry) return;
-    const list: IChat[] = initMsgState.dmEnterEntry?.message.map(
-      (data: any) => {
+    const list: IChat[] = initMsgState.dmEnterEntry.message.map(
+      (data: IDMChatFromServer) => {
         const payload: IChat = {
           channelIdx: initMsgState.dmEnterEntry?.channelIdx,
           senderIdx:
-            data.sender === roomState.currentDmRoomMemberList?.userIdx1
+            data.sender === roomState.currentDmRoomMemberList?.userNickname1
               ? roomState.currentDmRoomMemberList?.userIdx1
               : roomState.currentDmRoomMemberList?.userIdx2,
           sender: data.sender,
