@@ -1,5 +1,11 @@
-import { IChatRoom, IDmMemList, IMember } from "@/type/type";
-import { ReactNode, createContext, useContext, useReducer } from "react";
+import { IChatRoom, IDmMemList, IMember } from "@/type/RoomType";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 
 interface RoomContextData {
   dmRooms: IChatRoom[];
