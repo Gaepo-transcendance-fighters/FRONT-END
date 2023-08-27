@@ -19,7 +19,8 @@ import { socket } from "@/app/page";
 import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom, ReturnMsgDto, main } from "@/type/type";
+import { main } from "@/type/type";
+import { IChatRoom, ReturnMsgDto} from "@/type/RoomType"
 import RoomEnter from "@/external_functions/RoomEnter";
 
 const modalStyle = {
