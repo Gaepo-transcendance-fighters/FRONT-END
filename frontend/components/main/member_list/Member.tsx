@@ -122,7 +122,7 @@ export default function Member({
         userIdx: person.userIdx,
         grant: !isAuthorized,
       },
-      (ret: string | number) => {
+      (ret: ReturnMsgDto) => {
         console.log("SetAdmin ret : ", ret);
         setIsAuthorized((prev) => !prev); //
         console.log("SetAdmin isAuthorized : ", isAuthorized);
@@ -190,8 +190,7 @@ export default function Member({
         targetNickname: person.nickname,
         targetIdx: person.userIdx,
       },
-      (ret: string | number) => {
-        console.log("ret : ", ret);
+      (ret: ReturnMsgDto) => {
         // if (ret === 200) {
         // setShowAlert(true);
         // setString(strings[3]);

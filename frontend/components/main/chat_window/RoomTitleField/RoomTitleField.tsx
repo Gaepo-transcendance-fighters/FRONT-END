@@ -89,15 +89,15 @@ const RoomTitleField = ({
 
   const leaveRoom = () => {
     if (roomState.currentRoom?.mode !== "private") {
-    const payload = {
-      channelIdx: roomState.currentRoom?.channelIdx,
-      userIdx: userState.userIdx, // [작업필요] 추후 나의 userIdx로 교체필요
-    };
-    roomDispatch({ type: "SET_IS_LOBBY_BTN", value: true });
-    socket.emit("chat_goto_lobby", payload, (ret: ReturnMsgDto) => {
-      console.log("leaveRoom chat_goto_lobby ret : ", ret);
-    });}
-    else {
+      const payload = {
+        channelIdx: roomState.currentRoom?.channelIdx,
+        userIdx: userState.userIdx, // [작업필요] 추후 나의 userIdx로 교체필요
+      };
+      roomDispatch({ type: "SET_IS_LOBBY_BTN", value: true });
+      socket.emit("chat_goto_lobby", payload, (ret: ReturnMsgDto) => {
+        console.log("leaveRoom chat_goto_lobby ret : ", ret);
+      });
+    } else {
       roomDispatch({ type: "SET_CUR_ROOM", value: null });
       roomDispatch({ type: "SET_IS_OPEN", value: false });
     }
