@@ -33,19 +33,25 @@ const BottomField = ({ setMsgs }: Props) => {
 
   useEffect(() => {
     const messageHandler = (chatFromServer: IChat) => {
-      if (roomState.currentRoom?.mode === "private") {
+        let result;
+        if (roomState.currentRoom?.mode === "private") {
+          if (roomState.currentDmRoomMemberList?.userIdx1 === chatFromServer.senderIdx) {
+            result = roomState.currentDmRoomMemberList?.userNickname1
+          } else if (roomState.currentDmRoomMemberList?.userIdx2 === chatFromServer.senderIdx) {
+            result = roomState.currentDmRoomMemberList?.userNickname2
+          } else return ;
         const chat = {
           channelIdx: chatFromServer.channelIdx,
           senderIdx: chatFromServer.sender === roomState.currentDmRoomMemberList?.userIdx1
             ? roomState.currentDmRoomMemberList?.userIdx1
             : roomState.currentDmRoomMemberList?.userIdx2,
-          sender: chatFromServer.sender,
+          sender: result,
           msg: chatFromServer.msg,
           msgDate: chatFromServer.msgDate, }
         setMsgs((prevChats: any) => [chat, ...prevChats]); // <----- any type 나중 변경 필요.
         console.log(chat);
       } else {
-          const result = roomState.currentRoomMemberList.find(person => person.userIdx === chatFromServer.senderIdx)
+        result = roomState.currentRoomMemberList.find(person => person.userIdx === chatFromServer.senderIdx)
         if (result?.nickname) {
           const chat = {
             channelIdx: chatFromServer.channelIdx,

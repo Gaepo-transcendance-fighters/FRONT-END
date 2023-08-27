@@ -2,7 +2,7 @@
 
 import "@/components/main/room_list/RoomList.css";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom } from "@/type/type";
+import { IChatRoom, ReturnMsgDto } from "@/type/type";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { socket } from "@/app/page";
@@ -21,20 +21,44 @@ const style = {
   p: 4,
 };
 
-export default function EditRoomModal({ prop }: { prop: () => void }) {
+export default function EditRoomModal({
+  prop,
+  showAlert,
+  setShowAlert,
+}: {
+  prop: () => void;
+  showAlert: boolean;
+  setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { roomState, roomDispatch } = useRoom();
   const [value, setValue] = useState("");
   const { userState } = useUser();
   const payload = {
     channelIdx: roomState.currentRoom?.channelIdx,
-    senderIdx: userState.userIdx, // [번경필요]나중에 나의 userIdx 로 변경필요
-    changedPassword: value,
+    userIdx: userState.userIdx, // [번경필요]나중에 나의 userIdx 로 변경필요
+    changePassword: value,
   };
+
+  useEffect(() => {
+    const changingPw = (res: IChatRoom[]) => {
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: res });
+    };
+
+    socket.on("BR_chat_room_password", changingPw);
+    return () => {
+      socket.off("BR_chat_room_password", changingPw);
+    }
+  }, []);
 
   const handleClose = () => {
     prop();
-    socket.emit("BR_chat_room_password", payload);
-    console.log("방설정변경 pw: ", value);
+    socket.emit("BR_chat_room_password", payload, (ret: ReturnMsgDto) => {
+      if (ret.code === 200) {
+        console.log("pw changing success");
+      } else {
+        setShowAlert(true);
+      }
+    });
   };
 
   useEffect(() => {

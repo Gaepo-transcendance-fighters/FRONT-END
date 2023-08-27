@@ -4,7 +4,7 @@ import Stack from "./RoomNameStack";
 import Typography from "@mui/material/Typography";
 import VpnKeyTwoToneIcon from "@mui/icons-material/VpnKeyTwoTone";
 import "./RoomTitleField.css";
-import { IconButton } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
 import SettingIconButton from "./SettingIconButton";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -15,16 +15,24 @@ import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { IChat } from "../ChatWindow";
 
-interface Props {
-  setMsgs: Dispatch<SetStateAction<IChat[]>>;
-}
+// interface Props {
+//   setMsgs: Dispatch<SetStateAction<IChat[]>>;
+// }
 export enum Mode {
   PRIVATE = "private",
   PUBLIC = "public",
   PROTECTED = "protected",
 }
 
-const RoomTitleField = ({ setMsgs }: Props) => {
+const RoomTitleField = ({
+  setMsgs,
+  showAlert,
+  setShowAlert,
+}: {
+  setMsgs: Dispatch<SetStateAction<IChat[]>>;
+  showAlert: boolean;
+  setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -80,6 +88,7 @@ const RoomTitleField = ({ setMsgs }: Props) => {
   // }, [userState.nickname]);
 
   const leaveRoom = () => {
+    if (roomState.currentRoom?.mode !== "private") {
     const payload = {
       channelIdx: roomState.currentRoom?.channelIdx,
       userIdx: userState.userIdx, // [작업필요] 추후 나의 userIdx로 교체필요
@@ -87,8 +96,11 @@ const RoomTitleField = ({ setMsgs }: Props) => {
     roomDispatch({ type: "SET_IS_LOBBY_BTN", value: true });
     socket.emit("chat_goto_lobby", payload, (ret: ReturnMsgDto) => {
       console.log("leaveRoom chat_goto_lobby ret : ", ret);
-    });
-    console.log("[RoomTItleField] click leaveroom");
+    });}
+    else {
+      roomDispatch({ type: "SET_CUR_ROOM", value: null });
+      roomDispatch({ type: "SET_IS_OPEN", value: false });
+    }
   };
 
   return (
@@ -113,13 +125,19 @@ const RoomTitleField = ({ setMsgs }: Props) => {
         </div>
         <div className="room_setting">
           {roomState.currentRoom?.mode === "private" ? null : (
-            <SettingIconButton />
+            <SettingIconButton
+              showAlert={showAlert}
+              setShowAlert={setShowAlert}
+            />
           )}
         </div>
         <div className="room_exit">
-          <IconButton aria-label="leave room" onClick={leaveRoom}>
+          {/* <IconButton aria-label="leave room" onClick={leaveRoom}>
             <DeleteForeverIcon />
-          </IconButton>
+          </IconButton> */}
+          <Button variant="contained" size="small" onClick={leaveRoom}>
+            lobby
+          </Button>
         </div>
       </div>
     </div>
