@@ -583,7 +583,7 @@ export default function PageRedir() {
                         width: "100%",
                       }}
                     >
-                      <MyGameLog />
+                      {/* <MyGameLog /> */}
                     </Box>
                   </Card>
                 </Stack>
