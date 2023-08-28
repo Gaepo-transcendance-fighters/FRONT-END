@@ -86,8 +86,8 @@ const Inwaiting = () => {
 
   const handleOpenModal_redir = useCallback(() => {
     console.log("game_queue_start");
-    console.log(authState.id)
-    console.log("first", gameFirstReady, "second", gameSecondReady)
+    console.log(authState.id);
+    console.log("first", gameFirstReady, "second", gameSecondReady);
 
     if (gameFirstReady && gameSecondReady) {
       gameSocket.emit(
@@ -112,8 +112,11 @@ const Inwaiting = () => {
     history.pushState(null, "", location.href);
     window.addEventListener("popstate", preventGoBack);
 
-    gameSocket.on("game_queue_success", () => {});
-    gameSocket.on("game_queue_quit", () => {});
+    if (gameState.gameMode !== GameType.FRIEND) {
+      gameSocket.on("game_queue_success", () => {});
+      gameSocket.on("game_queue_quit", () => {});
+    }
+
     gameSocket.on("game_ready_first", (gameSetting: IGameSetting) => {
       console.log("game_ready_first");
       gameDispatch({ type: "SET_GAME_MODE", value: gameSetting.gameType });

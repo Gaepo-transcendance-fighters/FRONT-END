@@ -13,7 +13,9 @@ import { useRoom } from "@/context/RoomContext";
 import { useUser } from "@/context/UserContext";
 import { useFriend } from "@/context/FriendContext";
 import { socket } from "@/app/page";
-import { IMaindata, ReturnMsgDto } from "@/type/type";
+import { IMaindata } from "@/type/type";
+import { ReturnMsgDto } from "@/type/RoomType";
+
 
 const Layout = () => {
   const { authState } = useAuth();

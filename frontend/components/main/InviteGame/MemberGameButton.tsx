@@ -6,49 +6,59 @@ import { useRouter } from "next/navigation";
 import { socket } from "@/app/page";
 import InviteGame from "./InviteGame";
 import WaitAccept from "./WaitAccept";
-import { IFriend, IMember } from "@/type/type";
+import { IMember } from "@/type/RoomType";
 import { useAuth } from "@/context/AuthContext";
-
-const Bar = forwardRef((props: any, ref: any) => (
-  <span {...props} ref={ref}>
-    {props.children}
-  </span>
-));
+import { useModalContext } from "@/context/ModalContext";
+import { useGame } from "@/context/GameContext";
+import { GameType } from "@/type/type";
 
 const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const router = useRouter();
-  const [isInvite, setIsInvite] = useState(false);
   const { authState } = useAuth();
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const { openModal, closeModal } = useModalContext();
+  const { gameDispatch } = useGame();
 
   const handleOpenModal = () => {
     socket.emit("chat_invite_ask", {
       myUserIdx: authState.id,
       targetUserIdx: prop.userIdx,
     });
-    setIsInvite(true);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
+    console.log("open");
+    openModal({
+      children: <WaitAccept />,
+    });
   };
 
   useEffect(() => {
-    const askInvite = ({
-      myUserIdx,
+    const recieveInvite = ({
+      inviteUserIdx,
+      inviteUserNickname,
       targetUserIdx,
+      targetUserNickname,
+      answer,
     }: {
-      myUserIdx: number;
+      inviteUserIdx: number;
+      inviteUserNickname: string;
       targetUserIdx: number;
+      targetUserNickname: string;
+      answer: number;
     }) => {
-      console.log("초대 받음");
-      handleOpenModal();
+      console.log("receive invite", answer);
+      if (answer === 0) closeModal();
+      else if (answer === 1) {
+        gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
+        closeModal();
+        router.push("./optionselect");
+      }
     };
-    socket.on("chat_invite_ask", askInvite);
+    socket.on("chat_receive_answer", recieveInvite);
+    socket.on("chat_invite_answer", recieveInvite);
+
+    socket.on("chat_invite_ask", () => {});
 
     return () => {
       socket.off("chat_invite_ask");
+      socket.off("chat_invite_answer");
     };
   }, []);
 
@@ -62,19 +72,8 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       >
         친선전
       </Button>
-      <Bar>
-        {!isInvite ? (
-          <InviteGame open={openModal} />
-        ) : (
-          <WaitAccept open={openModal} />
-        )}
-      </Bar>
     </>
   );
 };
 
 export default MemberGameButton;
-
-// display: "flex",
-// alignItems: "center",
-// justifyContent: "center",
