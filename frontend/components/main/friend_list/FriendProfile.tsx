@@ -18,6 +18,8 @@ import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import { main } from "@/type/type";
+import { IChatRoom, ReturnMsgDto} from "@/type/RoomType"
+import RoomEnter from "@/external_functions/RoomEnter";
 import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
 import FriendGameButton from "../InviteGame/FriendGameButton";
@@ -134,17 +136,57 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     socket.emit("user_profile", ReqData);
   }, []);
 
-  //0820기준 수정필요z
-  const CheckDm = (data: IFriend) => {
-    const matchedRoom = roomState.dmRooms.find(
+  useEffect(() => {
+    const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
+      if (payload) {
+        roomDispatch({ type: "SET_DM_ROOMS", value: payload });
+        handleCloseModal();
+        roomDispatch({ type: "SET_NEW_DM_ROOM_ALERT", value: true });
+      }
+    };
+
+    socket.on("create_dm", ChatGetDmRoomList);
+    return () => {
+      socket.off("create_dm", ChatGetDmRoomList);
+    };
+  }, []);
+
+  const sendDM = (data: IFriend) => {
+    const existingRoom = roomState.dmRooms.find(
       (roomState) => roomState.targetNickname === data.friendNickname
     );
 
-    if (matchedRoom) roomDispatch({ type: "SET_CUR_ROOM", value: matchedRoom });
-    else {
-      //ㅇ없을때.. <- 지킴님 화이팅..!
+    if (existingRoom) {
+      socket.emit(
+        "chat_get_DM",
+        {
+          channelIdx: existingRoom.channelIdx,
+        },
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
+            RoomEnter(existingRoom, roomState, userState, roomDispatch);
+            handleCloseModal();
+          } else {
+            console.log(ret.msg);
+            return;
+          }
+        }
+      );
     }
-    handleCloseModal();
+    else {
+      // 방이 존재하지 않는다. 그럼 새로운 방만들기
+      socket.emit("create_DM", {
+        targetNickname : data.friendNickname,
+        targetIdx : data.friendIdx,
+      }, (ret: ReturnMsgDto) => {
+        if (ret.code === 200) {
+          console.log(ret.msg);
+        } else {
+          console.log(ret.msg);
+          return ;
+        }
+      })
+    }
   };
 
   const addFriend = async () => {
@@ -254,7 +296,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                   type="button"
                   sx={{ minWidth: "max-content" }}
                   variant="contained"
-                  onClick={() => CheckDm(prop)}
+                  onClick={() => sendDM(prop)}
                 >
                   DM
                 </Button>

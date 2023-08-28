@@ -5,7 +5,8 @@ import Rooms from "./Rooms";
 import { useRoom } from "@/context/RoomContext";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
-import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
+import { IChatRoom, ReturnMsgDto, alert } from "@/type/RoomType";
+import { Alert } from "@mui/material";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();
@@ -59,6 +60,16 @@ export default function RoomTypeButton() {
     OnClick(false);
   };
 
+  useEffect(() => {
+    if (roomState.hasNewDmRoomAlert === true) {
+      const time = setTimeout(() => {
+        roomDispatch({ type:"SET_NEW_DM_ROOM_ALERT", value: false})
+      }, 3000);
+
+      return () => clearTimeout(time);
+    }
+  }, [roomState.hasNewDmRoomAlert]);
+
   return (
     <>
       <div>
@@ -81,6 +92,11 @@ export default function RoomTypeButton() {
         currentRoomList={disabled ? roomState.nonDmRooms : roomState.dmRooms}
         channelType={disabled}
       />
+      {roomState.hasNewDmRoomAlert === true ? (
+        <Alert sx={alert} severity="info" style={{ width: "333px" }}>
+          You have new Direct Message Channel!
+        </Alert>
+      ) : null}
     </>
   );
 }
