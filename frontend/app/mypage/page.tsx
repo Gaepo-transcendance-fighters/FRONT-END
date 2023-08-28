@@ -50,8 +50,8 @@ const myProfileStyle = {
 interface IUserData {
   nickname: string;
   imgUrl: string;
-  Win: number;
-  Lose: number;
+  win: number;
+  lose: number;
   rank: number;
   email: string;
 }
@@ -74,8 +74,8 @@ export default function PageRedir() {
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
     imgUrl: "",
-    Win: 0,
-    Lose: 0,
+    win: 0,
+    lose: 0,
     rank: 0,
     email: "",
   });
@@ -98,7 +98,6 @@ export default function PageRedir() {
         setUserData(response.data);
       });
     // };
-    console.log("API REQUEST");
   }, [reload]);
 
   const OpenFileInput = () => {
@@ -543,11 +542,11 @@ export default function PageRedir() {
                             랭크(포인트) : {userData.rank}
                           </Typography>
                           <Typography margin={1}>
-                            승률 :{" "}
-                            {Math.floor(
-                              (userData.Win / (userData.Win + userData.Lose)) *
+                            승률 : {" "}
+                            {userData.win + userData.lose === 0 ? 0 : Math.floor(
+                              (userData.win / (userData.win + userData.lose)) *
                                 100
-                            )}
+                            )}%
                           </Typography>
                         </CardContent>
                       </Card>
