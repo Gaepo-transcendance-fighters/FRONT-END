@@ -94,8 +94,6 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
       const lastElement = msgs[lastIdx];
       console.log("lastIdxMsg", lastElement);
       setLastDate(() => lastElement.msgDate);
-      // console.log("메세지 갱신됐어, 라스트 데이트도 업뎃함");
-      // console.log(Date.now(), lastDate);
     }
   }, [msgs, lastDate]);
 
