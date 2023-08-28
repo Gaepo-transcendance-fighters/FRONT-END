@@ -12,6 +12,7 @@ import { InitMsgProvider } from "@/context/InitMsgContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { io } from "socket.io-client";
 import { use, useEffect } from "react";
+import { ModalContextProvider } from "@/context/ModalContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +28,6 @@ const font = createTheme({
   },
 });
 
-
 export default function RootLayout({
   children,
 }: {
@@ -37,32 +37,34 @@ export default function RootLayout({
 
   return (
     <ThemeProvider theme={font}>
-      <AuthProvider>
-        <UserProvider>
-          <GameProvider>
-            <RoomProvider>
-              <FriendProvider>
-                <InitMsgProvider>
-                  <html lang="en">
-                    <body className={inter.className}>
-                      <div
-                        style={{
-                          backgroundImage: `url("/background.png")`,
-                          width: "100%",
-                          backgroundRepeat: "repeat",
-                          height: "100vh",
-                        }}
-                      >
-                        {children}
-                      </div>
-                    </body>
-                  </html>
-                </InitMsgProvider>
-              </FriendProvider>
-            </RoomProvider>
-          </GameProvider>
-        </UserProvider>
-      </AuthProvider>
+      <ModalContextProvider>
+        <AuthProvider>
+          <UserProvider>
+            <GameProvider>
+              <RoomProvider>
+                <FriendProvider>
+                  <InitMsgProvider>
+                    <html lang="en">
+                      <body className={inter.className}>
+                        <div
+                          style={{
+                            backgroundImage: `url("/background.png")`,
+                            width: "100%",
+                            backgroundRepeat: "repeat",
+                            height: "100vh",
+                          }}
+                        >
+                          {children}
+                        </div>
+                      </body>
+                    </html>
+                  </InitMsgProvider>
+                </FriendProvider>
+              </RoomProvider>
+            </GameProvider>
+          </UserProvider>
+        </AuthProvider>
+      </ModalContextProvider>
     </ThemeProvider>
   );
 }
