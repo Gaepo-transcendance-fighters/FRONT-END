@@ -1,7 +1,7 @@
 // RoomEnter.ts
 import { socket } from "@/app/page";
-import { IChatRoom, ReturnMsgDto } from "@/type/type";
-import { Mode } from "@/type/type";
+import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
+import { Mode } from "@/type/RoomType";
 import { RoomContextData, RoomAction } from "@/context/RoomContext";
 import { UserContextData } from "@/context/UserContext";
 import { Dispatch } from "react";
