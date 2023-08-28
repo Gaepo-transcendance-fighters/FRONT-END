@@ -103,6 +103,17 @@ const RoomTitleField = ({
     }
   };
 
+  useEffect(() => {
+    const changingPw = (res: IChatRoom[]) => {
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: res });
+    };
+
+    socket.on("BR_chat_room_password", changingPw);
+    return () => {
+      socket.off("BR_chat_room_password", changingPw);
+    }
+  }, []);
+
   return (
     <div className="room_title_field">
       <div className="room_title_field_left">
