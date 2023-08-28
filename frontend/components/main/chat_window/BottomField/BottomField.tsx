@@ -54,22 +54,14 @@ const BottomField = ({ setMsgs }: Props) => {
             roomState.currentDmRoomMemberList?.userIdx1
               ? roomState.currentDmRoomMemberList?.userIdx1
               : roomState.currentDmRoomMemberList?.userIdx2,
-<<<<<<< HEAD
-          sender: chatFromServer.sender,
-=======
           sender: result,
->>>>>>> dev
           msg: chatFromServer.msg,
           msgDate: chatFromServer.msgDate,
         };
         setMsgs((prevChats: any) => [chat, ...prevChats]); // <----- any type 나중 변경 필요.
         console.log(chat);
       } else {
-<<<<<<< HEAD
-        const result = roomState.currentRoomMemberList.find(
-=======
         result = roomState.currentRoomMemberList.find(
->>>>>>> dev
           (person) => person.userIdx === chatFromServer.senderIdx
         );
         if (result?.nickname) {

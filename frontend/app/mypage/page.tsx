@@ -185,7 +185,7 @@ export default function PageRedir() {
     }
 
     try {
-      let idx: number = Number(localStorage.getItem("id"));
+      let idx: number = Number(localStorage.getItem("idx"));
       const response = await axios({
         // method: "POST",
         // url: `http://localhost:4000/users/profile`,
