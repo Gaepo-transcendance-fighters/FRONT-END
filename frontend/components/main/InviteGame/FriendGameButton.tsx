@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/page";
 import WaitAccept from "./WaitAccept";
+
 import { IFriend } from "@/type/type";
 import { useAuth } from "@/context/AuthContext";
 import { useModalContext } from "@/context/ModalContext";
