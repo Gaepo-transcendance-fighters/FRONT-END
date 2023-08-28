@@ -42,14 +42,14 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
   }, [observerTarget, loading]);
 
   const callHistory = useCallback(async () => {
-    console.log("callHistory start lastDate", lastDate);
     if (!lastDate) {
       setLoading(false);
       return;
     }
     await axios
       .get(
-        `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
+        // `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
+        `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
       )
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
@@ -87,21 +87,14 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
 
   // 이전 대화기록을 불러오거나, 새로 채팅을 송수신하게되면 그때마다 불러와진 대화기록 중 제일 오래된 메세지의 Date를 가져온다.
   useEffect(() => {
-    console.log("!!!");
     if (msgs.length > 0) {
       const lastIdx = msgs.length - 1;
-      console.log("lastidx", lastIdx);
       const lastElement = msgs[lastIdx];
-      console.log("lastIdxMsg", lastElement);
       setLastDate(() => lastElement.msgDate);
       // console.log("메세지 갱신됐어, 라스트 데이트도 업뎃함");
       // console.log(Date.now(), lastDate);
     }
   }, [msgs, lastDate]);
-
-  useEffect(() => {
-    console.log(msgs);
-  }, [msgs]);
 
   return (
     <Box

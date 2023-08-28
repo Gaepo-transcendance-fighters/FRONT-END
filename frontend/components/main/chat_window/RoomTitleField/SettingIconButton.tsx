@@ -27,10 +27,8 @@ export default function SettingIconButton({
 
   useEffect(() => {
     if (showAlert) {
-      console.log("alret 켜졌다.");
       const time = setTimeout(() => {
         setShowAlert(false);
-        console.log("alret 꺼졌다.");
       }, 3000);
 
       return () => clearTimeout(time);

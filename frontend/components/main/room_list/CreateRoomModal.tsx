@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import { useState, Dispatch, SetStateAction, useEffect, KeyboardEvent } from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
@@ -58,9 +58,7 @@ export default function CreateRoomModal({
         );
       }
       roomDispatch({ type: "SET_CUR_ROOM", value: data });
-      console.log("ChatCreateRoom : ", data);
       roomDispatch({ type: "SET_IS_OPEN", value: true });
-      console.log("ChatCreateRoom2 : ", roomState.isOpen);
       roomDispatch({
         type: "SET_CUR_MEM",
         value: [
@@ -89,6 +87,15 @@ export default function CreateRoomModal({
     });
   };
 
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === "Enter") {
+      socket.emit("BR_chat_create_room", { password: value }, (ret: ReturnMsgDto) => {
+      console.log("OnClick : ", ret);
+      // if (ret === 200)
+    });
+    }
+  };
+
   return (
     <>
       <Modal
@@ -114,6 +121,8 @@ export default function CreateRoomModal({
                   type="password"
                   autoComplete="false"
                   onChange={(e) => setValue(e.currentTarget.value)}
+                  autoFocus={true}
+                  onKeyDown={onKeyDown}
                 />
               </Stack>
             </Card>

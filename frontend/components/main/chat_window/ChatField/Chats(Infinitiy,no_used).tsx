@@ -41,7 +41,6 @@ const Chats = () => {
   }, [observerTarget]);
 
   const callUser = useCallback(async () => {
-    console.log(pageNum);
     await axios
       // dev original
       // .get(`http://localhost:4000/chat/messages?channelIdx=1&index=${pageNum}`)

@@ -58,8 +58,8 @@ const BottomField = ({ setMsgs }: Props) => {
           msgDate: chatFromServer.msgDate,
         };
         setMsgs((prevChats: any) => [chat, ...prevChats]); // <----- any type 나중 변경 필요.
-        console.log(chat);
       } else {
+        console.log("chatFromServer.senderIdx ", chatFromServer.senderIdx);
         result = roomState.currentRoomMemberList.find(
           (person) => person.userIdx === chatFromServer.senderIdx
         );
