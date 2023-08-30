@@ -65,7 +65,7 @@ const FriendList = () => {
     // setClient(true);
     const cur = select ? friendState.blockList : friendState.friendList;
     setShowlist(cur);
-  }, [friendState.friendList, friendState.blockList, select]);
+  }, [friendState.friendList, friendState.blockList, select, showlist]);
 
   // if (!client) return <></>;
 
@@ -133,10 +133,9 @@ const FriendList = () => {
           }}
         >
           {showlist
-            ? showlist.map((user, idx) => (
+            && showlist.map((user, idx) => (
                 <Friend key={idx} prop={user as IUserProp} />
-              ))
-            : []}
+              ))}
         </Card>
       </Stack>
     </Card>

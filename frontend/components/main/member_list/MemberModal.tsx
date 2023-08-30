@@ -84,26 +84,28 @@ export default function MemberModal({
 
   const addFriend = async () => {
     const friendReqData: FriendReqData = {
+      userIdx : userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
     await axios({
       method: "post",
       url: "http://paulryu9309.ddns.net:4000/users/follow",
-      data: JSON.stringify(friendReqData),
+      data: friendReqData,
     })
       .then((res) => {
-        console.log(res.data);
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
       })
       .catch((err) => {
         console.log(err);
       });
+    handleCloseMenu();
     handleCloseModal();
   };
 
   const deleteFriend = async () => {
     const friendReqData: FriendReqData = {
+      userIdx : userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
