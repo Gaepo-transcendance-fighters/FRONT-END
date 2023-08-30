@@ -13,11 +13,15 @@ const NonDmChat = ({ msgs, setMsgs }: Props) => {
   return (
     <Box
       sx={{
+        display: "flex",
+        flexDirection: "column-reverse",
+        overflowY: "scroll",
+        overflowAnchor: "none",
+        position: "sticky",
         backgroundColor: "#3272D2",
         height: "40vh",
         borderRadius: "5px",
         listStyleType: "none",
-        overflowY: "scroll",
         margin: "0% 2% 1% 2%",
       }}
     >

@@ -71,24 +71,23 @@ const BottomField = ({ setMsgs }: Props) => {
             msg: chatFromServer.msg,
             msgDate: chatFromServer.msgDate,
           };
-          setMsgs((prevChats: IChat[]) => [...prevChats, chat]);
+          setMsgs((prevChats: IChat[]) => [chat, ...prevChats]);
         } else {
           console.log("[ERROR] there aren't nickname from data");
         }
       }
-      setMsg("");
     };
     socket.on("chat_send_msg", messageHandler);
-
+    
     return () => {
       socket.off("chat_send_msg", messageHandler);
     };
   }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList]);
-
+  
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
-
+  
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
@@ -97,27 +96,28 @@ const BottomField = ({ setMsgs }: Props) => {
         roomState.currentRoom?.mode === "private" &&
         roomState.currentDmRoomMemberList?.userIdx1 &&
         roomState.currentDmRoomMemberList?.userIdx2
-      ) {
-        payload = {
-          channelIdx: roomState.currentRoom?.channelIdx,
-          senderIdx: userState.userIdx,
-          msg: msg,
-          targetIdx:
+        ) {
+          payload = {
+            channelIdx: roomState.currentRoom?.channelIdx,
+            senderIdx: userState.userIdx,
+            msg: msg,
+            targetIdx:
             userState.userIdx === roomState.currentDmRoomMemberList?.userIdx1
-              ? roomState.currentDmRoomMemberList?.userIdx2
-              : roomState.currentDmRoomMemberList?.userIdx1,
-        };
-      } else if (
-        roomState.currentRoom?.mode === "public" ||
-        roomState.currentRoom?.mode === "protected"
-      ) {
-        payload = {
-          channelIdx: roomState.currentRoom?.channelIdx,
-          senderIdx: userState.userIdx,
-          msg: msg,
+            ? roomState.currentDmRoomMemberList?.userIdx2
+            : roomState.currentDmRoomMemberList?.userIdx1,
+          };
+        } else if (
+          roomState.currentRoom?.mode === "public" ||
+          roomState.currentRoom?.mode === "protected"
+          ) {
+            payload = {
+              channelIdx: roomState.currentRoom?.channelIdx,
+              senderIdx: userState.userIdx,
+              msg: msg,
         };
       }
       socket.emit("chat_send_msg", payload);
+      setMsg("");
       inputRef.current?.focus();
     },
     [msg]
