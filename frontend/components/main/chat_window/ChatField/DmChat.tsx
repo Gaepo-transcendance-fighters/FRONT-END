@@ -15,6 +15,7 @@ interface Props {
 }
 
 const DmChat = ({ msgs, setMsgs }: Props) => {
+  const [end, setEnd] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const { roomState } = useRoom();
   const observerTarget = useRef(null);
@@ -22,14 +23,14 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
   const { initMsgState } = useInitMsg();
 
   useEffect(() => {
+    if (!observerTarget.current) return;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
           setLoading(true);
           callHistory();
         }
-      },
-      { threshold: 0.3 }
+      }, {threshold: 0.1}
     );
 
     if (observerTarget.current) observer.observe(observerTarget.current);
@@ -42,24 +43,28 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
   }, [observerTarget, loading]);
 
   const callHistory = useCallback(async () => {
-    console.log("callHistory start lastDate", lastDate);
     if (!lastDate) {
       setLoading(false);
       return;
     }
     await axios
       .get(
-        `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
+        // `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
+        `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
       )
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
-        setMsgs((prevMsgs) => [...prevMsgs, ...newData]);
+        if (newData.length === 0) {
+          setEnd(true)
+          return;
+        }
         setLoading(false);
+        setMsgs((prevMsgs) => [...prevMsgs, ...newData])
         const lastIdx = msgs.length - 1;
         const lastElement = msgs[lastIdx];
         setLastDate((prev) => lastElement.msgDate);
       });
-  }, [lastDate, loading, msgs]);
+  }, [lastDate, loading, msgs, end]);
 
   // 첫 메세지 20개 불러오는 로직
   useEffect(() => {
@@ -83,23 +88,16 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
     setMsgs((prevState) => {
       return [...prevState, ...list];
     });
-  }, [initMsgState]);
+  }, []);
 
   // 이전 대화기록을 불러오거나, 새로 채팅을 송수신하게되면 그때마다 불러와진 대화기록 중 제일 오래된 메세지의 Date를 가져온다.
   useEffect(() => {
-    console.log("!!!");
     if (msgs.length > 0) {
       const lastIdx = msgs.length - 1;
-      console.log("lastidx", lastIdx);
       const lastElement = msgs[lastIdx];
-      console.log("lastIdxMsg", lastElement);
       setLastDate(() => lastElement.msgDate);
     }
   }, [msgs, lastDate]);
-
-  useEffect(() => {
-    console.log(msgs);
-  }, [msgs]);
 
   return (
     <Box
@@ -148,7 +146,7 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
       <Typography style={{ color: "white" }} component={"div"} align="center">
         this is top of the chat list...
       </Typography>
-      {loading === true && (
+      {end === false && loading === true && (
         <Typography style={{ color: "white" }} component={"div"}>
           loading...
         </Typography>
