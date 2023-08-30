@@ -2,7 +2,7 @@
 
 import { Box, Button } from "@mui/material";
 import { useState, useCallback, useEffect, useRef } from "react";
-import FormControl, { useFormControl } from "@mui/material/FormControl";
+import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { socket } from "@/app/page";
 import { Dispatch } from "react";
@@ -57,7 +57,7 @@ const BottomField = ({ setMsgs }: Props) => {
           msg: chatFromServer.msg,
           msgDate: chatFromServer.msgDate,
         };
-        setMsgs((prevChats: any) => [chat, ...prevChats]); // <----- any type 나중 변경 필요.
+        setMsgs((prevChats: IChat[]) => [chat, ...prevChats]);
         console.log(chat);
       } else {
         result = roomState.currentRoomMemberList.find(
@@ -71,7 +71,7 @@ const BottomField = ({ setMsgs }: Props) => {
             msg: chatFromServer.msg,
             msgDate: chatFromServer.msgDate,
           };
-          setMsgs((prevChats: any) => [...prevChats, chat]); // <----- any type 나중 변경 필요.
+          setMsgs((prevChats: IChat[]) => [...prevChats, chat]);
         } else {
           console.log("[ERROR] there aren't nickname from data");
         }
@@ -105,7 +105,7 @@ const BottomField = ({ setMsgs }: Props) => {
           targetIdx:
             userState.userIdx === roomState.currentDmRoomMemberList?.userIdx1
               ? roomState.currentDmRoomMemberList?.userIdx2
-              : roomState.currentDmRoomMemberList?.userIdx1, // <------------------ 현재 채널의 모든 사용자들의 인덱스를 알아야한다.
+              : roomState.currentDmRoomMemberList?.userIdx1,
         };
       } else if (
         roomState.currentRoom?.mode === "public" ||
@@ -114,7 +114,7 @@ const BottomField = ({ setMsgs }: Props) => {
         payload = {
           channelIdx: roomState.currentRoom?.channelIdx,
           senderIdx: userState.userIdx,
-          msg: msg, // <------------------ 현재 채널의 모든 사용자들의 인덱스를 알아야한다.
+          msg: msg,
         };
       }
       socket.emit("chat_send_msg", payload);
