@@ -9,14 +9,7 @@ import { useRoom } from "@/context/RoomContext";
 import { useEffect, useState } from "react";
 import { alert } from "@/type/RoomType";
 import Alert from "@mui/material/Alert";
-
-export interface IChat {
-  channelIdx: number | undefined;
-  senderIdx: number | undefined;
-  sender?: string;
-  msg: string;
-  msgDate: string;
-}
+import { IChat } from "@/type/type";
 
 const ChatWindow = () => {
   const { roomState } = useRoom();

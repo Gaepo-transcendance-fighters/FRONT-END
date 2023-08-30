@@ -13,7 +13,7 @@ import { useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
-import { IChat } from "../ChatWindow";
+import { IChat } from "@/type/type";
 
 export enum Mode {
   PRIVATE = "private",

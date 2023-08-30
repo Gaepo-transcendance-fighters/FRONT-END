@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import { useRoom } from "@/context/RoomContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
-import { IChat } from "../ChatWindow";
+import { IChat } from "@/type/type";
 import axios from "axios";
 import { useInitMsg } from "@/context/InitMsgContext";
 import { IDMChatFromServer } from "@/type/RoomType";

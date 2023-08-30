@@ -73,3 +73,11 @@ export interface ICor {
 export interface IPaddle extends ICor {}
 
 export interface IBall extends ICor {}
+
+export interface IChat {
+  channelIdx: number | undefined;
+  senderIdx: number | undefined;
+  sender?: string;
+  msg: string;
+  msgDate: string;
+}

@@ -8,7 +8,7 @@ import { socket } from "@/app/page";
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
 import { useRoom } from "@/context/RoomContext";
-import { IChat } from "../ChatWindow";
+import { IChat } from "@/type/type";
 import { useUser } from "@/context/UserContext";
 
 interface IPayload {

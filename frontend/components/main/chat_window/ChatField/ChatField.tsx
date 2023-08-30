@@ -3,7 +3,7 @@
 import { useRoom } from "@/context/RoomContext";
 import { Box, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
-import { IChat } from "../ChatWindow";
+import { IChat } from "@/type/type";
 import DmChat from "./DmChat";
 import NonDmChat from "./NonDmChat";
 
