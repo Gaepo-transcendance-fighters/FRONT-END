@@ -64,6 +64,7 @@ interface IFriendData {
 }
 
 interface FriendReqData {
+  userIdx : number;
   targetNickname: string;
   targetIdx: number;
 }
@@ -189,6 +190,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   const addFriend = async () => {
     console.log("add friend");
     const friendReqData: FriendReqData = {
+      userIdx : userState.userIdx,
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
     };
@@ -210,6 +212,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   const deleteFriend = async () => {
     console.log("delete friend");
     const friendReqData: FriendReqData = {
+      userIdx : userState.userIdx,
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
     };

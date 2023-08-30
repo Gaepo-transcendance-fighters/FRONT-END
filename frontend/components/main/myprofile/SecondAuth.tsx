@@ -97,15 +97,17 @@ export default function SecondAuth() {
   };
 
   return (
-    <Button
-      type="button"
-      style={{
-        minWidth: "max-content",
-      }}
-      variant="contained"
-      onClick={handleOpenModal}
-    >
-      2차인증
+    <>
+      <Button
+        type="button"
+        style={{
+          minWidth: "max-content",
+        }}
+        variant="contained"
+        onClick={handleOpenModal}
+      >
+        2차인증
+      </Button>
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box sx={modalStyle} borderRadius={"10px"}>
           <Card
@@ -200,6 +202,6 @@ export default function SecondAuth() {
           </Card>
         </Box>
       </Modal>
-    </Button>
+    </>
   );
 }
