@@ -83,7 +83,7 @@ const BottomField = ({ setMsgs }: Props) => {
     return () => {
       socket.off("chat_send_msg", messageHandler);
     };
-  }, []);
+  }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList]);
 
   useEffect(() => {
     inputRef.current?.focus();
