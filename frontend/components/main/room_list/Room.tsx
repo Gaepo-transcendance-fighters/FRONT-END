@@ -13,17 +13,16 @@ import {
   alert,
   lock,
   clickedLock,
-} from "@/type/type";
+  IMember,
+  ILeftMember,
+  ReturnMsgDto,
+} from "@/type/RoomType";
 import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";
-import { IMember } from "@/type/type";
+import { useInitMsg } from "@/context/InitMsgContext";
+import RoomEnter from "@/external_functions/RoomEnter"
 
-export interface ILeftMember {
-  userNickname: string;
-  userIdx: number;
-  imgUri: string;
-}
 
 export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -32,11 +31,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [newMem, setNewMem] = useState("");
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
-
-  // userIdx: number | undefined;
-  // nickname: string | undefined;
-  // imgUri: string | undefined;
-  // permission?: Permission | undefined;
+  const { initMsgDispatch } = useInitMsg();
 
   useEffect(() => {
     const ChatExitRoom = ({
@@ -46,8 +41,6 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       leftMember: ILeftMember[];
       owner: string;
     }) => {
-      console.log("room", room);
-      console.log("owner", owner);
       if (!leftMember) {
         roomDispatch({ type: "SET_CUR_ROOM", value: null });
         roomDispatch({ type: "SET_IS_OPEN", value: false });
@@ -78,7 +71,6 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const ChatEnterNoti = (data: IChatEnterNoti) => {
-      // console.log("ChatEnterNoti ", data )
       setShowAlert(true);
       setNewMem(data.newMember);
       roomDispatch({ type: "SET_CUR_MEM", value: data.member });
@@ -123,7 +115,6 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     const ChatEnter = (payload: IChatEnter) => {
       roomDispatch({ type: "SET_CUR_MEM", value: payload.member });
       roomDispatch({ type: "SET_ADMIN_ARY", value: payload.admin });
-      //channelIdx 안보내줘도 될듯?
     };
     socket.on("chat_enter", ChatEnter);
 
@@ -145,6 +136,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           imgUri: payload.imgUri,
         },
       });
+      initMsgDispatch({ type: "SET_INIT_MSG", value: payload });
     };
     socket.on("chat_get_DM", ChatDmEnter);
 
@@ -166,7 +158,6 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
 
   useEffect(() => {
     const GoToLobby = (payload: IChatRoom[]) => {
-      console.log("GoToLobby ", payload);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
     socket.on("chat_goto_lobby", GoToLobby);
@@ -176,26 +167,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
     };
   }, []);
 
-  const RoomEnter = (room: IChatRoom) => {
-    if (roomState.currentRoom && roomState.currentRoom.mode !== Mode.PRIVATE) {
-      socket.emit(
-        "chat_goto_lobby",
-        {
-          channelIdx: roomState.currentRoom.channelIdx,
-          userIdx: userState.userIdx,
-        },
-        (ret: number | string) => {
-          console.log("chat_goto_lobby ret : ", ret);
-        }
-      );
-    }
-    roomDispatch({ type: "SET_CUR_ROOM", value: room });
-    roomDispatch({ type: "SET_IS_OPEN", value: true });
-  };
-
   const RoomClick = (room: IChatRoom) => {
     if (roomState.currentRoom?.channelIdx !== room.channelIdx) {
-      // TODO : 누른 버튼 색 다르게 해보기
       if (room.mode === Mode.PROTECTED) handleOpen();
       else if (room.mode === Mode.PRIVATE) {
         socket.emit(
@@ -203,9 +176,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           {
             channelIdx: room.channelIdx,
           },
-          (ret: number) => {
-            if (ret === 200) {
-              RoomEnter(room);
+          (ret: ReturnMsgDto) => {
+            if (ret.code === 200) {
+              RoomEnter(room, roomState, userState, roomDispatch);
             }
           }
         );
@@ -217,9 +190,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
             userIdx: userState.userIdx,
             channelIdx: room.channelIdx,
           },
-          (ret: number) => {
-            if (ret === 200) {
-              RoomEnter(room);
+          (ret: ReturnMsgDto) => {
+            if (ret.code === 200) {
+              RoomEnter(room, roomState, userState, roomDispatch);
             }
           }
         );

@@ -14,6 +14,8 @@ import { useUser } from "@/context/UserContext";
 import { useFriend } from "@/context/FriendContext";
 import { socket } from "@/app/page";
 import { IMaindata } from "@/type/type";
+import { ReturnMsgDto } from "@/type/RoomType";
+
 
 const Layout = () => {
   const { authState } = useAuth();
@@ -49,8 +51,8 @@ const Layout = () => {
       socket.emit(
         "main_enter",
         { intra: localStorage.getItem("intra") },
-        (ret: number) => {
-          if (ret === 200) {
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
           }
         }
       );

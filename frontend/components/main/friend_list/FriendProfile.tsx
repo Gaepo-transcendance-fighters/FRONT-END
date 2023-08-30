@@ -13,13 +13,16 @@ import {
 import { useEffect, useState } from "react";
 import { IFriend } from "./FriendList";
 import Image from "next/image";
-import WaitAccept from "../InviteGame/WaitAccept";
 import MyGameLog from "../myprofile/MyGameLog";
 import { socket } from "@/app/page";
-import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import { main } from "@/type/type";
+import { IChatRoom, ReturnMsgDto} from "@/type/RoomType"
+import RoomEnter from "@/external_functions/RoomEnter";
+import { useFriend } from "@/context/FriendContext";
+import axios from "axios";
+import FriendGameButton from "../InviteGame/FriendGameButton";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -61,7 +64,6 @@ interface IFriendData {
 }
 
 interface FriendReqData {
-  userIdx: number;
   targetNickname: string;
   targetIdx: number;
 }
@@ -77,10 +79,29 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     Lose: 0,
     isOnline: false,
   });
-
+  const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
+  const { friendDispatch } = useFriend();
+
+  const RankSrc =
+    friendData.rank < 800
+      ? "./rank/exp_medal_bronze.png"
+      : friendData.rank >= 800 && friendData.rank < 1100
+      ? "./rank/exp_medal_silver.png"
+      : "./rank/exp_medal_gold.png";
 
   const handleOpenModal = () => {
+    socket.emit(
+      "user_profile",
+      {
+        userIdx: userState.userIdx,
+        targetNickname: prop.friendNickname,
+        targetIdx: prop.friendIdx,
+      },
+      () => {
+        console.log("유저프로필에 데이터 보냄");
+      }
+    );
     setOpenModal(true);
   };
 
@@ -96,12 +117,16 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     setAnchorEl(null);
   };
 
+  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
   useEffect(() => {
     const UserProfile = (data: IFriendData) => {
       setFriendData(data);
     };
-
     // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
+    socket.on("user_profile", UserProfile);
+  });
+
+  useEffect(() => {
     const ReqData = {
       //값 변경 필요
       userIdx: userState.userIdx,
@@ -109,32 +134,114 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       targetIdx: prop.friendIdx,
     };
     socket.emit("user_profile", ReqData);
+  }, []);
 
-    socket.on("user_profile", UserProfile);
-  });
+  useEffect(() => {
+    const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
+      if (payload) {
+        roomDispatch({ type: "SET_DM_ROOMS", value: payload });
+        handleCloseModal();
+        roomDispatch({ type: "SET_NEW_DM_ROOM_ALERT", value: true });
+      }
+    };
 
-  const RankImgSelect = (data: IFriendData) => {
-    if (data.rank < 800) return "./rank/exp_medal_bronze.png";
-    else if (data.rank >= 800 && data.rank < 1100)
-      return "./rank/exp_medal_silver.png";
-    else if (data.rank >= 1100) return "./rank/exp_medal_gold.png";
-  };
+    socket.on("create_dm", ChatGetDmRoomList);
+    return () => {
+      socket.off("create_dm", ChatGetDmRoomList);
+    };
+  }, []);
 
-  const RankSrc = RankImgSelect(friendData);
-  const { roomState, roomDispatch } = useRoom();
-
-  //0820기준 수정필요z
-  const CheckDm = (data: IFriend) => {
-    const matchedRoom = roomState.dmRooms.find(
+  const sendDM = (data: IFriend) => {
+    const existingRoom = roomState.dmRooms.find(
       (roomState) => roomState.targetNickname === data.friendNickname
     );
 
-    if (matchedRoom) roomDispatch({ type: "SET_CUR_ROOM", value: matchedRoom });
-    else {
-      //ㅇ없을때.. <- 지킴님 화이팅..!
+    if (existingRoom) {
+      socket.emit(
+        "chat_get_DM",
+        {
+          channelIdx: existingRoom.channelIdx,
+        },
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
+            RoomEnter(existingRoom, roomState, userState, roomDispatch);
+            handleCloseModal();
+          } else {
+            console.log(ret.msg);
+            return;
+          }
+        }
+      );
     }
+    else {
+      // 방이 존재하지 않는다. 그럼 새로운 방만들기
+      socket.emit("create_DM", {
+        targetNickname : data.friendNickname,
+        targetIdx : data.friendIdx,
+      }, (ret: ReturnMsgDto) => {
+        if (ret.code === 200) {
+          console.log(ret.msg);
+        } else {
+          console.log(ret.msg);
+          return ;
+        }
+      })
+    }
+  };
+
+  const addFriend = async () => {
+    console.log("add friend");
+    const friendReqData: FriendReqData = {
+      targetNickname: prop.friendNickname,
+      targetIdx: prop.friendIdx,
+    };
+    await axios({
+      method: "post",
+      url: "http://paulryu9309.ddns.net:4000/users/follow",
+      data: friendReqData,
+    })
+      .then((res) => {
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseMenu();
     handleCloseModal();
   };
+
+  const deleteFriend = async () => {
+    console.log("delete friend");
+    const friendReqData: FriendReqData = {
+      targetNickname: prop.friendNickname,
+      targetIdx: prop.friendIdx,
+    };
+
+    await axios({
+      method: "delete",
+      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      data: friendReqData,
+    })
+      .then((res) => {
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseMenu();
+    handleCloseModal();
+  };
+
+  useEffect(() => {
+    const userProfile = (data: IFriendData) => {
+      setFriendData(data);
+    };
+
+    socket.on("user_profile", userProfile);
+    return () => {
+      socket.off("user_profile");
+    };
+  }, [friendData]);
 
   return (
     <>
@@ -181,16 +288,15 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 닉네임: {friendData?.targetNickname}
               </Typography>
               <Typography>
-                상태:{" "}
-                {friendData.isOnline === true ? <>Online</> : <>Offline</>}
+                상태: {friendData?.isOnline ? loginOn : loginOff}
               </Typography>
               <Stack direction={"row"} spacing={2}>
-                <WaitAccept />
+                <FriendGameButton prop={prop} />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
                   variant="contained"
-                  onClick={() => CheckDm(prop)}
+                  onClick={() => sendDM(prop)}
                 >
                   DM
                 </Button>
@@ -209,8 +315,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                   MenuListProps={{ sx: { py: 0 } }}
                 >
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                    <MenuItem>Add</MenuItem>
-                    <MenuItem>Delete</MenuItem>
+                    <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                     <MenuItem>Block</MenuItem>
                   </Stack>
                 </Menu>
