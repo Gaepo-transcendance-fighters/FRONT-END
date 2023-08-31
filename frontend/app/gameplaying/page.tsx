@@ -4,19 +4,22 @@ import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 
 import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
 import { useGame } from "@/context/GameContext";
 import useModal from "@/hooks/useModal";
 import Modals from "@/components/public/Modals";
 import { gameSocket } from "../page";
+import { useAuth } from "@/context/AuthContext";
 
 const GamePlaying = () => {
   const router = useRouter();
+  const { authState } = useAuth();
   const [client, setClient] = useState<boolean>(false);
   const { gameState, gameDispatch } = useGame();
   const { isShowing, toggle } = useModal();
   const { isShowing: isShowing2, toggle: toggle2 } = useModal();
+  const [msg, setMsg] = useState<string>("");
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const backToMain = () => {
@@ -56,25 +59,10 @@ const GamePlaying = () => {
     addEventListener("keydown", preventRefresh);
     addEventListener("beforeunload", preventRefreshButton);
 
-    //탈주시
-    // gameSocket.on("game_queue_quit", (res: number) => {
-    //   console.log("상대가 나감", res);
-    //   gameDispatch({ type: "A_SCORE", value: 5 });
-    //   gameDispatch({ type: "B_SCORE", value: 0 });
-    //   gameSocket.emit("game_get_score", {
-    //     userIdx1: gameState.aPlayer.id,
-    //     userScore1: 5,
-    //     userIdx2: gameState.bPlayer.id,
-    //     userScore2: 0,
-    //     issueDate: Date.now(),
-    //     gameStatus: "game_quit",
-    //     winner: gameState.aPlayer.id,
-    //   });
-    //   setOpenModal(true);
-    //   setTimeout(() => {
-    //     router.replace("./gameresult");
-    //   }, 2000);
-    // });
+    gameSocket.emit("game_force_quit", { userIdx: authState.id });
+    gameSocket.on("game_force_quit", (msg: string) => {
+      setOpenModal(true);
+    });
     return () => {
       removeEventListener("popstate", preventGoBack);
       removeEventListener("keydown", preventRefresh);

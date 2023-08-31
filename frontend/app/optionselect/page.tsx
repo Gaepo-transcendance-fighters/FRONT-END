@@ -17,10 +17,7 @@ import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { gameSocket } from "../page";
-import { io } from "socket.io-client";
-
-// type SpeedOption = "speed1" | "speed2" | "speed3";
-// type MapOption = "map1" | "map2" | "map3";
+import axios from "axios";
 
 enum SpeedOption {
   speed1,
@@ -46,14 +43,6 @@ interface IGameOption {
   speed: SpeedOption; //NORMAL, FAST, FASTER
   mapNumber: MapOption; // A, B, C
 }
-
-// export const gameSocket = io("http://localhost:4000/game", {
-// const userId =
-//   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
-
-// export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
-//   query: { userId: userId },
-// });
 
 const OptionSelect = () => {
   const router = useRouter();
@@ -83,76 +72,38 @@ const OptionSelect = () => {
   };
 
   useEffect(() => {
-    if (!gameSocket) return;
-    gameSocket.on("game_queue_regist", () => {
-      console.log("game_queue_regist 받음");
-    });
-    gameSocket.on("game_option", () => {
-      console.log("game_option 받음");
-    });
-
-    return () => {
-      gameSocket.off("game_option");
-      gameSocket.off("game_queue_regist");
-    };
-  }, []);
-
-  useEffect(() => {
     countdown > 0 && setTimeout(() => setCountdown(countdown - 1), 1000);
     // 나중에 이거 풀면됨
     if (countdown == 0) cntRedir();
   }, [countdown]);
 
-  const cntRedir = () => {
+  const cntRedir = async () => {
     if (!gameSocket) return;
     gameDispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
 
-    console.log(authState.id);
-
-    gameSocket.emit(
-      "game_option",
-      {
+    await axios({
+      method: "post",
+      url: "/game",
+      data: {
         gameType: gameState.gameMode,
         userIdx: authState.id,
         speed: selectedSpeedOption,
         mapNumber: selectedMapOption,
       },
-      (res: { code: number; msg: string }) => {
-        if (res.code === 200) {
-          console.log("queue regist start");
-
-          if (gameState.gameMode === GameType.FRIEND) {
-            console.log("친구게임");
-            setTimeout(() => {
-              router.replace("./inwaiting");
-            }, 300);
-            return;
-          }
-
-          gameSocket.emit(
-            "game_queue_regist",
-            {
-              userIdx: authState.id,
-              queueDate: Date.now(),
-            },
-            (res: { code: number; msg: string }) => {
-              console.log(res);
-              if (res.code === 200) {
-                setTimeout(() => {
-                  router.replace("./inwaiting");
-                }, 300);
-              }
-            }
-          );
-        }
+    }).then((res) => {
+      if (res.data.code === 200) {
+        gameSocket.connect();
+        router.replace("/game");
+      } else {
+        console.log("게임방 생성 실패");
+        router.replace("/?from=game");
       }
-    );
+    });
   };
 
   useEffect(() => {
     setClient(true);
-    gameSocket.connect();
   }, []);
 
   if (!client) return <></>;

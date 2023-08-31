@@ -32,6 +32,7 @@ import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { gameSocket } from "../page";
 import { useAuth } from "@/context/AuthContext";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 enum SpeedOption {
   speed1,
@@ -74,171 +75,71 @@ const Inwaiting = () => {
   const { gameState, gameDispatch } = useGame();
   const { authState, authDispatch } = useAuth();
   const { isShowing, toggle } = useModal();
-  const [gameFirstReady, setGameFirstReady] = useState<boolean>(false);
-  const [gameSecondReady, setGameSecondReady] = useState<boolean>(false);
 
   const BackToMain = () => {
-    gameSocket.emit("game_queue_quit", authState.id, () => {
-      console.log("game_queue_quit");
-    });
+    //게임 소켓 - 게임 큐 취소
+    gameSocket.disconnect();
     router.replace("/?from=game");
   };
 
-  const handleOpenModal_redir = useCallback(() => {
-    console.log("game_queue_start");
-    console.log(authState.id);
-    console.log("first", gameFirstReady, "second", gameSecondReady);
-
-    if (gameFirstReady && gameSecondReady) {
-      gameSocket.emit(
-        "game_ready_second_answer",
-        {
-          userIdx: authState.id,
-          serverDateTime: gameState.serverDateTime,
-          clientDateTime: Date.now(),
-        },
-        () => console.log("game_ready_second_answer")
-      );
-    }
-  }, [gameFirstReady, gameSecondReady]);
+  const preventGoBack = (e: PopStateEvent) => {
+    e.preventDefault();
+    toggle();
+  };
 
   useEffect(() => {
     setClient(true);
-    const preventGoBack = (e: PopStateEvent) => {
-      e.preventDefault();
-      toggle();
-    };
 
+    //게임 소켓 - 이벤트 등록
+    gameSocket.on("game_ping", (serverTime: number) => {
+      console.log("game_ping");
+      gameSocket.emit(
+        "game_ping",
+        {
+          userIdx: authState.id,
+          serverTime: serverTime,
+          clientTime: Date.now(),
+        },
+        (data: ReturnMsgDto) => {
+          console.log(data);
+          setTimeout(() => {
+            router.replace("./gameplaying");
+          }, 2000);
+        }
+      );
+    });
+
+    gameSocket.emit(
+      "game_queue_start",
+      { userIdx: authState.id },
+      (res: ReturnMsgDto) => {
+        if (res.code === 200) {
+          console.log("game_queue_start");
+        }
+      }
+    );
+
+    gameSocket.on("game_queue_success", (data: IGameQueueSuccess) => {
+      console.log("game_queue_success");
+      gameDispatch({
+        type: "A_PLAYER",
+        value: { nick: data.userNicknameFirst, id: data.userIdxFirst },
+      });
+      gameDispatch({
+        type: "B_PLAYER",
+        value: { nick: data.userNicknameSecond, id: data.userIdxSecond },
+      });
+      setOpenModal(true);
+    });
+
+    //큐 대기 중 페이지 탈주 방지
     history.pushState(null, "", location.href);
     window.addEventListener("popstate", preventGoBack);
 
-    if (gameState.gameMode !== GameType.FRIEND) {
-      gameSocket.on("game_queue_success", () => {});
-      gameSocket.on("game_queue_quit", () => {});
-    }
-
-    gameSocket.on("game_ready_first", (gameSetting: IGameSetting) => {
-      console.log("game_ready_first");
-      gameDispatch({ type: "SET_GAME_MODE", value: gameSetting.gameType });
-      gameDispatch({
-        type: "SET_BALL_SPEED_OPTION",
-        value: gameSetting.speed,
-      });
-      gameDispatch({
-        type: "SET_MAP_TYPE",
-        value: gameSetting.mapNumber,
-      });
-      setGameFirstReady(true);
-    });
-    gameSocket.on(
-      "game_ready_second",
-      ({
-        roomId,
-        serverDateTime,
-      }: {
-        roomId: string;
-        serverDateTime: number;
-      }) => {
-        console.log("game_ready_second");
-        gameDispatch({
-          type: "SET_ROOM_ID",
-          value: roomId,
-        });
-        console.log("roomid", roomId, "room", gameState.roomId);
-        gameDispatch({
-          type: "SET_SERVER_DATE_TIME",
-          value: serverDateTime,
-        });
-        setGameSecondReady(true);
-      }
-    );
-    gameSocket.on("game_ready_second_answer", () => {});
-    gameSocket.on(
-      "game_ready_final",
-      ({
-        userNicknameFirst,
-        userIdxFirst,
-        firstLatency,
-        userNicknameSecond,
-        userIdxSecond,
-        secondLatency,
-      }: {
-        userNicknameFirst: string;
-        userIdxFirst: number;
-        firstLatency: number;
-        userNicknameSecond: string;
-        userIdxSecond: number;
-        secondLatency: number;
-      }) => {
-        console.log("game_ready_final");
-        if (authState.id === userIdxFirst) {
-          gameDispatch({
-            type: "A_PLAYER",
-            value: { nick: userNicknameFirst, id: userIdxFirst },
-          });
-          gameDispatch({
-            type: "B_PLAYER",
-            value: { nick: userNicknameSecond, id: userIdxSecond },
-          });
-        } else if (authState.id === userIdxSecond) {
-          gameDispatch({
-            type: "A_PLAYER",
-            value: { nick: userNicknameFirst, id: userIdxFirst },
-          });
-          gameDispatch({
-            type: "B_PLAYER",
-            value: { nick: userNicknameSecond, id: userIdxSecond },
-          });
-        }
-        const latency = firstLatency - secondLatency;
-        gameDispatch({
-          type: "SET_LATENCY",
-          value: latency < 0 ? -latency : latency,
-        });
-      }
-    );
-    gameSocket.on(
-      "game_start",
-      ({
-        animationStartDate,
-        ballDegreeX,
-        ballDegreeY,
-        ballNextPosX,
-        ballNextPosY,
-        ballExpectedEventDate,
-      }: {
-        animationStartDate: number;
-        ballDegreeX: number;
-        ballDegreeY: number;
-        ballNextPosX: number;
-        ballNextPosY: number;
-        ballExpectedEventDate: number;
-      }) => {
-        console.log("game_start");
-        gameDispatch({
-          type: "SET_SERVER_DATE_TIME",
-          value: animationStartDate,
-        });
-        gameDispatch({
-          type: "SET_DEGREE",
-          value: { x: ballDegreeX, y: ballDegreeY },
-        });
-        setOpenModal(true);
-        setTimeout(() => {
-          router.replace("./gameplaying");
-        }, 2000);
-      }
-    );
-
     return () => {
       window.removeEventListener("popstate", preventGoBack);
+      gameSocket.off("game_ping");
       gameSocket.off("game_queue_success");
-      gameSocket.off("game_queue_quit");
-      gameSocket.off("game_ready_first");
-      gameSocket.off("game_ready_second");
-      gameSocket.off("game_ready_second_answer");
-      gameSocket.off("game_ready_final");
-      gameSocket.off("game_start");
     };
   }, []);
 
@@ -296,9 +197,6 @@ const Inwaiting = () => {
             <Typography sx={{ fontSize: "3rem" }}>
               상대방을 기다리고있습니다...
             </Typography>
-            <Button variant="contained" onClick={handleOpenModal_redir}>
-              큐가잡힌경우
-            </Button>
             <Modals
               isShowing={isShowing}
               hide={toggle}

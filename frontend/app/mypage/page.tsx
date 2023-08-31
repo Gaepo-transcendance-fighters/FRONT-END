@@ -93,7 +93,12 @@ export default function PageRedir() {
       Authorization: "Bearer " + localStorage.getItem("authorization"),
     };
     axios
-      .get("http://paulryu9309.ddns.net:4000/users/profile", { headers })
+      .get("http://paulryu9309.ddns.net:4000/users/profile", {
+        headers: headers,
+        data: JSON.stringify({
+          userNickName: nickname,
+        }),
+      })
       .then((response) => {
         setUserData(response.data);
       });

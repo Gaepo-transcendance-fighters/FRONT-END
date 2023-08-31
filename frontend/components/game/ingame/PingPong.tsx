@@ -8,6 +8,7 @@ import { useGame } from "@/context/GameContext";
 import { gameSocket } from "@/app/page";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeout: ReturnType<typeof setTimeout> | null = null;
@@ -23,6 +24,12 @@ function debounce(func: (...args: any[]) => void, wait: number) {
   };
 }
 
+enum EGameStatus {
+  ONGOING,
+  END,
+  JUDGE,
+}
+
 interface IGameProps {
   ballX: number;
   BallY: number;
@@ -31,6 +38,15 @@ interface IGameProps {
   hit: number; // 0 - no hit, 1 - player 1 paddle 에 hit, 2
   serverTime: number; // ms 단위로, ping check 용
   cntPerFrame: number; // 1 - 60 까지 계속 반복됨
+}
+
+interface IGameEnd {
+  userIdx1: number;
+  userScore1: number;
+  userIdx2: number;
+  userScore2: number;
+  issueDate: number;
+  gameStatus: EGameStatus; // 게임 속행, 게임 종료, 연결문제 판정승, 0, 1, 2
 }
 
 const PingPong = () => {
@@ -369,6 +385,7 @@ const PingPong = () => {
 
   useEffect(() => {
     setClient(true);
+    gameSocket.emit("game_start", { userIdx: authState.id });
     gameSocket.on("game_start", (res) => {
       console.log("game_start", res);
     });
@@ -376,6 +393,7 @@ const PingPong = () => {
       console.log("game_frame", res);
       setGameProps(res);
     });
+
     gameSocket.on(
       "game_move_paddle",
       ({ code, msg }: { code: number; msg: string }) => {
@@ -385,12 +403,35 @@ const PingPong = () => {
         }
       }
     );
+    gameSocket.on("game_pause_score", (data: IGameEnd) => {
+      console.log("game_pause_score");
+      gameSocket.emit(
+        "game_pause_score",
+        { userIdx: authState.id },
+        (res: ReturnMsgDto) => {
+          console.log(res);
+          if (res.code === 200) {
+            gameDispatch({ type: "A_SCORE", value: data.userScore1 });
+            gameDispatch({ type: "B_SCORE", value: data.userScore2 });
+            if (
+              data.gameStatus === EGameStatus.END ||
+              data.gameStatus === EGameStatus.JUDGE
+            ) {
+              gameDispatch({ type: "SCORE_RESET" });
+              router.push("/gameresult");
+            }
+          }
+        }
+      );
+    });
 
     window.addEventListener("keydown", movePaddle);
 
     return () => {
       gameSocket.off("game_start");
       gameSocket.off("game_frame");
+      gameSocket.off("game_move_paddle");
+      gameSocket.off("game_pause_score");
 
       window.removeEventListener("keydown", movePaddle);
     };

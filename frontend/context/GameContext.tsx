@@ -9,7 +9,7 @@ interface GameContextData {
   bPlayer: { nick: string; id: number };
   bScore: number;
   latency: number;
-  roomId: string;
+  roomId: number;
   serverDateTime: number;
   degree: { x: number; y: number };
 }
@@ -63,7 +63,7 @@ const initialState: GameContextData = {
   aScore: 0,
   bPlayer: { nick: "", id: 0 },
   bScore: 0,
-  roomId: "",
+  roomId: 0,
   serverDateTime: 0,
   degree: { x: 0, y: 0 },
 };
@@ -78,7 +78,7 @@ export function resetGameContextData(): GameContextData {
     aScore: 0,
     bPlayer: { nick: "", id: 0 },
     bScore: 0,
-    roomId: "",
+    roomId: 0,
     serverDateTime: 0,
     degree: { x: 0, y: 0 },
   };
