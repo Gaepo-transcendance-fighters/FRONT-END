@@ -117,24 +117,24 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     setAnchorEl(null);
   };
 
-  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
-  useEffect(() => {
-    const UserProfile = (data: IFriendData) => {
-      setFriendData(data);
-    };
-    // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
-    socket.on("user_profile", UserProfile);
-  });
+  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다. // 이 2 개는 맨 아래랑 같은 동작같은데 ..? ws
+  // useEffect(() => {
+  //   const UserProfile = (data: IFriendData) => {
+  //     setFriendData(data);
+  //   };
+  //   // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
+  //   socket.on("user_profile", UserProfile);
+  // });
 
-  useEffect(() => {
-    const ReqData = {
-      //값 변경 필요
-      userIdx: userState.userIdx,
-      targetNickname: prop.friendNickname,
-      targetIdx: prop.friendIdx,
-    };
-    socket.emit("user_profile", ReqData);
-  }, []);
+  // useEffect(() => {
+  //   const ReqData = {
+  //     //값 변경 필요
+  //     userIdx: userState.userIdx,
+  //     targetNickname: prop.friendNickname,
+  //     targetIdx: prop.friendIdx,
+  //   };
+  //   socket.emit("user_profile", ReqData);
+  // }, []);
 
   useEffect(() => {
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
@@ -189,7 +189,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     }
   };
 
-  const addFriend = async () => {
+  const addFriend = async () => { // 이거 안 쓰는 건가요? ws
     console.log("add friend");
     const friendReqData: FriendReqData = {
       targetNickname: prop.friendNickname,
@@ -197,7 +197,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     };
     await axios({
       method: "post",
-      url: "http://paulryu9309.ddns.net:4000/users/follow",
+      url: "http://localhost:4000/users/follow",
+      // url: "http://paulryu9309.ddns.net:4000/users/follow",
       data: friendReqData,
     })
       .then((res) => {
@@ -219,7 +220,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
 
     await axios({
       method: "delete",
-      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      url: "http://localhost:4000/users/unfollow",
+      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
       data: friendReqData,
     })
       .then((res) => {
@@ -230,6 +232,21 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       });
     handleCloseMenu();
     handleCloseModal();
+  };
+  
+  const handleOpenNdataModal = () => {
+    socket.emit(
+      "user_profile",
+      {
+        userIdx: userState.userIdx,
+        targetNickname: prop.friendNickname,
+        targetIdx: prop.friendIdx,
+      },
+      () => {
+        console.log("유저프로필에 데이터 보냄");
+      }
+    );
+    setOpenModal(true);
   };
 
   useEffect(() => {
@@ -245,7 +262,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
 
   return (
     <>
-      <Button type="button" onClick={handleOpenModal}>
+      <Button type="button" onClick={handleOpenNdataModal}>
         <Typography>더보기</Typography>
       </Button>
       <Modal open={openModal} onClose={handleCloseModal}>
