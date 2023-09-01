@@ -143,7 +143,7 @@ export default function PageRedir() {
     const dataUrl: string = await readFileAsDataURL(file);
 
     const formData = new FormData();
-    formData.append("userIdx", Number(localStorage.getItem("idx")).toString());
+    formData.append("userIdx", localStorage.getItem("idx") || "");
     formData.append("userNickname", "");
     formData.append("imgData", dataUrl);
     console.log("formData", formData);

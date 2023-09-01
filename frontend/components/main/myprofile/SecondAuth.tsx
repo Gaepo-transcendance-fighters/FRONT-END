@@ -47,7 +47,7 @@ export default function SecondAuth() {
 
   useEffect(() => {
     const verified = localStorage.getItem("check2Auth");
-    if (!verified) return;
+    if (verified === "" || verified === null ) return;
     setVerified(verified);
   }, []);
 
