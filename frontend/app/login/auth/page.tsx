@@ -27,18 +27,14 @@ const Auth = () => {
   const { authDispatch } = useAuth();
 
   interface Data {
-    token: string;
-    jwt: string;
     userIdx: number;
     intra: string;
-    user: {
-      userIdx: number;
-      intra: string;
-      imgUri: string;
-      accessToken: string;
-      email: string;
-    };
+    imgUri: string;
+    token: string;
+    email: string;
+    check2Auth: boolean;
   }
+
   const postCode = async (code: string) => {
     // dev original
     await fetch("http://localhost:4000/login/auth", {
@@ -55,15 +51,18 @@ const Auth = () => {
     })
       .then(async (res) => {
         if (res.status === 200) {
-          // localStorage.setItem("loggedIn", "true");
           const data: Data = await res.json();
+          console.log(data);
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
-          localStorage.setItem("token", data.jwt);
           localStorage.setItem("intra", data.intra);
           localStorage.setItem("idx", data.userIdx.toString());
+          localStorage.setItem("imgUri", data.imgUri);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("check2Auth", data.check2Auth.toString());
           authDispatch({ type: "SET_ID", value: data.userIdx });
 
-          return router.push(`/`);
+          if (data.check2Auth === true) return router.push("./secondauth");
+          else return router.push(`/`);
         }
       })
       .catch((error) => {

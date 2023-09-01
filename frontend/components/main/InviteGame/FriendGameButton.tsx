@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/page";
 import WaitAccept from "./WaitAccept";
+
 import { IFriend } from "@/type/type";
 import { useAuth } from "@/context/AuthContext";
 import { useModalContext } from "@/context/ModalContext";
@@ -20,7 +21,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
       targetUserIdx: prop.friendIdx,
     });
     openModal({
-      children: <WaitAccept />,
+      children: <WaitAccept nickname={prop.friendNickname}/>,
     });
   };
 

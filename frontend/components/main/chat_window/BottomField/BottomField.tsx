@@ -10,7 +10,7 @@ import { SetStateAction } from "react";
 import { useRoom } from "@/context/RoomContext";
 import { IChat } from "@/type/type";
 import { useUser } from "@/context/UserContext";
-
+import { useAuth } from "@/context/AuthContext";
 interface IPayload {
   channelIdx: number | undefined;
   senderIdx: number;
@@ -26,6 +26,7 @@ const BottomField = ({ setMsgs }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { roomState } = useRoom();
   const { userState } = useUser();
+  const { authState } = useAuth();
 
   const changeMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(event.target.value);
