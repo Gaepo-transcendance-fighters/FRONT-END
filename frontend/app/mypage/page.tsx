@@ -100,7 +100,6 @@ export default function PageRedir() {
   const [reload, setReload] = useState<boolean>(false);
 
   useEffect(() => {
-    // const getData = () => {
     const verified = localStorage.getItem("check2Auth");
     if (!verified) return;
     setVerified(verified);
@@ -108,16 +107,11 @@ export default function PageRedir() {
       Authorization: "Bearer " + localStorage.getItem("authorization"),
     };
     axios
-      .get("http://paulryu9309.ddns.net:4000/users/profile", {
-        headers: headers,
-        data: JSON.stringify({
-          userNickName: nickname,
-        }),
-      })
+      .get("http://paulryu9309.ddns.net:4000/users/profile", { headers })
       .then((response) => {
         setUserData(response.data);
       });
-    // };
+
     console.log("API REQUEST");
   }, [reload, verified]);
 
@@ -522,10 +516,14 @@ export default function PageRedir() {
                           </Typography>
                           <Typography margin={1}>
                             승률 :{" "}
-                            {userData.win + userData.lose === 0 ? 0 : Math.floor(
-                              (userData.win / (userData.win + userData.lose)) *
-                                100
-                            )}%
+                            {userData.win + userData.lose === 0
+                              ? 0
+                              : Math.floor(
+                                  (userData.win /
+                                    (userData.win + userData.lose)) *
+                                    100
+                                )}
+                            %
                           </Typography>
                         </CardContent>
                       </Card>
