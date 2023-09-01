@@ -13,11 +13,8 @@ import { useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
-import { IChat } from "../ChatWindow";
+import { IChat } from "@/type/type";
 
-// interface Props {
-//   setMsgs: Dispatch<SetStateAction<IChat[]>>;
-// }
 export enum Mode {
   PRIVATE = "private",
   PUBLIC = "public",
@@ -56,37 +53,6 @@ const RoomTitleField = ({
     };
   }, [roomState.isLobbyBtn]);
 
-  // useEffect(() => {
-  //   const leaveAndDeleteHandler = (channels: IChatRoom[]) => {
-  //     console.log(
-  //       "[RoomTItleField] leaveAndDeleteHandler on! chanel : ",
-  //       channels
-  //     );
-  //     if (roomState.currentRoom) {
-  //       roomDispatch({ type: "SET_IS_OPEN", value: false });
-  //       roomDispatch({ type: "SET_CUR_ROOM", value: null });
-  //       roomDispatch({ type: "SET_NON_DM_ROOMS", value: channels });
-  //     } else
-  //       console.log("[RoomTItleField] there isn't roomState.currentRoom case");
-  //   };
-  //   socket.on("BR_chat_room_delete", leaveAndDeleteHandler);
-
-  //   return () => {
-  //     socket.off("BR_chat_room_delete", leaveAndDeleteHandler);
-  //   };
-  // });
-
-  // useEffect(() => {
-  //   console.log(
-  //     "[RoomTItleField] show current nonDmchannels has been changed : ",
-  //     roomState.nonDmRooms
-  //   );
-  // }, [roomState.nonDmRooms]);
-
-  // useEffect(() => {
-  //   console.log("userState.nickname : " + userState);
-  // }, [userState.nickname]);
-
   const leaveRoom = () => {
     if (roomState.currentRoom?.mode !== "private") {
       const payload = {
@@ -102,6 +68,17 @@ const RoomTitleField = ({
       roomDispatch({ type: "SET_IS_OPEN", value: false });
     }
   };
+
+  useEffect(() => {
+    const changingPw = (res: IChatRoom[]) => {
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: res });
+    };
+
+    socket.on("BR_chat_room_password", changingPw);
+    return () => {
+      socket.off("BR_chat_room_password", changingPw);
+    }
+  }, []);
 
   return (
     <div className="room_title_field">
@@ -132,9 +109,6 @@ const RoomTitleField = ({
           )}
         </div>
         <div className="room_exit">
-          {/* <IconButton aria-label="leave room" onClick={leaveRoom}>
-            <DeleteForeverIcon />
-          </IconButton> */}
           <Button variant="contained" size="small" onClick={leaveRoom}>
             lobby
           </Button>

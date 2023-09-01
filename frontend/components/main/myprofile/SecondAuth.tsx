@@ -9,6 +9,7 @@ import {
   Modal,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -48,6 +49,7 @@ export default function SecondAuth() {
   useEffect(() => {
     const verified = localStorage.getItem("check2Auth");
     if (verified === "" || verified === null ) return;
+
     setVerified(verified);
   }, []);
 

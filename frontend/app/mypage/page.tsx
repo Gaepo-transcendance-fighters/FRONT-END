@@ -56,8 +56,8 @@ const myProfileStyle = {
 interface IUserData {
   nickname: string;
   imgData: string;
-  Win: number;
-  Lose: number;
+  win: number;
+  lose: number;
   rank: number;
   email: string;
 }
@@ -85,8 +85,8 @@ export default function PageRedir() {
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
     imgData: "",
-    Win: 0,
-    Lose: 0,
+    win: 0,
+    lose: 0,
     rank: 0,
     email: "",
   });
@@ -371,8 +371,7 @@ export default function PageRedir() {
                         padding={"20px 0px 0px 2px"}
                       >
                         <form>
-                          <label htmlFor="profile-upload" />
-
+                          {/* <label htmlFor="profile-upload" /> */}
                           <Button
                             onClick={OpenFileInput}
                             style={{
@@ -525,10 +524,10 @@ export default function PageRedir() {
                           </Typography>
                           <Typography margin={1}>
                             승률 :{" "}
-                            {Math.floor(
-                              (userData.Win / (userData.Win + userData.Lose)) *
+                            {userData.win + userData.lose === 0 ? 0 : Math.floor(
+                              (userData.win / (userData.win + userData.lose)) *
                                 100
-                            )}
+                            )}%
                           </Typography>
                         </CardContent>
                       </Card>
@@ -594,7 +593,7 @@ export default function PageRedir() {
                         width: "100%",
                       }}
                     >
-                      <MyGameLog />
+                      {/* <MyGameLog /> */}
                     </Box>
                   </Card>
                 </Stack>

@@ -16,6 +16,7 @@ import React, { useState, ChangeEvent } from "react";
 import axios from "axios";
 import {socket} from "@/app/page";
 
+
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -33,6 +34,7 @@ const SecondAuth = () => {
   const [block, setBlock] = useState<boolean>(false);
   const [inputnumber, setInputNumber] = useState<string>("");
   const router = useRouter();
+
 
   const SendMail = async () => {
     const response = await axios({

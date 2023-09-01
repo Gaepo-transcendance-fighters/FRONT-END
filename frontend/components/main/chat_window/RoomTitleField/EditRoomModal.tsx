@@ -39,17 +39,6 @@ export default function EditRoomModal({
     changePassword: value,
   };
 
-  useEffect(() => {
-    const changingPw = (res: IChatRoom[]) => {
-      roomDispatch({ type: "SET_NON_DM_ROOMS", value: res });
-    };
-
-    socket.on("BR_chat_room_password", changingPw);
-    return () => {
-      socket.off("BR_chat_room_password", changingPw);
-    }
-  }, []);
-
   const handleClose = () => {
     prop();
     socket.emit("BR_chat_room_password", payload, (ret: ReturnMsgDto) => {
