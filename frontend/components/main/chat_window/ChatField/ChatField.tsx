@@ -1,7 +1,6 @@
 "use client";
 
 import { useRoom } from "@/context/RoomContext";
-import { Box, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { IChat } from "@/type/type";
 import DmChat from "./DmChat";
