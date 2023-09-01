@@ -79,6 +79,7 @@ export default function SecondAuth() {
       const response = await axios({
         method: "PATCH",
         url: "http://localhost:4000/users/profile",
+        // url: "http://paulryu9309.ddns.net:4000/users/profile",
         headers: {
           "Content-Type": "application/json",
         },
