@@ -64,6 +64,7 @@ const FriendList = () => {
   useEffect(() => {
     setClient(true);
     const cur = select ? friendState.blockList : friendState.friendList;
+    console.log("setClient : friendState.blockList", friendState.blockList);
     setShowlist(cur);
   }, [friendState.friendList, friendState.blockList, select, showlist]);
 
@@ -132,10 +133,10 @@ const FriendList = () => {
             borderRadius: "10px",
           }}
         >
-          {showlist
-            && showlist.map((user, idx) => (
-                <Friend key={idx} prop={user as IUserProp} />
-              ))}
+          {showlist &&
+            showlist.map((user, idx) => (
+              <Friend key={idx} prop={user as IUserProp} />
+            ))}
         </Card>
       </Stack>
     </Card>

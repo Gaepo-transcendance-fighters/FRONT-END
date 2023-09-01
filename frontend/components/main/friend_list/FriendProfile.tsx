@@ -17,25 +17,17 @@ import MyGameLog from "../myprofile/MyGameLog";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
-import { main } from "@/type/type";
+import {
+  FriendReqData,
+  IFriendData,
+  friendProfileModalStyle,
+  main,
+} from "@/type/type";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import RoomEnter from "@/external_functions/RoomEnter";
 import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
 import FriendGameButton from "../InviteGame/FriendGameButton";
-
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  height: 700,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const loginOn = (
   <Image src="/status/logon.png" alt="online" width={10} height={10} />
@@ -54,21 +46,6 @@ const gamePlaying = (
   />
 );
 
-interface IFriendData {
-  targetNickname: string;
-  imgUri: string;
-  rank: number;
-  Win: number;
-  Lose: number;
-  isOnline: boolean;
-}
-
-interface FriendReqData {
-  userIdx : number;
-  targetNickname: string;
-  targetIdx: number;
-}
-
 const FriendProfile = ({ prop }: { prop: IFriend }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -76,13 +53,13 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     targetNickname: "",
     imgUri: "",
     rank: 0,
-    Win: 0,
-    Lose: 0,
+    win: 0,
+    lose: 0,
     isOnline: false,
   });
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
-  const { friendDispatch } = useFriend();
+  const { friendState, friendDispatch } = useFriend();
 
   const RankSrc =
     friendData.rank < 800
@@ -122,6 +99,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   useEffect(() => {
     // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
     const UserProfile = (data: IFriendData) => {
+      console.log("UserProfile : ", data);
       setFriendData(data);
     };
     socket.on("user_profile", UserProfile);
@@ -187,39 +165,18 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     }
   };
 
-  const addFriend = async () => {
-    console.log("add friend");
-    const friendReqData: FriendReqData = {
-      userIdx : userState.userIdx,
-      targetNickname: prop.friendNickname,
-      targetIdx: prop.friendIdx,
-    };
-    await axios({
-      method: "post",
-      url: "http://paulryu9309.ddns.net:4000/users/follow",
-      data: friendReqData,
-    })
-      .then((res) => {
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    handleCloseMenu();
-    handleCloseModal();
-  };
-
   const deleteFriend = async () => {
     console.log("delete friend");
     const friendReqData: FriendReqData = {
-      userIdx : userState.userIdx,
+      userIdx: userState.userIdx,
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
     };
 
     await axios({
       method: "delete",
-      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      url: "http://localhost:4000/users/unfollow",
+      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
       data: friendReqData,
     })
       .then((res) => {
@@ -233,10 +190,52 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   };
 
   useEffect(() => {
+    const ChatBlock = (data: any) => {
+      console.log("ChatBlock : ", data);
+      const blockList = data.map((block: any) => {
+        return { targetNickname: block.userNickname, targetIdx: block.userIdx };
+      });
+      friendDispatch({
+        type: "ADD_BLOCK",
+        value: {
+          targetNickname: prop.friendNickname,
+          targetIdx: prop.friendIdx,
+        },
+      });
+      console.log("blockList : ", blockList);
+      friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
+      handleCloseMenu();
+      handleCloseModal();
+    };
+    socket.on("chat_block", ChatBlock);
+
+    return () => {
+      socket.off("chat_block", ChatBlock);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("friendState.blockList : ", friendState.blockList);
+  }, [friendState.blockList]);
+
+  const blockFriend = () => {
+    console.log("hi");
+    socket.emit(
+      "chat_block",
+      {
+        targetNickname: prop.friendNickname,
+        targetIdx: prop.friendIdx,
+      },
+      (ret: any) => {
+        console.log("blockFriend : ", blockFriend);
+      }
+    );
+  };
+
+  useEffect(() => {
     const userProfile = (data: IFriendData) => {
       setFriendData(data);
     };
-
     socket.on("user_profile", userProfile);
     return () => {
       socket.off("user_profile");
@@ -249,7 +248,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
         <Typography>더보기</Typography>
       </Button>
       <Modal open={openModal} onClose={handleCloseModal}>
-        <Box sx={modalStyle} borderRadius={"10px"}>
+        <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
           <Card
             sx={{
               backgroundColor: main.main7,
@@ -267,7 +266,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
               mx={5}
             >
               <Image
-                src={friendData?.imgUri}
+                src="/seal.png" // mockdata
+                // src={friendData?.imgUri} // < !mockdata
                 alt="user img"
                 width={100}
                 height={100}
@@ -316,7 +316,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 >
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
-                    <MenuItem>Block</MenuItem>
+                    <MenuItem onClick={blockFriend}>Block</MenuItem>
                   </Stack>
                 </Menu>
               </Stack>
@@ -374,12 +374,15 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                     랭크(포인트) : {friendData.rank}{" "}
                   </Typography>
                   <Typography margin={1}>
-                    승률{" "}
-                    {Math.floor(
-                      (friendData.Win / (friendData.Win + friendData.Lose)) *
-                        100
-                    )}
-                    :
+                    승률 :{" "}
+                    {friendData.win + friendData.lose === 0
+                      ? 0
+                      : Math.floor(
+                          (friendData.win /
+                            (friendData.win + friendData.lose)) *
+                            100
+                        )}
+                    %
                   </Typography>
                 </CardContent>
               </Card>
@@ -431,7 +434,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 width: "100%",
               }}
             >
-              <MyGameLog />
+              {/* <MyGameLog /> */}
             </Box>
           </Card>
         </Box>
