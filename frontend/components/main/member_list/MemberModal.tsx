@@ -84,7 +84,7 @@ export default function MemberModal({
 
   const addFriend = async () => {
     const friendReqData: FriendReqData = {
-      userIdx : userState.userIdx,
+      userIdx: userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
@@ -105,7 +105,7 @@ export default function MemberModal({
 
   const deleteFriend = async () => {
     const friendReqData: FriendReqData = {
-      userIdx : userState.userIdx,
+      userIdx: userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
@@ -126,12 +126,11 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    if (
-      friendState.friendList.find(
-        (friend) => friend.friendNickname === person.nickname
-      )
+    friendState.friendList.find(
+      (friend) => friend.friendNickname === person.nickname
     )
-      setIsFriend(true);
+      ? setIsFriend(true)
+      : setIsFriend(false);
   }, [isFriend]);
 
   useEffect(() => {
