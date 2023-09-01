@@ -18,7 +18,7 @@ import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import { main } from "@/type/type";
-import { IChatRoom, ReturnMsgDto} from "@/type/RoomType"
+import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import RoomEnter from "@/external_functions/RoomEnter";
 import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
@@ -64,6 +64,7 @@ interface IFriendData {
 }
 
 interface FriendReqData {
+  userIdx : number;
   targetNickname: string;
   targetIdx: number;
 }
@@ -90,7 +91,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       ? "./rank/exp_medal_silver.png"
       : "./rank/exp_medal_gold.png";
 
-  const handleOpenModal = () => {
+  const handleOpenNdataModal = () => {
     socket.emit(
       "user_profile",
       {
@@ -119,21 +120,15 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
 
   // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
   useEffect(() => {
+    // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
     const UserProfile = (data: IFriendData) => {
       setFriendData(data);
     };
-    // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
     socket.on("user_profile", UserProfile);
-  });
 
-  useEffect(() => {
-    const ReqData = {
-      //값 변경 필요
-      userIdx: userState.userIdx,
-      targetNickname: prop.friendNickname,
-      targetIdx: prop.friendIdx,
+    return () => {
+      socket.off("user_profile");
     };
-    socket.emit("user_profile", ReqData);
   }, []);
 
   useEffect(() => {
@@ -172,26 +167,30 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
           }
         }
       );
-    }
-    else {
+    } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
-      socket.emit("create_DM", {
-        targetNickname : data.friendNickname,
-        targetIdx : data.friendIdx,
-      }, (ret: ReturnMsgDto) => {
-        if (ret.code === 200) {
-          console.log(ret.msg);
-        } else {
-          console.log(ret.msg);
-          return ;
+      socket.emit(
+        "create_DM",
+        {
+          targetNickname: data.friendNickname,
+          targetIdx: data.friendIdx,
+        },
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
+            console.log(ret.msg);
+          } else {
+            console.log(ret.msg);
+            return;
+          }
         }
-      })
+      );
     }
   };
 
   const addFriend = async () => {
     console.log("add friend");
     const friendReqData: FriendReqData = {
+      userIdx : userState.userIdx,
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
     };
@@ -213,6 +212,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   const deleteFriend = async () => {
     console.log("delete friend");
     const friendReqData: FriendReqData = {
+      userIdx : userState.userIdx,
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
     };
@@ -245,7 +245,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
 
   return (
     <>
-      <Button type="button" onClick={handleOpenModal}>
+      <Button type="button" onClick={handleOpenNdataModal}>
         <Typography>더보기</Typography>
       </Button>
       <Modal open={openModal} onClose={handleCloseModal}>

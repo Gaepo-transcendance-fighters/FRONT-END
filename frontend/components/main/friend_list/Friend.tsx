@@ -7,7 +7,9 @@ import { main } from "@/font/color";
 import { useEffect } from "react";
 import { IFriend, IBlock, IUserProp } from "@/type/type";
 
-const loginOn = <Image src="/status/logon.png" alt="online" width={10} height={10} />;
+const loginOn = (
+  <Image src="/status/logon.png" alt="online" width={10} height={10} />
+);
 
 const loginOff = (
   <Image src="/status/logoff.png" alt="offline" width={10} height={10} />
@@ -15,7 +17,7 @@ const loginOff = (
 
 const playing = (
   <Image src="/status/gameplaying.png" alt="playing" width={10} height={10} />
-)
+);
 
 const Friend = ({ prop }: { prop: IUserProp }) => {
   return (
@@ -39,7 +41,7 @@ const Friend = ({ prop }: { prop: IUserProp }) => {
             </Typography>
           </Tooltip>
           <Stack direction={"row"} alignItems={"center"}>
-            {prop.isOnline ?? prop.isOnline ? loginOn :  loginOff}
+            {prop.isOnline ?? prop.isOnline ? loginOn : loginOff}
             <FriendProfile prop={prop as IFriend} />
           </Stack>
         </Stack>

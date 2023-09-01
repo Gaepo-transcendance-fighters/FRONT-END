@@ -2,15 +2,15 @@
 
 import { Box, Button } from "@mui/material";
 import { useState, useCallback, useEffect, useRef } from "react";
-import FormControl, { useFormControl } from "@mui/material/FormControl";
+import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { socket } from "@/app/page";
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
 import { useRoom } from "@/context/RoomContext";
-import { IChat } from "../ChatWindow";
+import { IChat } from "@/type/type";
 import { useUser } from "@/context/UserContext";
-
+import { useAuth } from "@/context/AuthContext";
 interface IPayload {
   channelIdx: number | undefined;
   senderIdx: number;
@@ -26,6 +26,7 @@ const BottomField = ({ setMsgs }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { roomState } = useRoom();
   const { userState } = useUser();
+  const { authState } = useAuth();
 
   const changeMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(event.target.value);
@@ -57,7 +58,7 @@ const BottomField = ({ setMsgs }: Props) => {
           msg: chatFromServer.msg,
           msgDate: chatFromServer.msgDate,
         };
-        setMsgs((prevChats: any) => [chat, ...prevChats]); // <----- any type 나중 변경 필요.
+        setMsgs((prevChats: IChat[]) => [chat, ...prevChats]);
         console.log(chat);
       } else {
         result = roomState.currentRoomMemberList.find(
@@ -71,24 +72,23 @@ const BottomField = ({ setMsgs }: Props) => {
             msg: chatFromServer.msg,
             msgDate: chatFromServer.msgDate,
           };
-          setMsgs((prevChats: any) => [...prevChats, chat]); // <----- any type 나중 변경 필요.
+          setMsgs((prevChats: IChat[]) => [chat, ...prevChats]);
         } else {
           console.log("[ERROR] there aren't nickname from data");
         }
       }
-      setMsg("");
     };
     socket.on("chat_send_msg", messageHandler);
-
+    
     return () => {
       socket.off("chat_send_msg", messageHandler);
     };
-  }, []);
-
+  }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList]);
+  
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
-
+  
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
@@ -97,27 +97,28 @@ const BottomField = ({ setMsgs }: Props) => {
         roomState.currentRoom?.mode === "private" &&
         roomState.currentDmRoomMemberList?.userIdx1 &&
         roomState.currentDmRoomMemberList?.userIdx2
-      ) {
-        payload = {
-          channelIdx: roomState.currentRoom?.channelIdx,
-          senderIdx: userState.userIdx,
-          msg: msg,
-          targetIdx:
+        ) {
+          payload = {
+            channelIdx: roomState.currentRoom?.channelIdx,
+            senderIdx: userState.userIdx,
+            msg: msg,
+            targetIdx:
             userState.userIdx === roomState.currentDmRoomMemberList?.userIdx1
-              ? roomState.currentDmRoomMemberList?.userIdx2
-              : roomState.currentDmRoomMemberList?.userIdx1, // <------------------ 현재 채널의 모든 사용자들의 인덱스를 알아야한다.
-        };
-      } else if (
-        roomState.currentRoom?.mode === "public" ||
-        roomState.currentRoom?.mode === "protected"
-      ) {
-        payload = {
-          channelIdx: roomState.currentRoom?.channelIdx,
-          senderIdx: userState.userIdx,
-          msg: msg, // <------------------ 현재 채널의 모든 사용자들의 인덱스를 알아야한다.
+            ? roomState.currentDmRoomMemberList?.userIdx2
+            : roomState.currentDmRoomMemberList?.userIdx1,
+          };
+        } else if (
+          roomState.currentRoom?.mode === "public" ||
+          roomState.currentRoom?.mode === "protected"
+          ) {
+            payload = {
+              channelIdx: roomState.currentRoom?.channelIdx,
+              senderIdx: userState.userIdx,
+              msg: msg,
         };
       }
       socket.emit("chat_send_msg", payload);
+      setMsg("");
       inputRef.current?.focus();
     },
     [msg]

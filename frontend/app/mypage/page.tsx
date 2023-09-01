@@ -21,6 +21,12 @@ const font = createTheme({
   },
 });
 
+interface UserEditprofileDto {
+  userIdx: number;
+  userNickname: string;
+  imgUrl: any;
+}
+
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -50,10 +56,15 @@ const myProfileStyle = {
 interface IUserData {
   nickname: string;
   imgUrl: string;
-  Win: number;
-  Lose: number;
+  win: number;
+  lose: number;
   rank: number;
   email: string;
+}
+
+interface Modals {
+  nickNameModal: boolean;
+  authModal: boolean;
 }
 
 import { useRouter, useSearchParams } from "next/navigation";
@@ -63,32 +74,36 @@ import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
 
+import SecondAuth from "@/components/main/myprofile/SecondAuth";
+import { useAuth } from "@/context/AuthContext";
+
 export default function PageRedir() {
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const nickname = searchParams.toString();
-
   const { userState } = useUser();
-  const [checked, setChecked] = useState(true);
+  const { authState } = useAuth();
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
     imgUrl: "",
-    Win: 0,
-    Lose: 0,
+    win: 0,
+    lose: 0,
     rank: 0,
     email: "",
   });
-  const [message, setMessage] = useState("");
+
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [verified, setVerified] = useState<boolean>(false);
+  //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
+
+  const [verified, setVerified] = useState<string>("");
+
   const [inputName, setInputName] = useState<string>("");
 
   const [reload, setReload] = useState<boolean>(false);
 
   useEffect(() => {
     // const getData = () => {
+    const verified = localStorage.getItem("check2Auth");
+    if (!verified) return;
+    setVerified(verified);
     const headers = {
       Authorization: "Bearer " + localStorage.getItem("authorization"),
     };
@@ -104,7 +119,7 @@ export default function PageRedir() {
       });
     // };
     console.log("API REQUEST");
-  }, [reload]);
+  }, [reload, verified]);
 
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
@@ -122,19 +137,25 @@ export default function PageRedir() {
   const uploadImage = async (file: File) => {
     // readAsDataURL을 사용해 이미지를 base64로 변환
     const dataUrl: string = await readFileAsDataURL(file);
+
+    const formData = new FormData();
+    formData.append("userIdx", Number(localStorage.getItem("idx")).toString());
+    formData.append("userNickname", "");
+    formData.append("imgUrl", dataUrl);
+    console.log("formData", formData);
+
     try {
       await axios({
+        // method: "POST",
+        // url: `http://localhost:4000/users/profile`,
         method: "PUT",
         url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
-        data: JSON.stringify({
-          imgUri: dataUrl,
-        }),
+        data: formData,
       });
-      console.log("업로드 완료");
     } catch (error) {
       console.error("업로드 실패", error);
     }
@@ -169,21 +190,26 @@ export default function PageRedir() {
     }
 
     try {
+      let idx: number = Number(localStorage.getItem("idx"));
       const response = await axios({
+        // method: "POST",
+        // url: `http://localhost:4000/users/profile`,
         method: "PATCH",
         url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
 
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "Application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
-          changedNickname: inputName,
+          userIdx: Number(localStorage.getItem("idx")),
+          userNickname: inputName,
+          imgUrl: localStorage.getItem("imgUri"),
         }),
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
-        console.log("Sucess");
+        console.log("Success");
         handleCloseModal();
       }
     } catch (error) {
@@ -192,41 +218,11 @@ export default function PageRedir() {
     setReload((curr) => !curr);
   };
 
-  const onChangeSecondAuth = async () => {
-    if (verified == true) setVerified(false);
-    else setVerified(true);
-
-    try {
-      const response = await axios({
-        method: "PATCH",
-        url: "http://paulryu9309.ddns.net:4000/users/profile/:my_nickname",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify({
-          // userNickName: userData?.nickname,
-          check2Auth: verified,
-        }),
-      });
-    } catch (error) {
-      console.log("2차인증 시 에러발생");
-    }
-  };
-
   const handleOpenModal = () => {
     setOpenModal(true);
   };
-
   const handleCloseModal = () => {
     setOpenModal(false);
-  };
-
-  const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
   };
 
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -325,7 +321,6 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        // src="https://image.fmkorea.com/files/attach/new3/20230426/2895716/2869792504/5712239214/67b5b96fceb24c036e6f7368386974d5.png"
                         src={userData?.imgUrl}
                         style={{
                           width: "100%",
@@ -352,7 +347,7 @@ export default function PageRedir() {
                       </Typography>
 
                       <CardContent style={{ width: "100%" }}>
-                        {verified == true ? (
+                        {verified === "true" ? (
                           <Typography style={{ fontSize: "1.5rem" }}>
                             2차인증 여부 : Y
                           </Typography>
@@ -374,8 +369,7 @@ export default function PageRedir() {
                         padding={"20px 0px 0px 2px"}
                       >
                         <form>
-                          <label htmlFor="profile-upload" />
-
+                          {/* <label htmlFor="profile-upload" /> */}
                           <Button
                             onClick={OpenFileInput}
                             style={{
@@ -395,15 +389,7 @@ export default function PageRedir() {
                             onChange={handleChange}
                           />
                         </form>
-                        {/* <form>
-                          <input
-                            type="file"
-                            id="profile-upload"
-                            accept="image/png, image/jpg, image/jpeg"
-                            style={{ display: "none" }}
-                          />
-                        </form> */}
-                        {/* 123 */}
+
                         <Button
                           type="submit"
                           style={{
@@ -478,20 +464,7 @@ export default function PageRedir() {
                             </Card>
                           </Box>
                         </Modal>
-                        <Button
-                          type="button"
-                          style={{
-                            minWidth: "max-content",
-                          }}
-                          variant="contained"
-                          onClick={onChangeSecondAuth}
-                        >
-                          {verified == true ? (
-                            <>2차인증 비활성화</>
-                          ) : (
-                            <>2차인증 활성화</>
-                          )}
-                        </Button>
+                        <SecondAuth />
                       </Stack>
                     </Stack>
                   </Card>
@@ -549,10 +522,10 @@ export default function PageRedir() {
                           </Typography>
                           <Typography margin={1}>
                             승률 :{" "}
-                            {Math.floor(
-                              (userData.Win / (userData.Win + userData.Lose)) *
+                            {userData.win + userData.lose === 0 ? 0 : Math.floor(
+                              (userData.win / (userData.win + userData.lose)) *
                                 100
-                            )}
+                            )}%
                           </Typography>
                         </CardContent>
                       </Card>
@@ -618,7 +591,7 @@ export default function PageRedir() {
                         width: "100%",
                       }}
                     >
-                      <MyGameLog />
+                      {/* <MyGameLog /> */}
                     </Box>
                   </Card>
                 </Stack>

@@ -23,6 +23,7 @@ import InviteGame from "@/components/main/InviteGame/InviteGame";
 
 const userId =
   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
+
 export const socket = io("http://localhost:4000/chat", {
   // haryu's server
   // export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
