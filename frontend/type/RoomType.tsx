@@ -85,12 +85,12 @@ export interface IDmMemList {
 
 export interface IChatDmEnter {
   message: IDMChatFromServer[]
+  totalMsgCount : number,
   channelIdx: number; 
   userIdx1: number;
   userIdx2: number;
   userNickname1: string;
   userNickname2: string;
-  // channelIdx: number;
   imgUri: string;
 }
 

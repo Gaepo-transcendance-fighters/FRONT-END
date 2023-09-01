@@ -1,70 +1,72 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
-import { useRoom } from "@/context/RoomContext";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Dispatch, SetStateAction } from "react";
-import { IChat } from "@/type/type";
-import axios from "axios";
 import { useInitMsg } from "@/context/InitMsgContext";
+import { useRoom } from "@/context/RoomContext";
 import { IDMChatFromServer } from "@/type/RoomType";
+import { IChat } from "@/type/type";
+import { Typography } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { Dispatch, SetStateAction } from "react";
+
+const options = {
+  threshold: 0.1,
+};
 
 interface Props {
   msgs: IChat[];
   setMsgs: Dispatch<SetStateAction<IChat[]>>;
 }
 
-const DmChat = ({ msgs, setMsgs }: Props) => {
-  const [end, setEnd] = useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
+const DmChats = ({ msgs, setMsgs }: Props) => {
+  const [loading, setLoading] = useState(true);
+  const [pageNum, setPageNum] = useState(0); // [제작필요]첫 페이지 를 알아야한다.
   const { roomState } = useRoom();
-  const observerTarget = useRef(null);
-  const [lastDate, setLastDate] = useState<string>();
   const { initMsgState } = useInitMsg();
+  const observerTarget = useRef(null);
 
   useEffect(() => {
-    if (!observerTarget.current) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setLoading(true);
-          callHistory();
-        }
-      }, {threshold: 0.1}
-    );
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) {
+        setPageNum((num) => num - 1);
+      }
+    }, options);
 
-    if (observerTarget.current) observer.observe(observerTarget.current);
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
 
     return () => {
       if (observerTarget.current) {
         observer.unobserve(observerTarget.current);
       }
     };
-  }, [observerTarget, loading]);
+  }, [observerTarget]);
 
-  const callHistory = useCallback(async () => {
-    if (!lastDate) {
-      setLoading(false);
-      return;
-    }
+  const callUser = useCallback(async () => {
+    console.log(pageNum);
     await axios
+      // dev original
       .get(
-        // `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
-        `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
+        `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&index=${pageNum}`
       )
+      // haryu's server
+      // .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
-        if (newData.length === 0) {
-          setEnd(true)
-          return;
-        }
+        setMsgs((prevMsgs) => [...prevMsgs, ...newData]);
         setLoading(false);
-        setMsgs((prevMsgs) => [...prevMsgs, ...newData])
-        const lastIdx = msgs.length - 1;
-        const lastElement = msgs[lastIdx];
-        setLastDate((prev) => lastElement.msgDate);
       });
-  }, [lastDate, loading, msgs, end]);
+  }, [pageNum]);
+
+  useEffect(() => {
+    if (pageNum > 0) {
+      setTimeout(() => {
+        callUser();
+      }, 500);
+      setLoading(true);
+    }
+  }, [pageNum]);
 
   // 첫 메세지 20개 불러오는 로직
   useEffect(() => {
@@ -88,39 +90,34 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
     setMsgs((prevState) => {
       return [...prevState, ...list];
     });
+    let calPage = Math.floor(initMsgState.dmEnterEntry.totalMsgCount / 5);
+    // let calPage = initMsgState.dmEnterEntry.totalMsgCount / 5;
+    console.log("initMsgState.dmEnterEntry.totalMsgCount % 5" , initMsgState.dmEnterEntry.totalMsgCount % 5);
+    if (initMsgState.dmEnterEntry.totalMsgCount % 5 !== 0)
+      calPage += 1;
+    setPageNum(calPage);
+    console.log("totalmsgcount: ",initMsgState.dmEnterEntry.totalMsgCount);
+    console.log("total page : ",calPage);
   }, []);
 
-  // 이전 대화기록을 불러오거나, 새로 채팅을 송수신하게되면 그때마다 불러와진 대화기록 중 제일 오래된 메세지의 Date를 가져온다.
-  useEffect(() => {
-    if (msgs.length > 0) {
-      const lastIdx = msgs.length - 1;
-      const lastElement = msgs[lastIdx];
-      setLastDate(() => lastElement.msgDate);
-    }
-  }, [msgs, lastDate]);
-
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column-reverse",
-        overflowY: "scroll",
-        overflowAnchor: "none",
-        position: "sticky",
-        backgroundColor: "#3272D2",
-        height: "40vh",
-        borderRadius: "5px",
-        listStyleType: "none",
-        margin: "0% 2% 1% 2%",
-      }}
-    >
-      {msgs.map((value, i) => {
-        return (
-          <ul
-            key={i}
-            style={{ margin: "1% 0% 1% 0%", padding: "2% 2% 0.5% 2%" }}
-          >
+    <>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column-reverse",
+          overflowY: "auto",
+          overflowAnchor: "none",
+          position: "sticky",
+          margin: "1% 0% 1% 0%",
+          padding: "2% 2% 0.5% 2%",
+          height: "36vh",
+        }}
+      >
+        {msgs.map((value, i) => {
+          return (
             <div
+              key={i}
               style={{
                 listStyleType: "none",
                 margin: "0px 0 0 0",
@@ -128,31 +125,21 @@ const DmChat = ({ msgs, setMsgs }: Props) => {
                 padding: 0,
               }}
             >
-              {
-                <Typography variant="h6">
-                  {value.senderIdx ===
-                  roomState.currentDmRoomMemberList?.userIdx1
-                    ? roomState.currentDmRoomMemberList?.userNickname1
-                    : roomState.currentDmRoomMemberList?.userNickname2 +
-                      ": " +
-                      value.msg}
-                </Typography>
-              }
+              <Typography variant="h6">
+                {value.senderIdx === roomState.currentDmRoomMemberList?.userIdx1
+                  ? roomState.currentDmRoomMemberList?.userNickname1
+                  : roomState.currentDmRoomMemberList?.userNickname2 +
+                    ": " +
+                    value.msg}
+              </Typography>
             </div>
-          </ul>
-        );
-      })}
-      <div ref={observerTarget}> </div>
-      <Typography style={{ color: "white" }} component={"div"} align="center">
-        this is top of the chat list...
-      </Typography>
-      {end === false && loading === true && (
-        <Typography style={{ color: "white" }} component={"div"}>
-          loading...
-        </Typography>
-      )}
-    </Box>
+          );
+        })}
+        <div ref={observerTarget}></div>
+        {loading === true && <p>loading...</p>}
+      </div>
+    </>
   );
 };
 
-export default DmChat;
+export default DmChats;
