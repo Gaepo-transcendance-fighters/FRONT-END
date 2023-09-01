@@ -92,8 +92,8 @@ export default function MemberModal({
       method: "post",
       url: "http://localhost:4000/users/follow",
       data: JSON.stringify(friendReqData),
-<!--       url: "http://paulryu9309.ddns.net:4000/users/follow", -->
-<!--       data: friendReqData, -->
+      // url: "http://paulryu9309.ddns.net:4000/users/follow",
+      // data: friendReqData,
 
     })
       .then((res) => {

@@ -91,21 +91,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       ? "./rank/exp_medal_silver.png"
       : "./rank/exp_medal_gold.png";
 
-  const handleOpenNdataModal = () => {
-    socket.emit(
-      "user_profile",
-      {
-        userIdx: userState.userIdx,
-        targetNickname: prop.friendNickname,
-        targetIdx: prop.friendIdx,
-      },
-      () => {
-        console.log("유저프로필에 데이터 보냄");
-      }
-    );
-    setOpenModal(true);
-  };
-
   const handleCloseModal = () => {
     setOpenModal(false);
   };
