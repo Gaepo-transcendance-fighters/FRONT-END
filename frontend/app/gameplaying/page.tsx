@@ -55,8 +55,8 @@ const GamePlaying = () => {
 
     history.pushState(null, "", location.href);
     addEventListener("popstate", preventGoBack);
-    // addEventListener("keydown", preventRefresh);
-    // addEventListener("beforeunload", preventRefreshButton);
+    addEventListener("keydown", preventRefresh);
+    addEventListener("beforeunload", preventRefreshButton);
 
     gameSocket.emit("game_force_quit", { userIdx: authState.id });
     gameSocket.on("game_force_quit", (msg: string) => {
@@ -64,8 +64,8 @@ const GamePlaying = () => {
     });
     return () => {
       removeEventListener("popstate", preventGoBack);
-      // removeEventListener("keydown", preventRefresh);
-      // removeEventListener("beforeunload", preventRefreshButton);
+      removeEventListener("keydown", preventRefresh);
+      removeEventListener("beforeunload", preventRefreshButton);
     };
   }, []);
 
@@ -170,6 +170,7 @@ const GamePlaying = () => {
             }}
           >
             <Card
+              sx={{ px: "30px" }}
               style={{
                 width: "20%",
                 height: "max-content",
@@ -179,6 +180,7 @@ const GamePlaying = () => {
                 border: "1px solid black",
                 backgroundColor: main.main3,
                 color: "white",
+                wordSpacing: "1rem",
               }}
             >
               <Typography>
@@ -188,16 +190,16 @@ const GamePlaying = () => {
                   : gameState.gameMode === 1
                   ? "Normal"
                   : "Rank"}
-                <br />
+              </Typography>
+              <Typography>
                 Speed:{" "}
                 {gameState.ballSpeedOption === 2
                   ? "Slow"
                   : gameState.ballSpeedOption === 3
                   ? "Normal"
                   : "Fast"}
-                <br />
-                Map: {gameState.mapType}
               </Typography>
+              <Typography>Map: {gameState.mapType}</Typography>
             </Card>
             <Modals
               isShowing={isShowing}
@@ -205,7 +207,6 @@ const GamePlaying = () => {
               message="뒤로가기 멈춰!"
               routing="/?from=game"
             />
-            <Button onClick={() => setOpenModal(true)}>탈주시</Button>
             <Modals
               isShowing={openModal}
               message="상대방이 탈주했습니다. 결과페이지로 이동합니다"
