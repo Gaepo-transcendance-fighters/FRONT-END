@@ -64,7 +64,6 @@ const FriendList = () => {
   useEffect(() => {
     setClient(true);
     const cur = select ? friendState.blockList : friendState.friendList;
-    console.log("setClient : friendState.blockList", friendState.blockList);
     setShowlist(cur);
   }, [friendState.friendList, friendState.blockList, select, showlist]);
 

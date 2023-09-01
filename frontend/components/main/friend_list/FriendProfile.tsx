@@ -49,7 +49,6 @@ const gamePlaying = (
 );
 
 const FriendProfile = ({ prop }: { prop: IUserProp }) => {
-  console.log("prop: IUserProp ", prop);
   const nickname = !prop.targetNickname
     ? prop.friendNickname
     : prop.targetNickname;
@@ -106,7 +105,6 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   useEffect(() => {
     // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
     const UserProfile = (data: IFriendData) => {
-      console.log("UserProfile : ", data);
       setFriendData(data);
     };
     socket.on("user_profile", UserProfile);
@@ -174,7 +172,6 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   };
 
   const deleteFriend = async () => {
-    console.log("delete friend");
     const friendReqData: FriendReqData = {
       userIdx: userState.userIdx,
       targetNickname: nickname!,
@@ -199,7 +196,6 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
 
   useEffect(() => {
     const ChatBlock = (data: IChatBlock[]) => {
-      console.log("ChatBlock : ", data);
       const blockList = data.map((block: IChatBlock) => {
         return { targetNickname: block.userNickname, targetIdx: block.userIdx };
       });
@@ -210,7 +206,6 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
           targetIdx: idx!,
         },
       });
-      console.log("blockList : ", blockList);
       friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
       handleCloseMenu();
       handleCloseModal();
@@ -222,12 +217,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("friendState.blockList : ", friendState.blockList);
-  }, [friendState.blockList]);
-
   const blockFriend = () => {
-    console.log("hi");
     socket.emit(
       "chat_block",
       {
