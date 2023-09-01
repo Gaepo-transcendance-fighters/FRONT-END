@@ -49,11 +49,7 @@ const BottomField = ({ setMsgs }: Props) => {
         } else return;
         const chat = {
           channelIdx: chatFromServer.channelIdx,
-          senderIdx:
-            chatFromServer.sender ===
-            roomState.currentDmRoomMemberList?.userIdx1
-              ? roomState.currentDmRoomMemberList?.userIdx1
-              : roomState.currentDmRoomMemberList?.userIdx2,
+          senderIdx: chatFromServer.senderIdx,
           sender: result,
           msg: chatFromServer.msg,
           msgDate: chatFromServer.msgDate,
