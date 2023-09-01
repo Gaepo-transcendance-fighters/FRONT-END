@@ -19,6 +19,7 @@ import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import {
   FriendReqData,
+  IChatBlock,
   IFriendData,
   IUserProp,
   friendProfileModalStyle,
@@ -82,8 +83,8 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
         targetNickname: nickname,
         targetIdx: idx,
       },
-      () => {
-        console.log("유저프로필에 데이터 보냄");
+      (ret : ReturnMsgDto) => {
+        console.log("유저프로필에 데이터 보냄 : ", ret);
       }
     );
     setOpenModal(true);
@@ -197,9 +198,9 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   };
 
   useEffect(() => {
-    const ChatBlock = (data: any) => {
+    const ChatBlock = (data: IChatBlock[]) => {
       console.log("ChatBlock : ", data);
-      const blockList = data.map((block: any) => {
+      const blockList = data.map((block: IChatBlock) => {
         return { targetNickname: block.userNickname, targetIdx: block.userIdx };
       });
       friendDispatch({
@@ -233,8 +234,8 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
         targetNickname: nickname,
         targetIdx: idx,
       },
-      (ret: any) => {
-        console.log("blockFriend : ", blockFriend);
+      (ret: ReturnMsgDto) => {
+        console.log("blockFriend ret : ", ret);
       }
     );
   };
@@ -336,7 +337,6 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
                         ? "Block"
                         : "UnBlock"}
                     </MenuItem>
-                    {/* <MenuItem onClick={blockFriend}>Block</MenuItem> */}
                   </Stack>
                 </Menu>
               </Stack>

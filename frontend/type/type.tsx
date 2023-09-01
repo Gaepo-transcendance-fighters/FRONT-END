@@ -87,3 +87,8 @@ export const friendProfileModalStyle = {
   boxShadow: 24,
   p: 4,
 };
+
+export interface IChatBlock {
+  userNickname: string;
+  userIdx: number;
+}
