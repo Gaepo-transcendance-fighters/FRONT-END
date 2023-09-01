@@ -41,6 +41,7 @@ const Game = () => {
   const { gameState, gameDispatch } = useGame();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [client, setClient] = useState<boolean>(false);
+  const [cha, setCha] = useState<string>("");
 
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
@@ -66,7 +67,9 @@ const Game = () => {
 
   useEffect(() => {
     setClient(true);
-  }, []);
+    const random = Math.floor(Math.random() * 7) + 1;
+    setCha(`/character/cha${random}.png`);
+  }, [cha]);
 
   if (!client) return <></>;
 
@@ -82,7 +85,7 @@ const Game = () => {
         }}
       >
         <Image
-          src="/cha2.png"
+          src={cha}
           alt="gogoo1"
           width={500}
           height={500}

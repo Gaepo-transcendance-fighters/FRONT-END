@@ -55,8 +55,8 @@ const GamePlaying = () => {
 
     history.pushState(null, "", location.href);
     addEventListener("popstate", preventGoBack);
-    addEventListener("keydown", preventRefresh);
-    addEventListener("beforeunload", preventRefreshButton);
+    // addEventListener("keydown", preventRefresh);
+    // addEventListener("beforeunload", preventRefreshButton);
 
     gameSocket.emit("game_force_quit", { userIdx: authState.id });
     gameSocket.on("game_force_quit", (msg: string) => {
@@ -64,8 +64,8 @@ const GamePlaying = () => {
     });
     return () => {
       removeEventListener("popstate", preventGoBack);
-      removeEventListener("keydown", preventRefresh);
-      removeEventListener("beforeunload", preventRefreshButton);
+      // removeEventListener("keydown", preventRefresh);
+      // removeEventListener("beforeunload", preventRefreshButton);
     };
   }, []);
 

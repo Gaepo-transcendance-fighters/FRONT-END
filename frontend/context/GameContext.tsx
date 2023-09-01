@@ -57,7 +57,7 @@ type GameAction =
 const initialState: GameContextData = {
   gameMode: 1,
   ballSpeedOption: 3,
-  mapType: MapOption.map3,
+  mapType: MapOption.map1,
   latency: 0,
   aPlayer: { nick: "", id: 0 },
   aScore: 0,

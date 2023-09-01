@@ -1,5 +1,6 @@
 import { Card } from "@mui/material";
 import { useGame } from "@/context/GameContext";
+import zIndex from "@mui/material/styles/zIndex";
 
 const GameBoard = () => {
   const { gameState } = useGame();
@@ -15,6 +16,7 @@ const GameBoard = () => {
         }.png")`,
         padding: 0,
         backgroundRepeat: "repeat",
+        backgroundSize: "100px 100px",
         position: "relative",
         minWidth: "1000px",
         minHeight: "500px",
@@ -22,7 +24,9 @@ const GameBoard = () => {
         display: "flex",
         justifyContent: "space-around",
         alignItems: "center",
+        boxShadow: "inset 0px 15px 20px 0px rgba(0, 0, 0, 0.4)",
       }}
+      sx={{ zIndex: 2 }}
     >
       <div
         style={{
