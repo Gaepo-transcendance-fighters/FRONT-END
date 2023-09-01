@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import useModal from "@/hooks/useModal";
 import Modals from "@/components/public/Modals";
@@ -194,9 +194,23 @@ const Inwaiting = () => {
               backgroundColor: main.main3,
             }}
           >
-            <Typography sx={{ fontSize: "3rem" }}>
-              상대방을 기다리고있습니다...
-            </Typography>
+            <Stack
+              style={{
+                justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                src="/gif/gogoo1.gif"
+                alt="pingpong waiting"
+                width={200}
+                height={180}
+              />
+              <Typography sx={{ fontSize: "3rem" }}>
+                Waiting for queue
+              </Typography>
+            </Stack>
             <Modals
               isShowing={isShowing}
               hide={toggle}
@@ -241,59 +255,28 @@ const Inwaiting = () => {
                     </CardContent>
                   </CardContent>
                 </Card>
-                {gameState.gameMode == GameType.RANK ? (
-                  <>
-                    {" "}
-                    <Card
-                      style={{
-                        width: "100%",
-                        height: "90%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <CardContent
-                        style={{
-                          width: "100%",
-                          height: "40%",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        잠시후 게임화면으로 이동합니다.
-                      </CardContent>
-                    </Card>
-                  </>
-                ) : (
-                  <>
-                    {" "}
-                    <Card
-                      style={{
-                        width: "100%",
-                        height: "90%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <CardContent
-                        style={{
-                          width: "100%",
-                          height: "40%",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        잠시후 옵션 선택으로 이동합니다.
-                      </CardContent>
-                    </Card>
-                  </>
-                )}
+                <Card
+                  style={{
+                    width: "100%",
+                    height: "90%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <CardContent
+                    style={{
+                      width: "100%",
+                      height: "40%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    잠시후 게임화면으로 이동합니다.
+                  </CardContent>
+                </Card>
               </Box>
             </Modal>
           </Card>
@@ -322,7 +305,7 @@ const Inwaiting = () => {
             }}
             onClick={BackToMain}
           >
-            취소하고 메인으로가기
+            Back to Main
           </Button>
         </CardContent>
       </Stack>

@@ -13,11 +13,12 @@ const GameBoard = () => {
             ? "map2"
             : "map3"
         }.png")`,
+        padding: 0,
         backgroundRepeat: "repeat",
         position: "relative",
         minWidth: "1000px",
         minHeight: "500px",
-        border: "2px solid black",
+        border: "1px solid black",
         display: "flex",
         justifyContent: "space-around",
         alignItems: "center",
@@ -27,7 +28,7 @@ const GameBoard = () => {
         style={{
           borderLeftWidth: "3px",
           borderLeftStyle: "dashed",
-          borderLeftColor: "grey",
+          borderLeftColor: "black",
           height: "500px",
         }}
       ></div>

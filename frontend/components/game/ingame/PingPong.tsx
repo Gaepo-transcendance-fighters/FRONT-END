@@ -441,7 +441,22 @@ const PingPong = () => {
 
   return (
     <>
-      <GameBoard />
+      <div
+        style={{
+          padding: "49px",
+          backgroundImage: `url("/map/wall/${
+            gameState.mapType === 0
+              ? "map1"
+              : gameState.mapType === 1
+              ? "map2"
+              : "map3"
+          }.png")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "50.2px 50.24px",
+        }}
+      >
+        <GameBoard />
+      </div>
       <GamePaddle x={-470} y={gameProps.paddle1} />
       <GamePaddle x={470} y={gameProps.paddle2} />
       <GameBall x={gameProps.ballX} y={gameProps.BallY} />

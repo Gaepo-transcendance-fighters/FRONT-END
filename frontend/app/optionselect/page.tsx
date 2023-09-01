@@ -162,6 +162,7 @@ const OptionSelect = () => {
               justifyContent: "center",
               fontSize: "2rem",
               border: "2px solid black",
+              backgroundColor: main.main1,
             }}
           >
             <Typography sx={{ fontSize: "2rem" }}>Select Option</Typography>
@@ -174,7 +175,7 @@ const OptionSelect = () => {
               height: "70vh",
               border: "2px solid black",
               alignItems: "center",
-              backgroundColor: main.main3,
+              backgroundColor: main.main1,
             }}
             id={"middle_big"}
           >
@@ -183,7 +184,7 @@ const OptionSelect = () => {
             <Stack
               sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
               style={{
-                backgroundColor: main.main3,
+                backgroundColor: main.main1,
                 padding: "10px 0px 0px 0px",
               }}
               id={"speedoption"}
@@ -197,6 +198,7 @@ const OptionSelect = () => {
                   display: "flex",
                   justifyContent: "space-around",
                   alignItems: "center",
+                  backgroundColor: main.main3,
                 }}
               >
                 <Typography sx={{ fontSize: "1.5rem" }}>Speed</Typography>
@@ -278,7 +280,7 @@ const OptionSelect = () => {
             <Stack
               sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
               style={{
-                backgroundColor: main.main3,
+                backgroundColor: main.main1,
                 padding: "10px 0px 0px 0px",
               }}
               id={"mapoption"}
@@ -292,6 +294,7 @@ const OptionSelect = () => {
                   display: "flex",
                   justifyContent: "space-around",
                   alignItems: "center",
+                  backgroundColor: main.main3,
                 }}
               >
                 <Typography sx={{ fontSize: "1.5rem" }}>Map</Typography>
@@ -370,10 +373,27 @@ const OptionSelect = () => {
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
-                backgroundColor: main.main3,
+                backgroundColor: main.main1,
               }}
             >
-              {countdown == 0 ? (
+              {countdown === 0 ? (
+                <>
+                  <Card
+                    style={{
+                      width: "100%",
+                      height: "90%",
+                      border: "5px solid black",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "2rem",
+                      backgroundColor: main.main0,
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "2rem" }}>Let's Go!</Typography>
+                  </Card>
+                </>
+              ) : (
                 <>
                   <Card
                     style={{
@@ -385,26 +405,6 @@ const OptionSelect = () => {
                       justifyContent: "center",
                       fontSize: "2rem",
                       backgroundColor: "#F8C800",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "2rem" }}>
-                      {" "}
-                      GET READY!{" "}
-                    </Typography>
-                  </Card>
-                </>
-              ) : (
-                <>
-                  <Card
-                    style={{
-                      width: "100%",
-                      height: "90%",
-                      border: "5px solid #265ECF",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "2rem",
-                      backgroundColor: main.main0,
                     }}
                   >
                     <Typography sx={{ fontSize: "2rem" }}>

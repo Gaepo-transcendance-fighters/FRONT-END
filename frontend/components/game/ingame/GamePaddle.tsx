@@ -1,6 +1,9 @@
 import { Box } from "@mui/material";
+import Image from "next/image";
+import { useGame } from "@/context/GameContext";
 
 const GamePaddle = ({ x, y }: { x: number; y: number }) => {
+  const { gameState } = useGame();
   return (
     <Box
       component={"div"}
@@ -12,7 +15,23 @@ const GamePaddle = ({ x, y }: { x: number; y: number }) => {
         transform: `translate(${x}px, ${y}px)`,
         transition: "transform 150ms linear",
       }}
-    ></Box>
+    >
+      <Image
+        src={
+          gameState.mapType === 0
+            ? "/map/paddle/map1.png"
+            : gameState.mapType === 1
+            ? "/map/paddle/map2.png"
+            : "/map/paddle/map3.png"
+        }
+        alt="paddle"
+        width={20}
+        height={100}
+        style={{
+          filter: gameState.mapType === 1 ? "brightness(0.6)" : "",
+        }}
+      />
+    </Box>
   );
 };
 

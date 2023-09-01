@@ -1,10 +1,9 @@
 "use client";
 
 import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
-
 import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PingPong from "@/components/game/ingame/PingPong";
 import { useGame } from "@/context/GameContext";
 import useModal from "@/hooks/useModal";
@@ -56,8 +55,8 @@ const GamePlaying = () => {
 
     history.pushState(null, "", location.href);
     addEventListener("popstate", preventGoBack);
-    addEventListener("keydown", preventRefresh);
-    addEventListener("beforeunload", preventRefreshButton);
+    // addEventListener("keydown", preventRefresh);
+    // addEventListener("beforeunload", preventRefreshButton);
 
     gameSocket.emit("game_force_quit", { userIdx: authState.id });
     gameSocket.on("game_force_quit", (msg: string) => {
@@ -65,8 +64,8 @@ const GamePlaying = () => {
     });
     return () => {
       removeEventListener("popstate", preventGoBack);
-      removeEventListener("keydown", preventRefresh);
-      removeEventListener("beforeunload", preventRefreshButton);
+      // removeEventListener("keydown", preventRefresh);
+      // removeEventListener("beforeunload", preventRefreshButton);
     };
   }, []);
 
@@ -85,7 +84,10 @@ const GamePlaying = () => {
           }}
         >
           <CardContent
-            style={{
+            sx={{
+              ".MuiCardContent-root": {
+                p: 0,
+              },
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -108,16 +110,21 @@ const GamePlaying = () => {
             </Card>
           </CardContent>
 
-          <CardContent sx={{ mx: "auto" }}>
+          <CardContent
+            sx={{
+              p: 0,
+              mx: "auto",
+            }}
+          >
             <Card
               style={{
                 width: "max-content",
                 height: "max-content",
-                border: "2px solid black",
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
-                backgroundColor: main.main3,
+                boxShadow: "none",
+                backgroundColor: "transparent",
               }}
             >
               <Card
@@ -132,9 +139,8 @@ const GamePlaying = () => {
                   alignItems: "center",
                 }}
               >
-                Player 1
+                <Typography>Player 1</Typography>
               </Card>
-
               <PingPong />
 
               <Card
@@ -149,7 +155,7 @@ const GamePlaying = () => {
                   alignItems: "center",
                 }}
               >
-                Player 2
+                <Typography>Player 2</Typography>
               </Card>
             </Card>
           </CardContent>
@@ -158,7 +164,6 @@ const GamePlaying = () => {
             style={{
               width: "100%",
               height: "30vh",
-
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -172,7 +177,8 @@ const GamePlaying = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 border: "1px solid black",
-                backgroundColor: "#05BEFF",
+                backgroundColor: main.main3,
+                color: "white",
               }}
             >
               <Typography>
