@@ -82,7 +82,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
         targetNickname: nickname,
         targetIdx: idx,
       },
-      (ret : ReturnMsgDto) => {
+      (ret: ReturnMsgDto) => {
         console.log("유저프로필에 데이터 보냄 : ", ret);
       }
     );
@@ -132,9 +132,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   const sendDM = (data: IUserProp) => {
     const existingRoom = roomState.dmRooms.find(
       (roomState) => roomState.targetNickname === nickname
-      // (roomState) => roomState.targetNickname === data.friendNickname
     );
-
     if (existingRoom) {
       socket.emit(
         "chat_get_DM",
@@ -241,7 +239,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   }, [friendData]);
 
   // useEffect(() => {
-  //   const find = friendState.blockList.find((block) => 
+  //   const find = friendState.blockList.find((block) =>
   //     block.targetIdx === idx
   //   );
   // }, [openModal]);
@@ -321,8 +319,8 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                     <MenuItem onClick={blockFriend}>
-                      {friendState.blockList.find((block) => 
-                        block.targetIdx === idx
+                      {friendState.blockList.find(
+                        (block) => block.targetIdx === idx
                       ) === undefined
                         ? "Block"
                         : "UnBlock"}

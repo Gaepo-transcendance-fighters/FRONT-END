@@ -24,7 +24,7 @@ const font = createTheme({
 interface UserEditprofileDto {
   userIdx: number;
   userNickname: string;
-  imgData: any;
+  imgUrl: string;
 }
 
 const modalStyle = {
@@ -55,7 +55,7 @@ const myProfileStyle = {
 
 interface IUserData {
   nickname: string;
-  imgData: string;
+  imgUrl: string;
   win: number;
   lose: number;
   rank: number;
@@ -85,7 +85,7 @@ export default function PageRedir() {
   const { authState } = useAuth();
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
-    imgData: "",
+    imgUrl: "",
     win: 0,
     lose: 0,
     rank: 0,
@@ -142,13 +142,12 @@ export default function PageRedir() {
     const formData = new FormData();
     formData.append("userIdx", Number(localStorage.getItem("idx")).toString());
     formData.append("userNickname", "");
-    formData.append("imgData", dataUrl);
+    formData.append("imgUrl", dataUrl);
     console.log("formData", formData);
 
     try {
       await axios({
         method: "POST",
-        // method: "PUT",
         url: `http://localhost:4000/users/profile`,
         // url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
         headers: {
@@ -197,7 +196,6 @@ export default function PageRedir() {
         url: `http://localhost:4000/users/profile`,
         // method: "PATCH",
         // url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
-
         headers: {
           "Content-Type": "Application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -205,7 +203,7 @@ export default function PageRedir() {
         data: JSON.stringify({
           userIdx: Number(localStorage.getItem("idx")),
           userNickname: inputName,
-          imgData: localStorage.getItem("imgUri"),
+          imgUrl: localStorage.getItem("imgUrl"),
         }),
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
@@ -323,7 +321,7 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        src={userData?.imgData}
+                        src={userData?.imgUrl}
                         style={{
                           width: "100%",
                           height: "75%",
