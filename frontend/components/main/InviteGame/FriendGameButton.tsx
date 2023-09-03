@@ -21,7 +21,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
       targetUserIdx: prop.friendIdx,
     });
     openModal({
-      children: <WaitAccept />,
+      children: <WaitAccept nickname={prop.friendNickname}/>,
     });
   };
 

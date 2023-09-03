@@ -35,12 +35,13 @@ export interface IFriendData {
   targetNickname: string;
   imgUri: string;
   rank: number;
-  Win: number;
-  Lose: number;
+  win: number;
+  lose: number;
   isOnline: boolean;
 }
 
 export interface FriendReqData {
+  userIdx: number;
   targetNickname: string;
   targetIdx: number;
 }
@@ -73,3 +74,29 @@ export interface ICor {
 export interface IPaddle extends ICor {}
 
 export interface IBall extends ICor {}
+
+export const friendProfileModalStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  height: 700,
+  bgcolor: "#65d9f9",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
+export interface IChatBlock {
+  userNickname: string;
+  userIdx: number;
+}
+
+export interface IChat {
+  channelIdx: number | undefined;
+  senderIdx: number | undefined;
+  sender?: string;
+  msg: string;
+  msgDate: string;
+}

@@ -22,21 +22,8 @@ import RoomEnter from "@/external_functions/RoomEnter";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
 import MemberGameButton from "../InviteGame/MemberGameButton";
-import { FriendReqData } from "@/type/type";
+import { FriendReqData, friendProfileModalStyle } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
-
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  height: 500,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const loginOn = (
   <Image src="/status/logon.png" alt="online" width={10} height={10} />
@@ -84,33 +71,37 @@ export default function MemberModal({
 
   const addFriend = async () => {
     const friendReqData: FriendReqData = {
+      userIdx: userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
     await axios({
       method: "post",
-      url: "http://paulryu9309.ddns.net:4000/users/follow",
-      data: JSON.stringify(friendReqData),
+      url: "http://localhost:4000/users/follow",
+      // url: "http://paulryu9309.ddns.net:4000/users/follow",
+      data: friendReqData,
     })
       .then((res) => {
-        console.log(res.data);
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
       })
       .catch((err) => {
         console.log(err);
       });
+    handleCloseMenu();
     handleCloseModal();
   };
 
   const deleteFriend = async () => {
     const friendReqData: FriendReqData = {
+      userIdx: userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
 
     await axios({
       method: "delete",
-      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      url: "http://localhost:4000/users/unfollow",
+      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
       data: JSON.stringify(friendReqData),
     })
       .then((res) => {
@@ -120,16 +111,28 @@ export default function MemberModal({
       .catch((err) => {
         console.log(err);
       });
+    handleCloseMenu();
     handleCloseModal();
   };
 
   useEffect(() => {
-    if (
-      friendState.friendList.find(
-        (friend) => friend.friendNickname === person.nickname
-      )
+    const ChatBlock = () => {
+      handleCloseMenu();
+      handleCloseModal();
+    };
+    socket.on("chat_block", ChatBlock);
+
+    return () => {
+      socket.off("chat_block", ChatBlock);
+    };
+  }, []);
+
+  useEffect(() => {
+    friendState.friendList.find(
+      (friend) => friend.friendNickname === person.nickname
     )
-      setIsFriend(true);
+      ? setIsFriend(true)
+      : setIsFriend(false);
   }, [isFriend]);
 
   useEffect(() => {
@@ -195,9 +198,22 @@ export default function MemberModal({
     );
   };
 
+  const blockFriend = () => {
+    socket.emit(
+      "chat_block",
+      {
+        targetNickname: person.nickname,
+        targetIdx: person.userIdx,
+      },
+      (ret: ReturnMsgDto) => {
+        console.log("blockFriend ret : ", ret);
+      }
+    );
+  };
+
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
-      <Box sx={modalStyle} borderRadius={"10px"}>
+      <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
         <Card
           sx={{
             backgroundColor: "#48a0ed",
@@ -267,7 +283,13 @@ export default function MemberModal({
                   {isFriend && (
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                   )}
-                  <MenuItem>Block</MenuItem>
+                  <MenuItem onClick={blockFriend}>
+                    {friendState.blockList.find(
+                      (block) => block.targetIdx === person.userIdx
+                    ) === undefined
+                      ? "Block"
+                      : "UnBlock"}
+                  </MenuItem>
                 </Stack>
               </Menu>
             </Stack>

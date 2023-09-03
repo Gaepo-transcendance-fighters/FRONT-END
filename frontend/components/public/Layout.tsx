@@ -25,6 +25,7 @@ const Layout = () => {
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
+      console.log("data : ", data);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });

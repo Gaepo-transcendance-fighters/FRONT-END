@@ -18,7 +18,7 @@ const modalStyle = {
   p: 4,
 };
 
-const WaitAccept = ({ prop }: { prop: IMember }) => {
+const WaitAccept = ({ nickname }: { nickname: string | undefined}) => {
   const { closeModal } = useModalContext();
   return (
     <>
@@ -65,7 +65,7 @@ const WaitAccept = ({ prop }: { prop: IMember }) => {
             alignItems: "center",
           }}
         >
-          {prop.nickname} 님께 친선전 경기를 요청하였습니다.
+          {nickname} 님께 친선전 경기를 요청하였습니다.
           {/* 추후 optionSelect로 라우팅 시키는거 필요. */}
         </CardContent>
         <CardContent
