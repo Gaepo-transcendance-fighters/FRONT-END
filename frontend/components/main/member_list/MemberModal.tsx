@@ -71,14 +71,14 @@ export default function MemberModal({
 
   const addFriend = async () => {
     const friendReqData: FriendReqData = {
-      userIdx: userState.userIdx,
+      myIdx: userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
     await axios({
       method: "post",
-      url: "http://localhost:4000/users/follow",
-      // url: "http://paulryu9309.ddns.net:4000/users/follow",
+      // url: "http://localhost:4000/users/follow",
+      url: "http://paulryu9309.ddns.net:4000/users/follow",
       data: friendReqData,
     })
       .then((res) => {
@@ -93,16 +93,16 @@ export default function MemberModal({
 
   const deleteFriend = async () => {
     const friendReqData: FriendReqData = {
-      userIdx: userState.userIdx,
+      myIdx: userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
 
     await axios({
       method: "delete",
-      url: "http://localhost:4000/users/unfollow",
-      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
-      data: JSON.stringify(friendReqData),
+      // url: "http://localhost:4000/users/unfollow",
+      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      data: friendReqData,
     })
       .then((res) => {
         console.log(res.data);
@@ -128,6 +128,7 @@ export default function MemberModal({
   }, []);
 
   useEffect(() => {
+    console.log("friend? ", isFriend);
     friendState.friendList.find(
       (friend) => friend.friendNickname === person.nickname
     )
@@ -171,32 +172,18 @@ export default function MemberModal({
       );
     } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
-      socket.emit(
-        "create_DM",
-        {
-          targetNickname: person.nickname,
-          targetIdx: person.userIdx,
-        },
-        (ret: ReturnMsgDto) => {
-          if (ret.code === 200) {
-            console.log(ret.msg);
-          } else {
-            console.log(ret.msg);
-            return;
-          }
-        }
-      );
-    }
     socket.emit(
       "create_dm",
       { targetNickname: person.nickname, targetIdx: person.userIdx },
-      (res: ReturnMsgDto) => {
-        if (res.code === 200) {
-        } else if (res.code !== 200) {
+      (ret: ReturnMsgDto) => {
+        if (ret.code === 200) {
+            console.log(ret.msg);
+          } else if (ret.code !== 200) {
+            console.log(ret.msg);
         }
       }
     );
-  };
+  }}
 
   const blockFriend = () => {
     socket.emit(
