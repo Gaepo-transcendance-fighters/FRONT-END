@@ -27,13 +27,14 @@ const Auth = () => {
   const { authDispatch } = useAuth();
 
   interface Data {
-    userIdx: number;
-    intra: string;
-    imgUri: string;
-    token: string;
-    email: string;
-    check2Auth: boolean;
-  }
+      userIdx: number;
+      nickname: string;
+      intra: string;
+      imgUri: string;
+      token: string;
+      email: string;
+      check2Auth: boolean;
+  };
 
   const postCode = async (code: string) => {
     // dev original
@@ -60,6 +61,7 @@ const Auth = () => {
           localStorage.setItem("email", data.email);
           localStorage.setItem("check2Auth", data.check2Auth.toString());
           authDispatch({ type: "SET_ID", value: data.userIdx });
+          authDispatch({ type: "SET_NICKNAME", value: data.nickname });
 
           if (data.check2Auth === true) return router.push("./secondauth");
           else return router.push(`/`);

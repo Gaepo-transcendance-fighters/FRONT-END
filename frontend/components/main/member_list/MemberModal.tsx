@@ -90,8 +90,11 @@ export default function MemberModal({
     };
     await axios({
       method: "post",
-      url: "http://paulryu9309.ddns.net:4000/users/follow",
-      data: friendReqData,
+      url: "http://localhost:4000/users/follow",
+      data: JSON.stringify(friendReqData),
+      // url: "http://paulryu9309.ddns.net:4000/users/follow",
+      // data: friendReqData,
+
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
@@ -112,7 +115,7 @@ export default function MemberModal({
 
     await axios({
       method: "delete",
-      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      url: "http://localhost:4000/users/unfollow",
       data: JSON.stringify(friendReqData),
     })
       .then((res) => {

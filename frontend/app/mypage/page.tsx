@@ -24,7 +24,7 @@ const font = createTheme({
 interface UserEditprofileDto {
   userIdx: number;
   userNickname: string;
-  imgUrl: any;
+  imgData: string;
 }
 
 const modalStyle = {
@@ -55,7 +55,7 @@ const myProfileStyle = {
 
 interface IUserData {
   nickname: string;
-  imgUrl: string;
+  imgData: string;
   win: number;
   lose: number;
   rank: number;
@@ -76,14 +76,15 @@ import axios from "axios";
 
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
 import { useAuth } from "@/context/AuthContext";
+import {socket} from "@/app/page";
 
 export default function PageRedir() {
   const router = useRouter();
-  const { userState } = useUser();
+  const { userState, userDispatch } = useUser();
   const { authState } = useAuth();
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
-    imgUrl: "",
+    imgData: "",
     win: 0,
     lose: 0,
     rank: 0,
@@ -99,19 +100,27 @@ export default function PageRedir() {
 
   const [reload, setReload] = useState<boolean>(false);
 
+  const fetch = async () => {
+    await axios
+    .get("http://localhost:4000/users/profile", { 
+      headers: {
+        "Content-type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
+      },
+    })
+    .then((response) => {
+      setUserData(response.data);
+      console.log(response.data);
+    });
+  }
+
   useEffect(() => {
     // const getData = () => {
     const verified = localStorage.getItem("check2Auth");
     if (!verified) return;
     setVerified(verified);
-    const headers = {
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
-    };
-    axios
-      .get("http://paulryu9309.ddns.net:4000/users/profile", { headers })
-      .then((response) => {
-        setUserData(response.data);
-      });
+    fetch();
+    
     // };
     console.log("API REQUEST");
   }, [reload, verified]);
@@ -134,17 +143,15 @@ export default function PageRedir() {
     const dataUrl: string = await readFileAsDataURL(file);
 
     const formData = new FormData();
-    formData.append("userIdx", Number(localStorage.getItem("idx")).toString());
+    formData.append("userIdx", localStorage.getItem("idx") || "");
     formData.append("userNickname", "");
-    formData.append("imgUrl", dataUrl);
+    formData.append("imgData", dataUrl);
     console.log("formData", formData);
 
     try {
       await axios({
-        // method: "POST",
-        // url: `http://localhost:4000/users/profile`,
-        method: "PUT",
-        url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
+        method: "POST",
+        url: `http://localhost:4000/users/profile`,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -185,12 +192,10 @@ export default function PageRedir() {
     }
 
     try {
-      let idx: number = Number(localStorage.getItem("idx"));
+      let idx: number = Number(localStorage.getItem("id"));
       const response = await axios({
-        // method: "POST",
-        // url: `http://localhost:4000/users/profile`,
-        method: "PATCH",
-        url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
+        method: "POST",
+        url: `http://localhost:4000/users/profile`,
 
         headers: {
           "Content-Type": "Application/json",
@@ -199,12 +204,14 @@ export default function PageRedir() {
         data: JSON.stringify({
           userIdx: Number(localStorage.getItem("idx")),
           userNickname: inputName,
-          imgUrl: localStorage.getItem("imgUri"),
+          imgData: localStorage.getItem("imgUri"),
         }),
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
         console.log("Success");
+        userDispatch({ type: "CHANGE_NICK_NAME", value: response.data.result.nickname });
+        socket.emit('set_user_status', {userStatus:{ nickname: response.data.nickname}});
         handleCloseModal();
       }
     } catch (error) {
@@ -316,7 +323,7 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        src={userData?.imgUrl}
+                        src={userData?.imgData}
                         style={{
                           width: "100%",
                           height: "75%",
