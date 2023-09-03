@@ -92,3 +92,11 @@ export interface IChatBlock {
   userNickname: string;
   userIdx: number;
 }
+
+export interface IChat {
+  channelIdx: number | undefined;
+  senderIdx: number | undefined;
+  sender?: string;
+  msg: string;
+  msgDate: string;
+}
