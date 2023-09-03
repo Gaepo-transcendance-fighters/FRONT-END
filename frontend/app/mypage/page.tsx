@@ -111,18 +111,15 @@ export default function PageRedir() {
     })
     .then((response) => {
       setUserData(response.data);
-      console.log(response.data);
+      console.log("response.data : ", response.data);
     });
   }
 
   useEffect(() => {
-    // const getData = () => {
     const verified = localStorage.getItem("check2Auth");
     if (!verified) return;
     setVerified(verified);
     fetch();
-    
-    // };
     console.log("API REQUEST");
   }, [reload, verified]);
 
@@ -136,6 +133,8 @@ export default function PageRedir() {
     const files = event.target.files;
     if (files) {
       uploadImage(files[0]);
+    setReload((curr) => !curr);
+
     }
   };
 
@@ -143,30 +142,47 @@ export default function PageRedir() {
     // readAsDataURL을 사용해 이미지를 base64로 변환
     const dataUrl: string = await readFileAsDataURL(file);
 
+    if (dataUrl === "") return 
+
+    console.log("{}" ,{
+      userIdx : localStorage.getItem("idx") || "",
+      userNickname : "",
+      imgData : dataUrl,
+    });
     const formData = new FormData();
     formData.append("userIdx", localStorage.getItem("idx") || "");
     formData.append("userNickname", "");
-    formData.append("imgUrl", dataUrl);
-    console.log("formData", formData);
+    formData.append("imgData", dataUrl);
 
-    try {
-      await axios({
-        method: "POST",
-        // url: `http://localhost:4000/users/profile`,
-        url: `http://paulryu9309.ddns.net:4000/users/profile`,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + localStorage.getItem("authorization"),
-        },
-        data: formData,
-      });
-    } catch (error) {
+    await axios({
+      method: "post",
+      // url: `http://localhost:4000/users/profile`,
+      url: `http://paulryu9309.ddns.net:4000/users/profile`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
+      },
+      data: {
+        userIdx : Number(localStorage.getItem("idx")) || "",
+        userNickname : "",
+        imgData : dataUrl,
+      },
+      // data: formData,
+    }).then(res => {
+      console.log("res : ", res);
+    }).catch(error => {
       console.error("업로드 실패", error);
-    }
+    })
     setReload((curr) => !curr);
   };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
+    console.log("file", file.size)
+    if (file.size > 2000000) {
+      alert("더 작은 사이즈의 파일을 선택해주세요.")
+      return new Promise(() => "")
+    }
+    
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -324,7 +340,8 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        src={userData?.imgUrl}
+                        src={`${userData?.imgUrl}?${Date.now()}`}
+                        // src={userData?.imgUrl}
                         style={{
                           width: "100%",
                           height: "75%",
