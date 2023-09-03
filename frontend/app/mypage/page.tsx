@@ -55,7 +55,7 @@ const myProfileStyle = {
 
 interface IUserData {
   nickname: string;
-  imgUrl: string;
+  imgData: string;
   win: number;
   lose: number;
   rank: number;
@@ -76,8 +76,7 @@ import axios from "axios";
 
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
 import { useAuth } from "@/context/AuthContext";
-
-import { socket } from "@/app/page";
+import {socket} from "@/app/page";
 
 export default function PageRedir() {
   const router = useRouter();
@@ -85,7 +84,7 @@ export default function PageRedir() {
   const { authState } = useAuth();
   const [userData, setUserData] = useState<IUserData>({
     nickname: "",
-    imgUrl: "",
+    imgData: "",
     win: 0,
     lose: 0,
     rank: 0,
@@ -103,24 +102,27 @@ export default function PageRedir() {
 
   const fetch = async () => {
     await axios
-      // .get("http://localhost:4000/users/profile", {
-      .get("http://paulryu9309.ddns.net:4000/users/profile", {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("authorization"),
-        },
-      })
-      .then((response) => {
-        setUserData(response.data);
-        console.log(response.data);
-      });
-  };
+    .get("http://localhost:4000/users/profile", { 
+      headers: {
+        "Content-type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
+      },
+    })
+    .then((response) => {
+      setUserData(response.data);
+      console.log(response.data);
+    });
+  }
 
   useEffect(() => {
+    // const getData = () => {
     const verified = localStorage.getItem("check2Auth");
-    if (!verified || verified === "") return;
+    if (!verified) return;
     setVerified(verified);
     fetch();
+    
+    // };
+    console.log("API REQUEST");
   }, [reload, verified]);
 
   const OpenFileInput = () => {
@@ -141,9 +143,9 @@ export default function PageRedir() {
     const dataUrl: string = await readFileAsDataURL(file);
 
     const formData = new FormData();
-    formData.append("userIdx", Number(localStorage.getItem("idx")).toString());
+    formData.append("userIdx", localStorage.getItem("idx") || "");
     formData.append("userNickname", "");
-    formData.append("imgUrl", dataUrl);
+    formData.append("imgData", dataUrl);
     console.log("formData", formData);
 
     try {
@@ -191,7 +193,7 @@ export default function PageRedir() {
     }
 
     try {
-      let idx: number = Number(localStorage.getItem("idx"));
+      let idx: number = Number(localStorage.getItem("id"));
       const response = await axios({
         method: "POST",
         // url: `http://localhost:4000/users/profile`,
@@ -322,7 +324,7 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        src={userData?.imgUrl}
+                        src={userData?.imgData}
                         style={{
                           width: "100%",
                           height: "75%",

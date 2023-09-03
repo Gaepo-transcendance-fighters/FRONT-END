@@ -74,21 +74,6 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
       ? "./rank/exp_medal_silver.png"
       : "./rank/exp_medal_gold.png";
 
-  const handleOpenNdataModal = () => {
-    socket.emit(
-      "user_profile",
-      {
-        userIdx: userState.userIdx,
-        targetNickname: nickname,
-        targetIdx: idx,
-      },
-      (ret: ReturnMsgDto) => {
-        console.log("유저프로필에 데이터 보냄 : ", ret);
-      }
-    );
-    setOpenModal(true);
-  };
-
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -101,18 +86,37 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
     setAnchorEl(null);
   };
 
-  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
-  useEffect(() => {
-    // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
-    const UserProfile = (data: IFriendData) => {
-      setFriendData(data);
-    };
-    socket.on("user_profile", UserProfile);
+  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다. // 이 2 개는 맨 아래랑 같은 동작같은데 ..? ws
+  // useEffect(() => {
+  //   const UserProfile = (data: IFriendData) => {
+  //     setFriendData(data);
+  //   };
+  //   // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
+  //   socket.on("user_profile", UserProfile);
+  // });
 
-    return () => {
-      socket.off("user_profile");
-    };
-  }, []);
+  // useEffect(() => {
+  //   const ReqData = {
+  //     //값 변경 필요
+  //     userIdx: userState.userIdx,
+  //     targetNickname: prop.friendNickname,
+  //     targetIdx: prop.friendIdx,
+  //   };
+  //   socket.emit("user_profile", ReqData);
+  // }, []);
+
+  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
+  // useEffect(() => {
+  //   // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
+  //   const UserProfile = (data: IFriendData) => {
+  //     setFriendData(data);
+  //   };
+  //   socket.on("user_profile", UserProfile);
+
+  //   return () => {
+  //     socket.off("user_profile");
+  //   };
+  // }, []);
 
   useEffect(() => {
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
@@ -186,6 +190,21 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
       });
     handleCloseMenu();
     handleCloseModal();
+  };
+  
+  const handleOpenNdataModal = () => {
+    socket.emit(
+      "user_profile",
+      {
+        userIdx: userState.userIdx,
+        targetNickname: prop.friendNickname,
+        targetIdx: prop.friendIdx,
+      },
+      () => {
+        console.log("유저프로필에 데이터 보냄");
+      }
+    );
+    setOpenModal(true);
   };
 
   useEffect(() => {
