@@ -132,10 +132,10 @@ const FriendList = () => {
             borderRadius: "10px",
           }}
         >
-          {showlist &&
+          {showlist.length ?
             showlist.map((user, idx) => (
               <Friend key={idx} prop={user as IUserProp} />
-            ))}
+            )) : ""}
         </Card>
       </Stack>
     </Card>

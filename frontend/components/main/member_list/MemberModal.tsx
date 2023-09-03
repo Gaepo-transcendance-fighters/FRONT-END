@@ -47,7 +47,6 @@ export default function MemberModal({
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const { friendState, friendDispatch } = useFriend();
-  const [isFriend, setIsFriend] = useState(false);
 
   useEffect(() => {
     setCurFriend({
@@ -83,6 +82,7 @@ export default function MemberModal({
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+        friendDispatch({type : "SET_IS_FRIEND", value : true});
       })
       .catch((err) => {
         console.log(err);
@@ -105,8 +105,8 @@ export default function MemberModal({
       data: friendReqData,
     })
       .then((res) => {
-        console.log(res.data);
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+        friendDispatch({type : "SET_IS_FRIEND", value : false});
       })
       .catch((err) => {
         console.log(err);
@@ -119,6 +119,7 @@ export default function MemberModal({
     const ChatBlock = () => {
       handleCloseMenu();
       handleCloseModal();
+      friendDispatch({type : "SET_IS_FRIEND", value : false});
     };
     socket.on("chat_block", ChatBlock);
 
@@ -128,13 +129,16 @@ export default function MemberModal({
   }, []);
 
   useEffect(() => {
-    console.log("friend? ", isFriend);
-    friendState.friendList.find(
-      (friend) => friend.friendNickname === person.nickname
-    )
-      ? setIsFriend(true)
-      : setIsFriend(false);
-  }, [isFriend]);
+    console.log("friendState.friendList : ", friendState.friendList);
+        if (friendState.friendList.length) {
+      friendState.friendList.find(
+        (friend) => friend.friendNickname === person.nickname
+        )
+        ? 
+        friendDispatch({type : "SET_IS_FRIEND", value : true})
+        : 
+        friendDispatch({type : "SET_IS_FRIEND", value : false})}
+  }, [friendState.isFriend, friendState.friendList]);
 
   useEffect(() => {
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
@@ -266,8 +270,8 @@ export default function MemberModal({
                 MenuListProps={{ sx: { py: 0 } }}
               >
                 <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                  {!isFriend && <MenuItem onClick={addFriend}>Add</MenuItem>}
-                  {isFriend && (
+                  {!friendState.isFriend && <MenuItem onClick={addFriend}>Add</MenuItem>}
+                  {friendState.isFriend && (
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                   )}
                   <MenuItem onClick={blockFriend}>
