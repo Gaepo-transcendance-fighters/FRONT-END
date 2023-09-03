@@ -58,8 +58,6 @@ interface IUserData {
   imgUrl: string;
   win: number;
   lose: number;
-  win: number;
-  lose: number;
   rank: number;
   email: string;
 }
@@ -105,7 +103,8 @@ export default function PageRedir() {
 
   const fetch = async () => {
     await axios
-      .get("http://localhost:4000/users/profile", {
+      // .get("http://localhost:4000/users/profile", {
+      .get("http://paulryu9309.ddns.net:4000/users/profile", {
         headers: {
           "Content-type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -150,8 +149,8 @@ export default function PageRedir() {
     try {
       await axios({
         method: "POST",
-        url: `http://localhost:4000/users/profile`,
-        // url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
+        // url: `http://localhost:4000/users/profile`,
+        url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -195,9 +194,9 @@ export default function PageRedir() {
       let idx: number = Number(localStorage.getItem("idx"));
       const response = await axios({
         method: "POST",
-        url: `http://localhost:4000/users/profile`,
+        // url: `http://localhost:4000/users/profile`,
         // method: "PATCH",
-        // url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
+        url: `http://paulryu9309.ddns.net:4000/users/profile/${userData?.nickname}`,
         headers: {
           "Content-Type": "Application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),

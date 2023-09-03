@@ -152,17 +152,13 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
     } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
       socket.emit(
-        "create_DM",
-        {
-          targetNickname: nickname,
-          targetIdx: idx,
-        },
+        "create_dm",
+        { targetNickname: nickname, targetIdx: idx },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
             console.log(ret.msg);
-          } else {
+          } else if (ret.code !== 200) {
             console.log(ret.msg);
-            return;
           }
         }
       );
@@ -171,15 +167,15 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
 
   const deleteFriend = async () => {
     const friendReqData: FriendReqData = {
-      userIdx: userState.userIdx,
+      myIdx: userState.userIdx,
       targetNickname: nickname!,
       targetIdx: idx!,
     };
 
     await axios({
       method: "delete",
-      url: "http://localhost:4000/users/unfollow",
-      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      // url: "http://localhost:4000/users/unfollow",
+      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
       data: friendReqData,
     })
       .then((res) => {
@@ -223,7 +219,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
         targetIdx: idx,
       },
       (ret: ReturnMsgDto) => {
-        console.log("blockFriend ret : ", ret);
+        console.log("FriendProfile blockFriend ret : ", ret);
       }
     );
   };
