@@ -123,17 +123,17 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   // }, []);
 
   // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
-  useEffect(() => {
-    // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
-    const UserProfile = (data: IFriendData) => {
-      setFriendData(data);
-    };
-    socket.on("user_profile", UserProfile);
+  // useEffect(() => {
+  //   // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
+  //   const UserProfile = (data: IFriendData) => {
+  //     setFriendData(data);
+  //   };
+  //   socket.on("user_profile", UserProfile);
 
-    return () => {
-      socket.off("user_profile");
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("user_profile");
+  //   };
+  // }, []);
 
   useEffect(() => {
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {

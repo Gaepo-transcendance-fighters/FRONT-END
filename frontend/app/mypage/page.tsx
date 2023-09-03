@@ -24,7 +24,7 @@ const font = createTheme({
 interface UserEditprofileDto {
   userIdx: number;
   userNickname: string;
-  imgData: any;
+  imgData: string;
 }
 
 const modalStyle = {
