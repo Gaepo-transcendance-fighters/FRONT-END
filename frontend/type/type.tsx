@@ -41,7 +41,7 @@ export interface IFriendData {
 }
 
 export interface FriendReqData {
-  userIdx: number;
+  myIdx: number;
   targetNickname: string;
   targetIdx: number;
 }
