@@ -49,8 +49,8 @@ const DmChatOld = ({ msgs, setMsgs }: Props) => {
     }
     await axios
       .get(
-        // `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
-        `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
+        `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
+        // `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&msgDate=${lastDate}`
       )
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
