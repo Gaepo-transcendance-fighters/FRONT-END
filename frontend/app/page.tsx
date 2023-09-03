@@ -29,7 +29,7 @@ export const socket = io("http://localhost:4000/chat", {
   // export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
   query: { userId: userId },
 });
-export const gameSocket = io("http://localhost:4000/game/playroom", {
+export const gameSocket = io("http://localhost:4000/", {
   // export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
   query: { userId: userId },
 });

@@ -135,8 +135,7 @@ const Game = () => {
                       justifyContent: "center",
                     }}
                   >
-                    {/* 상단 안내메세지 */}
-                    How to?
+                    <Typography>How to?</Typography>
                   </Card>
 
                   <Card
@@ -147,7 +146,7 @@ const Game = () => {
                       alignItems: "center",
                       flexDirection: "column",
                       padding: "10px 0px 0px 0px",
-                      backgroundColor: "white",
+                      backgroundColor: main.main2,
                     }}
                   >
                     <CardContent
@@ -158,6 +157,7 @@ const Game = () => {
                         alignItems: "center",
                         flexDirection: "column",
                         padding: "10px 0px 0px 0px",
+                        marginBottom: "10px",
                       }}
                     >
                       {/* 일반게임 */}
@@ -171,8 +171,9 @@ const Game = () => {
                           backgroundColor: main.main3,
                         }}
                       >
-                        일반게임 안내
+                        <Typography>일반게임 안내</Typography>
                       </Card>
+                      <br></br>
                       {/* 일반설명 */}
                       <Card
                         style={{
@@ -214,8 +215,9 @@ const Game = () => {
                           backgroundColor: main.main3,
                         }}
                       >
-                        랭크게임 안내
+                        <Typography>랭크게임 안내</Typography>
                       </Card>
+                      <br></br>
                       {/* 랭크설명 */}
                       <Card
                         style={{

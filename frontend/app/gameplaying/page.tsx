@@ -37,6 +37,7 @@ const GamePlaying = () => {
 
     const preventRefresh = (e: KeyboardEvent) => {
       e.preventDefault();
+      console.log(e.key, e.metaKey);
       if (
         e.key === "F5" ||
         ((e.ctrlKey === true || e.metaKey === true) && e.key === "r")
@@ -54,7 +55,7 @@ const GamePlaying = () => {
     };
 
     history.pushState(null, "", location.href);
-    addEventListener("popstate", preventGoBack);
+    // addEventListener("popstate", preventGoBack);
     // addEventListener("keydown", preventRefresh);
     // addEventListener("beforeunload", preventRefreshButton);
 
@@ -63,7 +64,7 @@ const GamePlaying = () => {
       setOpenModal(true);
     });
     return () => {
-      removeEventListener("popstate", preventGoBack);
+      // removeEventListener("popstate", preventGoBack);
       // removeEventListener("keydown", preventRefresh);
       // removeEventListener("beforeunload", preventRefreshButton);
     };

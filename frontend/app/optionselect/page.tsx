@@ -162,7 +162,7 @@ const OptionSelect = () => {
               justifyContent: "center",
               fontSize: "2rem",
               border: "2px solid black",
-              backgroundColor: main.main1,
+              backgroundColor: main.main3,
             }}
           >
             <Typography sx={{ fontSize: "2rem" }}>Select Option</Typography>
@@ -173,9 +173,9 @@ const OptionSelect = () => {
             style={{
               width: "100%",
               height: "70vh",
-              border: "2px solid black",
+              boxShadow: "none",
               alignItems: "center",
-              backgroundColor: main.main1,
+              backgroundColor: "rgba(255, 255, 255, 0)",
             }}
             id={"middle_big"}
           >
@@ -184,7 +184,6 @@ const OptionSelect = () => {
             <Stack
               sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
               style={{
-                backgroundColor: main.main1,
                 padding: "10px 0px 0px 0px",
               }}
               id={"speedoption"}
@@ -198,7 +197,7 @@ const OptionSelect = () => {
                   display: "flex",
                   justifyContent: "space-around",
                   alignItems: "center",
-                  backgroundColor: main.main3,
+                  backgroundColor: main.main2,
                 }}
               >
                 <Typography sx={{ fontSize: "1.5rem" }}>Speed</Typography>
@@ -226,7 +225,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedSpeedOption === SpeedOption.speed1}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() =>
                         handleSpeedOptionChange(SpeedOption.speed1)
                       }
@@ -245,7 +247,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedSpeedOption === SpeedOption.speed2}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() =>
                         handleSpeedOptionChange(SpeedOption.speed2)
                       }
@@ -264,7 +269,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedSpeedOption === SpeedOption.speed3}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() =>
                         handleSpeedOptionChange(SpeedOption.speed3)
                       }
@@ -280,7 +288,6 @@ const OptionSelect = () => {
             <Stack
               sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
               style={{
-                backgroundColor: main.main1,
                 padding: "10px 0px 0px 0px",
               }}
               id={"mapoption"}
@@ -294,7 +301,7 @@ const OptionSelect = () => {
                   display: "flex",
                   justifyContent: "space-around",
                   alignItems: "center",
-                  backgroundColor: main.main3,
+                  backgroundColor: main.main2,
                 }}
               >
                 <Typography sx={{ fontSize: "1.5rem" }}>Map</Typography>
@@ -322,7 +329,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedMapOption === MapOption.map1}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() => handleMapOptionChange(MapOption.map1)}
                     />
                   }
@@ -339,7 +349,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedMapOption === MapOption.map2}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() => handleMapOptionChange(MapOption.map2)}
                     />
                   }
@@ -356,7 +369,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedMapOption === MapOption.map3}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() => handleMapOptionChange(MapOption.map3)}
                     />
                   }

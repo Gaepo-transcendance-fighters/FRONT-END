@@ -356,6 +356,7 @@ const PingPong = () => {
   // }, [ready, ballMove]);
 
   const movePaddle = (e: KeyboardEvent) => {
+    e.preventDefault();
     if (e.code === "ArrowUp") {
       gameSocket.emit("game_move_paddle", {
         userIdx: authState.id,
@@ -389,7 +390,8 @@ const PingPong = () => {
     gameSocket.on("game_start", (res) => {
       console.log("game_start", res);
     });
-    gameSocket.on("game_frame", (res: IGameProps) => {
+    gameSocket.emit("game_frame");
+    gameSocket.on("game_frame", (res: any) => {
       console.log("game_frame", res);
       setGameProps(res);
     });

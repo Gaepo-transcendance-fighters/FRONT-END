@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useFriend } from "@/context/FriendContext";
 
-const selectedButton = {
+const unselectedButton = {
   backgroundColor: main.main1,
   color: "white",
   "&:hover": {
@@ -21,7 +21,7 @@ const selectedButton = {
   flex: 1,
 };
 
-const unselectedButton = {
+const selectedButton = {
   backgroundColor: main.main5,
   color: "white",
   "&:hover": {
@@ -132,10 +132,10 @@ const FriendList = () => {
             borderRadius: "10px",
           }}
         >
-          {showlist
-            && showlist.map((user, idx) => (
-                <Friend key={idx} prop={user as IUserProp} />
-              ))}
+          {showlist &&
+            showlist.map((user, idx) => (
+              <Friend key={idx} prop={user as IUserProp} />
+            ))}
         </Card>
       </Stack>
     </Card>
