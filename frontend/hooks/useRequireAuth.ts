@@ -5,13 +5,28 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export const useRequireAuth = (redirectUrl: string = "/login") => {
-  const { authState } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    const localData = localStorage.getItem("loggedIn");
-    if (localData === "true") return router.push("/");
+  const getCookies = () => {
+    const cookies = document.cookie;
+    if (cookies === "") return "";
+    const value = cookies.split("=")[1];
+    return value;
+  };
 
-    if (!authState.isLoggedIn) router.push(redirectUrl);
+  useEffect(() => {
+    if (document.URL.includes("/login/auth")) return;
+    const cookies_value = getCookies();
+    console.log(document.URL);
+
+    if (cookies_value) {
+      if (
+        !localStorage.getItem("intra") ||
+        !localStorage.getItem("idx") ||
+        !localStorage.getItem("authorization")
+      )
+        return router.push(redirectUrl);
+      return router.push("/");
+    } else if (cookies_value === "") router.push(redirectUrl);
   }, []);
 };

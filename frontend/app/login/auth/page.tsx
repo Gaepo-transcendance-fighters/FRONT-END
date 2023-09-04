@@ -19,6 +19,16 @@ const modalStyle = {
   boxShadow: 24,
   p: 4,
 };
+interface Data {
+  userIdx: number;
+  nickname: string;
+  intra: string;
+  imgUri: string;
+  token: string;
+  email: string;
+  check2Auth: boolean;
+}
+
 const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
@@ -26,14 +36,11 @@ const Auth = () => {
   const { userDispatch } = useUser();
   const { authDispatch } = useAuth();
 
-  interface Data {
-      userIdx: number;
-      nickname: string;
-      intra: string;
-      imgUri: string;
-      token: string;
-      email: string;
-      check2Auth: boolean;
+  const setupCookies = () => {
+    let expire = new Date();
+
+    expire.setTime(expire.getTime() + 30 * 60 * 1000);
+    document.cookie = "login=1; path=/; expires=" + expire.toUTCString() + ";";
   };
 
   const postCode = async (code: string) => {
@@ -62,6 +69,7 @@ const Auth = () => {
           localStorage.setItem("check2Auth", data.check2Auth.toString());
           authDispatch({ type: "SET_ID", value: data.userIdx });
           authDispatch({ type: "SET_NICKNAME", value: data.nickname });
+          setupCookies();
 
           if (data.check2Auth === true) return router.push("./secondauth");
           else return router.push(`/`);
@@ -76,8 +84,6 @@ const Auth = () => {
   useEffect(() => {
     const code = searchParam.get("code");
     if (!code) return;
-    console.log(code);
-
     postCode(code);
   }, []);
 
