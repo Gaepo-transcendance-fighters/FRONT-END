@@ -93,6 +93,9 @@ const BottomField = ({ setMsgs }: Props) => {
     (event: React.FormEvent) => {
       event.preventDefault();
       let payload: IPayload | undefined = undefined;
+      if (msg === "") {
+        return;
+      }
       if (
         roomState.currentRoom?.mode === "private" &&
         roomState.currentDmRoomMemberList?.userIdx1 &&
