@@ -16,6 +16,7 @@ import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useGame } from "@/context/GameContext";
+import { gameSocket } from "../page";
 
 const infomodalStyle = {
   position: "absolute" as "absolute",
@@ -67,6 +68,10 @@ const Game = () => {
 
   useEffect(() => {
     setClient(true);
+    gameSocket.connect();
+  }, []);
+
+  useEffect(() => {
     const random = Math.floor(Math.random() * 7) + 1;
     setCha(`/character/cha${random}.png`);
   }, [cha]);
