@@ -25,6 +25,7 @@ const Layout = () => {
 
   useEffect(() => {
     const MainEnter = (data: IMaindata) => {
+      console.log("data : ", data);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
@@ -43,15 +44,14 @@ const Layout = () => {
     };
   }, []);
   useEffect(() => {
-    console.log(userState.nickname);
-    socket.emit(
-      "main_enter",
-      { intra: localStorage.getItem("intra") },
-      (ret: ReturnMsgDto) => {
-        if (ret.code === 200) {
+      socket.emit(
+        "main_enter",
+        { intra: localStorage.getItem("intra") },
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
+          }
         }
-      }
-    );
+      );
   }, []);
 
   return (

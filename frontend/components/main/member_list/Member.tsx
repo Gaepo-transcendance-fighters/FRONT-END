@@ -122,9 +122,7 @@ export default function Member({
         grant: !isAuthorized,
       },
       (ret: ReturnMsgDto) => {
-        console.log("SetAdmin ret : ", ret);
         setIsAuthorized((prev) => !prev);
-        console.log("SetAdmin isAuthorized : ", isAuthorized);
         setShowAlert(true);
       }
     );
@@ -164,7 +162,6 @@ export default function Member({
         roomDispatch({ type: "SET_CUR_ROOM", value: null });
         return;
       }
-      console.log("ChatKick ", data);
       const list: IMember[] = data.leftMember.map((mem: ILeftMember) => {
         return {
           nickname: mem.userNickname,
@@ -251,8 +248,8 @@ export default function Member({
         }}
       >
         <div className="memimg">
-          <Image src="/seal.png" alt="profile" width={53} height={53} />
-          {/* <Image src={person.imgUri} alt="profile" width={53} height={53} /> */}
+          {/* <Image src="/seal.png" alt="profile" width={53} height={53} /> */}
+          <Image src={person.imgUri!} alt="profile" width={53} height={53} />
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
