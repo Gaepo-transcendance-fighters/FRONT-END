@@ -184,7 +184,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
-        friendDispatch({type : "SET_IS_FRIEND", value : false});
+        friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })
       .catch((err) => {
         console.log(err);
@@ -192,7 +192,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
     handleCloseMenu();
     handleCloseModal();
   };
-  
+
   const handleOpenNdataModal = () => {
     socket.emit(
       "user_profile",
@@ -239,7 +239,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
         targetIdx: idx,
       },
       (ret: ReturnMsgDto) => {
-        friendDispatch({type : "SET_IS_FRIEND", value : false});
+        friendDispatch({ type: "SET_IS_FRIEND", value: false });
         console.log("FriendProfile blockFriend ret : ", ret);
       }
     );

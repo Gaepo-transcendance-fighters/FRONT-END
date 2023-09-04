@@ -82,7 +82,7 @@ export default function MemberModal({
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
-        friendDispatch({type : "SET_IS_FRIEND", value : true});
+        friendDispatch({ type: "SET_IS_FRIEND", value: true });
       })
       .catch((err) => {
         console.log(err);
@@ -106,7 +106,7 @@ export default function MemberModal({
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
-        friendDispatch({type : "SET_IS_FRIEND", value : false});
+        friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })
       .catch((err) => {
         console.log(err);
@@ -119,7 +119,7 @@ export default function MemberModal({
     const ChatBlock = () => {
       handleCloseMenu();
       handleCloseModal();
-      friendDispatch({type : "SET_IS_FRIEND", value : false});
+      friendDispatch({ type: "SET_IS_FRIEND", value: false });
     };
     socket.on("chat_block", ChatBlock);
 
@@ -129,14 +129,13 @@ export default function MemberModal({
   }, []);
 
   useEffect(() => {
-        if (friendState.friendList.length) {
+    if (friendState.friendList.length) {
       friendState.friendList.find(
         (friend) => friend.friendNickname === person.nickname
-        )
-        ? 
-        friendDispatch({type : "SET_IS_FRIEND", value : true})
-        : 
-        friendDispatch({type : "SET_IS_FRIEND", value : false})}
+      )
+        ? friendDispatch({ type: "SET_IS_FRIEND", value: true })
+        : friendDispatch({ type: "SET_IS_FRIEND", value: false });
+    }
   }, [friendState.isFriend, friendState.friendList]);
 
   useEffect(() => {
@@ -175,18 +174,19 @@ export default function MemberModal({
       );
     } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
-    socket.emit(
-      "create_dm",
-      { targetNickname: person.nickname, targetIdx: person.userIdx },
-      (ret: ReturnMsgDto) => {
-        if (ret.code === 200) {
+      socket.emit(
+        "create_dm",
+        { targetNickname: person.nickname, targetIdx: person.userIdx },
+        (ret: ReturnMsgDto) => {
+          if (ret.code === 200) {
             console.log(ret.msg);
           } else if (ret.code !== 200) {
             console.log(ret.msg);
+          }
         }
-      }
-    );
-  }}
+      );
+    }
+  };
 
   const blockFriend = () => {
     socket.emit(
@@ -269,7 +269,9 @@ export default function MemberModal({
                 MenuListProps={{ sx: { py: 0 } }}
               >
                 <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                  {!friendState.isFriend && <MenuItem onClick={addFriend}>Add</MenuItem>}
+                  {!friendState.isFriend && (
+                    <MenuItem onClick={addFriend}>Add</MenuItem>
+                  )}
                   {friendState.isFriend && (
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                   )}

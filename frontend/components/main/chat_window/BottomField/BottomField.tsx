@@ -61,7 +61,6 @@ const BottomField = ({ setMsgs }: Props) => {
         setMsgs((prevChats: IChat[]) => [chat, ...prevChats]);
         console.log(chat);
       } else {
-        console.log("chatFromServer.senderIdx ", chatFromServer.senderIdx);
         result = roomState.currentRoomMemberList.find(
           (person) => person.userIdx === chatFromServer.senderIdx
         );

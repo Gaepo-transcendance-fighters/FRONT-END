@@ -76,7 +76,7 @@ import axios from "axios";
 
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
 import { useAuth } from "@/context/AuthContext";
-import {socket} from "@/app/page";
+import { socket } from "@/app/page";
 
 export default function PageRedir() {
   const router = useRouter();
@@ -102,18 +102,17 @@ export default function PageRedir() {
 
   const fetch = async () => {
     await axios
-    .get("http://paulryu9309.ddns.net:4000/users/profile", { 
-    // .get("http://localhost:4000/users/profile", { 
-      headers: {
-        "Content-type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
-      },
-    })
-    .then((response) => {
-      setUserData(response.data);
-      console.log("response.data : ", response.data);
-    });
-  }
+      .get("http://paulryu9309.ddns.net:4000/users/profile", {
+        // .get("http://localhost:4000/users/profile", {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authorization"),
+        },
+      })
+      .then((response) => {
+        setUserData(response.data);
+      });
+  };
 
   useEffect(() => {
     const verified = localStorage.getItem("check2Auth");
@@ -133,8 +132,7 @@ export default function PageRedir() {
     const files = event.target.files;
     if (files) {
       uploadImage(files[0]);
-    setReload((curr) => !curr);
-
+      setReload((curr) => !curr);
     }
   };
 
@@ -142,13 +140,8 @@ export default function PageRedir() {
     // readAsDataURL을 사용해 이미지를 base64로 변환
     const dataUrl: string = await readFileAsDataURL(file);
 
-    if (dataUrl === "") return 
+    if (dataUrl === "") return;
 
-    console.log("{}" ,{
-      userIdx : localStorage.getItem("idx") || "",
-      userNickname : "",
-      imgData : dataUrl,
-    });
     const formData = new FormData();
     formData.append("userIdx", localStorage.getItem("idx") || "");
     formData.append("userNickname", "");
@@ -163,26 +156,29 @@ export default function PageRedir() {
         Authorization: "Bearer " + localStorage.getItem("authorization"),
       },
       data: {
-        userIdx : Number(localStorage.getItem("idx")) || "",
-        userNickname : "",
-        imgData : dataUrl,
+        userIdx: Number(localStorage.getItem("idx")) || "",
+        userNickname: "",
+        imgData: dataUrl,
       },
       // data: formData,
-    }).then(res => {
-      console.log("res : ", res);
-    }).catch(error => {
-      console.error("업로드 실패", error);
     })
+      .then((res) => {
+        console.log("res : ", res);
+      })
+      .catch((error) => {
+        console.error("업로드 실패", error);
+      });
     setReload((curr) => !curr);
   };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
-    console.log("file", file.size)
+    console.log("file", file.size);
     if (file.size > 2000000) {
-      alert("더 작은 사이즈의 파일을 선택해주세요.")
-      return new Promise(() => "")
+      // 임의의 값. 아직 파일 사이즈 미정.
+      alert("더 작은 사이즈의 파일을 선택해주세요.");
+      return new Promise(() => "");
     }
-    
+
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -227,8 +223,13 @@ export default function PageRedir() {
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
-        userDispatch({ type: "CHANGE_NICK_NAME", value: response.data.result.nickname });
-        socket.emit('set_user_status', {userStatus:{ nickname: response.data.nickname}});
+        userDispatch({
+          type: "CHANGE_NICK_NAME",
+          value: response.data.result.nickname,
+        });
+        socket.emit("set_user_status", {
+          userStatus: { nickname: response.data.nickname },
+        });
         handleCloseModal();
       }
     } catch (error) {
@@ -341,6 +342,9 @@ export default function PageRedir() {
                     >
                       <Avatar
                         src={`${userData?.imgUrl}?${Date.now()}`}
+                        // 이미지가 새로 고쳐지지 않는 문제는 브라우저가 이미지를 캐시하고 있기 때문에 이미지가 바뀌어도 계속 똑같은 이미지 띄움.
+                        // 이미지 URL에 쿼리 매개변수를 추가하여 이미지 URL을 변경
+                        // 이렇게 하면 브라우저는 이미지를 다시 다운로드하고 갱신된 이미지를 표시
                         // src={userData?.imgUrl}
                         style={{
                           width: "100%",
