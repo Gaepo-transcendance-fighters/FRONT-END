@@ -14,17 +14,20 @@ interface IBlock {
 interface FriendContextData {
   friendList: IFriend[];
   blockList: IBlock[];
+  isFriend: boolean;
 }
 
 type FriendAction =
   | { type: "SET_FRIENDLIST"; value: IFriend[] }
   | { type: "SET_BLOCKLIST"; value: IBlock[] }
   | { type: "ADD_BLOCK"; value: IBlock }
-  | { type: "ADD_FRIEND"; value: IFriend };
+  | { type: "ADD_FRIEND"; value: IFriend }
+  | { type: "SET_IS_FRIEND"; value: boolean };
 
 const initialState: FriendContextData = {
   friendList: [],
   blockList: [],
+  isFriend: false,
 };
 
 const FriendReducer = (
@@ -79,6 +82,8 @@ const FriendReducer = (
         return state;
       }
     }
+    case "SET_IS_FRIEND":
+      return { ...state, isFriend: action.value };
     default:
       return state;
   }
