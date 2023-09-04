@@ -285,8 +285,8 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
               mx={5}
             >
               <Image
-                src="/seal.png" // mockdata
-                // src={friendData?.imgUri} // < !mockdata
+                // src="/seal.png" // mockdata
+                src={friendData?.imgUri} // < !mockdata
                 alt="user img"
                 width={100}
                 height={100}

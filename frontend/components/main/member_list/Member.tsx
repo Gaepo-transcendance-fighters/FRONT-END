@@ -248,8 +248,8 @@ export default function Member({
         }}
       >
         <div className="memimg">
-          <Image src="/seal.png" alt="profile" width={53} height={53} />
-          {/* <Image src={person.imgUri} alt="profile" width={53} height={53} /> */}
+          {/* <Image src="/seal.png" alt="profile" width={53} height={53} /> */}
+          <Image src={person.imgUri!} alt="profile" width={53} height={53} />
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
