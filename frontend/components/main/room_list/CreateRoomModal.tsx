@@ -82,7 +82,6 @@ export default function CreateRoomModal({
 
   const OnClick = () => {
     socket.emit("BR_chat_create_room", { password: value }, (ret: ReturnMsgDto) => {
-      console.log("OnClick : ", ret);
       // if (ret === 200)
     });
   };
@@ -90,7 +89,6 @@ export default function CreateRoomModal({
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       socket.emit("BR_chat_create_room", { password: value }, (ret: ReturnMsgDto) => {
-      console.log("OnClick : ", ret);
       // if (ret === 200)
     });
     }

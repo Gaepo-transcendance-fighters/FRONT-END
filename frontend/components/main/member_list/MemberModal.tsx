@@ -129,7 +129,6 @@ export default function MemberModal({
   }, []);
 
   useEffect(() => {
-    console.log("friendState.friendList : ", friendState.friendList);
         if (friendState.friendList.length) {
       friendState.friendList.find(
         (friend) => friend.friendNickname === person.nickname
