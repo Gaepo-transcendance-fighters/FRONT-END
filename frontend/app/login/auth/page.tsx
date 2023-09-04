@@ -88,11 +88,8 @@ const Auth = () => {
   return (
     <Box>
       <Card sx={modalStyle}>
-        <CircularProgress sx={{ color: "white" }} />
         <Typography sx={{ color: "white" }}>Loading...</Typography>
-        <Typography sx={{ color: "white" }}>
-          {searchParam.get("code")}
-        </Typography>
+        <CircularProgress sx={{ color: "white" }} />
       </Card>
     </Box>
   );
