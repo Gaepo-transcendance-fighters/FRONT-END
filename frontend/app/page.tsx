@@ -24,14 +24,16 @@ import InviteGame from "@/components/main/InviteGame/InviteGame";
 const userId =
   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 
-export const socket = io("http://localhost:4000/chat", {
-  // haryu's server
-  // export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
+// export const socket = io("http://localhost:4000/chat", {
+// haryu's server
+export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
   query: { userId: userId },
+  autoConnect: false, //혹시 페이지에서 connect를 하면 새로고침 할 때마다 연결을 시도할까?
 });
-export const gameSocket = io("http://localhost:4000/", {
-  // export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
+// export const gameSocket = io("http://localhost:4000/", {
+export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
   query: { userId: userId },
+  autoConnect: false,
 });
 
 const Page = () => {

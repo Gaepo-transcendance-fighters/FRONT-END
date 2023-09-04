@@ -47,11 +47,13 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
     console.log(pageNum);
     await axios
       // dev original
-      .get(
-        `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`
-      )
+      // .get(
+      //   `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`
+      // )
       // haryu's server
-      // .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
+      .get(
+        `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`
+      )
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setMsgs((prevMsgs) => [...prevMsgs, ...newData]);
@@ -92,8 +94,7 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
     });
     let calPage = Math.floor(initMsgState.dmEnterEntry.totalMsgCount / 5);
     // let calPage = initMsgState.dmEnterEntry.totalMsgCount / 5;
-    if (initMsgState.dmEnterEntry.totalMsgCount % 5 !== 0)
-      calPage += 1;
+    if (initMsgState.dmEnterEntry.totalMsgCount % 5 !== 0) calPage += 1;
     setPageNum(calPage - 4);
   }, []);
 
@@ -134,16 +135,16 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
         );
       })}
       <div ref={observerTarget}></div>
-      {loading === true && 
+      {loading === true && (
         <Typography style={{ color: "white" }} align="center" component={"div"}>
           loading...
         </Typography>
-      }
-      {loading === false &&
+      )}
+      {loading === false && (
         <Typography style={{ color: "white" }} component={"div"} align="center">
           this is top of the chat list...
         </Typography>
-      }
+      )}
     </Box>
   );
 };

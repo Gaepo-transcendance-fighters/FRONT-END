@@ -78,8 +78,17 @@ const Inwaiting = () => {
 
   const BackToMain = () => {
     //게임 소켓 - 게임 큐 취소
-    gameSocket.disconnect();
-    router.replace("/?from=game");
+    gameSocket.emit(
+      "game_queue_quit",
+      { userIdx: authState.id },
+      (res: ReturnMsgDto) => {
+        if (res.code === 200) {
+          console.log("game_queue_quit");
+          gameSocket.disconnect();
+          router.replace("/?from=game");
+        }
+      }
+    );
   };
 
   const preventGoBack = (e: PopStateEvent) => {
@@ -91,6 +100,8 @@ const Inwaiting = () => {
     setClient(true);
 
     //게임 소켓 - 이벤트 등록
+    gameSocket.on("game_queue_quit", () => {});
+
     gameSocket.on("game_ping", (serverTime: number) => {
       console.log("game_ping");
       gameSocket.emit(
@@ -108,16 +119,6 @@ const Inwaiting = () => {
         }
       );
     });
-
-    gameSocket.emit(
-      "game_queue_start",
-      { userIdx: authState.id },
-      (res: ReturnMsgDto) => {
-        if (res.code === 200) {
-          console.log("game_queue_start");
-        }
-      }
-    );
 
     gameSocket.on("game_queue_success", (data: IGameQueueSuccess) => {
       console.log("game_queue_success");
@@ -138,6 +139,7 @@ const Inwaiting = () => {
 
     return () => {
       window.removeEventListener("popstate", preventGoBack);
+      gameSocket.off("game_queue_quit");
       gameSocket.off("game_ping");
       gameSocket.off("game_queue_success");
     };
