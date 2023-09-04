@@ -19,12 +19,9 @@ const ChatWindow = () => {
   
   useEffect(() => {
     setPrevRoom(roomState.currentRoom?.channelIdx);
-    console.log("prevROom :", prevRoom)
-    console.log("current channelIDx :", roomState.currentRoom?.channelIdx);
     if (prevRoom === roomState.currentRoom?.channelIdx || roomState.currentRoom?.mode === "private") return ;
-    console.log("do setMsgs");
     setMsgs([]);
-  }, [roomState.currentRoom?.channelIdx]);
+  }, [roomState.currentRoom?.channelIdx, msgs]);
 
   return (
     <Box sx={{ margin: "0", padding: "0", height: "60vh", minWidth: "300px" }}>
