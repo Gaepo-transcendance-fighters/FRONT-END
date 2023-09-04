@@ -64,7 +64,7 @@ interface IFriendData {
 }
 
 interface FriendReqData {
-  userIdx : number;
+  userIdx: number;
   targetNickname: string;
   targetIdx: number;
 }
@@ -191,10 +191,11 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     }
   };
 
-  const addFriend = async () => { // 이거 안 쓰는 건가요? ws
+  const addFriend = async () => {
+    // 이거 안 쓰는 건가요? ws
     console.log("add friend");
     const friendReqData: FriendReqData = {
-      userIdx : userState.userIdx,
+      userIdx: userState.userIdx,
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
     };
@@ -217,7 +218,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   const deleteFriend = async () => {
     console.log("delete friend");
     const friendReqData: FriendReqData = {
-      userIdx : userState.userIdx,
+      userIdx: userState.userIdx,
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
     };
@@ -237,7 +238,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     handleCloseMenu();
     handleCloseModal();
   };
-  
+
   const handleOpenNdataModal = () => {
     socket.emit(
       "user_profile",

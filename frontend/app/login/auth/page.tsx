@@ -27,18 +27,18 @@ const Auth = () => {
   const { authDispatch } = useAuth();
 
   interface Data {
-      userIdx: number;
-      nickname: string;
-      intra: string;
-      imgUri: string;
-      token: string;
-      email: string;
-      check2Auth: boolean;
-  };
+    userIdx: number;
+    nickname: string;
+    intra: string;
+    imgUri: string;
+    token: string;
+    email: string;
+    check2Auth: boolean;
+  }
 
   const postCode = async (code: string) => {
     // dev original
-    await fetch("http://localhost:4000/login/auth", {
+    await fetch(`http://localhost:4000/login/auth`, {
       // haryu's server
       // await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
       method: "POST",
