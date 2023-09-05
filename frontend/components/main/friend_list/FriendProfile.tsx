@@ -17,25 +17,19 @@ import MyGameLog from "../myprofile/MyGameLog";
 import { socket } from "@/app/home/page";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
-import { main } from "@/type/type";
+import {
+  FriendReqData,
+  IChatBlock,
+  IFriendData,
+  IUserProp,
+  friendProfileModalStyle,
+  main,
+} from "@/type/type";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import RoomEnter from "@/external_functions/RoomEnter";
 import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
 import FriendGameButton from "../InviteGame/FriendGameButton";
-
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  height: 700,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const loginOn = (
   <Image src="/status/logon.png" alt="online" width={10} height={10} />
@@ -54,6 +48,7 @@ const gamePlaying = (
   />
 );
 
+<<<<<<< HEAD
 interface IFriendData {
   targetNickname: string;
   imgUri: string;
@@ -70,19 +65,26 @@ interface FriendReqData {
 }
 
 const FriendProfile = ({ prop }: { prop: IFriend }) => {
+=======
+const FriendProfile = ({ prop }: { prop: IUserProp }) => {
+  const nickname = !prop.targetNickname
+    ? prop.friendNickname
+    : prop.targetNickname;
+  const idx = !prop.targetIdx ? prop.friendIdx : prop.targetIdx;
+>>>>>>> 62284524856b6b8b385a93219c013232f9e831e6
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [friendData, setFriendData] = useState<IFriendData>({
     targetNickname: "",
     imgUri: "",
     rank: 0,
-    Win: 0,
-    Lose: 0,
+    win: 0,
+    lose: 0,
     isOnline: false,
   });
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
-  const { friendDispatch } = useFriend();
+  const { friendState, friendDispatch } = useFriend();
 
   const RankSrc =
     friendData.rank < 800
@@ -150,11 +152,10 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     };
   }, []);
 
-  const sendDM = (data: IFriend) => {
+  const sendDM = (data: IUserProp) => {
     const existingRoom = roomState.dmRooms.find(
-      (roomState) => roomState.targetNickname === data.friendNickname
+      (roomState) => roomState.targetNickname === nickname
     );
-
     if (existingRoom) {
       socket.emit(
         "chat_get_DM",
@@ -174,23 +175,20 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
       socket.emit(
-        "create_DM",
-        {
-          targetNickname: data.friendNickname,
-          targetIdx: data.friendIdx,
-        },
+        "create_dm",
+        { targetNickname: nickname, targetIdx: idx },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
             console.log(ret.msg);
-          } else {
+          } else if (ret.code !== 200) {
             console.log(ret.msg);
-            return;
           }
         }
       );
     }
   };
 
+<<<<<<< HEAD
   const addFriend = async () => {
     // 이거 안 쓰는 건가요? ws
     console.log("add friend");
@@ -215,22 +213,30 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     handleCloseModal();
   };
 
+=======
+>>>>>>> 62284524856b6b8b385a93219c013232f9e831e6
   const deleteFriend = async () => {
-    console.log("delete friend");
     const friendReqData: FriendReqData = {
+<<<<<<< HEAD
       userIdx: userState.userIdx,
       targetNickname: prop.friendNickname,
       targetIdx: prop.friendIdx,
+=======
+      myIdx: userState.userIdx,
+      targetNickname: nickname!,
+      targetIdx: idx!,
+>>>>>>> 62284524856b6b8b385a93219c013232f9e831e6
     };
 
     await axios({
       method: "delete",
-      url: "http://localhost:4000/users/unfollow",
-      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      // url: "http://localhost:4000/users/unfollow",
+      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
       data: friendReqData,
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+        friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })
       .catch((err) => {
         console.log(err);
@@ -255,15 +261,57 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   };
 
   useEffect(() => {
+    const ChatBlock = (data: IChatBlock[]) => {
+      const blockList = data.map((block: IChatBlock) => {
+        return { targetNickname: block.userNickname, targetIdx: block.userIdx };
+      });
+      friendDispatch({
+        type: "ADD_BLOCK",
+        value: {
+          targetNickname: nickname!,
+          targetIdx: idx!,
+        },
+      });
+      friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
+      handleCloseMenu();
+      handleCloseModal();
+    };
+    socket.on("chat_block", ChatBlock);
+
+    return () => {
+      socket.off("chat_block", ChatBlock);
+    };
+  }, []);
+
+  const blockFriend = () => {
+    socket.emit(
+      "chat_block",
+      {
+        targetNickname: nickname,
+        targetIdx: idx,
+      },
+      (ret: ReturnMsgDto) => {
+        friendDispatch({ type: "SET_IS_FRIEND", value: false });
+        console.log("FriendProfile blockFriend ret : ", ret);
+      }
+    );
+  };
+
+  useEffect(() => {
     const userProfile = (data: IFriendData) => {
       setFriendData(data);
     };
-
     socket.on("user_profile", userProfile);
     return () => {
       socket.off("user_profile");
     };
   }, [friendData]);
+
+  // useEffect(() => {
+  //   const find = friendState.blockList.find((block) =>
+  //     block.targetIdx === idx
+  //   );
+  // }, [openModal]);
 
   return (
     <>
@@ -271,7 +319,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
         <Typography>더보기</Typography>
       </Button>
       <Modal open={openModal} onClose={handleCloseModal}>
-        <Box sx={modalStyle} borderRadius={"10px"}>
+        <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
           <Card
             sx={{
               backgroundColor: main.main7,
@@ -289,7 +337,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
               mx={5}
             >
               <Image
-                src={friendData?.imgUri}
+                // src="/seal.png" // mockdata
+                src={friendData?.imgUri} // < !mockdata
                 alt="user img"
                 width={100}
                 height={100}
@@ -313,7 +362,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 상태: {friendData?.isOnline ? loginOn : loginOff}
               </Typography>
               <Stack direction={"row"} spacing={2}>
-                <FriendGameButton prop={prop} />
+                {/* <FriendGameButton prop={prop} /> */}
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
@@ -338,7 +387,13 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 >
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
-                    <MenuItem>Block</MenuItem>
+                    <MenuItem onClick={blockFriend}>
+                      {friendState.blockList.find(
+                        (block) => block.targetIdx === idx
+                      ) === undefined
+                        ? "Block"
+                        : "UnBlock"}
+                    </MenuItem>
                   </Stack>
                 </Menu>
               </Stack>
@@ -396,12 +451,15 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                     랭크(포인트) : {friendData.rank}{" "}
                   </Typography>
                   <Typography margin={1}>
-                    승률{" "}
-                    {Math.floor(
-                      (friendData.Win / (friendData.Win + friendData.Lose)) *
-                        100
-                    )}
-                    :
+                    승률 :{" "}
+                    {friendData.win + friendData.lose === 0
+                      ? 0
+                      : Math.floor(
+                          (friendData.win /
+                            (friendData.win + friendData.lose)) *
+                            100
+                        )}
+                    %
                   </Typography>
                 </CardContent>
               </Card>
@@ -453,7 +511,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 width: "100%",
               }}
             >
-              <MyGameLog />
+              {/* <MyGameLog /> */}
             </Box>
           </Card>
         </Box>

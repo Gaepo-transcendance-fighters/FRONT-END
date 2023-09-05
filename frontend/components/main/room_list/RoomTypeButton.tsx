@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
 import { useRoom } from "@/context/RoomContext";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { IChatRoom, ReturnMsgDto, alert } from "@/type/RoomType";
 import { Alert } from "@mui/material";

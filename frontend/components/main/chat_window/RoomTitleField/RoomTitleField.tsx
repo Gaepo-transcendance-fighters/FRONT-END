@@ -11,7 +11,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { IChat } from "@/type/type";
 
@@ -38,7 +38,6 @@ const RoomTitleField = ({
 
   useEffect(() => {
     const leaveHandler = (channel: IChatRoom[]) => {
-      console.log("leaveHandler roomState.isLobbyBtn", roomState.isLobbyBtn);
       if (roomState.currentRoom && roomState.isLobbyBtn) {
         roomDispatch({ type: "SET_IS_OPEN", value: false });
         roomDispatch({ type: "SET_CUR_ROOM", value: null });

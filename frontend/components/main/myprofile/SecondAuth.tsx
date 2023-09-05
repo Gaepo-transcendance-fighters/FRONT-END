@@ -74,6 +74,7 @@ export default function SecondAuth() {
 
     const response = await axios({
       method: "patch",
+      // url: "http://paulryu9309.ddns.net:4000/users/profile/second",
       url: "http://localhost:4000/users/profile/second",
       headers: {
         "Content-Type": "Application/json",
@@ -83,28 +84,21 @@ export default function SecondAuth() {
         userIdx: Number(localStorage.getItem("idx")),
         check2Auth: newVerifiedValue,
       }, // 불리언 값을 JSON 문자열로 변환하여 전달
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          setVerified(newVerifiedValue ? "true" : "false");
-          localStorage.setItem(
-            "check2Auth",
-            newVerifiedValue ? "true" : "false"
-          );
-          if (!newVerifiedValue) return router.push("/home");
-          location.reload();
-          //       if (response.status == 200) {
-          //   if (response.data.check2Auth == true) {
-          //     console.log("success in check 2 auth");
-          //     return router.push("/home");
-          //   } else if (response.data.check2Auth === false) {
-          //     console.log("success in check 2 auth");
-          //   }
-        }
-      })
-      .catch((err) => {
-        console.log("2차인증 시 에러발생");
-      });
+    }).then((res) => {
+      if (res.status === 200) {
+        setVerified(newVerifiedValue ? "true" : "false");
+        localStorage.setItem("check2Auth", newVerifiedValue ? "true" : "false");
+        if (!newVerifiedValue) return router.push("/");
+        location.reload();
+        //       if (response.status == 200) {
+        //   if (response.data.check2Auth == true) {
+        //     console.log("success in check 2 auth");
+        //     return router.push("/");
+        //   } else if (response.data.check2Auth === false) {
+        //     console.log("success in check 2 auth");
+        //   }
+      }
+    });
   };
 
   return (

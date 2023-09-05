@@ -70,7 +70,7 @@ const MyGameLog = () => {
   const callUser = useCallback(async () => {
     await axios
       //dev original
-      .get(`http://localhost:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`)
+      .get(`http://localhost:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       //haryu's server
       // .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       .then((res) => {

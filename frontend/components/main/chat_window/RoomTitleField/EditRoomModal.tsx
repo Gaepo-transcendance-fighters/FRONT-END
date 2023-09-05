@@ -5,7 +5,7 @@ import { useRoom } from "@/context/RoomContext";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 
 const style = {
@@ -52,12 +52,10 @@ export default function EditRoomModal({
 
   useEffect(() => {
     const roomSettingHandler = (channels: IChatRoom[]) => {
-      console.log(channels);
       const targetChannelIdx = roomState.currentRoom?.channelIdx;
       const targetChannel: IChatRoom | undefined = channels.find(
         (channel) => channel.channelIdx === targetChannelIdx
       );
-      console.log("찾은 채널:", targetChannel);
       if (targetChannel) {
         roomDispatch({ type: "SET_NON_DM_ROOMS", value: channels });
         roomDispatch({ type: "SET_CUR_ROOM", value: targetChannel });
