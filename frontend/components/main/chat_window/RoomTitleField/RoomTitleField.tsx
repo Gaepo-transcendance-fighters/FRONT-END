@@ -11,7 +11,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
 import { Dispatch, SetStateAction } from "react";
-import { socket } from "@/app/page";
+import { socket } from "@/app/home/page";
 import { useUser } from "@/context/UserContext";
 import { IChat } from "@/type/type";
 
@@ -77,7 +77,7 @@ const RoomTitleField = ({
     socket.on("BR_chat_room_password", changingPw);
     return () => {
       socket.off("BR_chat_room_password", changingPw);
-    }
+    };
   }, []);
 
   return (

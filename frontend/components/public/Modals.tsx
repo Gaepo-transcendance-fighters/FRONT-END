@@ -11,7 +11,7 @@ import {
 import { createPortal } from "react-dom";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
-import { gameSocket } from "@/app/page";
+import { gameSocket } from "@/app/home/page";
 import { useGame } from "@/context/GameContext";
 
 const modalStyle = {

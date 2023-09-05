@@ -17,7 +17,7 @@ import { IFriend } from "../friend_list/FriendList";
 import { IChatDmEnter, IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
-import { socket } from "@/app/page";
+import { socket } from "@/app/home/page";
 import RoomEnter from "@/external_functions/RoomEnter";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
@@ -94,7 +94,6 @@ export default function MemberModal({
       data: JSON.stringify(friendReqData),
       // url: "http://paulryu9309.ddns.net:4000/users/follow",
       // data: friendReqData,
-
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });

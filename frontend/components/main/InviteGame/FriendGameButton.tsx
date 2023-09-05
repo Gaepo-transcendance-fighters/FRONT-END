@@ -3,7 +3,7 @@
 import { Button } from "@mui/material";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { socket } from "@/app/page";
+import { socket } from "@/app/home/page";
 import WaitAccept from "./WaitAccept";
 
 import { IFriend } from "@/type/type";
@@ -21,7 +21,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
       targetUserIdx: prop.friendIdx,
     });
     openModal({
-      children: <WaitAccept nickname={prop.friendNickname}/>,
+      children: <WaitAccept nickname={prop.friendNickname} />,
     });
   };
 

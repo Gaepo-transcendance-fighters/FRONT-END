@@ -15,7 +15,7 @@ const GameResult = () => {
 
   const BackToMain = () => {
     gameDispatch({ type: "SCORE_RESET" });
-    router.push("/");
+    router.push("/home");
   };
 
   useEffect(() => {

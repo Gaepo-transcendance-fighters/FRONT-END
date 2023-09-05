@@ -48,7 +48,7 @@ export default function SecondAuth() {
 
   useEffect(() => {
     const verified = localStorage.getItem("check2Auth");
-    if (verified === "" || verified === null ) return;
+    if (verified === "" || verified === null) return;
 
     setVerified(verified);
   }, []);
@@ -66,40 +66,45 @@ export default function SecondAuth() {
 
   const onChangeSecondAuth = async () => {
     let newVerifiedValue = false;
-    if (verified === 'true') {
+    if (verified === "true") {
       newVerifiedValue = false;
-    } else if (verified === 'false') {
+    } else if (verified === "false") {
       newVerifiedValue = true;
     }
-  
-      const response = await axios({
-        method: "patch",
-        url: "http://localhost:4000/users/profile/second",
-        headers: {
-          "Content-Type": "Application/json",
-          Authorization: "Bearer " + localStorage.getItem("authorization"),
-        },
-        data: {
-          userIdx : Number(localStorage.getItem("idx")),
-          check2Auth: newVerifiedValue}, // 불리언 값을 JSON 문자열로 변환하여 전달
-    }).then(res => {
-      if (res.status === 200) {
-      setVerified(newVerifiedValue ? "true" : "false");
-      localStorage.setItem("check2Auth", newVerifiedValue ? "true" : "false");
-        if (!newVerifiedValue) return router.push("/");
-      location.reload();
-    //       if (response.status == 200) {
-    //   if (response.data.check2Auth == true) {
-    //     console.log("success in check 2 auth");
-    //     return router.push("/");
-    //   } else if (response.data.check2Auth === false) {
-    //     console.log("success in check 2 auth");
-    //   }
-    }
 
-    }).catch(err => {
-      console.log("2차인증 시 에러발생");
-    });
+    const response = await axios({
+      method: "patch",
+      url: "http://localhost:4000/users/profile/second",
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
+      },
+      data: {
+        userIdx: Number(localStorage.getItem("idx")),
+        check2Auth: newVerifiedValue,
+      }, // 불리언 값을 JSON 문자열로 변환하여 전달
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setVerified(newVerifiedValue ? "true" : "false");
+          localStorage.setItem(
+            "check2Auth",
+            newVerifiedValue ? "true" : "false"
+          );
+          if (!newVerifiedValue) return router.push("/home");
+          location.reload();
+          //       if (response.status == 200) {
+          //   if (response.data.check2Auth == true) {
+          //     console.log("success in check 2 auth");
+          //     return router.push("/home");
+          //   } else if (response.data.check2Auth === false) {
+          //     console.log("success in check 2 auth");
+          //   }
+        }
+      })
+      .catch((err) => {
+        console.log("2차인증 시 에러발생");
+      });
   };
 
   return (

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
 import { useRoom } from "@/context/RoomContext";
-import { socket } from "@/app/page";
+import { socket } from "@/app/home/page";
 import { useUser } from "@/context/UserContext";
 import { IChatRoom, ReturnMsgDto, alert } from "@/type/RoomType";
 import { Alert } from "@mui/material";
@@ -63,7 +63,7 @@ export default function RoomTypeButton() {
   useEffect(() => {
     if (roomState.hasNewDmRoomAlert === true) {
       const time = setTimeout(() => {
-        roomDispatch({ type:"SET_NEW_DM_ROOM_ALERT", value: false})
+        roomDispatch({ type: "SET_NEW_DM_ROOM_ALERT", value: false });
       }, 3000);
 
       return () => clearTimeout(time);

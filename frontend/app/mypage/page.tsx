@@ -76,7 +76,7 @@ import axios from "axios";
 
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
 import { useAuth } from "@/context/AuthContext";
-import {socket} from "@/app/page";
+import { socket } from "@/app/home/page";
 
 export default function PageRedir() {
   const router = useRouter();
@@ -102,17 +102,17 @@ export default function PageRedir() {
 
   const fetch = async () => {
     await axios
-    .get("http://localhost:4000/users/profile", { 
-      headers: {
-        "Content-type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
-      },
-    })
-    .then((response) => {
-      setUserData(response.data);
-      console.log(response.data);
-    });
-  }
+      .get("http://localhost:4000/users/profile", {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authorization"),
+        },
+      })
+      .then((response) => {
+        setUserData(response.data);
+        console.log(response.data);
+      });
+  };
 
   useEffect(() => {
     // const getData = () => {
@@ -120,7 +120,7 @@ export default function PageRedir() {
     if (!verified) return;
     setVerified(verified);
     fetch();
-    
+
     // };
     console.log("API REQUEST");
   }, [reload, verified]);
@@ -210,8 +210,13 @@ export default function PageRedir() {
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
         console.log("Success");
-        userDispatch({ type: "CHANGE_NICK_NAME", value: response.data.result.nickname });
-        socket.emit('set_user_status', {userStatus:{ nickname: response.data.nickname}});
+        userDispatch({
+          type: "CHANGE_NICK_NAME",
+          value: response.data.result.nickname,
+        });
+        socket.emit("set_user_status", {
+          userStatus: { nickname: response.data.nickname },
+        });
         handleCloseModal();
       }
     } catch (error) {
@@ -232,7 +237,7 @@ export default function PageRedir() {
   };
 
   const BackToHome = () => {
-    router.push("/");
+    router.push("/home");
   };
 
   const RankImgSelect = (data: IUserData) => {
@@ -524,10 +529,14 @@ export default function PageRedir() {
                           </Typography>
                           <Typography margin={1}>
                             승률 :{" "}
-                            {userData.win + userData.lose === 0 ? 0 : Math.floor(
-                              (userData.win / (userData.win + userData.lose)) *
-                                100
-                            )}%
+                            {userData.win + userData.lose === 0
+                              ? 0
+                              : Math.floor(
+                                  (userData.win /
+                                    (userData.win + userData.lose)) *
+                                    100
+                                )}
+                            %
                           </Typography>
                         </CardContent>
                       </Card>

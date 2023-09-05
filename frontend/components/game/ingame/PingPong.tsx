@@ -5,7 +5,7 @@ import GamePaddle from "./GamePaddle";
 import { useCallback, useEffect, useState, useRef } from "react";
 import GameBall from "./GameBall";
 import { useGame, resetGameContextData } from "@/context/GameContext";
-import { gameSocket } from "@/app/page";
+import { gameSocket } from "@/app/home/page";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { IPaddle, IBall } from "@/type/type";

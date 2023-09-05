@@ -12,10 +12,9 @@ import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { useUser } from "@/context/UserContext";
 import { useFriend } from "@/context/FriendContext";
-import { socket } from "@/app/page";
+import { socket } from "@/app/home/page";
 import { IMaindata } from "@/type/type";
 import { ReturnMsgDto } from "@/type/RoomType";
-
 
 const Layout = () => {
   const { authState } = useAuth();

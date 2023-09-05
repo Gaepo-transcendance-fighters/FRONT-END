@@ -5,8 +5,8 @@ import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom, Mode, Permission, ReturnMsgDto } from "@/type/RoomType"
-import { socket } from "@/app/page";
+import { IChatRoom, Mode, Permission, ReturnMsgDto } from "@/type/RoomType";
+import { socket } from "@/app/home/page";
 import { useUser } from "@/context/UserContext";
 
 const style = {
@@ -83,10 +83,14 @@ export default function CreateRoomModal({
   }, [userState.userIdx, roomState.currentRoom]);
 
   const OnClick = () => {
-    socket.emit("BR_chat_create_room", { password: value }, (ret: ReturnMsgDto) => {
-      console.log("OnClick : ", ret);
-      // if (ret === 200)
-    });
+    socket.emit(
+      "BR_chat_create_room",
+      { password: value },
+      (ret: ReturnMsgDto) => {
+        console.log("OnClick : ", ret);
+        // if (ret === 200)
+      }
+    );
   };
 
   return (
