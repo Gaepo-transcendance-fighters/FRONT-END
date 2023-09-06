@@ -4,13 +4,13 @@ import { Box, Button } from "@mui/material";
 import { useState, useCallback, useEffect, useRef } from "react";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { socket } from "@/app/home/page";
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
 import { useRoom } from "@/context/RoomContext";
 import { IChat } from "@/type/type";
 import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
+import { socket } from "@/app/page";
 interface IPayload {
   channelIdx: number | undefined;
   senderIdx: number;
@@ -49,11 +49,7 @@ const BottomField = ({ setMsgs }: Props) => {
         } else return;
         const chat = {
           channelIdx: chatFromServer.channelIdx,
-          senderIdx:
-            chatFromServer.sender ===
-            roomState.currentDmRoomMemberList?.userIdx1
-              ? roomState.currentDmRoomMemberList?.userIdx1
-              : roomState.currentDmRoomMemberList?.userIdx2,
+          senderIdx: chatFromServer.senderIdx,
           sender: result,
           msg: chatFromServer.msg,
           msgDate: chatFromServer.msgDate,
@@ -93,6 +89,9 @@ const BottomField = ({ setMsgs }: Props) => {
     (event: React.FormEvent) => {
       event.preventDefault();
       let payload: IPayload | undefined = undefined;
+      if (msg === "") {
+        return;
+      }
       if (
         roomState.currentRoom?.mode === "private" &&
         roomState.currentDmRoomMemberList?.userIdx1 &&

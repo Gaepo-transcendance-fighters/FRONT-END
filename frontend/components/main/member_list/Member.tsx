@@ -20,7 +20,7 @@ import {
 import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 
 export default function Member({
   idx,

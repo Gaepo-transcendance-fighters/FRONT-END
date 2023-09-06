@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useModalContext } from "@/context/ModalContext";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 import { useAuth } from "@/context/AuthContext";
 
 const modalStyle = {
