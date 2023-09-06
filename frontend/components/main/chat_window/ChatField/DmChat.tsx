@@ -47,9 +47,14 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
     console.log(pageNum);
     await axios
       // dev original
-      .get(`http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`)
+      // .get(`http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`)
       // haryu's server
-      // .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
+      .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + localStorage.getItem("authorization"),
+        },
+      })
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setMsgs((prevMsgs) => [...prevMsgs, ...newData]);
