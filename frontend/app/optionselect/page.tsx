@@ -18,6 +18,7 @@ import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { gameSocket } from "../page";
 import axios from "axios";
+import { io } from "socket.io-client";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";

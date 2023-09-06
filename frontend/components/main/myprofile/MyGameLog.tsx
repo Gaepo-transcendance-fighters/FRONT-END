@@ -72,13 +72,9 @@ const MyGameLog = () => {
       //dev original
       .get(`http://localhost:4000/chat/messages?channelIdx=1&index=${pageNum}`)
       //haryu's server
-<<<<<<< HEAD
-      .get(
-        `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`
-      )
-=======
-      // .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`)
->>>>>>> f0201286c043d0a21d458c43c2d3ae1b1cffa430
+      // .get(
+      //   `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`
+      // )
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setGameRecord((prevRecord) => [...prevRecord, ...newData]);
