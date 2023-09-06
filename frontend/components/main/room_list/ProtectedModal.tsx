@@ -14,7 +14,7 @@ import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom, Mode, ReturnMsgDto } from "@/type/RoomType";
-import { socket } from "@/app/page";
+import { socket } from "@/app/home/page";
 import { useUser } from "@/context/UserContext";
 import { RoomContextData, RoomAction } from "@/context/RoomContext";
 import { UserContextData } from "@/context/UserContext";
@@ -57,9 +57,9 @@ export default function ProtectedModal({
   fail: boolean;
   RoomEnter: (
     room: IChatRoom,
-    roomState : RoomContextData,
-    userState : UserContextData,
-    roomDispatch : Dispatch<RoomAction>,
+    roomState: RoomContextData,
+    userState: UserContextData,
+    roomDispatch: Dispatch<RoomAction>
   ) => void; // <==================== 삭제필요
 }) {
   const { roomState, roomDispatch } = useRoom();

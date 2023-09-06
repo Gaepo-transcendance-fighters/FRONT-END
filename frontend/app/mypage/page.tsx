@@ -250,7 +250,7 @@ export default function PageRedir() {
   };
 
   const BackToHome = () => {
-    router.push("/");
+    router.push("/home");
   };
 
   const RankImgSelect = (data: IUserData) => {

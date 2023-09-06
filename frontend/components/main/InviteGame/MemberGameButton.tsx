@@ -3,7 +3,7 @@
 import { Box, Button, Card, CardContent, Modal } from "@mui/material";
 import { useEffect, useState, forwardRef } from "react";
 import { useRouter } from "next/navigation";
-import { socket } from "@/app/page";
+import { socket } from "@/app/home/page";
 import InviteGame from "./InviteGame";
 import WaitAccept from "./WaitAccept";
 import { IMember } from "@/type/RoomType";
@@ -25,7 +25,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
     });
     console.log("open");
     openModal({
-      children: <WaitAccept nickname={prop.nickname}/>,
+      children: <WaitAccept nickname={prop.nickname} />,
     });
   };
 

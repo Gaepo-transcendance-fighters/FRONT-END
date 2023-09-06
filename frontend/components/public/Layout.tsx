@@ -16,7 +16,6 @@ import { socket } from "@/app/page";
 import { IMaindata } from "@/type/type";
 import { ReturnMsgDto } from "@/type/RoomType";
 
-
 const Layout = () => {
   const { authState } = useAuth();
   const { roomState, roomDispatch } = useRoom();
@@ -44,14 +43,14 @@ const Layout = () => {
     };
   }, []);
   useEffect(() => {
-      socket.emit(
-        "main_enter",
-        { intra: localStorage.getItem("intra") },
-        (ret: ReturnMsgDto) => {
-          if (ret.code === 200) {
-          }
+    socket.emit(
+      "main_enter",
+      { intra: localStorage.getItem("intra") },
+      (ret: ReturnMsgDto) => {
+        if (ret.code === 200) {
         }
-      );
+      }
+    );
   }, []);
 
   return (

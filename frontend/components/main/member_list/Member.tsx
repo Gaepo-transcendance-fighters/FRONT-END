@@ -15,12 +15,12 @@ import {
   Permission,
   ReturnMsgDto,
   alert,
-  ILeftMember
+  ILeftMember,
 } from "@/type/RoomType";
 import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
-import { socket } from "@/app/page";
+import { socket } from "@/app/home/page";
 
 export default function Member({
   idx,

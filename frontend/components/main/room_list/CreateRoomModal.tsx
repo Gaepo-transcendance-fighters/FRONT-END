@@ -1,11 +1,17 @@
 "use client";
 
-import { useState, Dispatch, SetStateAction, useEffect, KeyboardEvent } from "react";
+import {
+  useState,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  KeyboardEvent,
+} from "react";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom, Mode, Permission, ReturnMsgDto } from "@/type/RoomType"
+import { IChatRoom, Mode, Permission, ReturnMsgDto } from "@/type/RoomType";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 
@@ -81,16 +87,24 @@ export default function CreateRoomModal({
   }, [userState.userIdx, roomState.currentRoom]);
 
   const OnClick = () => {
-    socket.emit("BR_chat_create_room", { password: value }, (ret: ReturnMsgDto) => {
-      // if (ret === 200)
-    });
+    socket.emit(
+      "BR_chat_create_room",
+      { password: value },
+      (ret: ReturnMsgDto) => {
+        // if (ret === 200)
+      }
+    );
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
-      socket.emit("BR_chat_create_room", { password: value }, (ret: ReturnMsgDto) => {
-      // if (ret === 200)
-    });
+      socket.emit(
+        "BR_chat_create_room",
+        { password: value },
+        (ret: ReturnMsgDto) => {
+          // if (ret === 200)
+        }
+      );
     }
   };
 
