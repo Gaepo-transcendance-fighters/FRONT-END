@@ -74,8 +74,8 @@ export default function SecondAuth() {
 
     const response = await axios({
       method: "patch",
-      // url: "http://paulryu9309.ddns.net:4000/users/profile/second",
-      url: "http://localhost:4000/users/profile/second",
+      url: "http://paulryu9309.ddns.net:4000/users/profile/second",
+      // url: "http://localhost:4000/users/profile/second",
       headers: {
         "Content-Type": "Application/json",
         Authorization: "Bearer " + localStorage.getItem("authorization"),
