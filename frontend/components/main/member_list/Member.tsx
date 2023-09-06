@@ -16,6 +16,7 @@ import {
   ReturnMsgDto,
   alert,
   ILeftMember,
+  Mode,
 } from "@/type/RoomType";
 import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
 import { useUser } from "@/context/UserContext";
@@ -253,7 +254,7 @@ export default function Member({
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
-          {person.nickname === roomState.currentRoom?.owner ? (
+          {roomState.currentRoom?.mode !== Mode.PRIVATE && person.nickname === roomState.currentRoom?.owner ? (
             <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
           ) : (
             roomState.adminAry.map((admin, idx) => {
