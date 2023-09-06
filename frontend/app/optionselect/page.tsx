@@ -44,6 +44,14 @@ interface IGameOption {
   mapNumber: MapOption; // A, B, C
 }
 
+// export const gameSocket = io("http://localhost:4000/game", {
+// const userId =
+//   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
+
+// export const gameSocket = io("http://localhost:4000/game", {
+//   query: { userId: userId },
+// });
+
 const OptionSelect = () => {
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();

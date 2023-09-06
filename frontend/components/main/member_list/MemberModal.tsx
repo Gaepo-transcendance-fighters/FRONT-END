@@ -22,21 +22,8 @@ import RoomEnter from "@/external_functions/RoomEnter";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
 import MemberGameButton from "../InviteGame/MemberGameButton";
-import { FriendReqData } from "@/type/type";
+import { FriendReqData, friendProfileModalStyle } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
-
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  height: 500,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const loginOn = (
   <Image src="/status/logon.png" alt="online" width={10} height={10} />
@@ -60,7 +47,6 @@ export default function MemberModal({
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const { friendState, friendDispatch } = useFriend();
-  const [isFriend, setIsFriend] = useState(false);
 
   useEffect(() => {
     setCurFriend({
@@ -84,17 +70,19 @@ export default function MemberModal({
 
   const addFriend = async () => {
     const friendReqData: FriendReqData = {
-      userIdx: userState.userIdx,
+      myIdx: userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
     await axios({
       method: "post",
+      // url: "http://localhost:4000/users/follow",
       url: "http://paulryu9309.ddns.net:4000/users/follow",
       data: friendReqData,
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+        friendDispatch({ type: "SET_IS_FRIEND", value: true });
       })
       .catch((err) => {
         console.log(err);
@@ -105,33 +93,50 @@ export default function MemberModal({
 
   const deleteFriend = async () => {
     const friendReqData: FriendReqData = {
-      userIdx: userState.userIdx,
+      myIdx: userState.userIdx,
       targetNickname: person.nickname!,
       targetIdx: person.userIdx!,
     };
 
     await axios({
       method: "delete",
+      // url: "http://localhost:4000/users/unfollow",
       url: "http://paulryu9309.ddns.net:4000/users/unfollow",
-      data: JSON.stringify(friendReqData),
+      data: friendReqData,
     })
       .then((res) => {
-        console.log(res.data);
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+        friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })
       .catch((err) => {
         console.log(err);
       });
+    handleCloseMenu();
     handleCloseModal();
   };
 
   useEffect(() => {
-    friendState.friendList.find(
-      (friend) => friend.friendNickname === person.nickname
-    )
-      ? setIsFriend(true)
-      : setIsFriend(false);
-  }, [isFriend]);
+    const ChatBlock = () => {
+      handleCloseMenu();
+      handleCloseModal();
+      friendDispatch({ type: "SET_IS_FRIEND", value: false });
+    };
+    socket.on("chat_block", ChatBlock);
+
+    return () => {
+      socket.off("chat_block", ChatBlock);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (friendState.friendList.length) {
+      friendState.friendList.find(
+        (friend) => friend.friendNickname === person.nickname
+      )
+        ? friendDispatch({ type: "SET_IS_FRIEND", value: true })
+        : friendDispatch({ type: "SET_IS_FRIEND", value: false });
+    }
+  }, [friendState.isFriend, friendState.friendList]);
 
   useEffect(() => {
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
@@ -170,35 +175,35 @@ export default function MemberModal({
     } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
       socket.emit(
-        "create_DM",
-        {
-          targetNickname: person.nickname,
-          targetIdx: person.userIdx,
-        },
+        "create_dm",
+        { targetNickname: person.nickname, targetIdx: person.userIdx },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
             console.log(ret.msg);
-          } else {
+          } else if (ret.code !== 200) {
             console.log(ret.msg);
-            return;
           }
         }
       );
     }
+  };
+
+  const blockFriend = () => {
     socket.emit(
-      "create_dm",
-      { targetNickname: person.nickname, targetIdx: person.userIdx },
-      (res: ReturnMsgDto) => {
-        if (res.code === 200) {
-        } else if (res.code !== 200) {
-        }
+      "chat_block",
+      {
+        targetNickname: person.nickname,
+        targetIdx: person.userIdx,
+      },
+      (ret: ReturnMsgDto) => {
+        console.log("blockFriend ret : ", ret);
       }
     );
   };
 
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
-      <Box sx={modalStyle} borderRadius={"10px"}>
+      <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
         <Card
           sx={{
             backgroundColor: "#48a0ed",
@@ -264,11 +269,19 @@ export default function MemberModal({
                 MenuListProps={{ sx: { py: 0 } }}
               >
                 <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                  {!isFriend && <MenuItem onClick={addFriend}>Add</MenuItem>}
-                  {isFriend && (
+                  {!friendState.isFriend && (
+                    <MenuItem onClick={addFriend}>Add</MenuItem>
+                  )}
+                  {friendState.isFriend && (
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                   )}
-                  <MenuItem>Block</MenuItem>
+                  <MenuItem onClick={blockFriend}>
+                    {friendState.blockList.find(
+                      (block) => block.targetIdx === person.userIdx
+                    ) === undefined
+                      ? "Block"
+                      : "UnBlock"}
+                  </MenuItem>
                 </Stack>
               </Menu>
             </Stack>

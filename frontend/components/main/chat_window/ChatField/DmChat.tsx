@@ -48,7 +48,7 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
     await axios
       // dev original
       // .get(
-      //   `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`
+      // `http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`
       // )
       // haryu's server
       .get(

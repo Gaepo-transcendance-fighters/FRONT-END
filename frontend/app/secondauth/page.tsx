@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import React, { useState, ChangeEvent } from "react";
 import axios from "axios";
+import {socket} from "@/app/page";
+
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -31,11 +33,14 @@ const modalStyle = {
 const SecondAuth = () => {
   const [block, setBlock] = useState<boolean>(false);
   const [inputnumber, setInputNumber] = useState<string>("");
+  const router = useRouter();
+
 
   const SendMail = async () => {
     const response = await axios({
       method: "POST",
-      url: `http://localhost:4000/users/second`,
+      // url: `http://localhost:4000/users/second`,
+      url: `http://paulryu9309.ddns.net:4000/users/second`,
       data: {
         // userIdx: localStorage.getItem("idx"),
         userIdx: Number(localStorage.getItem("idx")),
@@ -52,14 +57,19 @@ const SecondAuth = () => {
 
     const response = await axios({
       method: "PATCH",
-      url: `http://localhost:4000/users/second`,
+      // url: `http://localhost:4000/users/second`,
+      url: `http://paulryu9309.ddns.net:4000/users/second`,
       data: {
         // userIdx: localStorage.getItem("idx"),
         userIdx: Number(localStorage.getItem("idx")),
         code: Number(inputnumber),
       },
     });
-    if (response.status == 200) console.log("success in check 2 auth");
+    if (response.status == 200) {
+      console.log("success in check 2 auth");
+      socket.emit('set_user_status', {userStatus:{ nickname: response.data.nickname}});
+      return router.push("/");
+    }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
     else console.log("fail");
     //재입력 필요
