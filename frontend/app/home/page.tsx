@@ -26,6 +26,7 @@ const Page = () => {
   const param = useSearchParams();
   const router = useRouter();
   const [client, setClient] = useState(false);
+  const {authDispatch} = useAuth()
   const { openModal } = useModalContext();
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
+    authDispatch({type: "SET_ID", value: parseInt(localStorage.getItem('idx')!)})
     setClient(true);
     socket.connect();
     const askInvite = ({
