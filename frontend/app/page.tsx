@@ -11,15 +11,9 @@ import InviteGame from "@/components/main/InviteGame/InviteGame";
 
 const userId =
   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
-
 export const socket = io("http://localhost:4000/chat", {
   // haryu's server
   // export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
-  query: { userId: userId },
-});
-//TODO : 이 밑에 gameSocket을 주석처리 해줘야 데이터베이스에서 롤백이 이러나지 않습니다.
-export const gameSocket = io("http://localhost:4000/game", {
-  // export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
   query: { userId: userId },
 });
 
