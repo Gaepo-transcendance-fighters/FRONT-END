@@ -1,26 +1,16 @@
+import { IChatBlock, IFriend } from "@/type/type";
 import { ReactNode, createContext, useContext, useReducer } from "react";
-
-interface IFriend {
-  friendNickname: string;
-  friendIdx?: number;
-  isOnline: boolean;
-}
-
-interface IBlock {
-  targetNickname: string;
-  targetIdx: number;
-}
 
 interface FriendContextData {
   friendList: IFriend[];
-  blockList: IBlock[];
+  blockList: IChatBlock[];
   isFriend: boolean;
 }
 
 type FriendAction =
   | { type: "SET_FRIENDLIST"; value: IFriend[] }
-  | { type: "SET_BLOCKLIST"; value: IBlock[] }
-  | { type: "ADD_BLOCK"; value: IBlock }
+  | { type: "SET_BLOCKLIST"; value: IChatBlock[] }
+  | { type: "ADD_BLOCK"; value: IChatBlock }
   | { type: "ADD_FRIEND"; value: IFriend }
   | { type: "SET_IS_FRIEND"; value: boolean };
 
@@ -42,14 +32,14 @@ const FriendReducer = (
     case "ADD_FRIEND": {
       const newFriend: IFriend = action.value;
       if (
-        state.friendList.some(
-          (friend) => friend.friendNickname === newFriend.friendNickname
+        state.friendList.find(
+          (friend) => friend.friendIdx === newFriend.friendIdx
         )
       ) {
         return state;
       } else if (
-        state.blockList.some(
-          (block) => block.targetNickname === newFriend.friendNickname
+        state.blockList.find(
+          (block) => block.blockedUserIdx === newFriend.friendIdx
         )
       ) {
         return state;
@@ -58,27 +48,27 @@ const FriendReducer = (
       }
     }
     case "ADD_BLOCK": {
-      const newBlock: IBlock = action.value;
-      if (
-        state.blockList.some(
-          (block) => block.targetNickname === newBlock.targetNickname
-        )
+      const newBlock: IChatBlock = action.value;
+        if (
+        state.blockList.find((block) => block.blockedUserIdx === newBlock.blockedUserIdx)
       ) {
         return state;
-      } else if (
-        state.friendList.some(
-          (friend) => friend.friendNickname === newBlock.targetNickname
+      } 
+      else if (
+        state.friendList.find(
+          (friend) => friend.friendIdx === newBlock.blockedUserIdx
         )
       ) {
         const newFriendList: IFriend[] = state.friendList.filter(
-          (friend) => friend.friendNickname !== newBlock.targetNickname
+          (friend) => friend.friendIdx !== newBlock.blockedUserIdx
         );
         return {
           ...state,
           friendList: newFriendList,
           blockList: [...state.blockList, newBlock],
         };
-      } else {
+      } 
+      else {
         return state;
       }
     }
