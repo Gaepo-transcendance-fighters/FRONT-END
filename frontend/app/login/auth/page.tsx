@@ -46,9 +46,9 @@ const Auth = () => {
 
   const postCode = async (code: string) => {
     // dev original
-    // await fetch("http://localhost:4000/login/auth", {
+    await fetch("http://localhost:4000/login/auth", {
       // haryu's server
-      await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
+      // await fetch("http://paulryu9309.ddns.net:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -61,7 +61,8 @@ const Auth = () => {
       .then(async (res) => {
         if (res.status === 200) {
           const data: Data = await res.json();
-          if (data.imgUri === "http://paulryu9309.ddns.net:4000/img/0.png")
+          if (data.imgUri === "http://localhost:4000/img/0.png")
+          // if (data.imgUri === "http://paulryu9309.ddns.net:4000/img/0.png")
             socket.emit("set_user_status", {
               userStatus: { nickname: data.nickname },
             });
@@ -78,7 +79,7 @@ const Auth = () => {
           setupCookies();
 
           if (data.check2Auth === true) return router.push("./secondauth");
-          else return router.push(`/`);
+          else return router.push(`/home`);
         }
       })
       .catch((error) => {

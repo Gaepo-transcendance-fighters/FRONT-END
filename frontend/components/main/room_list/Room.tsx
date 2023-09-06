@@ -17,7 +17,7 @@ import {
   ILeftMember,
   ReturnMsgDto,
 } from "@/type/RoomType";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";
 import { useInitMsg } from "@/context/InitMsgContext";

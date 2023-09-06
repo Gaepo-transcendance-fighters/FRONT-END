@@ -1,5 +1,5 @@
 // RoomEnter.ts
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { Mode } from "@/type/RoomType";
 import { RoomContextData, RoomAction } from "@/context/RoomContext";

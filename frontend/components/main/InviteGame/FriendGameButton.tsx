@@ -3,7 +3,7 @@
 import { Button } from "@mui/material";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 import WaitAccept from "./WaitAccept";
 
 import { IFriend } from "@/type/type";
