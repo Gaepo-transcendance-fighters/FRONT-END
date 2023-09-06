@@ -22,7 +22,7 @@ import RoomEnter from "@/external_functions/RoomEnter";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
 import MemberGameButton from "../InviteGame/MemberGameButton";
-import { FriendReqData, friendProfileModalStyle } from "@/type/type";
+import { FriendReqData, IChatBlock, friendProfileModalStyle } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
 
 const loginOn = (
@@ -76,12 +76,21 @@ export default function MemberModal({
     };
     await axios({
       method: "post",
-      url: "http://localhost:4000/users/follow",
-      // url: "http://paulryu9309.ddns.net:4000/users/follow",
+      // url: "http://localhost:4000/users/follow",
+      url: "http://paulryu9309.ddns.net:4000/users/follow",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
+      },
       data: friendReqData,
     })
       .then((res) => {
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+        friendDispatch({type: "ADD_FRIEND", 
+        value: {
+          friendNickname: person.nickname!,
+          friendIdx: person.userIdx!,
+          isOnline: false
+        }})
+        // friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: true });
       })
       .catch((err) => {
@@ -100,8 +109,11 @@ export default function MemberModal({
 
     await axios({
       method: "delete",
-      url: "http://localhost:4000/users/unfollow",
-      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      // url: "http://localhost:4000/users/unfollow",
+      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
+      },
       data: friendReqData,
     })
       .then((res) => {
@@ -116,10 +128,21 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    const ChatBlock = () => {
+    const ChatBlock = (data: any) => {
+      const blockList = data.map((block: IChatBlock) => {
+        return { blockedNickname: block.blockedNickname, blockedUserIdx: block.blockedUserIdx };
+      });
+      friendDispatch({
+        type: "ADD_BLOCK",
+        value: {
+          blockedNickname: person.nickname!,
+          blockedUserIdx: person.userIdx!,
+        },
+      });
+      friendDispatch({ type: "SET_IS_FRIEND", value: false });
+      friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
       handleCloseMenu();
       handleCloseModal();
-      friendDispatch({ type: "SET_IS_FRIEND", value: false });
     };
     socket.on("chat_block", ChatBlock);
 
@@ -268,16 +291,20 @@ export default function MemberModal({
                 onClose={handleCloseMenu}
                 MenuListProps={{ sx: { py: 0 } }}
               >
-                <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                  {!friendState.isFriend && (
+                <Stack sx={{ backgroundColor: "#48a0ed" }}>{
+                  !friendState.blockList.find((block) => block.blockedUserIdx === person.userIdx) ?
+                  <>
+                  {!friendState.friendList.find((friend) => friend.friendIdx === person.userIdx) && (
                     <MenuItem onClick={addFriend}>Add</MenuItem>
                   )}
-                  {friendState.isFriend && (
+                  {friendState.friendList.find((friend) => friend.friendIdx === person.userIdx) && (
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
                   )}
+                  </> : null }
+                  
                   <MenuItem onClick={blockFriend}>
                     {friendState.blockList.find(
-                      (block) => block.targetIdx === person.userIdx
+                      (block) => block.blockedUserIdx === person.userIdx
                     ) === undefined
                       ? "Block"
                       : "UnBlock"}
