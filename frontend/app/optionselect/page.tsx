@@ -92,7 +92,7 @@ const OptionSelect = () => {
 
     await axios({
       method: "post",
-      url: "/game",
+      url: "http://paulryu9309.ddns.net:4000/game",
       data: {
         gameType: gameState.gameMode,
         userIdx: authState.id,

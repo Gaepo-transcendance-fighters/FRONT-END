@@ -68,7 +68,6 @@ const Game = () => {
 
   useEffect(() => {
     setClient(true);
-    gameSocket.connect();
   }, []);
 
   useEffect(() => {
