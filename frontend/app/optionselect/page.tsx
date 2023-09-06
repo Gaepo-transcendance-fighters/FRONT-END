@@ -103,10 +103,9 @@ const OptionSelect = () => {
         mapNumber: selectedMapOption,
       },
     }).then((res) => {
-      console.log(res);
       if (res.status === 200) {
         gameSocket.connect();
-        router.replace("/game");
+        router.replace("/inwaiting");
       } else {
         console.log("게임방 생성 실패");
         router.replace("/home/?from=game");
