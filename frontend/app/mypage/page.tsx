@@ -102,8 +102,8 @@ export default function PageRedir() {
 
   const fetch = async () => {
     await axios
-      // .get("http://paulryu9309.ddns.net:4000/users/profile", {
-        .get("http://localhost:4000/users/profile", {
+      .get("http://paulryu9309.ddns.net:4000/users/profile", {
+        // .get("http://localhost:4000/users/profile", {
         headers: {
           "Content-type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -149,8 +149,8 @@ export default function PageRedir() {
 
     await axios({
       method: "post",
-      url: `http://localhost:4000/users/profile`,
-      // url: `http://paulryu9309.ddns.net:4000/users/profile`,
+      // url: `http://localhost:4000/users/profile`,
+      url: `http://paulryu9309.ddns.net:4000/users/profile`,
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -209,8 +209,8 @@ export default function PageRedir() {
       let idx: number = Number(localStorage.getItem("id"));
       const response = await axios({
         method: "POST",
-        // url: `http://paulryu9309.ddns.net:4000/users/profile`,
-        url: `http://localhost:4000/users/profile`,
+        url: `http://paulryu9309.ddns.net:4000/users/profile`,
+        // url: `http://localhost:4000/users/profile`,
         headers: {
           "Content-Type": "Application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
