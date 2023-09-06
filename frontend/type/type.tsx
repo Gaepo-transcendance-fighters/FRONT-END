@@ -26,11 +26,6 @@ export interface IFriend {
   isOnline: boolean;
 }
 
-export interface IBlock {
-  targetNickname: string;
-  targetIdx: number;
-}
-
 export interface IFriendData {
   targetNickname: string;
   imgUri: string;
@@ -46,13 +41,14 @@ export interface FriendReqData {
   targetIdx: number;
 }
 
-export interface IUserProp {
-  friendNickname?: string;
-  friendIdx?: number;
-  isOnline?: boolean;
-  targetNickname?: string;
-  targetIdx?: number;
-}
+// export interface IUserProp {
+//   friendNickname?: string;
+//   friendIdx?: number;
+//   isOnline?: boolean;
+//   userNickname?: string;
+//   userIdx?: number;
+// }
+
 export interface IUserObject {
   imgUri: string;
   nickname: string;
@@ -62,7 +58,7 @@ export interface IUserObject {
 export interface IMaindata {
   channelList: IChatRoom[];
   friendList: IFriend[];
-  blockList: IBlock[];
+  blockList: IChatBlock[];
   userObject: IUserObject;
 }
 
@@ -89,8 +85,8 @@ export const friendProfileModalStyle = {
 };
 
 export interface IChatBlock {
-  userNickname: string;
-  userIdx: number;
+  blockedNickname: string;
+  blockedUserIdx: number;
 }
 
 export interface IChat {
