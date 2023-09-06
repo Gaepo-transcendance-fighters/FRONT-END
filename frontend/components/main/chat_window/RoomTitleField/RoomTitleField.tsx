@@ -38,7 +38,6 @@ const RoomTitleField = ({
 
   useEffect(() => {
     const leaveHandler = (channel: IChatRoom[]) => {
-      console.log("leaveHandler roomState.isLobbyBtn", roomState.isLobbyBtn);
       if (roomState.currentRoom && roomState.isLobbyBtn) {
         roomDispatch({ type: "SET_IS_OPEN", value: false });
         roomDispatch({ type: "SET_CUR_ROOM", value: null });
@@ -77,7 +76,7 @@ const RoomTitleField = ({
     socket.on("BR_chat_room_password", changingPw);
     return () => {
       socket.off("BR_chat_room_password", changingPw);
-    }
+    };
   }, []);
 
   return (

@@ -8,6 +8,7 @@ import {
   CardContent,
   Modal,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -43,10 +44,12 @@ export default function SecondAuth() {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const [verified, setVerified] = useState<string>("");
+  const router = useRouter();
 
   useEffect(() => {
     const verified = localStorage.getItem("check2Auth");
-    if (!verified) return;
+    if (verified === "" || verified === null) return;
+
     setVerified(verified);
   }, []);
 
@@ -62,53 +65,52 @@ export default function SecondAuth() {
   };
 
   const onChangeSecondAuth = async () => {
+    let newVerifiedValue = false;
     if (verified === "true") {
-      setVerified("false");
-      localStorage.setItem("check2Auth", "false");
+      newVerifiedValue = false;
     } else if (verified === "false") {
-      setVerified("true");
-      localStorage.setItem("check2Auth", "true");
+      newVerifiedValue = true;
     }
 
-    try {
-      let boolval;
-      if (verified === "true") boolval = true;
-      else if (verified === "false") boolval = false;
-      else throw new Error("Invalue check2Auth value");
-
-      const response = await axios({
-        method: "PATCH",
-        // url: "http://localhost:4000/users/profile",
-        url: "http://paulryu9309.ddns.net:4000/users/profile",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify({
-          // userNickName: userData?.nickname,
-          check2Auth: boolval,
-        }),
-      });
-    } catch (error) {
-      console.log("2차인증 시 에러발생");
-    }
-
-    location.reload();
-    // setOpenModal(false);
-    // console.log();
+    const response = await axios({
+      method: "patch",
+      // url: "http://paulryu9309.ddns.net:4000/users/profile/second",
+      url: "http://localhost:4000/users/profile/second",
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
+      },
+      data: {
+        userIdx: Number(localStorage.getItem("idx")),
+        check2Auth: newVerifiedValue,
+      }, // 불리언 값을 JSON 문자열로 변환하여 전달
+    }).then((res) => {
+      if (res.status === 200) {
+        setVerified(newVerifiedValue ? "true" : "false");
+        localStorage.setItem("check2Auth", newVerifiedValue ? "true" : "false");
+        if (!newVerifiedValue) return router.push("/");
+        location.reload();
+        //       if (response.status == 200) {
+        //   if (response.data.check2Auth == true) {
+        //     console.log("success in check 2 auth");
+        //     return router.push("/");
+        //   } else if (response.data.check2Auth === false) {
+        //     console.log("success in check 2 auth");
+        //   }
+      }
+    });
   };
 
   return (
-    <>
-      <Button
-        type="button"
-        style={{
-          minWidth: "max-content",
-        }}
-        variant="contained"
-        onClick={handleOpenModal}
-      >
-        2차인증
-      </Button>
+    <Button
+      type="button"
+      style={{
+        minWidth: "max-content",
+      }}
+      variant="contained"
+      onClick={handleOpenModal}
+    >
+      2차인증
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box sx={modalStyle} borderRadius={"10px"}>
           <Card
@@ -203,6 +205,6 @@ export default function SecondAuth() {
           </Card>
         </Box>
       </Modal>
-    </>
+    </Button>
   );
 }

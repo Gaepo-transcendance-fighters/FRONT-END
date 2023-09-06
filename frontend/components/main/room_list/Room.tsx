@@ -17,12 +17,11 @@ import {
   ILeftMember,
   ReturnMsgDto,
 } from "@/type/RoomType";
-import { socket } from "@/app/page";
+import { socket } from "@/app/home/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";
 import { useInitMsg } from "@/context/InitMsgContext";
-import RoomEnter from "@/external_functions/RoomEnter"
-
+import RoomEnter from "@/external_functions/RoomEnter";
 
 export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);

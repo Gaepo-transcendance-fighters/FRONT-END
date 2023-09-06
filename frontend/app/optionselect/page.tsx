@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
-import { gameSocket } from "../page";
+import { gameSocket } from "../home/page";
 import { io } from "socket.io-client";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
@@ -51,7 +51,7 @@ interface IGameOption {
 // const userId =
 //   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 
-// export const gameSocket = io("http://paulryu9309.ddns.net:4000/game", {
+// export const gameSocket = io("http://localhost:4000/game", {
 //   query: { userId: userId },
 // });
 
