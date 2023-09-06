@@ -26,7 +26,7 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
         !localStorage.getItem("authorization")
       )
         return router.push(redirectUrl);
-      return router.push("/");
+      return router.push("/home");
     } else if (cookies_value === "") router.push(redirectUrl);
   }, []);
 };

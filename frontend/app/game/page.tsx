@@ -55,7 +55,7 @@ const Game = () => {
   };
 
   const BackToMain = () => {
-    router.replace("/");
+    router.replace("/home");
   };
 
   const handleOpenModal = () => {

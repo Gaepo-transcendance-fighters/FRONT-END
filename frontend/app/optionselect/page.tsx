@@ -19,6 +19,9 @@ import { useAuth } from "@/context/AuthContext";
 import { gameSocket } from "../page";
 import axios from "axios";
 
+// type SpeedOption = "speed1" | "speed2" | "speed3";
+// type MapOption = "map1" | "map2" | "map3";
+
 enum SpeedOption {
   speed1,
   speed2,
@@ -100,12 +103,13 @@ const OptionSelect = () => {
         mapNumber: selectedMapOption,
       },
     }).then((res) => {
-      if (res.data.code === 200) {
+      console.log(res);
+      if (res.status === 200) {
         gameSocket.connect();
         router.replace("/game");
       } else {
         console.log("게임방 생성 실패");
-        router.replace("/?from=game");
+        router.replace("/home/?from=game");
       }
     });
   };

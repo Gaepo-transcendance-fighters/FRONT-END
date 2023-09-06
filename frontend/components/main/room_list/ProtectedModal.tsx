@@ -57,9 +57,9 @@ export default function ProtectedModal({
   fail: boolean;
   RoomEnter: (
     room: IChatRoom,
-    roomState : RoomContextData,
-    userState : UserContextData,
-    roomDispatch : Dispatch<RoomAction>,
+    roomState: RoomContextData,
+    userState: UserContextData,
+    roomDispatch: Dispatch<RoomAction>
   ) => void; // <==================== 삭제필요
 }) {
   const { roomState, roomDispatch } = useRoom();

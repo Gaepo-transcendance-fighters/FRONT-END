@@ -8,11 +8,10 @@ import { Dispatch } from "react";
 
 const RoomEnter = (
   room: IChatRoom,
-  roomState : RoomContextData,
-  userState : UserContextData,
-  roomDispatch : Dispatch<RoomAction>,
+  roomState: RoomContextData,
+  userState: UserContextData,
+  roomDispatch: Dispatch<RoomAction>
 ) => {
-
   if (roomState.currentRoom && roomState.currentRoom.mode !== Mode.PRIVATE) {
     console.log("[RoomEnter 조건문 안에 들어왔따. ]");
     socket.emit(

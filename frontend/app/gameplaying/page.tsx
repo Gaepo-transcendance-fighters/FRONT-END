@@ -25,7 +25,7 @@ const GamePlaying = () => {
     gameDispatch({ type: "SCORE_RESET" });
     gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
     gameSocket.disconnect();
-    router.replace("/");
+    router.replace("/home");
   };
 
   useEffect(() => {

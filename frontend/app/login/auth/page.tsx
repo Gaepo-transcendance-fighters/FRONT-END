@@ -77,8 +77,8 @@ const Auth = () => {
           authDispatch({ type: "SET_NICKNAME", value: data.nickname });
           setupCookies();
 
-          if (data.check2Auth === true) return router.push("./secondauth");
-          else return router.push("/");
+          if (data.check2Auth === true) return router.push("/secondauth");
+          else return router.push("/home");
         }
       })
       .catch((error) => {

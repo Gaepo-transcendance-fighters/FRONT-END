@@ -63,7 +63,7 @@ export default function RoomTypeButton() {
   useEffect(() => {
     if (roomState.hasNewDmRoomAlert === true) {
       const time = setTimeout(() => {
-        roomDispatch({ type:"SET_NEW_DM_ROOM_ALERT", value: false})
+        roomDispatch({ type: "SET_NEW_DM_ROOM_ALERT", value: false });
       }, 3000);
 
       return () => clearTimeout(time);
