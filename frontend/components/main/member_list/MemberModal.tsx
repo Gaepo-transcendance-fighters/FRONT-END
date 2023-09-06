@@ -17,7 +17,7 @@ import { IFriend } from "../friend_list/FriendList";
 import { IChatDmEnter, IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 import RoomEnter from "@/external_functions/RoomEnter";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
@@ -76,16 +76,9 @@ export default function MemberModal({
     };
     await axios({
       method: "post",
-<<<<<<< HEAD
-      url: "http://localhost:4000/users/follow",
-      data: JSON.stringify(friendReqData),
-      // url: "http://paulryu9309.ddns.net:4000/users/follow",
-      // data: friendReqData,
-=======
       // url: "http://localhost:4000/users/follow",
       url: "http://paulryu9309.ddns.net:4000/users/follow",
       data: friendReqData,
->>>>>>> 62284524856b6b8b385a93219c013232f9e831e6
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });

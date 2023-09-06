@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { IFriend } from "./FriendList";
 import Image from "next/image";
 import MyGameLog from "../myprofile/MyGameLog";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import {
@@ -48,30 +48,11 @@ const gamePlaying = (
   />
 );
 
-<<<<<<< HEAD
-interface IFriendData {
-  targetNickname: string;
-  imgUri: string;
-  rank: number;
-  Win: number;
-  Lose: number;
-  isOnline: boolean;
-}
-
-interface FriendReqData {
-  userIdx: number;
-  targetNickname: string;
-  targetIdx: number;
-}
-
-const FriendProfile = ({ prop }: { prop: IFriend }) => {
-=======
 const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   const nickname = !prop.targetNickname
     ? prop.friendNickname
     : prop.targetNickname;
   const idx = !prop.targetIdx ? prop.friendIdx : prop.targetIdx;
->>>>>>> 62284524856b6b8b385a93219c013232f9e831e6
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [friendData, setFriendData] = useState<IFriendData>({
@@ -188,44 +169,11 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
     }
   };
 
-<<<<<<< HEAD
-  const addFriend = async () => {
-    // 이거 안 쓰는 건가요? ws
-    console.log("add friend");
-    const friendReqData: FriendReqData = {
-      userIdx: userState.userIdx,
-      targetNickname: prop.friendNickname,
-      targetIdx: prop.friendIdx,
-    };
-    await axios({
-      method: "post",
-      url: "http://localhost:4000/users/follow",
-      // url: "http://paulryu9309.ddns.net:4000/users/follow",
-      data: friendReqData,
-    })
-      .then((res) => {
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    handleCloseMenu();
-    handleCloseModal();
-  };
-
-=======
->>>>>>> 62284524856b6b8b385a93219c013232f9e831e6
   const deleteFriend = async () => {
     const friendReqData: FriendReqData = {
-<<<<<<< HEAD
-      userIdx: userState.userIdx,
-      targetNickname: prop.friendNickname,
-      targetIdx: prop.friendIdx,
-=======
       myIdx: userState.userIdx,
       targetNickname: nickname!,
       targetIdx: idx!,
->>>>>>> 62284524856b6b8b385a93219c013232f9e831e6
     };
 
     await axios({
