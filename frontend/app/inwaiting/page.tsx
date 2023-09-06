@@ -30,7 +30,7 @@ const modalStyle = {
 import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
-import { gameSocket } from "../page";
+import { gameSocket } from "../home/page";
 import { useAuth } from "@/context/AuthContext";
 import { ReturnMsgDto } from "@/type/RoomType";
 

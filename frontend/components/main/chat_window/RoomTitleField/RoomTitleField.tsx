@@ -76,7 +76,7 @@ const RoomTitleField = ({
     socket.on("BR_chat_room_password", changingPw);
     return () => {
       socket.off("BR_chat_room_password", changingPw);
-    }
+    };
   }, []);
 
   return (

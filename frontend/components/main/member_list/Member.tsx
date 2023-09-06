@@ -15,7 +15,7 @@ import {
   Permission,
   ReturnMsgDto,
   alert,
-  ILeftMember
+  ILeftMember,
 } from "@/type/RoomType";
 import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
 import { useUser } from "@/context/UserContext";

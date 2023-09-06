@@ -14,8 +14,7 @@ import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import React, { useState, ChangeEvent } from "react";
 import axios from "axios";
-import {socket} from "@/app/page";
-
+import { socket } from "@/app/page";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -34,7 +33,6 @@ const SecondAuth = () => {
   const [block, setBlock] = useState<boolean>(false);
   const [inputnumber, setInputNumber] = useState<string>("");
   const router = useRouter();
-
 
   const SendMail = async () => {
     const response = await axios({
@@ -67,8 +65,10 @@ const SecondAuth = () => {
     });
     if (response.status == 200) {
       console.log("success in check 2 auth");
-      socket.emit('set_user_status', {userStatus:{ nickname: response.data.nickname}});
-      return router.push("/");
+      socket.emit("set_user_status", {
+        userStatus: { nickname: response.data.nickname },
+      });
+      return router.push("/home");
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
     else console.log("fail");
