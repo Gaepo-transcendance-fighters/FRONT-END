@@ -122,7 +122,7 @@ const PingPong = () => {
       );
     });
 
-    window.addEventListener("keydown", movePaddle);
+    // window.addEventListener("keydown", movePaddle);
 
     return () => {
       gameSocket.off("game_start");
@@ -130,7 +130,7 @@ const PingPong = () => {
       gameSocket.off("game_move_paddle");
       gameSocket.off("game_pause_score");
 
-      window.removeEventListener("keydown", movePaddle);
+      // window.removeEventListener("keydown", movePaddle);
     };
   }, []);
 
