@@ -4,6 +4,7 @@ import { Box, Button } from "@mui/material";
 import { useState, useCallback, useEffect, useRef } from "react";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import { socket } from "@/app/page";
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
 import { useRoom } from "@/context/RoomContext";
