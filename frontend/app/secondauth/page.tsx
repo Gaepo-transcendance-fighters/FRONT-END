@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import React, { useState, ChangeEvent } from "react";
 import axios from "axios";
-import { socket } from "@/app/home/page";
+import { socket } from "@/app/page";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -37,8 +37,8 @@ const SecondAuth = () => {
   const SendMail = async () => {
     const response = await axios({
       method: "POST",
-      // url: `http://localhost:4000/users/second`,
-      url: `http://paulryu9309.ddns.net:4000/users/second`,
+      url: `http://localhost:4000/users/second`,
+      // url: `http://paulryu9309.ddns.net:4000/users/second`,
       data: {
         // userIdx: localStorage.getItem("idx"),
         userIdx: Number(localStorage.getItem("idx")),
@@ -55,8 +55,8 @@ const SecondAuth = () => {
 
     const response = await axios({
       method: "PATCH",
-      // url: `http://localhost:4000/users/second`,
-      url: `http://paulryu9309.ddns.net:4000/users/second`,
+      url: `http://localhost:4000/users/second`,
+      // url: `http://paulryu9309.ddns.net:4000/users/second`,
       data: {
         // userIdx: localStorage.getItem("idx"),
         userIdx: Number(localStorage.getItem("idx")),
