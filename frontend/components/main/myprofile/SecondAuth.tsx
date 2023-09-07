@@ -88,7 +88,7 @@ export default function SecondAuth() {
       if (res.status === 200) {
         setVerified(newVerifiedValue ? "true" : "false");
         localStorage.setItem("check2Auth", newVerifiedValue ? "true" : "false");
-        if (!newVerifiedValue) return router.push("/");
+        if (!newVerifiedValue) return router.push("/home");
         location.reload();
         //       if (response.status == 200) {
         //   if (response.data.check2Auth == true) {

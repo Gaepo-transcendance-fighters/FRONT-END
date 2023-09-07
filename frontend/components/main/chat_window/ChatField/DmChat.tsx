@@ -20,7 +20,7 @@ interface Props {
 
 const DmChats = ({ msgs, setMsgs }: Props) => {
   const [loading, setLoading] = useState(true);
-  const [pageNum, setPageNum] = useState(0); // [제작필요]첫 페이지 를 알아야한다.
+  const [pageNum, setPageNum] = useState(0);
   const { roomState } = useRoom();
   const { initMsgState } = useInitMsg();
   const observerTarget = useRef(null);
@@ -61,7 +61,7 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
     if (pageNum > 0) {
       setTimeout(() => {
         callUser();
-      }, 500);
+      }, 100);
       setLoading(true);
     }
   }, [pageNum]);
@@ -84,16 +84,17 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
         return payload;
       }
     );
-    if (roomState.currentRoom?.channelIdx) setMsgs([]);
+    if (roomState.currentRoom?.channelIdx) {
+      setMsgs([]);
+    }
     setMsgs((prevState) => {
       return [...prevState, ...list];
     });
     let calPage = Math.floor(initMsgState.dmEnterEntry.totalMsgCount / 5);
-    // let calPage = initMsgState.dmEnterEntry.totalMsgCount / 5;
     if (initMsgState.dmEnterEntry.totalMsgCount % 5 !== 0)
       calPage += 1;
     setPageNum(calPage - 4);
-  }, []);
+  }, [roomState.currentRoom?.channelIdx]);
 
   return (
     <Box
@@ -123,10 +124,8 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
           >
             <Typography variant="h6">
               {value.senderIdx === roomState.currentDmRoomMemberList?.userIdx1
-                ? roomState.currentDmRoomMemberList?.userNickname1
-                : roomState.currentDmRoomMemberList?.userNickname2 +
-                  ": " +
-                  value.msg}
+                ? `${roomState.currentDmRoomMemberList?.userNickname1}: ${value.msg}`
+                : `${roomState.currentDmRoomMemberList?.userNickname2}: ${value.msg}`}
             </Typography>
           </div>
         );
