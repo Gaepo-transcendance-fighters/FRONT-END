@@ -130,12 +130,12 @@ export default function MemberModal({
   useEffect(() => {
     const ChatBlock = (data: any) => {
       const blockList = data.map((block: IChatBlock) => {
-        return { blockedNickname: block.blockedNickname, blockedUserIdx: block.blockedUserIdx };
+        return { blockedIntra: block.blockedIntra, blockedUserIdx: block.blockedUserIdx };
       });
       friendDispatch({
         type: "ADD_BLOCK",
         value: {
-          blockedNickname: person.nickname!,
+          blockedIntra: person.nickname!,
           blockedUserIdx: person.userIdx!,
         },
       });

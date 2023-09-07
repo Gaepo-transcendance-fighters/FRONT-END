@@ -85,7 +85,7 @@ export const friendProfileModalStyle = {
 };
 
 export interface IChatBlock {
-  blockedNickname: string;
+  blockedIntra: string;
   blockedUserIdx: number;
 }
 

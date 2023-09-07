@@ -14,7 +14,7 @@ const Block = ({ prop }: { prop: IChatBlock }) => {
         <Stack direction={"row"} justifyContent={"space-between"}>
           <Tooltip
             title={
-              prop.blockedNickname
+              prop.blockedIntra
             }
             arrow
           >
@@ -25,7 +25,7 @@ const Block = ({ prop }: { prop: IChatBlock }) => {
                 textOverflow: "ellipsis",
               }}
             >
-              {prop.blockedNickname}
+              {prop.blockedIntra}
             </Typography>
           </Tooltip>
           <Stack direction={"row"} alignItems={"center"}>

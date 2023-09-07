@@ -212,12 +212,12 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     const ChatBlock = (data: IChatBlock[]) => {
       console.log("friendprofile : ", data);
       const blockList = data.map((block: IChatBlock) => {
-        return { blockedNickname: block.blockedNickname, blockedUserIdx: block.blockedUserIdx };
+        return { blockedIntra: block.blockedIntra, blockedUserIdx: block.blockedUserIdx };
       });
       friendDispatch({
         type: "ADD_BLOCK",
         value: {
-          blockedNickname: prop.friendNickname,
+          blockedIntra: prop.friendNickname,
           blockedUserIdx: prop.friendIdx,
         },
       });

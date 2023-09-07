@@ -133,7 +133,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
       "user_profile",
       {
         userIdx: userState.userIdx,
-        targetNickname: prop.blockedNickname,
+        targetNickname: prop.blockedIntra,
         targetIdx: prop.blockedUserIdx,
       },
       () => {
@@ -146,7 +146,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
   useEffect(() => {
     const ChatBlock = (data: IChatBlock[]) => {
       const blockList = data.map((block: IChatBlock) => {
-        return { blockedNickname: block.blockedNickname, blockedUserIdx: block.blockedUserIdx };
+        return { blockedIntra: block.blockedIntra, blockedUserIdx: block.blockedUserIdx };
       });
       console.log("ChatBlock : ", data);
       friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
@@ -165,7 +165,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
     socket.emit(
       "chat_block",
       {
-        targetNickname: prop.blockedNickname,
+        targetNickname: prop.blockedIntra,
         targetIdx: prop.blockedUserIdx,
       },
       (ret: ReturnMsgDto) => {
