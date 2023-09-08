@@ -131,12 +131,13 @@ export default function MemberModal({
 
   useEffect(() => {
     const ChatBlock = (data: any) => {
-      const blockList = data.map((block: IChatBlock) => {
+      console.log("mmm ChatBlock : ", data);
+      const blockList = data.blockInfo ? data.blockInfo.map((block: IChatBlock) => {
         return {
           blockedNickname: block.blockedNickname,
           blockedUserIdx: block.blockedUserIdx,
         };
-      });
+      }) : [];
       friendDispatch({
         type: "ADD_BLOCK",
         value: {
@@ -145,6 +146,7 @@ export default function MemberModal({
         },
       });
       friendDispatch({ type: "SET_IS_FRIEND", value: false });
+      friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
       handleCloseMenu();
       handleCloseModal();

@@ -49,9 +49,11 @@ const FriendReducer = (
     }
     case "ADD_BLOCK": {
       const newBlock: IChatBlock = action.value;
+      console.log("1");
         if (
         state.blockList.find((block) => block.blockedUserIdx === newBlock.blockedUserIdx)
       ) {
+      console.log("2");
         return state;
       } 
       else if (
@@ -59,6 +61,7 @@ const FriendReducer = (
           (friend) => friend.friendIdx === newBlock.blockedUserIdx
         )
       ) {
+      console.log("3");
         const newFriendList: IFriend[] = state.friendList.filter(
           (friend) => friend.friendIdx !== newBlock.blockedUserIdx
         );
@@ -69,6 +72,7 @@ const FriendReducer = (
         };
       } 
       else {
+      console.log("4");
         return state;
       }
     }

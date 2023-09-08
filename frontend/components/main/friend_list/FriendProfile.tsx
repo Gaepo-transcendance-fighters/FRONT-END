@@ -209,14 +209,14 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   };
 
   useEffect(() => {
-    const ChatBlock = (data: IChatBlock[]) => {
+    const ChatBlock = (data: any) => {
       console.log("friendprofile : ", data);
-      const blockList = data.map((block: IChatBlock) => {
+      const blockList = data.blockInfo ? data.blockInfo.map((block: IChatBlock) => {
         return {
           blockedNickname: block.blockedNickname,
           blockedUserIdx: block.blockedUserIdx,
         };
-      });
+      }) : [];
       friendDispatch({
         type: "ADD_BLOCK",
         value: {
@@ -225,6 +225,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
         },
       });
       friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
+      friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_IS_FRIEND", value: false });
       handleCloseMenu();
       handleCloseModal();

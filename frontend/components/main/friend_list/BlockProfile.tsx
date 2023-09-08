@@ -144,13 +144,13 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
   };
 
   useEffect(() => {
-    const ChatBlock = (data: IChatBlock[]) => {
-      const blockList = data.map((block: IChatBlock) => {
+    const ChatBlock = (data: any) => {
+      const blockList = data.blockInfo ? data.blockInfo.map((block: IChatBlock) => {
         return {
           blockedNickname: block.blockedNickname,
           blockedUserIdx: block.blockedUserIdx,
         };
-      });
+      }) : [];
       console.log("ChatBlock : ", data);
       friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
       friendDispatch({ type: "SET_IS_FRIEND", value: false });
