@@ -7,7 +7,7 @@ import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { useUser } from "@/context/UserContext";
@@ -45,7 +45,8 @@ const Layout = () => {
   useEffect(() => {
     socket.emit(
       "main_enter",
-      { intra: localStorage.getItem("intra") },
+      // { intra: localStorage.getItem("intra") },
+      { nickname: userState.nickname },
       (ret: ReturnMsgDto) => {
         if (ret.code === 200) {
         }
