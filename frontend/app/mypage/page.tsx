@@ -223,6 +223,7 @@ export default function PageRedir() {
           imgUrl: localStorage.getItem("imgUri"),
         }),
       });
+      console.log("response : ", response);
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
         userDispatch({

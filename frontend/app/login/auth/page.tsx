@@ -45,12 +45,12 @@ const Auth = () => {
     expire.setTime(expire.getTime() + 30 * 60 * 1000);
     document.cookie = "login=1; path=/; expires=" + expire.toUTCString() + ";";
   };
-
+  
+  // haryu's server
+  // await fetch("http://localhost:4000/login/auth", {
   const postCode = async (code: string) => {
     // dev original
     await fetch(`${server_domain}/login/auth`, {
-      // haryu's server
-      // await fetch("http://localhost:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
