@@ -48,7 +48,28 @@ const PingPong = () => {
     cntPerFrame: 0,
   });
 
-  const movePaddle = (e: KeyboardEvent) => {
+  const upPaddle = (e: KeyboardEvent) => {
+    e.preventDefault();
+    if (e.code === "ArrowUp") {
+      gameSocket.emit("game_move_paddle", {
+        userIdx: authState.id,
+        paddle: 0,
+        serverTime: gameProps.serverTime,
+        clientTime: Date.now(),
+        cntPerFrame: gameProps.cntPerFrame,
+      });
+    } else if (e.code === "ArrowDown") {
+      gameSocket.emit("game_move_paddle", {
+        userIdx: authState.id,
+        paddle: 0,
+        serverTime: gameProps.serverTime,
+        clientTime: Date.now(),
+        cntPerFrame: gameProps.cntPerFrame,
+      });
+    }
+  };
+
+  const downPaddle = (e: KeyboardEvent) => {
     e.preventDefault();
     if (e.code === "ArrowUp") {
       gameSocket.emit("game_move_paddle", {
@@ -62,14 +83,6 @@ const PingPong = () => {
       gameSocket.emit("game_move_paddle", {
         userIdx: authState.id,
         paddle: -1,
-        serverTime: gameProps.serverTime,
-        clientTime: Date.now(),
-        cntPerFrame: gameProps.cntPerFrame,
-      });
-    } else {
-      gameSocket.emit("game_move_paddle", {
-        userIdx: authState.id,
-        paddle: 0,
         serverTime: gameProps.serverTime,
         clientTime: Date.now(),
         cntPerFrame: gameProps.cntPerFrame,
@@ -120,7 +133,8 @@ const PingPong = () => {
       );
     });
 
-    // window.addEventListener("keydown", movePaddle);
+    window.addEventListener("keydown", downPaddle);
+    window.addEventListener("keyup", upPaddle);
 
     return () => {
       gameSocket.off("game_start");
@@ -128,7 +142,8 @@ const PingPong = () => {
       gameSocket.off("game_move_paddle");
       gameSocket.off("game_pause_score");
 
-      // window.removeEventListener("keydown", movePaddle);
+      window.removeEventListener("keydown", downPaddle);
+      window.removeEventListener("keyup", upPaddle);
     };
   }, []);
 
