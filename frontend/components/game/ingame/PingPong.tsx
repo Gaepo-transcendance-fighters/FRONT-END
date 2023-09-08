@@ -111,6 +111,13 @@ const PingPong = () => {
     gameSocket.on("game_frame", (res: IGameProps) => {
       console.log("game_frame", res);
       setGameProps(res);
+      gameSocket.emit("game_move_paddle", {
+        userIdx: authState.id,
+        paddle: keyboard,
+        serverTime: gameProps.serverTime,
+        clientTime: Date.now(),
+        cntPerFrame: gameProps.cntPerFrame,
+      });
     });
 
     gameSocket.on(
@@ -156,7 +163,7 @@ const PingPong = () => {
       window.removeEventListener("keydown", downPaddle);
       window.removeEventListener("keyup", upPaddle);
     };
-  }, []);
+  }, [keyboard]);
 
   if (!client) return <></>;
 
