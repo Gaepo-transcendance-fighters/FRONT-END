@@ -88,8 +88,6 @@ export default function MemberModal({
     })
       .then((res) => {
         console.log("res : ", res.data.result);
-        console.log("res : ", res.data.result.friendIdx);
-        // console.log("res : ", res.data.result.isOnline);
         // friendDispatch({type: "ADD_FRIEND",
         // value: {
         //   friendNickname: person.nickname!,
@@ -120,7 +118,8 @@ export default function MemberModal({
       data: friendReqData,
     })
       .then((res) => {
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+        console.log("MMM deleteFriend : ", res);
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })
       .catch((err) => {

@@ -182,6 +182,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       data: friendReqData,
     })
       .then((res) => {
+        console.log("FFFdeleteFriend : ", res);
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })

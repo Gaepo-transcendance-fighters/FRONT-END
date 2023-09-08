@@ -117,10 +117,10 @@ const FriendList = () => {
             borderRadius: "10px",
           }}
         >
-          {!select &&
+          {!select && friendState.friendList.length ?
             friendState.friendList.map((user, idx) => (
               <Friend key={idx} prop={user} />
-            ))}
+            )) : ""}
           {select &&
             friendState.blockList.map((user, idx) => (
               <Block key={idx} prop={user} />
