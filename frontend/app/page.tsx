@@ -8,6 +8,7 @@ import { io } from "socket.io-client";
 import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 const userId =
   typeof window !== "undefined" ? localStorage.getItem("idx") : null;

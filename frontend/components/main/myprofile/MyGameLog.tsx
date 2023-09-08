@@ -10,6 +10,8 @@ import { main } from "@/type/type";
 
 import { useUser } from "@/context/UserContext";
 
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+
 const TOTAL_PAGES = 100;
 
 const options = {
@@ -70,7 +72,11 @@ const MyGameLog = () => {
   const callUser = useCallback(async () => {
     await axios
       //dev original
-      // .get(`http://localhost:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`)
+      .get(
+        `${server_domain}/game/records/userIdx=${localStorage.getItem(
+          "idx"
+        )}&page=${pageNum}`
+      )
       //haryu's server
       .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
       {headers: {

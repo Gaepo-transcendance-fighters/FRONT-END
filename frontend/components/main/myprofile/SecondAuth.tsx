@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -74,8 +76,8 @@ export default function SecondAuth() {
 
     const response = await axios({
       method: "patch",
-      url: "http://paulryu9309.ddns.net:4000/users/profile/second",
       // url: "http://localhost:4000/users/profile/second",
+      url: `${server_domain}/users/profile/second`,
       headers: {
         "Content-Type": "Application/json",
         Authorization: "Bearer " + localStorage.getItem("authorization"),

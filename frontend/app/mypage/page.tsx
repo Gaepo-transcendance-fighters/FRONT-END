@@ -15,6 +15,8 @@ import {
   Switch,
 } from "@mui/material";
 
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+
 const font = createTheme({
   typography: {
     fontFamily: "neodgm",
@@ -102,8 +104,8 @@ export default function PageRedir() {
 
   const fetch = async () => {
     await axios
-      .get("http://paulryu9309.ddns.net:4000/users/profile", {
-        // .get("http://localhost:4000/users/profile", {
+      // .get("http://localhost:4000/users/profile", {
+      .get(`${server_domain}/users/profile`, {
         headers: {
           "Content-type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -149,8 +151,8 @@ export default function PageRedir() {
 
     await axios({
       method: "post",
+      url: `${server_domain}/users/profile`,
       // url: `http://localhost:4000/users/profile`,
-      url: `http://paulryu9309.ddns.net:4000/users/profile`,
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + localStorage.getItem("authorization"),
@@ -209,8 +211,8 @@ export default function PageRedir() {
       let idx: number = Number(localStorage.getItem("id"));
       const response = await axios({
         method: "POST",
-        url: `http://paulryu9309.ddns.net:4000/users/profile`,
         // url: `http://localhost:4000/users/profile`,
+        url: `${server_domain}/users/profile`,
         headers: {
           "Content-Type": "Application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),

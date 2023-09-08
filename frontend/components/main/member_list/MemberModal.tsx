@@ -25,6 +25,8 @@ import MemberGameButton from "../InviteGame/MemberGameButton";
 import { FriendReqData, IChatBlock, friendProfileModalStyle } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
 
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+
 const loginOn = (
   <Image src="/status/logon.png" alt="online" width={10} height={10} />
 );
@@ -76,11 +78,8 @@ export default function MemberModal({
     };
     await axios({
       method: "post",
+      url: `${server_domain}/users/follow`,
       // url: "http://localhost:4000/users/follow",
-      url: "http://paulryu9309.ddns.net:4000/users/follow",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
-      },
       data: friendReqData,
     })
       .then((res) => {
@@ -109,11 +108,8 @@ export default function MemberModal({
 
     await axios({
       method: "delete",
+      url: `${server_domain}/users/unfollow`,
       // url: "http://localhost:4000/users/unfollow",
-      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
-      },
       data: friendReqData,
     })
       .then((res) => {

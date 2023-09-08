@@ -30,6 +30,8 @@ import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
 import FriendGameButton from "../InviteGame/FriendGameButton";
 
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+
 const loginOn = (
   <Image src="/status/logon.png" alt="online" width={10} height={10} />
 );
@@ -175,11 +177,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
 
     await axios({
       method: "delete",
+      url: `${server_domain}/users/unfollow`,
       // url: "http://localhost:4000/users/unfollow",
-      url: "http://paulryu9309.ddns.net:4000/users/unfollow",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
-      },
       data: friendReqData,
     })
       .then((res) => {
