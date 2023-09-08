@@ -104,6 +104,7 @@ const OptionSelect = () => {
         mapNumber: selectedMapOption,
       },
     }).then((res) => {
+      console.log(res)
       if (res.status === 200) {
         gameSocket.connect();
         router.replace("/inwaiting");

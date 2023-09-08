@@ -53,12 +53,15 @@ enum GameType {
 }
 
 interface IGameQueueSuccess {
-  GameRoomId: string;
+  dbKey: number;
   userNicknameFirst: string;
   userIdxFirst: number;
   userNicknameSecond: string;
   userIdxSecond: number;
   successDate: Date;
+  gameType: GameType; // friend, normal, rank
+  speed: SpeedOption; // normal, fast, faster
+  mapNumber: MapOption; // 0, 1, 2
 }
 
 interface IGameSetting {
@@ -85,7 +88,7 @@ const Inwaiting = () => {
         if (res.code === 200) {
           console.log("game_queue_quit");
           gameSocket.disconnect();
-          router.replace("/?from=game");
+          router.replace("/home?from=game");
         }
       }
     );
@@ -102,35 +105,48 @@ const Inwaiting = () => {
     //게임 소켓 - 이벤트 등록
     gameSocket.on("game_queue_quit", () => {});
 
-    gameSocket.on("game_ping", (serverTime: number) => {
+    gameSocket.on("game_start", () => {
+      setTimeout(() => {
+        router.replace("/gameplaying");
+      }, 2000);
+    })
+
+    gameSocket.on("game_ping", ({serverTime}: {serverTime: number}) => {
       console.log("game_ping");
+      const now = new Date().getTime();
+      console.log('now',now)
       gameSocket.emit(
-        "game_ping",
+        "game_ping_receive",
         {
           userIdx: authState.id,
           serverTime: serverTime,
-          clientTime: Date.now(),
-        },
-        (data: ReturnMsgDto) => {
-          console.log(data);
-          setTimeout(() => {
-            router.replace("/gameplaying");
-          }, 2000);
+          clientTime: now
         }
       );
     });
 
     gameSocket.on("game_queue_success", (data: IGameQueueSuccess) => {
-      console.log("game_queue_success");
-      gameDispatch({
-        type: "A_PLAYER",
-        value: { nick: data.userNicknameFirst, id: data.userIdxFirst },
-      });
-      gameDispatch({
-        type: "B_PLAYER",
-        value: { nick: data.userNicknameSecond, id: data.userIdxSecond },
-      });
-      setOpenModal(true);
+      gameSocket.emit("game_queue_success", { userIdx: authState.id }, () =>{
+          console.log("game_queue_success");
+          gameDispatch({
+            type: "A_PLAYER",
+            value: { nick: data.userNicknameFirst, id: data.userIdxFirst },
+          });
+          gameDispatch({
+            type: "B_PLAYER",
+            value: { nick: data.userNicknameSecond, id: data.userIdxSecond },
+          });
+          gameDispatch({
+            type: "SET_BALL_SPEED_OPTION", value: data.speed
+          })
+          gameDispatch({
+            type: "SET_MAP_TYPE", value: data.mapNumber
+          })
+          gameDispatch({
+            type: "SET_GAME_MODE", value: data.gameType
+          })
+          setOpenModal(true);
+      })
     });
 
     //큐 대기 중 페이지 탈주 방지
@@ -141,6 +157,7 @@ const Inwaiting = () => {
       window.removeEventListener("popstate", preventGoBack);
       gameSocket.off("game_queue_quit");
       gameSocket.off("game_ping");
+      gameSocket.off("game_start");
       gameSocket.off("game_queue_success");
     };
   }, []);

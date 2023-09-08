@@ -17,8 +17,6 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
   useEffect(() => {
     if (document.URL.includes("/login/auth")) return;
     const cookies_value = getCookies();
-    console.log(document.URL);
-
     if (cookies_value) {
       if (
         !localStorage.getItem("intra") ||

@@ -17,13 +17,12 @@ enum EGameStatus {
 }
 
 interface IGameProps {
-  ballX: number;
-  BallY: number;
-  paddle1: number; // 현재 위치
-  paddle2: number; // 현재 위치
-  hit: number; // 0 - no hit, 1 - player 1 paddle 에 hit, 2
-  serverTime: number; // ms 단위로, ping check 용
-  cntPerFrame: number; // 1 - 60 까지 계속 반복됨
+  ballX: number,
+  ballY: number,
+  paddle1: number, // 현재 위치 
+  paddle2: number, // 현재 위치
+  serverTime: number, // ms 단위로, ping check 용 targetFrame: number, // 가변 프레임을 생각하고 집어넣음
+  cntPerFrame: number, // 1 - 60 까지 계속 반복됨
 }
 
 interface IGameEnd {
@@ -42,10 +41,9 @@ const PingPong = () => {
   const { authState } = useAuth();
   const [gameProps, setGameProps] = useState<IGameProps>({
     ballX: 0,
-    BallY: 0,
+    ballY: 0,
     paddle1: 0,
     paddle2: 0,
-    hit: 0,
     serverTime: 0,
     cntPerFrame: 0,
   });
@@ -86,7 +84,7 @@ const PingPong = () => {
       console.log("game_start", res);
     });
     gameSocket.emit("game_frame");
-    gameSocket.on("game_frame", (res: any) => {
+    gameSocket.on("game_frame", (res: IGameProps) => {
       console.log("game_frame", res);
       setGameProps(res);
     });
@@ -156,7 +154,7 @@ const PingPong = () => {
       </div>
       <GamePaddle x={-470} y={gameProps.paddle1} />
       <GamePaddle x={470} y={gameProps.paddle2} />
-      <GameBall x={gameProps.ballX} y={gameProps.BallY} />
+      <GameBall x={gameProps.ballX} y={gameProps.ballY} />
     </>
   );
 };
