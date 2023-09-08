@@ -69,16 +69,20 @@ const MyGameLog = () => {
     };
   }, [observerTarget]);
 
+  //dev original
+  // .get(
+  //   `${server_domain}/game/records/userIdx=${localStorage.getItem(
+  //     "idx"
+  //   )}&page=${pageNum}`,
+  // )
+  //haryu's server
+  // .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
   const callUser = useCallback(async () => {
     await axios
-      //dev original
       .get(
         `${server_domain}/game/records/userIdx=${localStorage.getItem(
           "idx"
-        )}&page=${pageNum}`
-      )
-      //haryu's server
-      .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+        )}&page=${pageNum}`,
       {headers: {
         "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + localStorage.getItem("authorization"),

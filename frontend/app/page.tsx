@@ -15,12 +15,12 @@ const userId =
 
 // export const socket = io("http://localhost:4000/chat", {
   // haryu's server
-  export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
+  export const socket = io(`${server_domain}/chat`, {
   query: { userId: userId },
   autoConnect: false
 });
 // export const gameSocket = io("http://localhost:4000/game", {
-  export const gameSocket = io("http://paulryu9309.ddns.net:4000/game/playroom", {
+  export const gameSocket = io(`${server_domain}/game/playroom`, {
   query: { userId: userId },
   autoConnect: false
 });
