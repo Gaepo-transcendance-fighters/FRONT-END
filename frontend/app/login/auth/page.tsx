@@ -81,7 +81,8 @@ const Auth = () => {
             value: data.nickname,
           });
           authDispatch({ type: "SET_ID", value: data.userIdx });
-          authDispatch({ type: "SET_NICKNAME", value: data.nickname });
+          localStorage.setItem("nickname", data.nickname);
+          // authDispatch({ type: "SET_NICKNAME", value: data.nickname });
           setupCookies();
 
           if (data.check2Auth === true) return router.push("./secondauth");

@@ -47,7 +47,7 @@ const Layout = () => {
     socket.emit(
       "main_enter",
       // { intra: localStorage.getItem("intra") },
-      { userNickname : userState.nickname },
+      { userNickname : localStorage.getItem("nickname") },
       (ret: ReturnMsgDto) => {
         if (ret.code === 200) {
         }

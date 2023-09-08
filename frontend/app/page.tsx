@@ -10,9 +10,8 @@ import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-const userId =
+const userId = 
   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
-
 // export const socket = io("http://localhost:4000/chat", {
   // haryu's server
   export const socket = io(`${server_domain}/chat`, {
