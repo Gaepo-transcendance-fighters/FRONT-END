@@ -60,7 +60,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
   });
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
-  const {friendDispatch } = useFriend();
+  const { friendDispatch } = useFriend();
 
   const RankSrc =
     friendData.rank < 800
@@ -133,7 +133,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
       "user_profile",
       {
         userIdx: userState.userIdx,
-        targetNickname: prop.blockedIntra,
+        targetNickname: prop.blockedNickname,
         targetIdx: prop.blockedUserIdx,
       },
       () => {
@@ -146,7 +146,10 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
   useEffect(() => {
     const ChatBlock = (data: IChatBlock[]) => {
       const blockList = data.map((block: IChatBlock) => {
-        return { blockedIntra: block.blockedIntra, blockedUserIdx: block.blockedUserIdx };
+        return {
+          blockedNickname: block.blockedNickname,
+          blockedUserIdx: block.blockedUserIdx,
+        };
       });
       console.log("ChatBlock : ", data);
       friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
@@ -165,7 +168,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
     socket.emit(
       "chat_block",
       {
-        targetNickname: prop.blockedIntra,
+        targetNickname: prop.blockedNickname,
         targetIdx: prop.blockedUserIdx,
       },
       (ret: ReturnMsgDto) => {
@@ -255,9 +258,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
                   MenuListProps={{ sx: { py: 0 } }}
                 >
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                    <MenuItem onClick={blockFriend}>
-                        UnBlock
-                    </MenuItem>
+                    <MenuItem onClick={blockFriend}>UnBlock</MenuItem>
                   </Stack>
                 </Menu>
               </Stack>

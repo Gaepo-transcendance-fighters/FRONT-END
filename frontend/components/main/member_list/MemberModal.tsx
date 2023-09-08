@@ -22,7 +22,11 @@ import RoomEnter from "@/external_functions/RoomEnter";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
 import MemberGameButton from "../InviteGame/MemberGameButton";
-import { FriendReqData, IChatBlock, friendProfileModalStyle } from "@/type/type";
+import {
+  FriendReqData,
+  IChatBlock,
+  friendProfileModalStyle,
+} from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
@@ -83,13 +87,16 @@ export default function MemberModal({
       data: friendReqData,
     })
       .then((res) => {
-        friendDispatch({type: "ADD_FRIEND", 
-        value: {
-          friendNickname: person.nickname!,
-          friendIdx: person.userIdx!,
-          isOnline: false
-        }})
-        // friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
+        console.log("res : ", res.data.result);
+        console.log("res : ", res.data.result.friendIdx);
+        // console.log("res : ", res.data.result.isOnline);
+        // friendDispatch({type: "ADD_FRIEND",
+        // value: {
+        //   friendNickname: person.nickname!,
+        //   friendIdx: person.userIdx!,
+        //   isOnline: res.data.result.isOnline
+        // }})
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: true });
       })
       .catch((err) => {
@@ -126,12 +133,15 @@ export default function MemberModal({
   useEffect(() => {
     const ChatBlock = (data: any) => {
       const blockList = data.map((block: IChatBlock) => {
-        return { blockedIntra: block.blockedIntra, blockedUserIdx: block.blockedUserIdx };
+        return {
+          blockedNickname: block.blockedNickname,
+          blockedUserIdx: block.blockedUserIdx,
+        };
       });
       friendDispatch({
         type: "ADD_BLOCK",
         value: {
-          blockedIntra: person.nickname!,
+          blockedNickname: person.nickname!,
           blockedUserIdx: person.userIdx!,
         },
       });
@@ -287,17 +297,20 @@ export default function MemberModal({
                 onClose={handleCloseMenu}
                 MenuListProps={{ sx: { py: 0 } }}
               >
-                <Stack sx={{ backgroundColor: "#48a0ed" }}>{
-                  !friendState.blockList.find((block) => block.blockedUserIdx === person.userIdx) ?
-                  <>
-                  {!friendState.friendList.find((friend) => friend.friendIdx === person.userIdx) && (
-                    <MenuItem onClick={addFriend}>Add</MenuItem>
-                  )}
-                  {friendState.friendList.find((friend) => friend.friendIdx === person.userIdx) && (
-                    <MenuItem onClick={deleteFriend}>Delete</MenuItem>
-                  )}
-                  </> : null }
-                  
+                <Stack sx={{ backgroundColor: "#48a0ed" }}>
+                  {!friendState.blockList.find(
+                    (block) => block.blockedUserIdx === person.userIdx
+                  ) ? (
+                    <>
+                      {!friendState.friendList.find(
+                        (friend) => friend.friendIdx === person.userIdx
+                      ) && <MenuItem onClick={addFriend}>Add</MenuItem>}
+                      {friendState.friendList.find(
+                        (friend) => friend.friendIdx === person.userIdx
+                      ) && <MenuItem onClick={deleteFriend}>Delete</MenuItem>}
+                    </>
+                  ) : null}
+
                   <MenuItem onClick={blockFriend}>
                     {friendState.blockList.find(
                       (block) => block.blockedUserIdx === person.userIdx

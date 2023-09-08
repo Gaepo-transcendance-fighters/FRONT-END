@@ -173,7 +173,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       targetIdx: prop.friendIdx,
     };
 
-    console.log('req', friendReqData);
+    console.log("req", friendReqData);
 
     await axios({
       method: "delete",
@@ -211,12 +211,15 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     const ChatBlock = (data: IChatBlock[]) => {
       console.log("friendprofile : ", data);
       const blockList = data.map((block: IChatBlock) => {
-        return { blockedIntra: block.blockedIntra, blockedUserIdx: block.blockedUserIdx };
+        return {
+          blockedNickname: block.blockedNickname,
+          blockedUserIdx: block.blockedUserIdx,
+        };
       });
       friendDispatch({
         type: "ADD_BLOCK",
         value: {
-          blockedIntra: prop.friendNickname,
+          blockedNickname: prop.friendNickname,
           blockedUserIdx: prop.friendIdx,
         },
       });
@@ -336,9 +339,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 >
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
-                    <MenuItem onClick={blockFriend}>
-                      Block
-                    </MenuItem>
+                    <MenuItem onClick={blockFriend}>Block</MenuItem>
                   </Stack>
                 </Menu>
               </Stack>

@@ -12,12 +12,7 @@ const Block = ({ prop }: { prop: IChatBlock }) => {
     <>
       <Card sx={{ margin: 1, backgroundColor: main.main0 }}>
         <Stack direction={"row"} justifyContent={"space-between"}>
-          <Tooltip
-            title={
-              prop.blockedIntra
-            }
-            arrow
-          >
+          <Tooltip title={prop.blockedNickname} arrow>
             <Typography
               margin={1}
               sx={{
@@ -25,7 +20,7 @@ const Block = ({ prop }: { prop: IChatBlock }) => {
                 textOverflow: "ellipsis",
               }}
             >
-              {prop.blockedIntra}
+              {prop.blockedNickname}
             </Typography>
           </Tooltip>
           <Stack direction={"row"} alignItems={"center"}>
