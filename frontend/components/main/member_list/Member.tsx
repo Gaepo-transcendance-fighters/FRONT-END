@@ -23,6 +23,7 @@ import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
 import { socket } from "@/app/page";
 
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 export default function Member({
   idx,
   person,
@@ -254,7 +255,7 @@ export default function Member({
       >
         <div className="memimg">
           {/* <Image src="/seal.png" alt="profile" width={53} height={53} /> */}
-          <Image src={person.imgUri!} alt="profile" width={53} height={53} />
+          <Image src={person.imgUri! || `${server_domain}/img/${person.userIdx}.png`} alt="profile" width={53} height={53} />
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
