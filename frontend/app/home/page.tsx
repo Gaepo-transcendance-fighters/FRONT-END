@@ -10,18 +10,6 @@ import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
 import { socket } from "../page";
 
-// dev original
-// export const socket = io("http://localhost:4000/chat", {
-// haryu's server
-
-// const userId =
-//   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
-// // export const socket = io("http://localhost:4000/chat", {
-//   // haryu's server
-// export const socket = io("http://localhost:4000/chat", {
-//   query: { userId: userId },
-// });
-
 const Page = () => {
   const param = useSearchParams();
   const router = useRouter();

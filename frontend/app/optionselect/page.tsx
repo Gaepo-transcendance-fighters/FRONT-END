@@ -47,11 +47,11 @@ interface IGameOption {
   mapNumber: MapOption; // A, B, C
 }
 
-// export const gameSocket = io("http://localhost:4000/game", {
+// export const gameSocket = io("http://10.19.205.41:4000/game", {
 // const userId =
 //   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 
-// export const gameSocket = io("http://localhost:4000/game", {
+// export const gameSocket = io("http://10.19.205.41:4000/game", {
 //   query: { userId: userId },
 // });
 
