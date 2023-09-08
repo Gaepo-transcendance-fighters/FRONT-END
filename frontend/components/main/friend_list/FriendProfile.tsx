@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { IFriend } from "./FriendList";
 import Image from "next/image";
 import MyGameLog from "../myprofile/MyGameLog";
 import { socket } from "@/app/page";
@@ -20,7 +19,9 @@ import { useRoom } from "@/context/RoomContext";
 import {
   FriendReqData,
   IChatBlock,
+  IFriend,
   IFriendData,
+  IOnlineStatus,
   friendProfileModalStyle,
   main,
 } from "@/type/type";
@@ -58,7 +59,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     rank: 0,
     win: 0,
     lose: 0,
-    isOnline: false,
+    isOnline: IOnlineStatus.OFFLINE,
   });
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
@@ -211,12 +212,14 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   useEffect(() => {
     const ChatBlock = (data: any) => {
       console.log("friendprofile : ", data);
-      const blockList = data.blockInfo ? data.blockInfo.map((block: IChatBlock) => {
-        return {
-          blockedNickname: block.blockedNickname,
-          blockedUserIdx: block.blockedUserIdx,
-        };
-      }) : [];
+      const blockList = data.blockInfo
+        ? data.blockInfo.map((block: IChatBlock) => {
+            return {
+              blockedNickname: block.blockedNickname,
+              blockedUserIdx: block.blockedUserIdx,
+            };
+          })
+        : [];
       friendDispatch({
         type: "ADD_BLOCK",
         value: {
@@ -253,6 +256,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
 
   useEffect(() => {
     const userProfile = (data: IFriendData) => {
+      console.log("userProfile : ", userProfile);
       setFriendData(data);
     };
     socket.on("user_profile", userProfile);
@@ -313,10 +317,15 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 닉네임: {friendData?.targetNickname}
               </Typography>
               <Typography>
-                상태: {friendData?.isOnline ? loginOn : loginOff}
+                상태:{" "}
+                {friendData?.isOnline === IOnlineStatus.ONLINE
+                  ? loginOn
+                  : friendData?.isOnline === IOnlineStatus.OFFLINE
+                  ? loginOff
+                  : ""}
               </Typography>
               <Stack direction={"row"} spacing={2}>
-                <FriendGameButton prop={prop as IFriend} />
+                {/* <FriendGameButton prop={prop as IFriend} /> */}
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}

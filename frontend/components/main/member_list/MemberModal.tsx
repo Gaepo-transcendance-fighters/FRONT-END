@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { IFriend } from "../friend_list/FriendList";
 import { IChatDmEnter, IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
@@ -25,6 +24,8 @@ import MemberGameButton from "../InviteGame/MemberGameButton";
 import {
   FriendReqData,
   IChatBlock,
+  IFriend,
+  IOnlineStatus,
   friendProfileModalStyle,
 } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
@@ -58,7 +59,7 @@ export default function MemberModal({
     setCurFriend({
       friendNickname: person.nickname!,
       friendIdx: person.userIdx!,
-      isOnline: true,
+      isOnline: IOnlineStatus.ONLINE,
     });
   }, []);
 
@@ -132,12 +133,14 @@ export default function MemberModal({
   useEffect(() => {
     const ChatBlock = (data: any) => {
       console.log("mmm ChatBlock : ", data);
-      const blockList = data.blockInfo ? data.blockInfo.map((block: IChatBlock) => {
-        return {
-          blockedNickname: block.blockedNickname,
-          blockedUserIdx: block.blockedUserIdx,
-        };
-      }) : [];
+      const blockList = data.blockInfo
+        ? data.blockInfo.map((block: IChatBlock) => {
+            return {
+              blockedNickname: block.blockedNickname,
+              blockedUserIdx: block.blockedUserIdx,
+            };
+          })
+        : [];
       friendDispatch({
         type: "ADD_BLOCK",
         value: {
@@ -272,7 +275,12 @@ export default function MemberModal({
               닉네임: {curFriend?.friendNickname}
             </Typography>
             <Typography>
-              상태: {curFriend?.isOnline ? loginOn : loginOff}
+              상태:
+              {curFriend?.isOnline === IOnlineStatus.ONLINE
+                ? loginOn
+                : curFriend?.isOnline === IOnlineStatus.OFFLINE
+                ? loginOff
+                : ""}
             </Typography>
             <Stack direction={"row"} spacing={2}>
               <MemberGameButton prop={person} />

@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { IFriend } from "./FriendList";
 import Image from "next/image";
 import MyGameLog from "../myprofile/MyGameLog";
 import { socket } from "@/app/page";
@@ -21,6 +20,7 @@ import {
   FriendReqData,
   IChatBlock,
   IFriendData,
+  IOnlineStatus,
   friendProfileModalStyle,
   main,
 } from "@/type/type";
@@ -56,7 +56,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
     rank: 0,
     win: 0,
     lose: 0,
-    isOnline: false,
+    isOnline: IOnlineStatus.OFFLINE,
   });
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
@@ -145,12 +145,14 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
 
   useEffect(() => {
     const ChatBlock = (data: any) => {
-      const blockList = data.blockInfo ? data.blockInfo.map((block: IChatBlock) => {
-        return {
-          blockedNickname: block.blockedNickname,
-          blockedUserIdx: block.blockedUserIdx,
-        };
-      }) : [];
+      const blockList = data.blockInfo
+        ? data.blockInfo.map((block: IChatBlock) => {
+            return {
+              blockedNickname: block.blockedNickname,
+              blockedUserIdx: block.blockedUserIdx,
+            };
+          })
+        : [];
       console.log("ChatBlock : ", data);
       friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
       friendDispatch({ type: "SET_IS_FRIEND", value: false });
@@ -240,7 +242,12 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
                 닉네임: {friendData?.targetNickname}
               </Typography>
               <Typography>
-                상태: {friendData?.isOnline ? loginOn : loginOff}
+                상태:{" "}
+                {friendData?.isOnline === IOnlineStatus.ONLINE
+                  ? loginOn
+                  : friendData?.isOnline === IOnlineStatus.OFFLINE
+                  ? loginOff
+                  : ""}
               </Typography>
               <Stack direction={"row"} spacing={2}>
                 <Button

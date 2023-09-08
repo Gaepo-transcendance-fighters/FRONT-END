@@ -23,7 +23,7 @@ export enum GameType {
 export interface IFriend {
   friendNickname: string;
   friendIdx: number;
-  isOnline: boolean;
+  isOnline: IOnlineStatus;
 }
 
 export interface IFriendData {
@@ -32,13 +32,19 @@ export interface IFriendData {
   rank: number;
   win: number;
   lose: number;
-  isOnline: boolean;
+  isOnline: IOnlineStatus;
 }
 
 export interface FriendReqData {
   myIdx: number;
   targetNickname: string;
   targetIdx: number;
+}
+
+export enum IOnlineStatus {
+  ONLINE,
+  OFFLINE,
+  GAMEING,
 }
 
 // export interface IUserProp {

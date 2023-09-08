@@ -37,12 +37,6 @@ const unselectedButton = {
   flex: 1,
 };
 
-export interface IFriend {
-  friendNickname: string;
-  friendIdx: number;
-  isOnline: boolean;
-}
-
 const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
   const { friendState } = useFriend();
@@ -117,10 +111,11 @@ const FriendList = () => {
             borderRadius: "10px",
           }}
         >
-          {!select && friendState.friendList.length ?
-            friendState.friendList.map((user, idx) => (
-              <Friend key={idx} prop={user} />
-            )) : ""}
+          {!select && friendState.friendList.length
+            ? friendState.friendList.map((user, idx) => (
+                <Friend key={idx} prop={user} />
+              ))
+            : ""}
           {select &&
             friendState.blockList.map((user, idx) => (
               <Block key={idx} prop={user} />
