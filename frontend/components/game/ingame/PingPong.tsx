@@ -17,12 +17,12 @@ enum EGameStatus {
 }
 
 interface IGameProps {
-  ballX: number,
-  ballY: number,
-  paddle1: number, // 현재 위치 
-  paddle2: number, // 현재 위치
-  serverTime: number, // ms 단위로, ping check 용 targetFrame: number, // 가변 프레임을 생각하고 집어넣음
-  cntPerFrame: number, // 1 - 60 까지 계속 반복됨
+  ballX: number;
+  ballY: number;
+  paddle1: number; // 현재 위치
+  paddle2: number; // 현재 위치
+  serverTime: number; // ms 단위로, ping check 용 targetFrame: number, // 가변 프레임을 생각하고 집어넣음
+  cntPerFrame: number; // 1 - 60 까지 계속 반복됨
 }
 
 interface IGameEnd {
@@ -39,6 +39,7 @@ const PingPong = () => {
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
+  const [keyboard, setKeyboard] = useState(0);
   const [gameProps, setGameProps] = useState<IGameProps>({
     ballX: 0,
     ballY: 0,
@@ -51,43 +52,53 @@ const PingPong = () => {
   const upPaddle = (e: KeyboardEvent) => {
     e.preventDefault();
     if (e.code === "ArrowUp") {
-      gameSocket.emit("game_move_paddle", {
-        userIdx: authState.id,
-        paddle: 0,
-        serverTime: gameProps.serverTime,
-        clientTime: Date.now(),
-        cntPerFrame: gameProps.cntPerFrame,
-      });
+      setKeyboard(0);
     } else if (e.code === "ArrowDown") {
-      gameSocket.emit("game_move_paddle", {
-        userIdx: authState.id,
-        paddle: 0,
-        serverTime: gameProps.serverTime,
-        clientTime: Date.now(),
-        cntPerFrame: gameProps.cntPerFrame,
-      });
+      setKeyboard(0);
     }
+    // if (e.code === "ArrowUp") {
+    //   gameSocket.emit("game_move_paddle", {
+    //     userIdx: authState.id,
+    //     paddle: 0,
+    //     serverTime: gameProps.serverTime,
+    //     clientTime: Date.now(),
+    //     cntPerFrame: gameProps.cntPerFrame,
+    //   });
+    // } else if (e.code === "ArrowDown") {
+    //   gameSocket.emit("game_move_paddle", {
+    //     userIdx: authState.id,
+    //     paddle: 0,
+    //     serverTime: gameProps.serverTime,
+    //     clientTime: Date.now(),
+    //     cntPerFrame: gameProps.cntPerFrame,
+    //   });
+    // }
   };
 
   const downPaddle = (e: KeyboardEvent) => {
     e.preventDefault();
     if (e.code === "ArrowUp") {
-      gameSocket.emit("game_move_paddle", {
-        userIdx: authState.id,
-        paddle: 1,
-        serverTime: gameProps.serverTime,
-        clientTime: Date.now(),
-        cntPerFrame: gameProps.cntPerFrame,
-      });
+      setKeyboard(1);
     } else if (e.code === "ArrowDown") {
-      gameSocket.emit("game_move_paddle", {
-        userIdx: authState.id,
-        paddle: -1,
-        serverTime: gameProps.serverTime,
-        clientTime: Date.now(),
-        cntPerFrame: gameProps.cntPerFrame,
-      });
+      setKeyboard(-1);
     }
+    // if (e.code === "ArrowUp") {
+    //   gameSocket.emit("game_move_paddle", {
+    //     userIdx: authState.id,
+    //     paddle: 1,
+    //     serverTime: gameProps.serverTime,
+    //     clientTime: Date.now(),
+    //     cntPerFrame: gameProps.cntPerFrame,
+    //   });
+    // } else if (e.code === "ArrowDown") {
+    //   gameSocket.emit("game_move_paddle", {
+    //     userIdx: authState.id,
+    //     paddle: -1,
+    //     serverTime: gameProps.serverTime,
+    //     clientTime: Date.now(),
+    //     cntPerFrame: gameProps.cntPerFrame,
+    //   });
+    // }
   };
 
   useEffect(() => {
