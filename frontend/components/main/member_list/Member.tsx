@@ -235,6 +235,10 @@ export default function Member({
     );
   };
 
+  useEffect(() => {
+    console.log("roomState.currentRoom : ", roomState.currentRoom);
+  }, [roomState.currentRoom]);
+
   return (
     <>
       <div
@@ -257,7 +261,7 @@ export default function Member({
           {roomState.currentRoom?.mode !== Mode.PRIVATE && person.nickname === roomState.currentRoom?.owner ? (
             <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
           ) : (
-            roomState.adminAry.map((admin, idx) => {
+            roomState.currentRoom?.mode !== Mode.PRIVATE && roomState.adminAry.map((admin, idx) => {
               return admin.nickname === person.nickname ? (
                 <StarOutlineRoundedIcon
                   key={idx}
