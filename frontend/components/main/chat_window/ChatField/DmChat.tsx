@@ -21,7 +21,7 @@ interface Props {
 }
 
 const DmChats = ({ msgs, setMsgs }: Props) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [pageNum, setPageNum] = useState(0);
   const { roomState } = useRoom();
   const { initMsgState } = useInitMsg();
