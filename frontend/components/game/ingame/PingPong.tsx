@@ -111,6 +111,7 @@ const PingPong = () => {
     gameSocket.on("game_frame", (res: IGameProps) => {
       console.log("game_frame", res);
       setGameProps(res);
+      console.log("keyboard", keyboard);
       gameSocket.emit("game_move_paddle", {
         userIdx: authState.id,
         paddle: keyboard,
