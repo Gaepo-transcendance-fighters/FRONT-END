@@ -1,20 +1,11 @@
 "use client";
 
-import Image from "next/image";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, CardContent, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
-
+import { useAuth } from "@/context/AuthContext";
 import { main } from "@/type/type";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { socket } from "@/app/page";
 
 const server_domain = process.env.SERVER_URL_4000;
 
@@ -33,6 +24,7 @@ const modalStyle = {
 
 const SecondAuth = () => {
   const [block, setBlock] = useState<boolean>(false);
+  const { authState, authDispatch } = useAuth();
   const [inputnumber, setInputNumber] = useState<string>("");
   const router = useRouter();
 
@@ -66,8 +58,8 @@ const SecondAuth = () => {
       },
     });
     if (response.status == 200) {
-      console.log("success in check 2 auth");
-      socket.emit("set_user_status", {
+      if (!authState.chatSocket) return;
+      authState.chatSocket.emit("set_user_status", {
         userStatus: { nickname: response.data.nickname },
       });
       return router.push("/home");

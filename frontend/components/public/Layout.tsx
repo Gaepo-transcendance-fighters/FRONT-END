@@ -7,24 +7,26 @@ import ChatWindow from "../main/chat_window/ChatWindow";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { useUser } from "@/context/UserContext";
 import { useFriend } from "@/context/FriendContext";
-import { socket } from "@/app/page";
 import { IMaindata } from "@/type/type";
 import { ReturnMsgDto } from "@/type/RoomType";
 
 const Layout = () => {
-  const { authState } = useAuth();
   const { roomState, roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
+  const { authState } = useAuth();
 
   useEffect(() => {
+    console.log("effect")
+    if (!authState.chatSocket) return;
+    console.log("pass")
     const MainEnter = (data: IMaindata) => {
-      console.log("data : ", data);
+      console.log("main_enter", data)
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
@@ -35,22 +37,20 @@ const Layout = () => {
       });
       userDispatch({ type: "SET_USER_IDX", value: data.userObject.userIdx });
     };
-
-    socket.on("main_enter", MainEnter);
-
-    return () => {
-      socket.off("main_enter", MainEnter);
-    };
-  }, []);
-  useEffect(() => {
-    socket.emit(
+    authState.chatSocket.on("main_enter", MainEnter);
+    authState.chatSocket.emit(
       "main_enter",
-      { userNickname: localStorage.getItem("nickname") },
+      { userNickname: authState.userInfo.nickname },
       (ret: ReturnMsgDto) => {
         if (ret.code === 200) {
         }
       }
     );
+
+    return () => {
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("main_enter", MainEnter);
+    };
   }, []);
 
   return (

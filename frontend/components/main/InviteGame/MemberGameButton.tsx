@@ -1,10 +1,8 @@
 "use client";
 
-import { Box, Button, Card, CardContent, Modal } from "@mui/material";
-import { useEffect, useState, forwardRef } from "react";
+import { Button } from "@mui/material";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { socket } from "@/app/page";
-import InviteGame from "./InviteGame";
 import WaitAccept from "./WaitAccept";
 import { IMember } from "@/type/RoomType";
 import { useAuth } from "@/context/AuthContext";
@@ -19,8 +17,9 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const { gameDispatch } = useGame();
 
   const handleOpenModal = () => {
-    socket.emit("chat_invite_ask", {
-      myUserIdx: authState.id,
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit("chat_invite_ask", {
+      myUserIdx: authState.userInfo.id,
       targetUserIdx: prop.userIdx,
     });
     console.log("open");
@@ -30,6 +29,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const recieveInvite = ({
       inviteUserIdx,
       inviteUserNickname,
@@ -51,14 +51,15 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
         router.push("./optionselect");
       }
     };
-    socket.on("chat_receive_answer", recieveInvite);
-    socket.on("chat_invite_answer", recieveInvite);
+    authState.chatSocket.on("chat_receive_answer", recieveInvite);
+    authState.chatSocket.on("chat_invite_answer", recieveInvite);
 
-    socket.on("chat_invite_ask", () => {});
+    authState.chatSocket.on("chat_invite_ask", () => {});
 
     return () => {
-      socket.off("chat_invite_ask");
-      socket.off("chat_invite_answer");
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_invite_ask");
+      authState.chatSocket.off("chat_invite_answer");
     };
   }, []);
 
