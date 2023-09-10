@@ -157,9 +157,9 @@ const BottomField = ({ setMsgs }: Props) => {
                   height: "10px",
                 },
               }}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  onSubmit(event);
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  onSubmit(e);
                 }
               }}
             />
