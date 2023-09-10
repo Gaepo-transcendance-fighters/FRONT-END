@@ -65,7 +65,7 @@ const SecondAuth = () => {
         code: Number(inputnumber),
       },
     });
-    if (response.status == 200) {
+    if (response.status == 200 && response.data.result.checkTFA === true) {
       console.log("success in check 2 auth");
       socket.emit("set_user_status", {
         userStatus: { nickname: response.data.nickname },
@@ -73,9 +73,14 @@ const SecondAuth = () => {
       return router.push("/home");
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
-    else if (response.status == 200 && response.data.checkTFA === false) {
+    else if (
+      response.status == 200 &&
+      response.data.result.checkTFA === false
+    ) {
       console.log("fail");
-      alert("다시 입력해주세요");
+      alert("잘못된 입력입니다. 재시도 해주세요.");
+      setBlock(false); // 여기서 비우기.
+      setInputNumber("");
     }
     //재입력 필요
   };
@@ -161,6 +166,7 @@ const SecondAuth = () => {
                   backgroundColor: "lightGray",
                 }}
                 onClick={SendInput}
+                disabled={block == true ? false : true}
               >
                 입력
               </Button>
