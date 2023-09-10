@@ -27,6 +27,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);
   const [fail, setFail] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [showAlertBan, setShowAlertBan] = useState<boolean>(false);
   const [newMem, setNewMem] = useState("");
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
@@ -91,6 +92,16 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       return () => clearTimeout(time);
     }
   }, [showAlert]);
+
+  useEffect(() => {
+    if (showAlertBan) {
+      const time = setTimeout(() => {
+        setShowAlertBan(false);
+      }, 3000);
+
+      return () => clearTimeout(time);
+    }
+  }, [showAlertBan]);
 
   const leftPadding = (idx: number) => {
     if (idx < 10) return "00" + idx.toString();
@@ -193,6 +204,9 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
             if (ret.code === 200) {
               RoomEnter(room, roomState, userState, roomDispatch);
             }
+            else if (ret.code === 201) { // Banned user
+              setShowAlertBan(true);
+            }
           }
         );
       }
@@ -247,6 +261,11 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       {showAlert ? (
         <Alert sx={alert} severity="info" style={{ width: "333px" }}>
           {newMem} has joined
+        </Alert>
+      ) : null}
+      {showAlertBan ? (
+        <Alert sx={alert} severity="info" style={{ width: "333px" }}>
+          You are banned from the channel!!
         </Alert>
       ) : null}
     </>
