@@ -17,6 +17,7 @@ import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import {
   IBlock,
+  IChatBlock,
   IFriendData,
   IOnlineStatus,
   blockProfileModalStyle,
@@ -115,7 +116,7 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
   };
 
   useEffect(() => {
-    const ChatBlock = (data: any) => {
+    const ChatBlock = (data: IChatBlock) => {
       const blockList = data.blockInfo
         ? data.blockInfo.map((block: IBlock) => {
             return {

@@ -19,6 +19,7 @@ import { useRoom } from "@/context/RoomContext";
 import {
   FriendReqData,
   IBlock,
+  IChatBlock,
   IFriend,
   IFriendData,
   IOnlineStatus,
@@ -205,7 +206,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   };
 
   useEffect(() => {
-    const ChatBlock = (data: any) => {
+    const ChatBlock = (data: IChatBlock) => {
       const blockList = data.blockInfo
         ? data.blockInfo.map((block: IBlock) => {
             return {

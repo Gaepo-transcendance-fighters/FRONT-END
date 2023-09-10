@@ -99,6 +99,11 @@ export interface IBlock {
   blockedUserIdx: number;
 }
 
+export interface IChatBlock {
+  blockInfo : IBlock[];
+  friendList : IFriend[];
+}
+
 export interface IChat {
   channelIdx: number | undefined;
   senderIdx: number | undefined;

@@ -24,6 +24,7 @@ import MemberGameButton from "../InviteGame/MemberGameButton";
 import {
   FriendReqData,
   IBlock,
+  IChatBlock,
   IFriend,
   IOnlineStatus,
   friendProfileModalStyle,
@@ -123,7 +124,7 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    const ChatBlock = (data: any) => {
+    const ChatBlock = (data: IChatBlock) => {
       console.log("mmm ChatBlock : ", data);
       const blockList = data.blockInfo
         ? data.blockInfo.map((block: IBlock) => {
