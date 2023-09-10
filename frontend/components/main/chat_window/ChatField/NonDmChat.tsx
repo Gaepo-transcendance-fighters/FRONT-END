@@ -3,6 +3,7 @@
 import { Box, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { IChat } from "@/type/type";
+import { useFriend } from "@/context/FriendContext";
 
 interface Props {
   msgs: IChat[];
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const NonDmChat = ({ msgs, setMsgs }: Props) => {
+  const { friendState } = useFriend();
+
   return (
     <Box
       sx={{
@@ -41,7 +44,7 @@ const NonDmChat = ({ msgs, setMsgs }: Props) => {
             >
               {
                 <Typography variant="h6">
-                  {value.sender + ": " + value.msg}
+                  {value.sender + ": " + (friendState.blockList?.find((data) => data.blockedUserIdx === value.senderIdx) ? "this msg from blocked person" : value.msg ) }
                 </Typography>
               }
             </li>

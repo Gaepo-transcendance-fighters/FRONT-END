@@ -87,7 +87,7 @@ const RoomTitleField = ({
           {
             <Typography variant="h4">
               {roomState.currentRoom?.mode === "private"
-                ? userState.nickname + "'s room"
+                ? roomState.currentRoom.targetNickname + "'s room"
                 : roomState.currentRoom?.owner + "'s room"}
             </Typography>
           }
