@@ -73,7 +73,7 @@ const SecondAuth = () => {
       return router.push("/home");
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
-    else if (response.status == 201) {
+    else if (response.status == 200 && response.data.checkTFA === false) {
       console.log("fail");
       alert("다시 입력해주세요");
     }
@@ -153,6 +153,7 @@ const SecondAuth = () => {
                 onChange={(event) => {
                   setInputNumber(event?.target.value);
                 }}
+                disabled={block == true ? false : true}
               />
               <Button
                 style={{
