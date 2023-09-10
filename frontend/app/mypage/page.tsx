@@ -107,7 +107,6 @@ export default function PageRedir() {
       // .get("http://localhost:4000/users/profile", {
       .get(`${server_domain}/users/profile`, {
         headers: {
-          "Content-type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
       })
