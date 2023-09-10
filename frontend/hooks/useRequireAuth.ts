@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export const useRequireAuth = (redirectUrl: string = "/login") => {
   const router = useRouter();
-  const {authState} = useAuth();
+  const { authState } = useAuth();
 
   const getCookies = () => {
     const cookies = document.cookie;
@@ -21,9 +21,13 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
     console.log(document.URL);
 
     if (cookies_value) {
-      console.log("cookies", cookies_value)
-      console.log("auth", authState.userInfo)
-      if (!authState.userInfo.id || !authState.userInfo.nickname)
+      if (
+        !authState.userInfo.id ||
+        !authState.userInfo.nickname ||
+        !authState.userInfo.email ||
+        !authState.userInfo.authorization ||
+        !authState.userInfo.imgUrl
+      )
         return router.push(redirectUrl);
       return router.push("/home");
     } else if (cookies_value === "") router.push(redirectUrl);
