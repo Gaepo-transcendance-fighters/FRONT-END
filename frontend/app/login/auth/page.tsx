@@ -45,7 +45,7 @@ const Auth = () => {
     expire.setTime(expire.getTime() + 30 * 60 * 1000);
     document.cookie = "login=1; path=/; expires=" + expire.toUTCString() + ";";
   };
-  
+
   // haryu's server
   // await fetch("http://localhost:4000/login/auth", {
   const postCode = async (code: string) => {
@@ -85,7 +85,7 @@ const Auth = () => {
           // authDispatch({ type: "SET_NICKNAME", value: data.nickname });
           setupCookies();
 
-          if (data.check2Auth === true) return router.push("./secondauth");
+          if (data.check2Auth === true) return router.push("../secondauth");
           else return router.push(`/home`);
         }
       })
