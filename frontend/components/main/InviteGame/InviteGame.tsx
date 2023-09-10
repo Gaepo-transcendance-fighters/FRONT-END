@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useModalContext } from "@/context/ModalContext";
-import { socket } from "@/app/page";
 import { useAuth } from "@/context/AuthContext";
 
 const modalStyle = {
@@ -27,6 +26,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   const router = useRouter();
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const recieveInvite = ({
       inviteUserIdx, // 초대 한 사람
       inviteUserNickname,
@@ -44,22 +44,23 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       if (answer === 0) closeModal();
       else if (answer === 1) router.push("./optionselect");
     };
-    socket.on("chat_receive_answer", recieveInvite);
-    socket.on("chat_invite_answer", recieveInvite);
+    authState.chatSocket.on("chat_receive_answer", recieveInvite);
+    authState.chatSocket.on("chat_invite_answer", recieveInvite);
 
     return () => {
-      socket.off("chat_invite_answer");
-      socket.off("chat_receive_answer");
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_invite_answer");
+      authState.chatSocket.off("chat_receive_answer");
     };
   }, []);
 
   const handleYes = () => {
-    console.log("yes");
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_invite_answer",
       {
         inviteUserIdx: idx,
-        targetUserIdx: authState.id,
+        targetUserIdx: authState.userInfo.id,
         answer: 1,
       },
       (res: any) => {
@@ -69,12 +70,12 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   };
 
   const handleNo = () => {
-    console.log("no");
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_invite_answer",
       {
         inviteUserIdx: idx,
-        targetUserIdx: authState.id,
+        targetUserIdx: authState.userInfo.id,
         answer: 0,
       },
       (res: any) => {

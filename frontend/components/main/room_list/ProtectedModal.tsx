@@ -14,10 +14,10 @@ import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom, Mode, ReturnMsgDto } from "@/type/RoomType";
-import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { RoomContextData, RoomAction } from "@/context/RoomContext";
 import { UserContextData } from "@/context/UserContext";
+import { useAuth } from "@/context/AuthContext";
 
 const box = {
   position: "absolute" as "absolute",
@@ -63,7 +63,7 @@ export default function ProtectedModal({
   ) => void; // <==================== 삭제필요
 }) {
   const { roomState, roomDispatch } = useRoom();
-  const { userState } = useUser();
+  const { authState } = useAuth();
   const pwRef = useRef("");
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,20 +71,30 @@ export default function ProtectedModal({
   };
 
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
+    if (!authState.chatSocket) return;
     e.preventDefault();
     setFail(false);
-    socket.emit(
+    authState.chatSocket.emit(
       "chat_enter",
       {
-        userNickname: userState.nickname,
-        userIdx: userState.userIdx,
+        userNickname: authState.userInfo.nickname,
+        userIdx: authState.userInfo.id,
         channelIdx: room.channelIdx,
         password: pwRef.current,
       },
       (ret: ReturnMsgDto) => {
         if (ret.code === 200) {
           // RoomEnter(room);
-          RoomEnter(room, roomState, userState, roomDispatch);
+          RoomEnter(
+            room,
+            roomState,
+            {
+              imgUri: authState.userInfo.imgUrl,
+              nickname: authState.userInfo.nickname,
+              userIdx: authState.userInfo.id,
+            },
+            roomDispatch
+          );
           handleClose();
           setFail(false);
         } else {
@@ -96,20 +106,30 @@ export default function ProtectedModal({
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (!authState.chatSocket) return;
     if (e.code === "Enter") {
       setFail(false);
-      socket.emit(
+      authState.chatSocket.emit(
         "chat_enter",
         {
-          userNickname: userState.nickname,
-          userIdx: userState.userIdx,
+          userNickname: authState.userInfo.nickname,
+          userIdx: authState.userInfo.id,
           channelIdx: room.channelIdx,
           password: pwRef.current,
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
             // RoomEnter(room);
-            RoomEnter(room, roomState, userState, roomDispatch);
+            RoomEnter(
+              room,
+              roomState,
+              {
+                imgUri: authState.userInfo.imgUrl,
+                nickname: authState.userInfo.nickname,
+                userIdx: authState.userInfo.id,
+              },
+              roomDispatch
+            );
             handleClose();
             setFail(false);
           } else {

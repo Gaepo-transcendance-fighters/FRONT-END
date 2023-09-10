@@ -44,7 +44,13 @@ const NonDmChat = ({ msgs, setMsgs }: Props) => {
             >
               {
                 <Typography variant="h6">
-                  {value.sender + ": " + (friendState.blockList?.find((data) => data.blockedUserIdx === value.senderIdx) ? "this msg from blocked person" : value.msg ) }
+                  {value.sender +
+                    ": " +
+                    (friendState.blockList?.find(
+                      (data) => data.blockedUserIdx === value.senderIdx
+                    )
+                      ? "this msg from blocked person"
+                      : value.msg)}
                 </Typography>
               }
             </li>
