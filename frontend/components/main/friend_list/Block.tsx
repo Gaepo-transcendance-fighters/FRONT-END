@@ -5,9 +5,9 @@ import Image from "next/image";
 import BlockProfile from "./BlockProfile";
 import { main } from "@/font/color";
 import { useEffect } from "react";
-import { IChatBlock, IFriend } from "@/type/type";
+import { IBlock, IFriend } from "@/type/type";
 
-const Block = ({ prop }: { prop: IChatBlock }) => {
+const Block = ({ prop }: { prop: IBlock }) => {
   return (
     <>
       <Card sx={{ margin: 1, backgroundColor: main.main0 }}>

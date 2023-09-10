@@ -1,16 +1,16 @@
-import { IChatBlock, IFriend } from "@/type/type";
+import { IBlock, IFriend } from "@/type/type";
 import { ReactNode, createContext, useContext, useReducer } from "react";
 
 interface FriendContextData {
   friendList: IFriend[];
-  blockList: IChatBlock[];
+  blockList: IBlock[];
   isFriend: boolean;
 }
 
 type FriendAction =
   | { type: "SET_FRIENDLIST"; value: IFriend[] }
-  | { type: "SET_BLOCKLIST"; value: IChatBlock[] }
-  | { type: "ADD_BLOCK"; value: IChatBlock }
+  | { type: "SET_BLOCKLIST"; value: IBlock[] }
+  | { type: "ADD_BLOCK"; value: IBlock }
   | { type: "ADD_FRIEND"; value: IFriend }
   | { type: "SET_IS_FRIEND"; value: boolean };
 
@@ -48,20 +48,18 @@ const FriendReducer = (
       }
     }
     case "ADD_BLOCK": {
-      const newBlock: IChatBlock = action.value;
-      console.log("1");
-        if (
-        state.blockList.find((block) => block.blockedUserIdx === newBlock.blockedUserIdx)
+      const newBlock: IBlock = action.value;
+      if (
+        state.blockList.find(
+          (block) => block.blockedUserIdx === newBlock.blockedUserIdx
+        )
       ) {
-      console.log("2");
         return state;
-      } 
-      else if (
+      } else if (
         state.friendList.find(
           (friend) => friend.friendIdx === newBlock.blockedUserIdx
         )
       ) {
-      console.log("3");
         const newFriendList: IFriend[] = state.friendList.filter(
           (friend) => friend.friendIdx !== newBlock.blockedUserIdx
         );
@@ -70,9 +68,7 @@ const FriendReducer = (
           friendList: newFriendList,
           blockList: [...state.blockList, newBlock],
         };
-      } 
-      else {
-      console.log("4");
+      } else {
         return state;
       }
     }

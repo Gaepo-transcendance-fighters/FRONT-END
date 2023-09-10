@@ -23,6 +23,7 @@ import axios from "axios";
 import MemberGameButton from "../InviteGame/MemberGameButton";
 import {
   FriendReqData,
+  IBlock,
   IChatBlock,
   IFriend,
   IOnlineStatus,
@@ -84,17 +85,10 @@ export default function MemberModal({
     await axios({
       method: "post",
       url: `${server_domain}/users/follow`,
-      // url: "http://localhost:4000/users/follow",
       data: friendReqData,
     })
       .then((res) => {
-        console.log("res : ", res.data.result);
-        // friendDispatch({type: "ADD_FRIEND",
-        // value: {
-        //   friendNickname: person.nickname!,
-        //   friendIdx: person.userIdx!,
-        //   isOnline: res.data.result.isOnline
-        // }})
+        console.log("addFriend res : ", res.data.result);
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: true });
       })
@@ -115,7 +109,6 @@ export default function MemberModal({
     await axios({
       method: "delete",
       url: `${server_domain}/users/unfollow`,
-      // url: "http://localhost:4000/users/unfollow",
       data: friendReqData,
     })
       .then((res) => {
@@ -131,10 +124,10 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    const ChatBlock = (data: any) => {
+    const ChatBlock = (data: IChatBlock) => {
       console.log("mmm ChatBlock : ", data);
       const blockList = data.blockInfo
-        ? data.blockInfo.map((block: IChatBlock) => {
+        ? data.blockInfo.map((block: IBlock) => {
             return {
               blockedNickname: block.blockedNickname,
               blockedUserIdx: block.blockedUserIdx,

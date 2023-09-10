@@ -12,8 +12,6 @@ const RoomEnter = (
   userState: UserContextData,
   roomDispatch: Dispatch<RoomAction>
 ) => {
-  console.log("roomState.currentRoom.mode : ", roomState.currentRoom?.mode);
-  console.log("room : ", room);
   if (roomState.currentRoom && roomState.currentRoom.mode !== Mode.PRIVATE) {
     socket.emit(
       "chat_goto_lobby",

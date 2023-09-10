@@ -236,10 +236,6 @@ export default function Member({
     );
   };
 
-  useEffect(() => {
-    console.log("roomState.currentRoom : ", roomState.currentRoom);
-  }, [roomState.currentRoom]);
-
   return (
     <>
       <div
@@ -255,14 +251,21 @@ export default function Member({
       >
         <div className="memimg">
           {/* <Image src="/seal.png" alt="profile" width={53} height={53} /> */}
-          <Image src={person.imgUri! || `${server_domain}/img/${person.userIdx}.png`} alt="profile" width={53} height={53} />
+          <Image
+            src={`${server_domain}/img/${person.userIdx}.png`}
+            alt="profile"
+            width={53}
+            height={53}
+          />
         </div>
         <div className="memname">{person.nickname}</div>
         <div className="memicon">
-          {roomState.currentRoom?.mode !== Mode.PRIVATE && person.nickname === roomState.currentRoom?.owner ? (
+          {roomState.currentRoom?.mode !== Mode.PRIVATE &&
+          person.nickname === roomState.currentRoom?.owner ? (
             <StarRoundedIcon sx={{ height: "15px", color: "yellow" }} />
           ) : (
-            roomState.currentRoom?.mode !== Mode.PRIVATE && roomState.adminAry.map((admin, idx) => {
+            roomState.currentRoom?.mode !== Mode.PRIVATE &&
+            roomState.adminAry.map((admin, idx) => {
               return admin.nickname === person.nickname ? (
                 <StarOutlineRoundedIcon
                   key={idx}

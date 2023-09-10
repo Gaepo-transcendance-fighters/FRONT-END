@@ -18,6 +18,7 @@ import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import {
   FriendReqData,
+  IBlock,
   IChatBlock,
   IFriend,
   IFriendData,
@@ -174,8 +175,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       targetIdx: prop.friendIdx,
     };
 
-    console.log("req", friendReqData);
-
     await axios({
       method: "delete",
       url: `${server_domain}/users/unfollow`,
@@ -183,7 +182,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       data: friendReqData,
     })
       .then((res) => {
-        console.log("FFFdeleteFriend : ", res);
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })
@@ -202,18 +200,15 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
         targetNickname: prop.friendNickname,
         targetIdx: prop.friendIdx,
       },
-      () => {
-        console.log("유저프로필에 데이터 보냄");
-      }
+      () => {}
     );
     setOpenModal(true);
   };
 
   useEffect(() => {
-    const ChatBlock = (data: any) => {
-      console.log("friendprofile : ", data);
+    const ChatBlock = (data: IChatBlock) => {
       const blockList = data.blockInfo
-        ? data.blockInfo.map((block: IChatBlock) => {
+        ? data.blockInfo.map((block: IBlock) => {
             return {
               blockedNickname: block.blockedNickname,
               blockedUserIdx: block.blockedUserIdx,
@@ -296,7 +291,10 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
             >
               <Image
                 // src="/seal.png" // mockdata
-                src={friendData?.imgUri || `${server_domain}/img/${prop.friendIdx}.png`} // < !mockdata
+                src={
+                  friendData?.imgUri ||
+                  `${server_domain}/img/${prop.friendIdx}.png`
+                } // < !mockdata
                 alt="user img"
                 width={100}
                 height={100}
