@@ -30,16 +30,13 @@ const NonDmChat = ({ msgs, setMsgs }: Props) => {
     >
       {msgs.map((value, i) => {
         return (
-          <ul
-            key={i}
-            style={{ margin: "1% 0% 1% 0%", padding: "2% 2% 0.5% 2%" }}
-          >
-            <li
+          <div
+              key={i}
               style={{
                 listStyleType: "none",
                 margin: "0px 0 0 0",
                 color: "white",
-                padding: 0,
+                padding: "2% 0% 0% 2%"
               }}
             >
               {
@@ -53,8 +50,7 @@ const NonDmChat = ({ msgs, setMsgs }: Props) => {
                       : value.msg)}
                 </Typography>
               }
-            </li>
-          </ul>
+            </div>
         );
       })}
     </Box>
