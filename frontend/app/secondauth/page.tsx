@@ -55,6 +55,9 @@ const SecondAuth = () => {
   const SendInput = async () => {
     if (inputnumber.length !== 6) return; // <- 안내창띄우기
 
+    // document.getElementById("inputbox").value = "";
+    (document.getElementById("inputbox") as HTMLInputElement).value = "";
+
     const response = await axios({
       method: "PATCH",
       // url: `${server_domain}/users/second`,
@@ -80,7 +83,6 @@ const SecondAuth = () => {
       console.log("fail");
       alert("잘못된 입력입니다. 재시도 해주세요.");
       setBlock(false); // 여기서 비우기.
-      setInputNumber("");
     }
     //재입력 필요
   };
@@ -139,6 +141,7 @@ const SecondAuth = () => {
               }}
             >
               <input
+                id="inputbox"
                 type="text"
                 maxLength={6}
                 style={{
