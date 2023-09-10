@@ -81,13 +81,11 @@ const BottomField = ({ setMsgs }: Props) => {
     };
   }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList]);
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
+      const e = event.nativeEvent as InputEvent;
+      if (e.isComposing) return;
       let payload: IPayload | undefined = undefined;
       if (msg === "") {
         return;
@@ -118,7 +116,6 @@ const BottomField = ({ setMsgs }: Props) => {
       }
       socket.emit("chat_send_msg", payload);
       setMsg("");
-      inputRef.current?.focus();
     },
     [msg]
   );
@@ -147,8 +144,9 @@ const BottomField = ({ setMsgs }: Props) => {
                 color: "white",
                 marginTop: "3%",
               }}
-              autoFocus
+              inputRef={(input) => input && input.focus()}
               ref={inputRef}
+              notched
               value={msg}
               onChange={changeMsg}
               placeholder="Please enter message"
