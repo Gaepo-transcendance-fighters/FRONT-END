@@ -39,8 +39,8 @@ const SecondAuth = () => {
   const SendMail = async () => {
     const response = await axios({
       method: "POST",
-      url: `${server_domain}/users/second`,
-      // url: `http://localhost:4000/users/second`,
+      // url: `${server_domain}/users/second`,
+      url: `http://localhost:4000/users/second`,
       data: {
         // userIdx: localStorage.getItem("idx"),
         userIdx: Number(localStorage.getItem("idx")),
@@ -57,8 +57,8 @@ const SecondAuth = () => {
 
     const response = await axios({
       method: "PATCH",
-      url: `${server_domain}/users/second`,
-      // url: `http://localhost:4000/users/second`,
+      // url: `${server_domain}/users/second`,
+      url: `http://localhost:4000/users/second`,
       data: {
         // userIdx: localStorage.getItem("idx"),
         userIdx: Number(localStorage.getItem("idx")),
@@ -73,7 +73,7 @@ const SecondAuth = () => {
       return router.push("/home");
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
-    else {
+    else if (response.status == 201) {
       console.log("fail");
       alert("다시 입력해주세요");
     }
