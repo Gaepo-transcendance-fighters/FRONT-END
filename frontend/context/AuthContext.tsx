@@ -54,17 +54,17 @@ const initialState: AuthContextData = {
 const AuthReducer = (state: AuthContextData, action: AuthAction) => {
   switch (action.type) {
     case "SET_ID":
-      return { ...state, id: action.value };
+      return { ...state, userInfo: { ...state.userInfo, id: action.value } };
     case "SET_IMGURL":
-      return { ...state, imgUrl: action.value };
+      return { ...state, userInfo: { ...state.userInfo, imgUrl: action.value } };
     case "SET_NICKNAME":
-      return { ...state, nickname: action.value };
+      return { ...state, userInfo: { ...state.userInfo,nickname : action.value } };
     case "SET_EMAIL":
-      return { ...state, email: action.value };
+      return {... state ,userInfo:{... state .userInfo,email :action .value }};
     case "SET_AUTHORIZATION":
-      return { ...state, authorization: action.value };
+      return {... state ,userInfo:{... state .userInfo ,authorization :action .value }};
     case "SET_CHECK2AUTH":
-      return { ...state, check2Auth: action.value };
+      return {... state ,userInfo:{... state .userInfo ,check2Auth :action .value }};
     case "SET_BLOCK":
       return { ...state, blockList: action.value };
     case "SET_CHAT_SOCKET":

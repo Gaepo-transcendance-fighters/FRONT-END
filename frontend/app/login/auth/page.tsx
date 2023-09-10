@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
+
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -94,8 +95,8 @@ const Auth = () => {
           });
           setupCookies();
 
-          if (data.check2Auth === true) return router.push("./secondauth");
-          else return router.push(`/home`);
+          if (data.check2Auth === true) return router.push("/secondauth");
+          else return router.push(`/`);
         }
       })
       .catch((error) => {

@@ -11,7 +11,7 @@ import InviteGame from "@/components/main/InviteGame/InviteGame";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-export function HomePage() {
+export default function HomePage() {
   const router = useRouter();
   const [client, setClient] = useState(false);
   const { authState, authDispatch } = useAuth();
@@ -31,7 +31,8 @@ export function HomePage() {
 
     authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
     authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
-    router.replace("/login");
+
+    router.replace("/home")
   }, []);
 
   return null;
