@@ -16,7 +16,7 @@ import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import {
-  IChatBlock,
+  IBlock,
   IFriendData,
   IOnlineStatus,
   blockProfileModalStyle,
@@ -27,7 +27,7 @@ import { useFriend } from "@/context/FriendContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
+const BlockProfile = ({ prop }: { prop: IBlock }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [friendData, setFriendData] = useState<IFriendData>({
@@ -109,9 +109,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
         targetNickname: prop.blockedNickname,
         targetIdx: prop.blockedUserIdx,
       },
-      () => {
-        console.log("유저프로필에 데이터 보냄");
-      }
+      () => {}
     );
     setOpenModal(true);
   };
@@ -119,14 +117,13 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
   useEffect(() => {
     const ChatBlock = (data: any) => {
       const blockList = data.blockInfo
-        ? data.blockInfo.map((block: IChatBlock) => {
+        ? data.blockInfo.map((block: IBlock) => {
             return {
               blockedNickname: block.blockedNickname,
               blockedUserIdx: block.blockedUserIdx,
             };
           })
         : [];
-      console.log("ChatBlock : ", data);
       friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
       friendDispatch({ type: "SET_IS_FRIEND", value: false });
       handleCloseMenu();
@@ -214,7 +211,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
                 sx={{
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  fontSize : "23px"
+                  fontSize: "23px",
                 }}
               >
                 닉네임: {friendData?.targetNickname}

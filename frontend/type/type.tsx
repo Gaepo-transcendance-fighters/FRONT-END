@@ -47,14 +47,6 @@ export enum IOnlineStatus {
   GAMEING,
 }
 
-// export interface IUserProp {
-//   friendNickname?: string;
-//   friendIdx?: number;
-//   isOnline?: boolean;
-//   userNickname?: string;
-//   userIdx?: number;
-// }
-
 export interface IUserObject {
   imgUri: string;
   nickname: string;
@@ -64,7 +56,7 @@ export interface IUserObject {
 export interface IMaindata {
   channelList: IChatRoom[];
   friendList: IFriend[];
-  blockList: IChatBlock[];
+  blockList: IBlock[];
   userObject: IUserObject;
 }
 
@@ -96,14 +88,13 @@ export const blockProfileModalStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 500,
-  // height: 700,
   bgcolor: "#65d9f9",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
-export interface IChatBlock {
+export interface IBlock {
   blockedNickname: string;
   blockedUserIdx: number;
 }

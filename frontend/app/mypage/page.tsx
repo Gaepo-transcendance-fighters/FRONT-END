@@ -121,7 +121,6 @@ export default function PageRedir() {
     if (!verified) return;
     setVerified(verified);
     fetch();
-    console.log("API REQUEST");
   }, [reload, verified]);
 
   const OpenFileInput = () => {
@@ -208,7 +207,6 @@ export default function PageRedir() {
     }
 
     try {
-      let idx: number = Number(localStorage.getItem("id"));
       const response = await axios({
         method: "POST",
         // url: `http://localhost:4000/users/profile`,
@@ -473,8 +471,6 @@ export default function PageRedir() {
                                     onInput={handleOnInput}
                                     onChange={(event) => {
                                       setInputName(event?.target.value);
-
-                                      console.log(inputName);
                                     }}
                                   />
                                   <Button
