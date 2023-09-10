@@ -83,10 +83,12 @@ const MyGameLog = () => {
         `${server_domain}/game/records/userIdx=${localStorage.getItem(
           "idx"
         )}&page=${pageNum}`,
-      {headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
-      },})
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("authorization"),
+          },
+        }
+      )
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setGameRecord((prevRecord) => [...prevRecord, ...newData]);
