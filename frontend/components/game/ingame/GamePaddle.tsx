@@ -10,7 +10,7 @@ const GamePaddle = ({ x, y }: { x: number; y: number }) => {
       sx={{
         position: "absolute",
         width: "20px",
-        height: "100px",
+        height: "80px",
         backgroundColor: "grey",
         transform: `translate(${x}px, ${y}px)`,
         transition: "transform 50ms linear",
@@ -28,7 +28,7 @@ const GamePaddle = ({ x, y }: { x: number; y: number }) => {
         }
         alt="paddle"
         width={20}
-        height={100}
+        height={80}
         style={{
           filter: gameState.mapType === 1 ? "brightness(0.6)" : "",
           zIndex: 2,

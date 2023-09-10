@@ -10,6 +10,7 @@ import useModal from "@/hooks/useModal";
 import Modals from "@/components/public/Modals";
 import { gameSocket } from "../page";
 import { useAuth } from "@/context/AuthContext";
+import { Style } from "@mui/icons-material";
 
 const GamePlaying = () => {
   const router = useRouter();
@@ -27,6 +28,29 @@ const GamePlaying = () => {
     gameSocket.disconnect();
     router.replace("/home");
   };
+
+  const myNickname = {
+    width: "max-content",
+    padding: "20px",
+    margin: "30px",
+    height: "15%",
+    border: "2px solid black",
+    background: "orange",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+  }
+
+  const otherNickname = {
+    width: "max-content",
+    padding: "20px",
+    margin: "30px",
+    height: "15%",
+    border: "2px solid black",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+  }
 
   useEffect(() => {
     setClient(true);
@@ -129,34 +153,16 @@ const GamePlaying = () => {
               }}
             >
               <Card
-                style={{
-                  width: "max-content",
-                  padding: "20px",
-                  margin: "30px",
-                  height: "15%",
-                  border: "2px solid black",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
+                style={gameState.aPlayer.id === authState.id ? myNickname : otherNickname}
               >
-                <Typography>Player 1</Typography>
+                <Typography>{gameState.aPlayer.nick}</Typography>
               </Card>
               <PingPong />
 
               <Card
-                style={{
-                  width: "max-content",
-                  padding: "20px",
-                  margin: "30px",
-                  height: "15%",
-                  border: "2px solid black",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
+                style={gameState.bPlayer.id === authState.id ? myNickname : otherNickname}
               >
-                <Typography>Player 2</Typography>
+                <Typography>{gameState.bPlayer.nick}</Typography>
               </Card>
             </Card>
           </CardContent>
