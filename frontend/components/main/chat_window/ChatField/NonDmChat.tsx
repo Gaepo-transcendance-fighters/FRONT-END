@@ -47,7 +47,7 @@ const NonDmChat = ({ msgs, setMsgs }: Props) => {
                   {value.sender +
                     ": " +
                     (friendState.blockList?.find(
-                      (data) => data.targetIdx === value.senderIdx
+                      (data) => data.blockedUserIdx === value.senderIdx
                     )
                       ? "this msg from blocked person"
                       : value.msg)}

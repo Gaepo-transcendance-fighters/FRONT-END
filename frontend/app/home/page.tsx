@@ -31,6 +31,10 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
+    authDispatch({
+      type: "SET_ID",
+      value: parseInt(localStorage.getItem("idx")!),
+    });
     setClient(true);
 
     if (!authState.chatSocket) return;

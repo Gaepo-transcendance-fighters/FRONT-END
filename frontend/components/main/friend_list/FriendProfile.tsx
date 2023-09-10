@@ -17,9 +17,11 @@ import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import {
   FriendReqData,
+  IBlock,
   IChatBlock,
+  IFriend,
   IFriendData,
-  IUserProp,
+  IOnlineStatus,
   friendProfileModalStyle,
   main,
 } from "@/type/type";
@@ -48,11 +50,7 @@ const gamePlaying = (
   />
 );
 
-const FriendProfile = ({ prop }: { prop: IUserProp }) => {
-  const nickname = !prop.targetNickname
-    ? prop.friendNickname
-    : prop.targetNickname;
-  const idx = !prop.targetIdx ? prop.friendIdx : prop.targetIdx;
+const FriendProfile = ({ prop }: { prop: IFriend }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [friendData, setFriendData] = useState<IFriendData>({
@@ -61,7 +59,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
     rank: 0,
     win: 0,
     lose: 0,
-    isOnline: false,
+    isOnline: IOnlineStatus.OFFLINE,
   });
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
@@ -136,10 +134,10 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
     };
   }, []);
 
-  const sendDM = (data: IUserProp) => {
+  const sendDM = () => {
     if (!authState.chatSocket) return;
     const existingRoom = roomState.dmRooms.find(
-      (roomState) => roomState.targetNickname === nickname
+      (roomState) => roomState.targetNickname === prop.friendNickname
     );
     if (existingRoom) {
       authState.chatSocket.emit(
@@ -161,7 +159,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
       authState.chatSocket.emit(
         "create_dm",
-        { targetNickname: nickname, targetIdx: idx },
+        { targetNickname: prop.friendNickname, targetIdx: prop.friendIdx },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
             console.log(ret.msg);
@@ -176,8 +174,8 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   const deleteFriend = async () => {
     const friendReqData: FriendReqData = {
       myIdx: userState.userIdx,
-      targetNickname: nickname!,
-      targetIdx: idx!,
+      targetNickname: prop.friendNickname,
+      targetIdx: prop.friendIdx,
     };
 
     await axios({
@@ -206,27 +204,32 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
         targetNickname: prop.friendNickname,
         targetIdx: prop.friendIdx,
       },
-      () => {
-        console.log("유저프로필에 데이터 보냄");
-      }
+      () => {}
     );
     setOpenModal(true);
   };
 
   useEffect(() => {
     if (!authState.chatSocket) return;
-    const ChatBlock = (data: IChatBlock[]) => {
-      const blockList = data.map((block: IChatBlock) => {
-        return { targetNickname: block.userNickname, targetIdx: block.userIdx };
-      });
+    const ChatBlock = (data: IChatBlock) => {
+      const blockList = data.blockInfo
+        ? data.blockInfo.map((block: IBlock) => {
+            return {
+              blockedNickname: block.blockedNickname,
+              blockedUserIdx: block.blockedUserIdx,
+            };
+          })
+        : [];
       friendDispatch({
         type: "ADD_BLOCK",
         value: {
-          targetNickname: nickname!,
-          targetIdx: idx!,
+          blockedNickname: prop.friendNickname,
+          blockedUserIdx: prop.friendIdx,
         },
       });
       friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
+      friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+      friendDispatch({ type: "SET_IS_FRIEND", value: false });
       handleCloseMenu();
       handleCloseModal();
     };
@@ -243,8 +246,8 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
     authState.chatSocket.emit(
       "chat_block",
       {
-        targetNickname: nickname,
-        targetIdx: idx,
+        targetNickname: prop.friendNickname,
+        targetIdx: prop.friendIdx,
       },
       (ret: ReturnMsgDto) => {
         friendDispatch({ type: "SET_IS_FRIEND", value: false });
@@ -256,6 +259,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   useEffect(() => {
     if (!authState.chatSocket) return;
     const userProfile = (data: IFriendData) => {
+      console.log("userProfile : ", userProfile);
       setFriendData(data);
     };
     authState.chatSocket.on("user_profile", userProfile);
@@ -296,7 +300,10 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
             >
               <Image
                 // src="/seal.png" // mockdata
-                src={friendData?.imgUri} // < !mockdata
+                src={
+                  friendData?.imgUri ||
+                  `${server_domain}/img/${prop.friendIdx}.png`
+                } // < !mockdata
                 alt="user img"
                 width={100}
                 height={100}
@@ -317,15 +324,20 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
                 닉네임: {friendData?.targetNickname}
               </Typography>
               <Typography>
-                상태: {friendData?.isOnline ? loginOn : loginOff}
+                상태:{" "}
+                {friendData?.isOnline === IOnlineStatus.ONLINE
+                  ? loginOn
+                  : friendData?.isOnline === IOnlineStatus.OFFLINE
+                  ? loginOff
+                  : ""}
               </Typography>
               <Stack direction={"row"} spacing={2}>
-                {/* <FriendGameButton prop={prop} /> */}
+                {/* <FriendGameButton prop={prop as IFriend} /> */}
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
                   variant="contained"
-                  onClick={() => sendDM(prop)}
+                  onClick={() => sendDM()}
                 >
                   DM
                 </Button>
@@ -345,13 +357,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
                 >
                   <Stack sx={{ backgroundColor: "#48a0ed" }}>
                     <MenuItem onClick={deleteFriend}>Delete</MenuItem>
-                    <MenuItem onClick={blockFriend}>
-                      {friendState.blockList.find(
-                        (block) => block.targetIdx === idx
-                      ) === undefined
-                        ? "Block"
-                        : "UnBlock"}
-                    </MenuItem>
+                    <MenuItem onClick={blockFriend}>Block</MenuItem>
                   </Stack>
                 </Menu>
               </Stack>

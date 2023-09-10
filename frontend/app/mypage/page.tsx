@@ -106,7 +106,6 @@ export default function PageRedir() {
       // .get("http://localhost:4000/users/profile", {
       .get(`${server_domain}/users/profile`, {
         headers: {
-          "Content-type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
       })
@@ -120,7 +119,6 @@ export default function PageRedir() {
     if (!verified) return;
     setVerified(verified);
     fetch();
-    console.log("API REQUEST");
   }, [reload, verified]);
 
   const OpenFileInput = () => {
@@ -207,7 +205,6 @@ export default function PageRedir() {
     }
 
     try {
-      let idx: number = Number(localStorage.getItem("id"));
       const response = await axios({
         method: "POST",
         // url: `http://localhost:4000/users/profile`,
@@ -222,6 +219,7 @@ export default function PageRedir() {
           imgUrl: localStorage.getItem("imgUri"),
         }),
       });
+      console.log("response : ", response);
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
         if (!authState.chatSocket) return;
@@ -472,8 +470,6 @@ export default function PageRedir() {
                                     onInput={handleOnInput}
                                     onChange={(event) => {
                                       setInputName(event?.target.value);
-
-                                      console.log(inputName);
                                     }}
                                   />
                                   <Button

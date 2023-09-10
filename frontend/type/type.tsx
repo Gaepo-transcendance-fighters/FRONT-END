@@ -23,12 +23,7 @@ export enum GameType {
 export interface IFriend {
   friendNickname: string;
   friendIdx: number;
-  isOnline: boolean;
-}
-
-export interface IBlock {
-  targetNickname: string;
-  targetIdx: number;
+  isOnline: IOnlineStatus;
 }
 
 export interface IFriendData {
@@ -37,7 +32,7 @@ export interface IFriendData {
   rank: number;
   win: number;
   lose: number;
-  isOnline: boolean;
+  isOnline: IOnlineStatus;
 }
 
 export interface FriendReqData {
@@ -46,13 +41,12 @@ export interface FriendReqData {
   targetIdx: number;
 }
 
-export interface IUserProp {
-  friendNickname?: string;
-  friendIdx?: number;
-  isOnline?: boolean;
-  targetNickname?: string;
-  targetIdx?: number;
+export enum IOnlineStatus {
+  ONLINE,
+  OFFLINE,
+  GAMEING,
 }
+
 export interface IUserObject {
   imgUri: string;
   nickname: string;
@@ -88,9 +82,26 @@ export const friendProfileModalStyle = {
   p: 4,
 };
 
+export const blockProfileModalStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "#65d9f9",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
+export interface IBlock {
+  blockedNickname: string;
+  blockedUserIdx: number;
+}
+
 export interface IChatBlock {
-  userNickname: string;
-  userIdx: number;
+  blockInfo : IBlock[];
+  friendList : IFriend[];
 }
 
 export interface IChat {
