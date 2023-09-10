@@ -8,12 +8,12 @@ import { io } from "socket.io-client";
 import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
-import { socket } from "../page";
 
 const Page = () => {
   const param = useSearchParams();
   const router = useRouter();
   const [client, setClient] = useState(false);
+  const { authState, authDispatch } = useAuth();
   const { openModal } = useModalContext();
 
   useEffect(() => {
@@ -32,7 +32,9 @@ const Page = () => {
 
   useEffect(() => {
     setClient(true);
-    socket.connect();
+
+    if (!authState.chatSocket) return;
+    authState.chatSocket.connect();
     const askInvite = ({
       userIdx,
       userNickname,
@@ -44,9 +46,10 @@ const Page = () => {
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
     };
-    socket.on("chat_invite_answer", askInvite);
+    authState.chatSocket.on("chat_invite_answer", askInvite);
     return () => {
-      socket.off("chat_invite_answer");
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_invite_answer");
     };
   }, []);
 

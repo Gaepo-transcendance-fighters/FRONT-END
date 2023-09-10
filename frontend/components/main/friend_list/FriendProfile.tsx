@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Box,
   Button,
@@ -11,10 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { IFriend } from "./FriendList";
 import Image from "next/image";
-import MyGameLog from "../myprofile/MyGameLog";
-import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import {
@@ -29,7 +27,7 @@ import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import RoomEnter from "@/external_functions/RoomEnter";
 import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
-import FriendGameButton from "../InviteGame/FriendGameButton";
+import { useAuth } from "@/context/AuthContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -68,6 +66,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const { friendState, friendDispatch } = useFriend();
+  const { authState } = useAuth();
 
   const RankSrc =
     friendData.rank < 800
@@ -94,7 +93,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   //     setFriendData(data);
   //   };
   //   // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
-  //   socket.on("user_profile", UserProfile);
+  //   authState.socketon("user_profile", UserProfile);
   // });
 
   // useEffect(() => {
@@ -104,7 +103,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   //     targetNickname: prop.friendNickname,
   //     targetIdx: prop.friendIdx,
   //   };
-  //   socket.emit("user_profile", ReqData);
+  //   authState.socketemit("user_profile", ReqData);
   // }, []);
 
   // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
@@ -113,14 +112,15 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   //   const UserProfile = (data: IFriendData) => {
   //     setFriendData(data);
   //   };
-  //   socket.on("user_profile", UserProfile);
+  //   authState.socketon("user_profile", UserProfile);
 
   //   return () => {
-  //     socket.off("user_profile");
+  //     authState.socketoff("user_profile");
   //   };
   // }, []);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
       if (payload) {
         roomDispatch({ type: "SET_DM_ROOMS", value: payload });
@@ -129,18 +129,20 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
       }
     };
 
-    socket.on("create_dm", ChatGetDmRoomList);
+    authState.chatSocket.on("create_dm", ChatGetDmRoomList);
     return () => {
-      socket.off("create_dm", ChatGetDmRoomList);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("create_dm", ChatGetDmRoomList);
     };
   }, []);
 
   const sendDM = (data: IUserProp) => {
+    if (!authState.chatSocket) return;
     const existingRoom = roomState.dmRooms.find(
       (roomState) => roomState.targetNickname === nickname
     );
     if (existingRoom) {
-      socket.emit(
+      authState.chatSocket.emit(
         "chat_get_DM",
         {
           channelIdx: existingRoom.channelIdx,
@@ -157,7 +159,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
       );
     } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
-      socket.emit(
+      authState.chatSocket.emit(
         "create_dm",
         { targetNickname: nickname, targetIdx: idx },
         (ret: ReturnMsgDto) => {
@@ -196,7 +198,8 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   };
 
   const handleOpenNdataModal = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "user_profile",
       {
         userIdx: userState.userIdx,
@@ -211,6 +214,7 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatBlock = (data: IChatBlock[]) => {
       const blockList = data.map((block: IChatBlock) => {
         return { targetNickname: block.userNickname, targetIdx: block.userIdx };
@@ -226,15 +230,17 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
       handleCloseMenu();
       handleCloseModal();
     };
-    socket.on("chat_block", ChatBlock);
+    authState.chatSocket.on("chat_block", ChatBlock);
 
     return () => {
-      socket.off("chat_block", ChatBlock);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_block", ChatBlock);
     };
   }, []);
 
   const blockFriend = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_block",
       {
         targetNickname: nickname,
@@ -248,12 +254,14 @@ const FriendProfile = ({ prop }: { prop: IUserProp }) => {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const userProfile = (data: IFriendData) => {
       setFriendData(data);
     };
-    socket.on("user_profile", userProfile);
+    authState.chatSocket.on("user_profile", userProfile);
     return () => {
-      socket.off("user_profile");
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("user_profile");
     };
   }, [friendData]);
 

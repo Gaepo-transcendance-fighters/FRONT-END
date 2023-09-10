@@ -12,17 +12,17 @@ import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { useUser } from "@/context/UserContext";
 import { useFriend } from "@/context/FriendContext";
-import { socket } from "@/app/page";
 import { IMaindata } from "@/type/type";
 import { ReturnMsgDto } from "@/type/RoomType";
 
 const Layout = () => {
-  const { authState } = useAuth();
   const { roomState, roomDispatch } = useRoom();
   const { friendState, friendDispatch } = useFriend();
   const { userState, userDispatch } = useUser();
+  const { authState } = useAuth();
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const MainEnter = (data: IMaindata) => {
       console.log("data : ", data);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
@@ -36,14 +36,16 @@ const Layout = () => {
       userDispatch({ type: "SET_USER_IDX", value: data.userObject.userIdx });
     };
 
-    socket.on("main_enter", MainEnter);
+    authState.chatSocket.on("main_enter", MainEnter);
 
     return () => {
-      socket.off("main_enter", MainEnter);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("main_enter", MainEnter);
     };
   }, []);
   useEffect(() => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "main_enter",
       // { intra: localStorage.getItem("intra") },
       { nickname: userState.nickname },

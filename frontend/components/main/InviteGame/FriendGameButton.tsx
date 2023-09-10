@@ -3,7 +3,6 @@
 import { Button } from "@mui/material";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { socket } from "@/app/page";
 import WaitAccept from "./WaitAccept";
 
 import { IFriend } from "@/type/type";
@@ -16,8 +15,9 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
   const { openModal } = useModalContext();
 
   const handleOpenModal = () => {
-    socket.emit("chat_invite_ask", {
-      myUserIdx: authState.id,
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit("chat_invite_ask", {
+      myUserIdx: authState.userInfo.id,
       targetUserIdx: prop.friendIdx,
     });
     openModal({
@@ -26,13 +26,15 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const askInvite = () => {
       handleOpenModal();
     };
-    socket.on("chat_invite_ask", askInvite);
+    authState.chatSocket.on("chat_invite_ask", askInvite);
 
     return () => {
-      socket.off("chat_invite_ask");
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_invite_ask");
     };
   }, []);
 

@@ -78,7 +78,6 @@ import axios from "axios";
 
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
 import { useAuth } from "@/context/AuthContext";
-import { socket } from "@/app/page";
 
 export default function PageRedir() {
   const router = useRouter();
@@ -225,11 +224,12 @@ export default function PageRedir() {
       });
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
+        if (!authState.chatSocket) return;
         userDispatch({
           type: "CHANGE_NICK_NAME",
           value: response.data.result.nickname,
         });
-        socket.emit("set_user_status", {
+        authState.chatSocket.emit("set_user_status", {
           userStatus: { nickname: response.data.nickname },
         });
         handleCloseModal();
