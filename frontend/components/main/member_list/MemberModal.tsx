@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { IFriend } from "../friend_list/FriendList";
 import { IChatDmEnter, IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
@@ -22,7 +21,13 @@ import RoomEnter from "@/external_functions/RoomEnter";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
 import MemberGameButton from "../InviteGame/MemberGameButton";
-import { FriendReqData, friendProfileModalStyle } from "@/type/type";
+import {
+  FriendReqData,
+  IChatBlock,
+  IFriend,
+  IOnlineStatus,
+  friendProfileModalStyle,
+} from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
@@ -54,7 +59,7 @@ export default function MemberModal({
     setCurFriend({
       friendNickname: person.nickname!,
       friendIdx: person.userIdx!,
-      isOnline: true,
+      isOnline: IOnlineStatus.ONLINE,
     });
   }, []);
 
@@ -83,6 +88,13 @@ export default function MemberModal({
       data: friendReqData,
     })
       .then((res) => {
+        console.log("res : ", res.data.result);
+        // friendDispatch({type: "ADD_FRIEND",
+        // value: {
+        //   friendNickname: person.nickname!,
+        //   friendIdx: person.userIdx!,
+        //   isOnline: res.data.result.isOnline
+        // }})
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: true });
       })
@@ -107,7 +119,8 @@ export default function MemberModal({
       data: friendReqData,
     })
       .then((res) => {
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+        console.log("MMM deleteFriend : ", res);
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })
       .catch((err) => {
@@ -118,10 +131,28 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    const ChatBlock = () => {
+    const ChatBlock = (data: any) => {
+      console.log("mmm ChatBlock : ", data);
+      const blockList = data.blockInfo
+        ? data.blockInfo.map((block: IChatBlock) => {
+            return {
+              blockedNickname: block.blockedNickname,
+              blockedUserIdx: block.blockedUserIdx,
+            };
+          })
+        : [];
+      friendDispatch({
+        type: "ADD_BLOCK",
+        value: {
+          blockedNickname: person.nickname!,
+          blockedUserIdx: person.userIdx!,
+        },
+      });
+      friendDispatch({ type: "SET_IS_FRIEND", value: false });
+      friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+      friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
       handleCloseMenu();
       handleCloseModal();
-      friendDispatch({ type: "SET_IS_FRIEND", value: false });
     };
     socket.on("chat_block", ChatBlock);
 
@@ -244,7 +275,12 @@ export default function MemberModal({
               닉네임: {curFriend?.friendNickname}
             </Typography>
             <Typography>
-              상태: {curFriend?.isOnline ? loginOn : loginOff}
+              상태:
+              {curFriend?.isOnline === IOnlineStatus.ONLINE
+                ? loginOn
+                : curFriend?.isOnline === IOnlineStatus.OFFLINE
+                ? loginOff
+                : ""}
             </Typography>
             <Stack direction={"row"} spacing={2}>
               <MemberGameButton prop={person} />
@@ -271,15 +307,22 @@ export default function MemberModal({
                 MenuListProps={{ sx: { py: 0 } }}
               >
                 <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                  {!friendState.isFriend && (
-                    <MenuItem onClick={addFriend}>Add</MenuItem>
-                  )}
-                  {friendState.isFriend && (
-                    <MenuItem onClick={deleteFriend}>Delete</MenuItem>
-                  )}
+                  {!friendState.blockList.find(
+                    (block) => block.blockedUserIdx === person.userIdx
+                  ) ? (
+                    <>
+                      {!friendState.friendList.find(
+                        (friend) => friend.friendIdx === person.userIdx
+                      ) && <MenuItem onClick={addFriend}>Add</MenuItem>}
+                      {friendState.friendList.find(
+                        (friend) => friend.friendIdx === person.userIdx
+                      ) && <MenuItem onClick={deleteFriend}>Delete</MenuItem>}
+                    </>
+                  ) : null}
+
                   <MenuItem onClick={blockFriend}>
                     {friendState.blockList.find(
-                      (block) => block.targetIdx === person.userIdx
+                      (block) => block.blockedUserIdx === person.userIdx
                     ) === undefined
                       ? "Block"
                       : "UnBlock"}

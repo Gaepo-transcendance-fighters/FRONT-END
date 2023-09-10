@@ -10,17 +10,18 @@ import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-const userId =
+const userId = 
   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
-
-export const socket = io(`${server_domain}/chat`, {
+// export const socket = io("http://localhost:4000/chat", {
   // haryu's server
-  // export const socket = io("http://localhost:4000/chat", {
+  export const socket = io(`${server_domain}/chat`, {
   query: { userId: userId },
+  autoConnect: false
 });
-export const gameSocket = io(`${server_domain}/game`, {
-  // export const gameSocket = io("http://localhost:4000/game", {
+// export const gameSocket = io("http://localhost:4000/game", {
+  export const gameSocket = io(`${server_domain}/game/playroom`, {
   query: { userId: userId },
+  autoConnect: false
 });
 
 export default function HomePage() {

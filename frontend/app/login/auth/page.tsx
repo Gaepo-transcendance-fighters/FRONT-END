@@ -45,12 +45,12 @@ const Auth = () => {
     expire.setTime(expire.getTime() + 30 * 60 * 1000);
     document.cookie = "login=1; path=/; expires=" + expire.toUTCString() + ";";
   };
-
+  
+  // haryu's server
+  // await fetch("http://localhost:4000/login/auth", {
   const postCode = async (code: string) => {
     // dev original
     await fetch(`${server_domain}/login/auth`, {
-      // haryu's server
-      // await fetch("http://localhost:4000/login/auth", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -69,15 +69,20 @@ const Auth = () => {
               userStatus: { nickname: data.nickname },
             });
 
-          console.log(data);
+          console.log("data : ", data);
           localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
           localStorage.setItem("intra", data.intra);
           localStorage.setItem("idx", data.userIdx.toString());
           localStorage.setItem("imgUri", data.imgUri);
           localStorage.setItem("email", data.email);
           localStorage.setItem("check2Auth", data.check2Auth.toString());
+          userDispatch({
+            type: "CHANGE_NICK_NAME",
+            value: data.nickname,
+          });
           authDispatch({ type: "SET_ID", value: data.userIdx });
-          authDispatch({ type: "SET_NICKNAME", value: data.nickname });
+          localStorage.setItem("nickname", data.nickname);
+          // authDispatch({ type: "SET_NICKNAME", value: data.nickname });
           setupCookies();
 
           if (data.check2Auth === true) return router.push("./secondauth");

@@ -43,10 +43,11 @@ const Layout = () => {
     };
   }, []);
   useEffect(() => {
+    console.log("userState.nickname : ", userState.nickname);
     socket.emit(
       "main_enter",
       // { intra: localStorage.getItem("intra") },
-      { nickname: userState.nickname },
+      { userNickname : localStorage.getItem("nickname") },
       (ret: ReturnMsgDto) => {
         if (ret.code === 200) {
         }
