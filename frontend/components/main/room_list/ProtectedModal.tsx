@@ -83,7 +83,6 @@ export default function ProtectedModal({
       },
       (ret: ReturnMsgDto) => {
         if (ret.code === 200) {
-          // RoomEnter(room);
           RoomEnter(room, roomState, userState, roomDispatch);
           handleClose();
           setFail(false);
@@ -108,7 +107,6 @@ export default function ProtectedModal({
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            // RoomEnter(room);
             RoomEnter(room, roomState, userState, roomDispatch);
             handleClose();
             setFail(false);
