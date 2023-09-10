@@ -90,6 +90,19 @@ export const friendProfileModalStyle = {
   p: 4,
 };
 
+export const blockProfileModalStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  // height: 700,
+  bgcolor: "#65d9f9",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 export interface IChatBlock {
   blockedNickname: string;
   blockedUserIdx: number;

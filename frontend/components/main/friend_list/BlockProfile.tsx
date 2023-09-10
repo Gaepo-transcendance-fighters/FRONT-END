@@ -1,9 +1,9 @@
 "use client";
+
 import {
   Box,
   Button,
   Card,
-  CardContent,
   Menu,
   MenuItem,
   Modal,
@@ -12,40 +12,20 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import MyGameLog from "../myprofile/MyGameLog";
 import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import {
-  FriendReqData,
   IChatBlock,
   IFriendData,
   IOnlineStatus,
-  friendProfileModalStyle,
+  blockProfileModalStyle,
   main,
 } from "@/type/type";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
-import RoomEnter from "@/external_functions/RoomEnter";
 import { useFriend } from "@/context/FriendContext";
-import axios from "axios";
-import FriendGameButton from "../InviteGame/FriendGameButton";
 
-const loginOn = (
-  <Image src="/status/logon.png" alt="online" width={10} height={10} />
-);
-
-const loginOff = (
-  <Image src="/status/logoff.png" alt="offline" width={10} height={10} />
-);
-
-const gamePlaying = (
-  <Image
-    src="/status/gameplaying.png"
-    alt="gameplaying"
-    width={10}
-    height={10}
-  />
-);
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -61,13 +41,6 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const { friendDispatch } = useFriend();
-
-  const RankSrc =
-    friendData.rank < 800
-      ? "./rank/exp_medal_bronze.png"
-      : friendData.rank >= 800 && friendData.rank < 1100
-      ? "./rank/exp_medal_silver.png"
-      : "./rank/exp_medal_gold.png";
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -202,7 +175,7 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
         <Typography>더보기</Typography>
       </Button>
       <Modal open={openModal} onClose={handleCloseModal}>
-        <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
+        <Box sx={blockProfileModalStyle} borderRadius={"10px"}>
           <Card
             sx={{
               backgroundColor: main.main7,
@@ -221,7 +194,10 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
             >
               <Image
                 // src="/seal.png" // mockdata
-                src={friendData?.imgUri} // < !mockdata
+                src={
+                  friendData?.imgUri ||
+                  `${server_domain}/img/${prop.blockedUserIdx}.png`
+                } // < !mockdata
                 alt="user img"
                 width={100}
                 height={100}
@@ -232,159 +208,28 @@ const BlockProfile = ({ prop }: { prop: IChatBlock }) => {
                 width: "15vw",
               }}
               spacing={1}
+              paddingTop={1.5}
             >
               <Typography
                 sx={{
                   overflow: "hidden",
                   textOverflow: "ellipsis",
+                  fontSize : "23px"
                 }}
               >
                 닉네임: {friendData?.targetNickname}
-              </Typography>
-              <Typography>
-                상태:{" "}
-                {friendData?.isOnline === IOnlineStatus.ONLINE
-                  ? loginOn
-                  : friendData?.isOnline === IOnlineStatus.OFFLINE
-                  ? loginOff
-                  : ""}
               </Typography>
               <Stack direction={"row"} spacing={2}>
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
                   variant="contained"
-                  onClick={handleOpenMenu}
+                  onClick={blockFriend}
                 >
-                  더보기
+                  UnBlock
                 </Button>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleCloseMenu}
-                  MenuListProps={{ sx: { py: 0 } }}
-                >
-                  <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                    <MenuItem onClick={blockFriend}>UnBlock</MenuItem>
-                  </Stack>
-                </Menu>
               </Stack>
             </Stack>
-          </Card>
-          <br />
-          <Card sx={{ backgroundColor: main.main7 }}>
-            <CardContent sx={{ paddingBottom: 0 }}>
-              <Typography>전적</Typography>
-            </CardContent>
-            <Stack direction={"row"}>
-              {/* 이미지 */}
-              <Card
-                sx={{
-                  margin: 1,
-                  marginRight: 0,
-                  width: "30%",
-                  // height: "90%",
-                }}
-              >
-                <CardContent
-                  sx={{
-                    backgroundColor: main.main3,
-                    height: "100%",
-                    "&:last-child": { paddingBottom: "16px" },
-                  }}
-                >
-                  <img
-                    src={RankSrc}
-                    style={{
-                      width: "70%",
-                      height: "70%",
-                      display: "block",
-                      margin: "0 auto",
-                    }}
-                  ></img>
-                </CardContent>
-              </Card>
-              {/* !이미지 */}
-              <Card
-                sx={{
-                  margin: 1,
-                  width: "70%",
-                  height: "60%",
-                }}
-              >
-                <CardContent
-                  sx={{
-                    backgroundColor: main.main3,
-                    height: "100%",
-                    "&:last-child": { paddingBottom: "16px" },
-                  }}
-                >
-                  <Typography margin={1}>
-                    랭크(포인트) : {friendData.rank}{" "}
-                  </Typography>
-                  <Typography margin={1}>
-                    승률 :{" "}
-                    {friendData.win + friendData.lose === 0
-                      ? 0
-                      : Math.floor(
-                          (friendData.win /
-                            (friendData.win + friendData.lose)) *
-                            100
-                        )}
-                    %
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Stack>
-          </Card>
-          <br />
-
-          <Card
-            sx={{
-              // backgroundColor: "RED",
-              // backgroundColor: "#3478c5",
-              backgroundColor: main.main3,
-              height: "50%",
-              width: "100%",
-              overflowY: "scroll",
-            }}
-            id="logs"
-          >
-            <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Card
-                sx={{ paddingBottom: 0 }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "60%",
-                  height: "30%",
-                  backgroundColor: main.main7,
-                  border: "2px solid black",
-                }}
-              >
-                <Typography style={{ fontSize: "2rem" }}>전적 기록</Typography>
-              </Card>
-            </Box>
-            <br />
-            <Box
-              sx={{
-                listStyleType: "none",
-                overflowY: "scroll",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-              }}
-            >
-              {/* <MyGameLog /> */}
-            </Box>
           </Card>
         </Box>
       </Modal>
