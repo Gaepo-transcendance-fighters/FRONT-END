@@ -5,9 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useAuth } from "@/context/AuthContext";
+import { useUser } from "@/context/UserContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
-
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -36,6 +36,7 @@ const Auth = () => {
   const router = useRouter();
   const [client, setClient] = useState(false);
   const { authState, authDispatch } = useAuth();
+  const { userDispatch } = useUser();
 
   const setupCookies = () => {
     let expire = new Date();
@@ -68,7 +69,9 @@ const Auth = () => {
             authState.chatSocket.emit("set_user_status", {
               userStatus: { nickname: data.nickname },
             });
-
+          userDispatch({ type: "SET_USER_IDX", value: data.userIdx });
+          userDispatch({ type: "CHANGE_NICK_NAME", value: data.nickname });
+          userDispatch({ type: "CHANGE_IMG", value: data.imgUri });
           authDispatch({
             type: "SET_ID",
             value: data.userIdx,

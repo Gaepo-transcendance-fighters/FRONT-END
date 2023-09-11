@@ -106,7 +106,7 @@ export default function PageRedir() {
       // .get("http://localhost:4000/users/profile", {
       .get(`${server_domain}/users/profile`)
       .then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         setUserData(response.data);
       });
   };
@@ -337,7 +337,11 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        src={`${userData?.imgUrl}?${Date.now()}`}
+                        src={
+                          userData?.imgUrl
+                            ? `${userData?.imgUrl}${Date.now()}`
+                            : `${server_domain}/img/${userState.userIdx}.png`
+                        }
                         // 이미지가 새로 고쳐지지 않는 문제는 브라우저가 이미지를 캐시하고 있기 때문에 이미지가 바뀌어도 계속 똑같은 이미지 띄움.
                         // 이미지 URL에 쿼리 매개변수를 추가하여 이미지 URL을 변경
                         // 이렇게 하면 브라우저는 이미지를 다시 다운로드하고 갱신된 이미지를 표시
@@ -367,7 +371,7 @@ export default function PageRedir() {
                       </Typography>
 
                       <CardContent style={{ width: "100%" }}>
-                        {verified  ? (
+                        {verified ? (
                           <Typography style={{ fontSize: "1.5rem" }}>
                             2차인증 여부 : Y
                           </Typography>
