@@ -10,7 +10,6 @@ import { useRoom } from "@/context/RoomContext";
 import { IChat } from "@/type/type";
 import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
-import { socket } from "@/app/page";
 interface IPayload {
   channelIdx: number | undefined;
   senderIdx: number;
@@ -33,6 +32,7 @@ const BottomField = ({ setMsgs }: Props) => {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const messageHandler = (chatFromServer: IChat) => {
       let result;
       if (roomState.currentRoom?.mode === "private") {
@@ -74,16 +74,18 @@ const BottomField = ({ setMsgs }: Props) => {
         }
       }
     };
-    socket.on("chat_send_msg", messageHandler);
+    authState.chatSocket.on("chat_send_msg", messageHandler);
 
     return () => {
-      socket.off("chat_send_msg", messageHandler);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_send_msg", messageHandler);
     };
   }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList]);
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
+      if (!authState.chatSocket) return;
       const e = event.nativeEvent as InputEvent;
       if (e.isComposing) return;
       let payload: IPayload | undefined = undefined;
@@ -114,7 +116,8 @@ const BottomField = ({ setMsgs }: Props) => {
           msg: msg,
         };
       }
-      socket.emit("chat_send_msg", payload);
+
+      authState.chatSocket.emit("chat_send_msg", payload);
       setMsg("");
     },
     [msg]

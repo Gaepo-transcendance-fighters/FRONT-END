@@ -1,10 +1,5 @@
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-} from "react";
+import { ReactNode, createContext, useContext, useReducer } from "react";
+import { Socket } from "socket.io-client";
 
 interface IBlockPerson {
   targetNickname: string;
@@ -15,41 +10,67 @@ interface IBlockList {
   blockPerson: IBlockPerson[];
 }
 
-interface AuthContextData {
-  isLoggedIn: boolean;
+interface IUserInfo {
   id: number;
   nickname: string;
+  email: string;
   imgUrl: string;
+  authorization: string;
+  check2Auth: boolean;
+}
+
+interface AuthContextData {
+  userInfo: IUserInfo;
   blockList: IBlockList | null;
+  chatSocket?: Socket;
+  gameSocket?: Socket;
 }
 
 type AuthAction =
-  | { type: "LOGIN"; value: boolean }
   | { type: "SET_ID"; value: number }
   | { type: "SET_NICKNAME"; value: string }
   | { type: "SET_IMGURL"; value: string }
-  | { type: "SET_BLOCK"; value: IBlockList };
+  | { type: "SET_EMAIL"; value: string }
+  | { type: "SET_AUTHORIZATION"; value: string }
+  | { type: "SET_CHECK2AUTH"; value: boolean }
+  | { type: "SET_BLOCK"; value: IBlockList }
+  | { type: "SET_CHAT_SOCKET"; value: Socket }
+  | { type: "SET_GAME_SOCKET"; value: Socket };
 
 const initialState: AuthContextData = {
-  isLoggedIn: false,
-  id: 0,
-  nickname: "",
-  imgUrl: "",
+  userInfo: {
+    id: 0,
+    nickname: "",
+    imgUrl: "",
+    email: "",
+    authorization: "",
+    check2Auth: false,
+  },
   blockList: null,
+  chatSocket: undefined,
+  gameSocket: undefined,
 };
 
 const AuthReducer = (state: AuthContextData, action: AuthAction) => {
   switch (action.type) {
-    case "LOGIN":
-      return { ...state, isLoggedIn: action.value };
     case "SET_ID":
-      return { ...state, id: action.value };
+      return { ...state, userInfo: { ...state.userInfo, id: action.value } };
     case "SET_IMGURL":
-      return { ...state, imgUrl: action.value };
+      return { ...state, userInfo: { ...state.userInfo, imgUrl: action.value } };
     case "SET_NICKNAME":
-      return { ...state, nickname: action.value };
+      return { ...state, userInfo: { ...state.userInfo,nickname : action.value } };
+    case "SET_EMAIL":
+      return {... state ,userInfo:{... state .userInfo,email :action .value }};
+    case "SET_AUTHORIZATION":
+      return {... state ,userInfo:{... state .userInfo ,authorization :action .value }};
+    case "SET_CHECK2AUTH":
+      return {... state ,userInfo:{... state .userInfo ,check2Auth :action .value }};
     case "SET_BLOCK":
       return { ...state, blockList: action.value };
+    case "SET_CHAT_SOCKET":
+      return { ...state, chatSocket: action.value };
+    case "SET_GAME_SOCKET":
+      return { ...state, gameSocket: action.value };
     default:
       return state;
   }
@@ -69,14 +90,6 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authState, authDispatch] = useReducer(AuthReducer, initialState);
-
-  useEffect(() => {
-    const loggedIn = localStorage.getItem("loggedIn");
-
-    if (loggedIn === "true") {
-      authDispatch({ type: "LOGIN", value: true });
-    }
-  }, []);
 
   return (
     <AuthContext.Provider value={{ authState, authDispatch }}>

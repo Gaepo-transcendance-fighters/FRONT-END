@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { useRoom } from "@/context/RoomContext";
 import {
@@ -25,6 +24,7 @@ import {
 } from "@/type/type";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
+import { useAuth } from "@/context/AuthContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -40,6 +40,7 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
     isOnline: IOnlineStatus.OFFLINE,
   });
   const { roomState, roomDispatch } = useRoom();
+  const { authState } = useAuth();
   const { userState } = useUser();
   const { friendDispatch } = useFriend();
 
@@ -88,6 +89,7 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
   // }, []);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
       if (payload) {
         roomDispatch({ type: "SET_DM_ROOMS", value: payload });
@@ -96,14 +98,16 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
       }
     };
 
-    socket.on("create_dm", ChatGetDmRoomList);
+    authState.chatSocket.on("create_dm", ChatGetDmRoomList);
     return () => {
-      socket.off("create_dm", ChatGetDmRoomList);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("create_dm", ChatGetDmRoomList);
     };
   }, []);
 
   const handleOpenNdataModal = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "user_profile",
       {
         userIdx: userState.userIdx,
@@ -116,6 +120,7 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatBlock = (data: IChatBlock) => {
       const blockList = data.blockInfo
         ? data.blockInfo.map((block: IBlock) => {
@@ -130,15 +135,17 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
       handleCloseMenu();
       handleCloseModal();
     };
-    socket.on("chat_block", ChatBlock);
+    authState.chatSocket.on("chat_block", ChatBlock);
 
     return () => {
-      socket.off("chat_block", ChatBlock);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_block", ChatBlock);
     };
   }, []);
 
   const blockFriend = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_block",
       {
         targetNickname: prop.blockedNickname,
@@ -152,12 +159,14 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const userProfile = (data: IFriendData) => {
       setFriendData(data);
     };
-    socket.on("user_profile", userProfile);
+    authState.chatSocket.on("user_profile", userProfile);
     return () => {
-      socket.off("user_profile");
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("user_profile");
     };
   }, [friendData]);
 

@@ -17,7 +17,7 @@ import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { gameSocket } from "../page";
-import { io } from "socket.io-client";
+import { io } from "authState.socketio-client";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";
@@ -84,16 +84,16 @@ const OptionSelect = () => {
 
   useEffect(() => {
     if (!gameSocket) return;
-    gameSocket.on("game_queue_regist", () => {
+    authState.gameSocketon("game_queue_regist", () => {
       console.log("game_queue_regist 받음");
     });
-    gameSocket.on("game_option", () => {
+    authState.gameSocketon("game_option", () => {
       console.log("game_option 받음");
     });
 
     return () => {
-      gameSocket.off("game_option");
-      gameSocket.off("game_queue_regist");
+      authState.gameSocketoff("game_option");
+      authState.gameSocketoff("game_queue_regist");
     };
   }, []);
 
@@ -110,7 +110,7 @@ const OptionSelect = () => {
 
     console.log(authState.id);
 
-    gameSocket.emit(
+    authState.gameSocketemit(
       "game_option",
       {
         gameType: gameState.gameMode,
@@ -130,7 +130,7 @@ const OptionSelect = () => {
             return;
           }
 
-          gameSocket.emit(
+          authState.gameSocketemit(
             "game_queue_regist",
             {
               userIdx: authState.id,
@@ -152,7 +152,7 @@ const OptionSelect = () => {
 
   useEffect(() => {
     setClient(true);
-    gameSocket.connect();
+    authState.gameSocketconnect();
   }, []);
 
   if (!client) return <></>;
