@@ -203,7 +203,13 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           },
           (ret: ReturnMsgDto) => {
             if (ret.code === 200) {
-              RoomEnter(room, roomState, userState, roomDispatch);
+              RoomEnter(
+                room,
+                roomState,
+                userState,
+                roomDispatch,
+                authState.chatSocket!
+              );
             }
           }
         );
@@ -217,7 +223,13 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           },
           (ret: ReturnMsgDto) => {
             if (ret.code === 200) {
-              RoomEnter(room, roomState, userState, roomDispatch);
+              RoomEnter(
+                room,
+                roomState,
+                userState,
+                roomDispatch,
+                authState.chatSocket!
+              );
             } else if (ret.code === 201) {
               // Banned user
               setShowAlertBan(true);

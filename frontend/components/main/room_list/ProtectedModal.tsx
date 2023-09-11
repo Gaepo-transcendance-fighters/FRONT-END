@@ -14,6 +14,7 @@ import { Box, Typography } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom, Mode, ReturnMsgDto } from "@/type/RoomType";
+import { Socket } from "socket.io-client";
 import { useUser } from "@/context/UserContext";
 import { RoomContextData, RoomAction } from "@/context/RoomContext";
 import { UserContextData } from "@/context/UserContext";
@@ -59,7 +60,8 @@ export default function ProtectedModal({
     room: IChatRoom,
     roomState: RoomContextData,
     userState: UserContextData,
-    roomDispatch: Dispatch<RoomAction>
+    roomDispatch: Dispatch<RoomAction>,
+    chatSocket: Socket
   ) => void; // <==================== 삭제필요
 }) {
   const { roomState, roomDispatch } = useRoom();
@@ -93,7 +95,8 @@ export default function ProtectedModal({
               nickname: authState.userInfo.nickname,
               userIdx: authState.userInfo.id,
             },
-            roomDispatch
+            roomDispatch,
+            authState.chatSocket!
           );
           handleClose();
           setFail(false);
@@ -128,7 +131,8 @@ export default function ProtectedModal({
                 nickname: authState.userInfo.nickname,
                 userIdx: authState.userInfo.id,
               },
-              roomDispatch
+              roomDispatch,
+              authState.chatSocket!
             );
             handleClose();
             setFail(false);
