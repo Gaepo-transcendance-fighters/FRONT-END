@@ -4,11 +4,10 @@ import { Box, Card, CircularProgress, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { main } from "@/font/color";
-import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
-import { socket } from "@/app/page";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -36,8 +35,7 @@ const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
   const [client, setClient] = useState(false);
-  const { userDispatch } = useUser();
-  const { authDispatch } = useAuth();
+  const { authState, authDispatch } = useAuth();
 
   const setupCookies = () => {
     let expire = new Date();
@@ -45,7 +43,7 @@ const Auth = () => {
     expire.setTime(expire.getTime() + 30 * 60 * 1000);
     document.cookie = "login=1; path=/; expires=" + expire.toUTCString() + ";";
   };
-  
+
   // haryu's server
   // await fetch("http://localhost:4000/login/auth", {
   const postCode = async (code: string) => {
@@ -63,30 +61,42 @@ const Auth = () => {
       .then(async (res) => {
         if (res.status === 200) {
           const data: Data = await res.json();
-          if (data.imgUri === `${server_domain}/img/0.png`)
-            // if (data.imgUri === "http://localhost:4000/img/0.png")
-            socket.emit("set_user_status", {
+          if (
+            data.imgUri === `${server_domain}/img/0.png` &&
+            authState.chatSocket
+          )
+            authState.chatSocket.emit("set_user_status", {
               userStatus: { nickname: data.nickname },
             });
 
-          console.log("data : ", data);
-          localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
-          localStorage.setItem("intra", data.intra);
-          localStorage.setItem("idx", data.userIdx.toString());
-          localStorage.setItem("imgUri", data.imgUri);
-          localStorage.setItem("email", data.email);
-          localStorage.setItem("check2Auth", data.check2Auth.toString());
-          userDispatch({
-            type: "CHANGE_NICK_NAME",
+          authDispatch({
+            type: "SET_ID",
+            value: data.userIdx,
+          });
+          authDispatch({
+            type: "SET_NICKNAME",
             value: data.nickname,
           });
-          authDispatch({ type: "SET_ID", value: data.userIdx });
-          localStorage.setItem("nickname", data.nickname);
-          // authDispatch({ type: "SET_NICKNAME", value: data.nickname });
+          authDispatch({
+            type: "SET_IMGURL",
+            value: data.imgUri,
+          });
+          authDispatch({
+            type: "SET_AUTHORIZATION",
+            value: data.token,
+          });
+          authDispatch({
+            type: "SET_CHECK2AUTH",
+            value: data.check2Auth,
+          });
+          authDispatch({
+            type: "SET_EMAIL",
+            value: data.email,
+          });
           setupCookies();
 
-          if (data.check2Auth === true) return router.push("./secondauth");
-          else return router.push(`/home`);
+          if (data.check2Auth === true) return router.push("/secondauth");
+          else return router.push(`/`);
         }
       })
       .catch((error) => {
@@ -112,9 +122,6 @@ const Auth = () => {
       <Card sx={modalStyle}>
         <CircularProgress sx={{ color: "white" }} />
         <Typography sx={{ color: "white" }}>Loading...</Typography>
-        <Typography sx={{ color: "white" }}>
-          {searchParam.get("code")}
-        </Typography>
       </Card>
     </Box>
   );
