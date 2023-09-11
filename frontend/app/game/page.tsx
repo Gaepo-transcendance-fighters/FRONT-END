@@ -16,7 +16,6 @@ import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useGame } from "@/context/GameContext";
-import { gameSocket } from "../page";
 
 const infomodalStyle = {
   position: "absolute" as "absolute",
