@@ -23,9 +23,7 @@ const RoomEnter = (
         channelIdx: roomState.currentRoom.channelIdx,
         userIdx: userState.userIdx,
       },
-      (ret: ReturnMsgDto) => {
-        console.log("chat_goto_lobby ret : ", ret.code);
-      }
+      (ret: ReturnMsgDto) => {}
     );
   }
   roomDispatch({ type: "SET_CUR_ROOM", value: room });

@@ -80,7 +80,7 @@ const BottomField = ({ setMsgs }: Props) => {
       if (!authState.chatSocket) return;
       authState.chatSocket.off("chat_send_msg", messageHandler);
     };
-  }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList]);
+  }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList, roomState.currentRoom]);
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
