@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 export const useRequireAuth = (redirectUrl: string = "/login") => {
   const router = useRouter();
+  const { authState } = useAuth();
 
   const getCookies = () => {
     const cookies = document.cookie;
@@ -19,9 +20,11 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
     const cookies_value = getCookies();
     if (cookies_value) {
       if (
-        !localStorage.getItem("intra") ||
-        !localStorage.getItem("idx") ||
-        !localStorage.getItem("authorization")
+        !authState.userInfo.id ||
+        !authState.userInfo.nickname ||
+        !authState.userInfo.email ||
+        !authState.userInfo.authorization ||
+        !authState.userInfo.imgUrl
       )
         return router.push(redirectUrl);
       return router.push("/home");

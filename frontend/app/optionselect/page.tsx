@@ -16,12 +16,12 @@ import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
-import { gameSocket } from "../page";
 import axios from "axios";
-import { io } from "socket.io-client";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";
+
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 enum SpeedOption {
   speed1,
@@ -48,11 +48,11 @@ interface IGameOption {
   mapNumber: MapOption; // A, B, C
 }
 
-// export const gameSocket = io("http://localhost:4000/game", {
+// export const gameSocket = io("http://10.19.205.41:4000/game", {
 // const userId =
 //   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
 
-// export const gameSocket = io("http://localhost:4000/game", {
+// export const gameSocket = io("http://10.19.205.41:4000/game", {
 //   query: { userId: userId },
 // });
 
@@ -84,29 +84,45 @@ const OptionSelect = () => {
   };
 
   useEffect(() => {
+    if (!authState.gameSocket) return;
+    authState.gameSocket.on("game_queue_regist", () => {
+      console.log("game_queue_regist 받음");
+    });
+    authState.gameSocket.on("game_option", () => {
+      console.log("game_option 받음");
+    });
+
+    return () => {
+      if (!authState.gameSocket) return;
+      authState.gameSocket.off("game_option");
+      authState.gameSocket.off("game_queue_regist");
+    };
+  }, []);
+
+  useEffect(() => {
     countdown > 0 && setTimeout(() => setCountdown(countdown - 1), 1000);
     // 나중에 이거 풀면됨
     if (countdown == 0) cntRedir();
   }, [countdown]);
 
   const cntRedir = async () => {
-    if (!gameSocket) return;
+    if (!authState.gameSocket) return;
     gameDispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
 
     await axios({
       method: "post",
-      url: "http://paulryu9309.ddns.net:4000/game",
+      url: `${server_domain}/game`,
       data: {
         gameType: gameState.gameMode,
-        userIdx: authState.id,
+        userIdx: authState.userInfo.id,
         speed: selectedSpeedOption,
         mapNumber: selectedMapOption,
       },
     }).then((res) => {
       console.log(res)
       if (res.status === 200) {
-        gameSocket.connect();
+        authState.gameSocket!.connect();
         router.replace("/inwaiting");
       } else {
         console.log("게임방 생성 실패");

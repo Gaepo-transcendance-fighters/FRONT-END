@@ -8,7 +8,6 @@ import PingPong from "@/components/game/ingame/PingPong";
 import { useGame } from "@/context/GameContext";
 import useModal from "@/hooks/useModal";
 import Modals from "@/components/public/Modals";
-import { gameSocket } from "../page";
 import { useAuth } from "@/context/AuthContext";
 import { Style } from "@mui/icons-material";
 
@@ -23,9 +22,10 @@ const GamePlaying = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const backToMain = () => {
+    if (!authState.gameSocket) return;
     gameDispatch({ type: "SCORE_RESET" });
-    gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
-    gameSocket.disconnect();
+    authState.gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
+    authState.gameSocket.disconnect();
     router.replace("/home");
   };
 
@@ -53,6 +53,7 @@ const GamePlaying = () => {
   }
 
   useEffect(() => {
+    if (!authState.gameSocket) return;
     setClient(true);
     const preventGoBack = (e: PopStateEvent) => {
       e.preventDefault();
@@ -79,18 +80,21 @@ const GamePlaying = () => {
     };
 
     history.pushState(null, "", location.href);
-    // addEventListener("popstate", preventGoBack);
-    // addEventListener("keydown", preventRefresh);
-    // addEventListener("beforeunload", preventRefreshButton);
+    addEventListener("popstate", preventGoBack);
+    addEventListener("keydown", preventRefresh);
+    addEventListener("beforeunload", preventRefreshButton);
 
-    gameSocket.emit("game_force_quit", { userIdx: authState.id });
-    gameSocket.on("game_force_quit", (msg: string) => {
+    authState.gameSocket.emit("game_force_quit", { userIdx: authState.userInfo.id });
+    authState.gameSocket.on("game_force_quit", (msg: string) => {
+      console.log(`game force quit: ${msg}`)
       setOpenModal(true);
     });
     return () => {
-      // removeEventListener("popstate", preventGoBack);
-      // removeEventListener("keydown", preventRefresh);
-      // removeEventListener("beforeunload", preventRefreshButton);
+      if (!authState.gameSocket) return;
+      authState.gameSocket.off("game_force_quit");
+      removeEventListener("popstate", preventGoBack);
+      removeEventListener("keydown", preventRefresh);
+      removeEventListener("beforeunload", preventRefreshButton);
     };
   }, []);
 
@@ -153,14 +157,14 @@ const GamePlaying = () => {
               }}
             >
               <Card
-                style={gameState.aPlayer.id === authState.id ? myNickname : otherNickname}
+                style={gameState.aPlayer.id === authState.userInfo.id ? myNickname : otherNickname}
               >
                 <Typography>{gameState.aPlayer.nick}</Typography>
               </Card>
               <PingPong />
 
               <Card
-                style={gameState.bPlayer.id === authState.id ? myNickname : otherNickname}
+                style={gameState.bPlayer.id === authState.userInfo.id ? myNickname : otherNickname}
               >
                 <Typography>{gameState.bPlayer.nick}</Typography>
               </Card>

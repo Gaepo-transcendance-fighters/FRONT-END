@@ -10,6 +10,8 @@ import { main } from "@/type/type";
 
 import { useUser } from "@/context/UserContext";
 
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+
 const TOTAL_PAGES = 100;
 
 const options = {
@@ -67,8 +69,17 @@ const MyGameLog = () => {
     };
   }, [observerTarget]);
 
+  //dev original
+  // .get(
+  //   `${server_domain}/game/records/userIdx=${localStorage.getItem(
+  //     "idx"
+  //   )}&page=${pageNum}`,
+  // )
+  //haryu's server
+  // .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
   const callUser = useCallback(async () => {
     await axios
+<<<<<<< HEAD
       //dev original
       // .get(`http://localhost:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`)
       //haryu's server
@@ -76,6 +87,18 @@ const MyGameLog = () => {
       //   `http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=1&index=${pageNum}`
       // )
       .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`)
+=======
+      .get(
+        `${server_domain}/game/records/userIdx=${localStorage.getItem(
+          "idx"
+        )}&page=${pageNum}`,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("authorization"),
+          },
+        }
+      )
+>>>>>>> e7bcc064953437b904cb6a5f35c034333eb76dd9
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setGameRecord((prevRecord) => [...prevRecord, ...newData]);

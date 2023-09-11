@@ -9,29 +9,30 @@ import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
 
-const userId =
-  typeof window !== "undefined" ? localStorage.getItem("idx") : null;
-
-// export const socket = io("http://localhost:4000/chat", {
-  // haryu's server
-export const socket = io("http://paulryu9309.ddns.net:4000/chat", {
-  query: { userId: userId },
-  autoConnect: false, //혹시 페이지에서 connect를 하면 새로고침 할 때마다 연결을 시도할까?
-});
-
-// export const gameSocket = io("http://localhost:4000/", {
-  export const gameSocket = io("http://paulryu9309.ddns.net:4000/game/playroom", {
-  query: { userId: userId },
-  autoConnect: false,
-});
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 export default function HomePage() {
   const router = useRouter();
   const [client, setClient] = useState(false);
+  const { authState, authDispatch } = useAuth();
 
   useEffect(() => {
     setClient(true);
-    router.replace("/login");
+
+    const socket = io(`${server_domain}/chat`, {
+      query: { userId: authState.userInfo.id },
+      autoConnect: false,
+    });
+
+    const gameSocket = io(`${server_domain}/game`, {
+      query: { userId: authState.userInfo.id },
+      autoConnect: false,
+    });
+
+    authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
+    authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
+
+    router.replace("/home")
   }, []);
 
   return null;

@@ -13,17 +13,25 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { IFriend } from "../friend_list/FriendList";
 import { IChatDmEnter, IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
-import { socket } from "@/app/page";
 import RoomEnter from "@/external_functions/RoomEnter";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
 import MemberGameButton from "../InviteGame/MemberGameButton";
-import { FriendReqData, friendProfileModalStyle } from "@/type/type";
+import {
+  FriendReqData,
+  IBlock,
+  IChatBlock,
+  IFriend,
+  IOnlineStatus,
+  friendProfileModalStyle,
+} from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
+import { useAuth } from "@/context/AuthContext";
+
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 const loginOn = (
   <Image src="/status/logon.png" alt="online" width={10} height={10} />
@@ -47,12 +55,13 @@ export default function MemberModal({
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const { friendState, friendDispatch } = useFriend();
+  const { authState } = useAuth();
 
   useEffect(() => {
     setCurFriend({
       friendNickname: person.nickname!,
       friendIdx: person.userIdx!,
-      isOnline: true,
+      isOnline: IOnlineStatus.ONLINE,
     });
   }, []);
 
@@ -76,11 +85,11 @@ export default function MemberModal({
     };
     await axios({
       method: "post",
-      url: "http://localhost:4000/users/follow",
-      // url: "http://paulryu9309.ddns.net:4000/users/follow",
+      url: `${server_domain}/users/follow`,
       data: friendReqData,
     })
       .then((res) => {
+        console.log("addFriend res : ", res.data.result);
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: true });
       })
@@ -100,12 +109,12 @@ export default function MemberModal({
 
     await axios({
       method: "delete",
-      url: "http://localhost:4000/users/unfollow",
-      // url: "http://paulryu9309.ddns.net:4000/users/unfollow",
+      url: `${server_domain}/users/unfollow`,
       data: friendReqData,
     })
       .then((res) => {
-        friendDispatch({ type: "SET_FRIENDLIST", value: res.data });
+        console.log("MMM deleteFriend : ", res);
+        friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })
       .catch((err) => {
@@ -116,15 +125,35 @@ export default function MemberModal({
   };
 
   useEffect(() => {
-    const ChatBlock = () => {
+    if (!authState.chatSocket) return;
+    const ChatBlock = (data: IChatBlock) => {
+      console.log("mmm ChatBlock : ", data);
+      const blockList = data.blockInfo
+        ? data.blockInfo.map((block: IBlock) => {
+            return {
+              blockedNickname: block.blockedNickname,
+              blockedUserIdx: block.blockedUserIdx,
+            };
+          })
+        : [];
+      friendDispatch({
+        type: "ADD_BLOCK",
+        value: {
+          blockedNickname: person.nickname!,
+          blockedUserIdx: person.userIdx!,
+        },
+      });
+      friendDispatch({ type: "SET_IS_FRIEND", value: false });
+      friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
+      friendDispatch({ type: "SET_BLOCKLIST", value: blockList });
       handleCloseMenu();
       handleCloseModal();
-      friendDispatch({ type: "SET_IS_FRIEND", value: false });
     };
-    socket.on("chat_block", ChatBlock);
+    authState.chatSocket.on("chat_block", ChatBlock);
 
     return () => {
-      socket.off("chat_block", ChatBlock);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_block", ChatBlock);
     };
   }, []);
 
@@ -139,25 +168,28 @@ export default function MemberModal({
   }, [friendState.isFriend, friendState.friendList]);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
       payload ? roomDispatch({ type: "SET_DM_ROOMS", value: payload }) : null;
       handleCloseModal();
       roomDispatch({ type: "SET_NEW_DM_ROOM_ALERT", value: true });
     };
 
-    socket.on("create_dm", ChatGetDmRoomList);
+    authState.chatSocket.on("create_dm", ChatGetDmRoomList);
     return () => {
-      socket.off("create_dm", ChatGetDmRoomList);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("create_dm", ChatGetDmRoomList);
     };
   }, []);
 
   const sendDM = () => {
+    if (!authState.chatSocket) return;
     const existingRoom = roomState.dmRooms.find(
       (element) => element.targetNickname === person.nickname
     );
     if (existingRoom) {
       // 이미 dm 방이 존재. 그럼 기존 방 리디렉션
-      socket.emit(
+      authState.chatSocket.emit(
         "chat_get_DM",
         {
           channelIdx: existingRoom.channelIdx,
@@ -174,7 +206,7 @@ export default function MemberModal({
       );
     } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
-      socket.emit(
+      authState.chatSocket.emit(
         "create_dm",
         { targetNickname: person.nickname, targetIdx: person.userIdx },
         (ret: ReturnMsgDto) => {
@@ -189,7 +221,8 @@ export default function MemberModal({
   };
 
   const blockFriend = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_block",
       {
         targetNickname: person.nickname,
@@ -242,7 +275,12 @@ export default function MemberModal({
               닉네임: {curFriend?.friendNickname}
             </Typography>
             <Typography>
-              상태: {curFriend?.isOnline ? loginOn : loginOff}
+              상태:
+              {curFriend?.isOnline === IOnlineStatus.ONLINE
+                ? loginOn
+                : curFriend?.isOnline === IOnlineStatus.OFFLINE
+                ? loginOff
+                : ""}
             </Typography>
             <Stack direction={"row"} spacing={2}>
               <MemberGameButton prop={person} />
@@ -269,15 +307,22 @@ export default function MemberModal({
                 MenuListProps={{ sx: { py: 0 } }}
               >
                 <Stack sx={{ backgroundColor: "#48a0ed" }}>
-                  {!friendState.isFriend && (
-                    <MenuItem onClick={addFriend}>Add</MenuItem>
-                  )}
-                  {friendState.isFriend && (
-                    <MenuItem onClick={deleteFriend}>Delete</MenuItem>
-                  )}
+                  {!friendState.blockList.find(
+                    (block) => block.blockedUserIdx === person.userIdx
+                  ) ? (
+                    <>
+                      {!friendState.friendList.find(
+                        (friend) => friend.friendIdx === person.userIdx
+                      ) && <MenuItem onClick={addFriend}>Add</MenuItem>}
+                      {friendState.friendList.find(
+                        (friend) => friend.friendIdx === person.userIdx
+                      ) && <MenuItem onClick={deleteFriend}>Delete</MenuItem>}
+                    </>
+                  ) : null}
+
                   <MenuItem onClick={blockFriend}>
                     {friendState.blockList.find(
-                      (block) => block.targetIdx === person.userIdx
+                      (block) => block.blockedUserIdx === person.userIdx
                     ) === undefined
                       ? "Block"
                       : "UnBlock"}

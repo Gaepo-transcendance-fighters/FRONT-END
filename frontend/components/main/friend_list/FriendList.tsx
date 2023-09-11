@@ -2,6 +2,7 @@
 
 import { ToggleButton, Card, Typography, Box, Stack } from "@mui/material";
 import Friend from "./Friend";
+import Block from "./Block";
 import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useFriend } from "@/context/FriendContext";
@@ -36,36 +37,14 @@ const selectedButton = {
   flex: 1,
 };
 
-export interface IFriend {
-  friendNickname: string;
-  friendIdx: number;
-  isOnline: boolean;
-}
-
-export interface IBlock {
-  targetNickname: string;
-  targetIdx: number;
-}
-
-interface IUserProp {
-  friendNickname?: string;
-  friendIdx?: number;
-  isOnline?: boolean;
-  targetNickname?: string;
-  targetIdx?: number;
-}
-
 const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
-  const [showlist, setShowlist] = useState<IUserProp[]>([]);
   const { friendState } = useFriend();
   const [client, setClient] = useState(false);
 
   useEffect(() => {
     setClient(true);
-    const cur = select ? friendState.blockList : friendState.friendList;
-    setShowlist(cur);
-  }, [friendState.friendList, friendState.blockList, select, showlist]);
+  }, [select]);
 
   if (!client) return <></>;
 
@@ -108,7 +87,7 @@ const FriendList = () => {
         >
           <ToggleButton
             value="show"
-            onChange={() => setSelect(false)}
+            onClick={() => setSelect(false)}
             sx={!select ? selectedButton : unselectedButton}
           >
             Friend
@@ -116,7 +95,7 @@ const FriendList = () => {
 
           <ToggleButton
             value="show"
-            onChange={() => setSelect(true)}
+            onClick={() => setSelect(true)}
             sx={select ? selectedButton : unselectedButton}
           >
             Block
@@ -132,11 +111,23 @@ const FriendList = () => {
             borderRadius: "10px",
           }}
         >
+<<<<<<< HEAD
           {showlist.length
             ? showlist.map((user, idx) => (
                 <Friend key={idx} prop={user as IUserProp} />
               ))
             : ""}
+=======
+          {!select && friendState.friendList.length
+            ? friendState.friendList.map((user, idx) => (
+                <Friend key={idx} prop={user} />
+              ))
+            : ""}
+          {select &&
+            friendState.blockList.map((user, idx) => (
+              <Block key={idx} prop={user} />
+            ))}
+>>>>>>> e7bcc064953437b904cb6a5f35c034333eb76dd9
         </Card>
       </Stack>
     </Card>

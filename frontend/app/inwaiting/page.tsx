@@ -30,7 +30,6 @@ const modalStyle = {
 import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
-import { gameSocket } from "../page";
 import { useAuth } from "@/context/AuthContext";
 import { ReturnMsgDto } from "@/type/RoomType";
 
@@ -80,14 +79,15 @@ const Inwaiting = () => {
   const { isShowing, toggle } = useModal();
 
   const BackToMain = () => {
+    if (!authState.gameSocket) return;
     //게임 소켓 - 게임 큐 취소
-    gameSocket.emit(
+    authState.gameSocket.emit(
       "game_queue_quit",
-      { userIdx: authState.id },
+      { userIdx: authState.userInfo.id },
       (res: ReturnMsgDto) => {
         if (res.code === 200) {
           console.log("game_queue_quit");
-          gameSocket.disconnect();
+          authState.gameSocket!.disconnect();
           router.replace("/home?from=game");
         }
       }
@@ -100,33 +100,32 @@ const Inwaiting = () => {
   };
 
   useEffect(() => {
+    if (!authState.gameSocket) return;
     setClient(true);
 
     //게임 소켓 - 이벤트 등록
-    gameSocket.on("game_queue_quit", () => {});
+    authState.gameSocket.on("game_queue_quit", () => {});
 
-    gameSocket.on("game_start", () => {
+    authState.gameSocket.on("game_start", () => {
       setTimeout(() => {
         router.replace("/gameplaying");
       }, 2000);
     })
 
-    gameSocket.on("game_ping", ({serverTime}: {serverTime: number}) => {
-      console.log("game_ping");
+    authState.gameSocket.on("game_ping", ({serverTime}: {serverTime: number}) => {
       const now = new Date().getTime();
-      console.log('now',now)
-      gameSocket.emit(
+      authState.gameSocket!.emit(
         "game_ping_receive",
         {
-          userIdx: authState.id,
+          userIdx: authState.userInfo.id,
           serverTime: serverTime,
           clientTime: now
         }
       );
     });
 
-    gameSocket.on("game_queue_success", (data: IGameQueueSuccess) => {
-      gameSocket.emit("game_queue_success", { userIdx: authState.id }, () =>{
+    authState.gameSocket.on("game_queue_success", (data: IGameQueueSuccess) => {
+      authState.gameSocket!.emit("game_queue_success", { userIdx: authState.userInfo.id }, () =>{
           console.log("game_queue_success");
           gameDispatch({
             type: "A_PLAYER",
@@ -154,11 +153,12 @@ const Inwaiting = () => {
     window.addEventListener("popstate", preventGoBack);
 
     return () => {
+      if (!authState.gameSocket) return;
       window.removeEventListener("popstate", preventGoBack);
-      gameSocket.off("game_queue_quit");
-      gameSocket.off("game_ping");
-      gameSocket.off("game_start");
-      gameSocket.off("game_queue_success");
+      authState.gameSocket.off("game_queue_quit");
+      authState.gameSocket.off("game_ping");
+      authState.gameSocket.off("game_start");
+      authState.gameSocket.off("game_queue_success");
     };
   }, []);
 

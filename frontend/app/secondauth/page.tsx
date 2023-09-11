@@ -1,20 +1,13 @@
 "use client";
 
-import Image from "next/image";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, CardContent, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
-
+import { useAuth } from "@/context/AuthContext";
 import { main } from "@/type/type";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { socket } from "@/app/page";
+
+const server_domain = process.env.SERVER_URL_4000;
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -31,19 +24,17 @@ const modalStyle = {
 
 const SecondAuth = () => {
   const [block, setBlock] = useState<boolean>(false);
+  const { authState, authDispatch } = useAuth();
   const [inputnumber, setInputNumber] = useState<string>("");
   const router = useRouter();
 
   const SendMail = async () => {
     const response = await axios({
       method: "POST",
-      url: `http://localhost:4000/users/second`,
-      // url: `http://paulryu9309.ddns.net:4000/users/second`,
+      url: `${server_domain}/users/second`,
       data: {
-        // userIdx: localStorage.getItem("idx"),
-        userIdx: Number(localStorage.getItem("idx")),
-
-        email: localStorage.getItem("email"),
+        userIdx: authState.userInfo.id,
+        email: authState.userInfo.email,
       },
     });
     if (response.status == 200) setBlock(true);
@@ -55,17 +46,15 @@ const SecondAuth = () => {
 
     const response = await axios({
       method: "PATCH",
-      url: `http://localhost:4000/users/second`,
-      // url: `http://paulryu9309.ddns.net:4000/users/second`,
+      url: `${server_domain}/users/second`,
       data: {
-        // userIdx: localStorage.getItem("idx"),
-        userIdx: Number(localStorage.getItem("idx")),
+        userIdx: authState.userInfo.id,
         code: Number(inputnumber),
       },
     });
     if (response.status == 200) {
-      console.log("success in check 2 auth");
-      socket.emit("set_user_status", {
+      if (!authState.chatSocket) return;
+      authState.chatSocket.emit("set_user_status", {
         userStatus: { nickname: response.data.nickname },
       });
       return router.push("/home");

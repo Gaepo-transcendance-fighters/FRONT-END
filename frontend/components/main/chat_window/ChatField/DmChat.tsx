@@ -9,6 +9,8 @@ import axios from "axios";
 import { useEffect, useState, useRef, useCallback, lazy } from "react";
 import { Dispatch, SetStateAction } from "react";
 
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+
 const options = {
   threshold: 0.1,
 };
@@ -19,7 +21,7 @@ interface Props {
 }
 
 const DmChats = ({ msgs, setMsgs }: Props) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [pageNum, setPageNum] = useState(0);
   const { roomState } = useRoom();
   const { initMsgState } = useInitMsg();
@@ -47,9 +49,17 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
     console.log(pageNum);
     await axios
       // dev original
+<<<<<<< HEAD
       // .get(`http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`)
       // haryu's server
     .get(`http://paulryu9309.ddns.net:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`)
+=======
+      .get(
+        `${server_domain}/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`
+      )
+      // haryu's server
+      // .get(`http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`)
+>>>>>>> e7bcc064953437b904cb6a5f35c034333eb76dd9
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setMsgs((prevMsgs) => [...prevMsgs, ...newData]);
@@ -91,9 +101,13 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
       return [...prevState, ...list];
     });
     let calPage = Math.floor(initMsgState.dmEnterEntry.totalMsgCount / 5);
+<<<<<<< HEAD
     // let calPage = initMsgState.dmEnterEntry.totalMsgCount / 5;
     if (initMsgState.dmEnterEntry.totalMsgCount % 5 !== 0)
       calPage += 1;
+=======
+    if (initMsgState.dmEnterEntry.totalMsgCount % 5 !== 0) calPage += 1;
+>>>>>>> e7bcc064953437b904cb6a5f35c034333eb76dd9
     setPageNum(calPage - 4);
   }, [roomState.currentRoom?.channelIdx]);
 
@@ -120,7 +134,7 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
               listStyleType: "none",
               margin: "0px 0 0 0",
               color: "white",
-              padding: 0,
+              padding: "2% 0% 0% 2%"
             }}
           >
             <Typography variant="h6">
