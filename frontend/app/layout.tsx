@@ -33,7 +33,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // useRequireAuth();
+  useRequireAuth();
 
   return (
     <ThemeProvider theme={font}>

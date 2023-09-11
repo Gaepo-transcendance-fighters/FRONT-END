@@ -19,6 +19,8 @@ export default function HomePage() {
   useEffect(() => {
     setClient(true);
 
+    console.log(`${server_domain}/chat`)
+
     const socket = io(`${server_domain}/chat`, {
       query: { userId: authState.userInfo.id },
       autoConnect: false,

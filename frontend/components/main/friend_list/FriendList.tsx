@@ -111,13 +111,6 @@ const FriendList = () => {
             borderRadius: "10px",
           }}
         >
-<<<<<<< HEAD
-          {showlist.length
-            ? showlist.map((user, idx) => (
-                <Friend key={idx} prop={user as IUserProp} />
-              ))
-            : ""}
-=======
           {!select && friendState.friendList.length
             ? friendState.friendList.map((user, idx) => (
                 <Friend key={idx} prop={user} />
@@ -127,7 +120,6 @@ const FriendList = () => {
             friendState.blockList.map((user, idx) => (
               <Block key={idx} prop={user} />
             ))}
->>>>>>> e7bcc064953437b904cb6a5f35c034333eb76dd9
         </Card>
       </Stack>
     </Card>
