@@ -64,7 +64,7 @@ const SecondAuth = () => {
       // authState.chatSocket.emit("set_user_status", {
       //   userStatus: { nickname: response.data.nickname },
       // });
-      return router.push("/home");
+      return router.push("/");
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
     else if (
