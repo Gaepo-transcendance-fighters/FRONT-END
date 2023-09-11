@@ -60,9 +60,7 @@ export default function RoomTypeButton() {
         userNickname: userState.nickname,
         userIdx: userState.userIdx,
       },
-      (ret: ReturnMsgDto) => {
-        console.log(ret);
-      }
+      (ret: ReturnMsgDto) => {}
     );
     OnClick(false);
   };
