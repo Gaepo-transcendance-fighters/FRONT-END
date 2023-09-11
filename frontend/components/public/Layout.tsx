@@ -22,16 +22,26 @@ const Layout = () => {
   const { authState } = useAuth();
 
   useEffect(() => {
-    console.log("effect")
+    console.log("effect");
     if (!authState.chatSocket) return;
-    console.log("pass")
+    console.log("pass");
     const MainEnter = (data: IMaindata) => {
-      console.log("main_enter", data)
+      console.log("main_enter", data);
       console.log(data.userObject.imgUri);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-      userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+      let imgString = data.userObject.imgUri.substring(
+        0,
+        data.userObject.imgUri.length - 4
+      );
+      let dateNow = Date.now().toString();
+      console.log("dateNow : ", dateNow);
+      userDispatch({
+        type: "CHANGE_IMG",
+        value: imgString + dateNow + ".png",
+      });
+      // userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
       userDispatch({
         type: "CHANGE_NICK_NAME",
         value: data.userObject.nickname,

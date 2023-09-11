@@ -63,7 +63,6 @@ interface IUserData {
   imgUri: string;
   win: number;
   lose: number;
-  rank: number;
   email: string;
   intra: string;
   isOnline: IOnlineStatus;
@@ -100,7 +99,6 @@ export default function PageRedir() {
     imgUri: "",
     win: 0,
     lose: 0,
-    rank: 0,
     email: "",
     intra: "",
     isOnline: IOnlineStatus.ONLINE,
@@ -118,18 +116,18 @@ export default function PageRedir() {
 
   const [reload, setReload] = useState<boolean>(false);
 
-  const fetch = async () => {
-    await axios
-      .get(`${server_domain}/users/profile`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("authorization"),
-        }, // 헤더 객체를 설정합니다.
-      })
-      .then((response) => {
-        console.log(response.data);
-        setUserData(response.data);
-      });
-  };
+  // const fetch = async () => {
+  //   await axios
+  //     .get(`${server_domain}/users/profile`, {
+  //       headers: {
+  //         Authorization: "Bearer " + authState.userInfo.authorization,
+  //       }, // 헤더 객체를 설정합니다.
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setUserData(response.data.result);
+  //     });
+  // };
 
   useEffect(() => {
     console.log("userData : ", userData);
@@ -141,8 +139,8 @@ export default function PageRedir() {
     // setVerified(verified);
     console.log("isSet : ", isSet);
     if (!isSet) return;
-    fetch();
-  }, [reload, verified]);
+  //   fetch();
+  }, [reload, verified, isSet]);
 
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
@@ -155,7 +153,6 @@ export default function PageRedir() {
     if (files) {
       uploadImage(files[0]);
       setReload((curr) => !curr);
-      setIsSet(true);
     }
   };
 
@@ -186,11 +183,11 @@ export default function PageRedir() {
     })
       .then((res) => {
         console.log("res : ", res);
+        setUserData(res.data.result);
       })
       .catch((error) => {
         console.error("업로드 실패", error);
       });
-    console.log("ho");
     setReload((curr) => !curr);
     setIsSet(true);
   };
@@ -276,15 +273,15 @@ export default function PageRedir() {
   };
 
   const BackToHome = () => {
-    setReload(false);
+    setIsSet(false);
     router.push("/home");
   };
 
   const RankImgSelect = (data: IUserData) => {
-    if (data.rank < 800) return "./rank/exp_medal_bronze.png";
-    else if (data.rank >= 800 && data.rank < 1100)
+    if (data?.rankpoint < 800) return "./rank/exp_medal_bronze.png";
+    else if (data?.rankpoint >= 800 && data?.rankpoint < 1100)
       return "./rank/exp_medal_silver.png";
-    else if (data.rank >= 1100) return "./rank/exp_medal_gold.png";
+    else if (data?.rankpoint >= 1100) return "./rank/exp_medal_gold.png";
   };
 
   const RankSrc = RankImgSelect(userData);
@@ -367,26 +364,25 @@ export default function PageRedir() {
                       }}
                       mx={5}
                     >
-                      <Avatar
-                        src={
-                          userData.imgUri
-                            ? `${userData.imgUri}?${Date.now()}`
-                            : `${server_domain}/img/${userState.userIdx}.png`
-                        }
-                        // src={
-                        //   `${userData?.imgUri}?${Date.now()}` ||
-                        //   `${server_domain}/img/${userState.userIdx}.png`
-                        // }
-                        // 이미지가 새로 고쳐지지 않는 문제는 브라우저가 이미지를 캐시하고 있기 때문에 이미지가 바뀌어도 계속 똑같은 이미지 띄움.
-                        // 이미지 URL에 쿼리 매개변수를 추가하여 이미지 URL을 변경
-                        // 이렇게 하면 브라우저는 이미지를 다시 다운로드하고 갱신된 이미지를 표시
-                        // src={userData?.imgUrl}
-                        style={{
-                          width: "100%",
-                          height: "75%",
-                          border: "4px solid #8CCAE5",
-                        }}
-                      />
+                      {isSet ? (
+                        <Avatar
+                          src={`${userData?.imgUri}?${Date.now()}`}
+                          style={{
+                            width: "100%",
+                            height: "75%",
+                            border: "4px solid #8CCAE5",
+                          }}
+                        />
+                      ) : (
+                        <Avatar
+                          src={`${server_domain}/img/${userState.userIdx}.png`}
+                          style={{
+                            width: "100%",
+                            height: "75%",
+                            border: "4px solid #8CCAE5",
+                          }}
+                        />
+                      )}
                     </Box>
                     {/* 이미지, 닉네임, 2차인증, */}
                     <Stack
@@ -575,7 +571,7 @@ export default function PageRedir() {
                           }}
                         >
                           <Typography margin={1}>
-                            랭크(포인트) : {userData.rank}
+                            랭크(포인트) : {userData?.rankpoint}
                           </Typography>
                           <Typography margin={1}>
                             승률 :{" "}
