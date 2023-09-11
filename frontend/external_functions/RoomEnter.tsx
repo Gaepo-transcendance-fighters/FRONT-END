@@ -1,6 +1,7 @@
 // RoomEnter.ts
 
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
+import { Socket } from "socket.io-client";
 import { Mode } from "@/type/RoomType";
 import { RoomContextData, RoomAction } from "@/context/RoomContext";
 import { UserContextData } from "@/context/UserContext";
@@ -11,13 +12,12 @@ const RoomEnter = (
   room: IChatRoom,
   roomState: RoomContextData,
   userState: UserContextData,
-  roomDispatch: Dispatch<RoomAction>
+  roomDispatch: Dispatch<RoomAction>,
+  chatSocket: Socket
 ) => {
-  const { authState } = useAuth();
-  if (!authState.chatSocket) return;
   if (roomState.currentRoom && roomState.currentRoom.mode !== Mode.PRIVATE) {
     console.log("[RoomEnter 조건문 안에 들어왔따. ]");
-    authState.chatSocket.emit(
+    chatSocket.emit(
       "chat_goto_lobby",
       {
         channelIdx: roomState.currentRoom.channelIdx,
