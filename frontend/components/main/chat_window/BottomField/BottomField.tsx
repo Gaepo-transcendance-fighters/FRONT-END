@@ -84,6 +84,7 @@ const BottomField = ({ setMsgs }: Props) => {
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
+      if (!authState.chatSocket) return;
       event.preventDefault();
       if (!authState.chatSocket) return;
       const e = event.nativeEvent as InputEvent;
