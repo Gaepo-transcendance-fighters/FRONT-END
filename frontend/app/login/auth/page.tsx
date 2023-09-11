@@ -100,9 +100,9 @@ const Auth = () => {
           });
           setupCookies();
 
-          if (data.check2Auth === true) return router.push("/secondauth");
-          else if (data.available === false ) return router.push("/init"); 
-          else return router.push(`/`);
+          if (data.available &&data.check2Auth === true) return router.push("../secondauth");
+          else if (data.available === false ) return router.push("../init"); 
+          else return router.push(`/home`);
         } else if (res.status === 400) {
           const message = await res.json().then((data) => data.message);
           alert(message);

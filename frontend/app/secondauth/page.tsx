@@ -47,6 +47,7 @@ const SecondAuth = () => {
   const SendInput = async () => {
     if (inputnumber.length !== 6) return; // <- 안내창띄우기
 
+    (document.getElementById("inputbox") as HTMLInputElement).value = "";
     const response = await axios({
       method: "PATCH",
       url: `${server_domain}/users/second`,
@@ -57,7 +58,7 @@ const SecondAuth = () => {
         code: Number(inputnumber),
       },
     });
-    if (response.status == 200) {
+    if (response.status == 200 && response.data.result.checkTFA === true) {
       if (!authState.chatSocket) return;
       authState.chatSocket.emit("set_user_status", {
         userStatus: { nickname: response.data.nickname },
@@ -65,7 +66,14 @@ const SecondAuth = () => {
       return router.push("/home");
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
-    else console.log("fail");
+    else if (
+       response.status == 200 &&
+       response.data.result.checkTFA === false
+     ) {
+       console.log("fail");
+       alert("잘못된 입력입니다. 재시도 해주세요.");
+       setBlock(false); // 여기서 비우기.
+     }
     //재입력 필요
   };
 
@@ -123,6 +131,7 @@ const SecondAuth = () => {
               }}
             >
               <input
+                id="inputbox"
                 type="text"
                 maxLength={6}
                 style={{
@@ -142,6 +151,7 @@ const SecondAuth = () => {
                 onChange={(event) => {
                   setInputNumber(event?.target.value);
                 }}
+                disabled={block == true ? false : true}
               />
               <Button
                 style={{
@@ -149,6 +159,7 @@ const SecondAuth = () => {
                   backgroundColor: "lightGray",
                 }}
                 onClick={SendInput}
+                disabled={block == true ? false : true}
               >
                 입력
               </Button>
