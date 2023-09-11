@@ -78,7 +78,6 @@ import axios from "axios";
 
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
 import { useAuth } from "@/context/AuthContext";
-import { socket } from "@/app/page";
 
 export default function PageRedir() {
   const router = useRouter();
@@ -96,7 +95,7 @@ export default function PageRedir() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
 
-  const [verified, setVerified] = useState<string>("");
+  const [verified, setVerified] = useState(false);
 
   const [inputName, setInputName] = useState<string>("");
 
@@ -105,18 +104,15 @@ export default function PageRedir() {
   const fetch = async () => {
     await axios
       // .get("http://localhost:4000/users/profile", {
-      .get(`${server_domain}/users/profile`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("authorization"),
-        },
-      })
+      .get(`${server_domain}/users/profile`)
       .then((response) => {
+        console.log(response.data)
         setUserData(response.data);
       });
   };
 
   useEffect(() => {
-    const verified = localStorage.getItem("check2Auth");
+    const verified = authState.userInfo.check2Auth;
     if (!verified) return;
     setVerified(verified);
     fetch();
@@ -143,7 +139,7 @@ export default function PageRedir() {
     if (dataUrl === "") return;
 
     const formData = new FormData();
-    formData.append("userIdx", localStorage.getItem("idx") || "");
+    formData.append("userIdx", authState.userInfo.id.toString() || "");
     formData.append("userNickname", "");
     formData.append("imgData", dataUrl);
 
@@ -153,10 +149,9 @@ export default function PageRedir() {
       // url: `http://localhost:4000/users/profile`,
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
       },
       data: {
-        userIdx: Number(localStorage.getItem("idx")) || "",
+        userIdx: Number(authState.userInfo.id) || "",
         userNickname: "",
         imgData: dataUrl,
       },
@@ -215,19 +210,20 @@ export default function PageRedir() {
           Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
-          userIdx: Number(localStorage.getItem("idx")),
+          userIdx: Number(authState.userInfo.id),
           userNickname: inputName,
-          imgUrl: localStorage.getItem("imgUri"),
+          imgUrl: authState.userInfo.imgUrl,
         }),
       });
       console.log("response : ", response);
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
+        if (!authState.chatSocket) return;
         userDispatch({
           type: "CHANGE_NICK_NAME",
           value: response.data.result.nickname,
         });
-        socket.emit("set_user_status", {
+        authState.chatSocket.emit("set_user_status", {
           userStatus: { nickname: response.data.nickname },
         });
         handleCloseModal();
@@ -371,7 +367,7 @@ export default function PageRedir() {
                       </Typography>
 
                       <CardContent style={{ width: "100%" }}>
-                        {verified === "true" ? (
+                        {verified  ? (
                           <Typography style={{ fontSize: "1.5rem" }}>
                             2차인증 여부 : Y
                           </Typography>

@@ -122,7 +122,7 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
               listStyleType: "none",
               margin: "0px 0 0 0",
               color: "white",
-              padding: 0,
+              padding: "2% 0% 0% 2%"
             }}
           >
             <Typography variant="h6">

@@ -3,24 +3,27 @@
 import { useEffect, useState } from "react";
 import Rooms from "./Rooms";
 import { useRoom } from "@/context/RoomContext";
-import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
 import { IChatRoom, ReturnMsgDto, alert } from "@/type/RoomType";
 import { Alert } from "@mui/material";
+import { useAuth } from "@/context/AuthContext";
 
 export default function RoomTypeButton() {
   const { roomState, roomDispatch } = useRoom();
   const [disabled, setDisabled] = useState(true);
   const { userState } = useUser();
+  const { authState } = useAuth();
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
       payload ? roomDispatch({ type: "SET_DM_ROOMS", value: payload }) : null;
     };
-    socket.on("chat_get_DMList", ChatGetDmRoomList);
+    authState.chatSocket.on("chat_get_DMList", ChatGetDmRoomList);
 
     return () => {
-      socket.off("chat_get_DMList", ChatGetDmRoomList);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_get_DMList", ChatGetDmRoomList);
     };
   }, []);
 
@@ -29,33 +32,35 @@ export default function RoomTypeButton() {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatGetRoomList = (payload?: IChatRoom[]) => {
       payload
         ? roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload })
         : null;
     };
-    socket.on("chat_get_roomList", ChatGetRoomList);
+    authState.chatSocket.on("chat_get_roomList", ChatGetRoomList);
 
     return () => {
-      socket.off("chat_get_roomList", ChatGetRoomList);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_get_roomList", ChatGetRoomList);
     };
   }, []);
 
   const NonDmBtnClick = () => {
-    socket.emit("chat_get_roomList", (ret: ReturnMsgDto) => {});
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit("chat_get_roomList", (ret: ReturnMsgDto) => {});
     OnClick(true);
   };
 
   const DmBtnClick = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_get_DMList",
       {
         userNickname: userState.nickname,
         userIdx: userState.userIdx,
       },
-      (ret: ReturnMsgDto) => {
-        console.log(ret);
-      }
+      (ret: ReturnMsgDto) => {}
     );
     OnClick(false);
   };
