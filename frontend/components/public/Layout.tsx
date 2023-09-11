@@ -27,6 +27,7 @@ const Layout = () => {
     console.log("pass")
     const MainEnter = (data: IMaindata) => {
       console.log("main_enter", data)
+      console.log(data.userObject.imgUri);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });

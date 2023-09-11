@@ -56,12 +56,20 @@ const myProfileStyle = {
 };
 
 interface IUserData {
+  available: boolean;
+  check2Auth: boolean;
+  createdAt: string;
   nickname: string;
-  imgUrl: string;
+  imgUri: string;
   win: number;
   lose: number;
   rank: number;
   email: string;
+  intra: string;
+  isOnline: IOnlineStatus;
+  rankpoint: number;
+  updatedAt: string;
+  userIdx: number;
 }
 
 interface Modals {
@@ -70,7 +78,7 @@ interface Modals {
 }
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { main } from "@/type/type";
+import { IOnlineStatus, main } from "@/type/type";
 import React, { useEffect, useState, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
@@ -83,13 +91,22 @@ export default function PageRedir() {
   const router = useRouter();
   const { userState, userDispatch } = useUser();
   const { authState } = useAuth();
+  const [isSet, setIsSet] = useState<boolean>(false);
   const [userData, setUserData] = useState<IUserData>({
+    available: false,
+    check2Auth: false,
+    createdAt: "",
     nickname: "",
-    imgUrl: "",
+    imgUri: "",
     win: 0,
     lose: 0,
     rank: 0,
     email: "",
+    intra: "",
+    isOnline: IOnlineStatus.ONLINE,
+    rankpoint: 0,
+    updatedAt: "",
+    userIdx: 0,
   });
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -103,8 +120,11 @@ export default function PageRedir() {
 
   const fetch = async () => {
     await axios
-      // .get("http://localhost:4000/users/profile", {
-      .get(`${server_domain}/users/profile`)
+      .get(`${server_domain}/users/profile`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("authorization"),
+        }, // 헤더 객체를 설정합니다.
+      })
       .then((response) => {
         console.log(response.data);
         setUserData(response.data);
@@ -112,9 +132,15 @@ export default function PageRedir() {
   };
 
   useEffect(() => {
-    const verified = authState.userInfo.check2Auth;
-    if (!verified) return;
-    setVerified(verified);
+    console.log("userData : ", userData);
+  }, [userData]);
+
+  useEffect(() => {
+    // const verified = authState.userInfo.check2Auth;
+    // if (!verified) return;
+    // setVerified(verified);
+    console.log("isSet : ", isSet);
+    if (!isSet) return;
     fetch();
   }, [reload, verified]);
 
@@ -129,6 +155,7 @@ export default function PageRedir() {
     if (files) {
       uploadImage(files[0]);
       setReload((curr) => !curr);
+      setIsSet(true);
     }
   };
 
@@ -163,7 +190,9 @@ export default function PageRedir() {
       .catch((error) => {
         console.error("업로드 실패", error);
       });
+    console.log("ho");
     setReload((curr) => !curr);
+    setIsSet(true);
   };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
@@ -232,6 +261,7 @@ export default function PageRedir() {
       console.log("닉네임 변경중 문제가 발생");
     }
     setReload((curr) => !curr);
+    setIsSet(true);
   };
 
   const handleOpenModal = () => {
@@ -246,6 +276,7 @@ export default function PageRedir() {
   };
 
   const BackToHome = () => {
+    setReload(false);
     router.push("/home");
   };
 
@@ -338,10 +369,14 @@ export default function PageRedir() {
                     >
                       <Avatar
                         src={
-                          userData?.imgUrl
-                            ? `${userData?.imgUrl}${Date.now()}`
+                          userData.imgUri
+                            ? `${userData.imgUri}?${Date.now()}`
                             : `${server_domain}/img/${userState.userIdx}.png`
                         }
+                        // src={
+                        //   `${userData?.imgUri}?${Date.now()}` ||
+                        //   `${server_domain}/img/${userState.userIdx}.png`
+                        // }
                         // 이미지가 새로 고쳐지지 않는 문제는 브라우저가 이미지를 캐시하고 있기 때문에 이미지가 바뀌어도 계속 똑같은 이미지 띄움.
                         // 이미지 URL에 쿼리 매개변수를 추가하여 이미지 URL을 변경
                         // 이렇게 하면 브라우저는 이미지를 다시 다운로드하고 갱신된 이미지를 표시
