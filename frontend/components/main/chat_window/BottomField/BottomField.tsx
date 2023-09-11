@@ -150,7 +150,6 @@ const BottomField = ({ setMsgs }: Props) => {
               }}
               inputRef={(input) => input && input.focus()}
               ref={inputRef}
-              notched
               value={msg}
               onChange={changeMsg}
               placeholder="Please enter message"
