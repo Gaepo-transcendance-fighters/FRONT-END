@@ -82,14 +82,13 @@ const BottomField = ({ setMsgs }: Props) => {
     };
   }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList, roomState.currentRoom]);
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
+      if (!authState.chatSocket) return;
       event.preventDefault();
       if (!authState.chatSocket) return;
+      const e = event.nativeEvent as InputEvent;
+      if (e.isComposing) return;
       let payload: IPayload | undefined = undefined;
       if (msg === "") {
         return;
@@ -121,7 +120,6 @@ const BottomField = ({ setMsgs }: Props) => {
 
       authState.chatSocket.emit("chat_send_msg", payload);
       setMsg("");
-      inputRef.current?.focus();
     },
     [msg]
   );
@@ -150,7 +148,7 @@ const BottomField = ({ setMsgs }: Props) => {
                 color: "white",
                 marginTop: "3%",
               }}
-              autoFocus
+              inputRef={(input) => input && input.focus()}
               ref={inputRef}
               value={msg}
               onChange={changeMsg}
@@ -160,9 +158,9 @@ const BottomField = ({ setMsgs }: Props) => {
                   height: "10px",
                 },
               }}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  onSubmit(event);
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  onSubmit(e);
                 }
               }}
             />
