@@ -5,7 +5,6 @@ import GamePaddle from "./GamePaddle";
 import { useEffect, useState } from "react";
 import GameBall from "./GameBall";
 import { useGame } from "@/context/GameContext";
-import { gameSocket } from "@/app/page";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { ReturnMsgDto } from "@/type/RoomType";
@@ -57,7 +56,7 @@ const PingPong = () => {
       setKeyboard(0);
     }
     // if (e.code === "ArrowUp") {
-    //   gameSocket.emit("game_move_paddle", {
+    //   authState.gameSocket.emit("game_move_paddle", {
     //     userIdx: authState.id,
     //     paddle: 0,
     //     serverTime: gameProps.serverTime,
@@ -65,7 +64,7 @@ const PingPong = () => {
     //     cntPerFrame: gameProps.cntPerFrame,
     //   });
     // } else if (e.code === "ArrowDown") {
-    //   gameSocket.emit("game_move_paddle", {
+    //   authState.gameSocket.emit("game_move_paddle", {
     //     userIdx: authState.id,
     //     paddle: 0,
     //     serverTime: gameProps.serverTime,
@@ -83,7 +82,7 @@ const PingPong = () => {
       setKeyboard(-1);
     }
     // if (e.code === "ArrowUp") {
-    //   gameSocket.emit("game_move_paddle", {
+    //   authState.gameSocket.emit("game_move_paddle", {
     //     userIdx: authState.id,
     //     paddle: 1,
     //     serverTime: gameProps.serverTime,
@@ -91,7 +90,7 @@ const PingPong = () => {
     //     cntPerFrame: gameProps.cntPerFrame,
     //   });
     // } else if (e.code === "ArrowDown") {
-    //   gameSocket.emit("game_move_paddle", {
+    //   authState.gameSocket.emit("game_move_paddle", {
     //     userIdx: authState.id,
     //     paddle: -1,
     //     serverTime: gameProps.serverTime,
@@ -102,18 +101,20 @@ const PingPong = () => {
   };
 
   useEffect(() => {
+    if (!authState.gameSocket) return console.log("no connection to gamesocket")
+
     setClient(true);
-    gameSocket.emit("game_start", { userIdx: authState.id });
-    gameSocket.on("game_start", (res) => {
+
+    authState.gameSocket.emit("game_start", { userIdx: authState.userInfo.id });
+    authState.gameSocket.on("game_start", (res) => {
       console.log("game_start", res);
     });
-    gameSocket.emit("game_frame");
-    gameSocket.on("game_frame", (res: IGameProps) => {
-      console.log("game_frame", res);
+
+    authState.gameSocket.emit("game_frame");
+    authState.gameSocket.on("game_frame", (res: IGameProps) => {
       setGameProps(res);
-      console.log("keyboard", keyboard);
-      gameSocket.emit("game_move_paddle", {
-        userIdx: authState.id,
+      authState.gameSocket!.emit("game_move_paddle", {
+        userIdx: authState.userInfo.id,
         paddle: keyboard,
         serverTime: gameProps.serverTime,
         clientTime: Date.now(),
@@ -121,20 +122,20 @@ const PingPong = () => {
       });
     });
 
-    gameSocket.on(
+    authState.gameSocket.on(
       "game_move_paddle",
       ({ code, msg }: { code: number; msg: string }) => {
-        console.log("game_move_paddle", code, msg);
         if (code === 200) {
           console.log("success");
         }
       }
     );
-    gameSocket.on("game_pause_score", (data: IGameEnd) => {
+    
+    authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
       console.log("game_pause_score");
-      gameSocket.emit(
+      authState.gameSocket!.emit(
         "game_pause_score",
-        { userIdx: authState.id },
+        { userIdx: authState.userInfo.id },
         (res: ReturnMsgDto) => {
           console.log(res);
           if (res.code === 200) {
@@ -156,10 +157,11 @@ const PingPong = () => {
     window.addEventListener("keyup", upPaddle);
 
     return () => {
-      gameSocket.off("game_start");
-      gameSocket.off("game_frame");
-      gameSocket.off("game_move_paddle");
-      gameSocket.off("game_pause_score");
+      if (!authState.gameSocket) return console.log("no connection to gamesocket")
+      authState.gameSocket.off("game_start");
+      authState.gameSocket.off("game_frame");
+      authState.gameSocket.off("game_move_paddle");
+      authState.gameSocket.off("game_pause_score");
 
       window.removeEventListener("keydown", downPaddle);
       window.removeEventListener("keyup", upPaddle);

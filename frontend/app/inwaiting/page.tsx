@@ -101,6 +101,7 @@ const Inwaiting = () => {
 
   useEffect(() => {
     if (!authState.gameSocket) return;
+    console.log("waiting")
     setClient(true);
 
     //게임 소켓 - 이벤트 등록

@@ -122,6 +122,7 @@ const OptionSelect = () => {
     }).then((res) => {
       console.log(res)
       if (res.status === 200) {
+        console.log('gameSocket', authState.gameSocket!)
         authState.gameSocket!.connect();
         router.replace("/inwaiting");
       } else {
