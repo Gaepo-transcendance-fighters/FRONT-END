@@ -104,7 +104,11 @@ export default function PageRedir() {
   const fetch = async () => {
     await axios
       // .get("http://localhost:4000/users/profile", {
-      .get(`${server_domain}/users/profile`)
+      .get(`${server_domain}/users/profile`, {
+        headers: {
+          Authorization: "Bearer " + authState.userInfo.authorization,
+        },
+      })
       .then((response) => {
         console.log(response.data)
         setUserData(response.data);
