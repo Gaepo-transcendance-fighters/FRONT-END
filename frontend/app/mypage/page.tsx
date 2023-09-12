@@ -410,7 +410,7 @@ export default function PageRedir() {
                           />
                         </form>
 
-                        <Button
+                        {/* <Button
                           type="submit"
                           style={{
                             minWidth: "max-content",
@@ -419,7 +419,7 @@ export default function PageRedir() {
                           onClick={handleOpenModal}
                         >
                           닉네임변경
-                        </Button>
+                        </Button> */}
                         <Modal open={openModal} onClose={handleCloseModal}>
                           <Box sx={modalStyle} borderRadius={"10px"}>
                             <Card
