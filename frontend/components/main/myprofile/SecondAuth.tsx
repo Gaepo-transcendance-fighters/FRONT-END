@@ -52,11 +52,11 @@ export default function SecondAuth() {
   const { authState, authDispatch } = useAuth();
 
   useEffect(() => {
-    const verified = authState.userInfo.check2Auth;
+    // const verified = authState.userInfo.check2Auth;
     // if (verified === "" || verified === null) return;
 
-    // setVerified(verified);
-  }, []);
+    setVerified(authState.userInfo.check2Auth);
+  }, [authState.userInfo.check2Auth]);
 
   //값을 서버에서 받아오므로, useRef는 받아온 값으로 변경되어야할것.
   //useState로 초기값 설정해주고, 바뀐값을 전달만해줌?
@@ -90,15 +90,17 @@ export default function SecondAuth() {
       }, // 불리언 값을 JSON 문자열로 변환하여 전달
     }).then((res) => {
       if (res.status === 200) {
-        setVerified(newVerifiedValue);
+        setVerified(!newVerifiedValue);
         authDispatch({
           type: "SET_CHECK2AUTH",
-          value: newVerifiedValue,
+          value: !newVerifiedValue,
         });
+        setOpenModal(false);
+
 
         // localStorage.setItem("check2Auth", newVerifiedValue ? "true" : "false");
-        if (!newVerifiedValue) return router.push("/home");
-        location.reload();
+        // if (!newVerifiedValue) return router.push("/home");
+        // location.reload();
         //       if (response.status == 200) {
         //   if (response.data.check2Auth == true) {
         //     console.log("success in check 2 auth");
@@ -190,7 +192,7 @@ export default function SecondAuth() {
                   backgroundColor: "#49EC62",
                   border: "1px solid black",
                 }}
-                disabled={!verified}
+                disabled={verified}
                 onClick={onChangeSecondAuth}
               >
                 활성화
@@ -205,7 +207,7 @@ export default function SecondAuth() {
                   backgroundColor: "#FF6364",
                   border: "1px solid black",
                 }}
-                disabled={verified}
+                disabled={!verified}
                 onClick={onChangeSecondAuth}
               >
                 비활성화
