@@ -39,7 +39,7 @@ export default function InitUser() {
   
 
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, "");
+    e.target.value = e.target.value.replace(/[^A-Za-z]/gi, "");
   };
 
   const SetNick = async () => {
