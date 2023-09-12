@@ -207,7 +207,8 @@ export default function PageRedir() {
         url: `${server_domain}/users/profile`,
         headers: {
           "Content-Type": "Application/json",
-          Authorization: "Bearer " + localStorage.getItem("authorization"),
+          Authorization: "Bearer " + authState.userInfo.authorization,
+          // Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
           userIdx: Number(authState.userInfo.id),

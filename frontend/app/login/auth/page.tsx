@@ -55,7 +55,8 @@ const Auth = () => {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
+        Authorization: "Bearer " + authState.userInfo.authorization,
+        // Authorization: "Bearer " + localStorage.getItem("authorization"),
       },
       body: JSON.stringify({
         code: code,
