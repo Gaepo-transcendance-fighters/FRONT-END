@@ -70,13 +70,12 @@ export default function SecondAuth() {
   };
 
   const onChangeSecondAuth = async () => {
-    let newVerifiedValue = false;
+    let newVerifiedValue = authState.userInfo.check2Auth;
     // if (verified) {
     //   newVerifiedValue = false;
     // } else if (verified === false) {
     //   newVerifiedValue = true;
     // }
-    newVerifiedValue = !verified;
     const response = await axios({
       method: "patch",
       // url: "http://localhost:4000/users/profile/second",
@@ -87,7 +86,7 @@ export default function SecondAuth() {
       },
       data: {
         userIdx: Number(authState.userInfo.id),
-        check2Auth: newVerifiedValue,
+        check2Auth: !newVerifiedValue,
       }, // 불리언 값을 JSON 문자열로 변환하여 전달
     }).then((res) => {
       if (res.status === 200) {
@@ -191,7 +190,7 @@ export default function SecondAuth() {
                   backgroundColor: "#49EC62",
                   border: "1px solid black",
                 }}
-                disabled={verified}
+                disabled={!verified}
                 onClick={onChangeSecondAuth}
               >
                 활성화
