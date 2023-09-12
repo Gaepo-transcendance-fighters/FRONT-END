@@ -7,7 +7,7 @@ import { main } from "@/type/type";
 import React, { useState } from "react";
 import axios from "axios";
 
-const server_domain = process.env.SERVER_URL_4000;
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -27,17 +27,18 @@ const SecondAuth = () => {
   const { authState, authDispatch } = useAuth();
   const [inputnumber, setInputNumber] = useState<string>("");
   const router = useRouter();
-
+  const sendUri = `${server_domain}/users/second`;
   const SendMail = async () => {
+    console.log("sendUri", sendUri);
     const response = await axios({
       method: "POST",
-      url: `${server_domain}/users/second`,
-      // url: `http://localhost:4000/users/second`,
+      url: sendUri,
+      headers: {
+        Authorization: "Bearer " + authState.userInfo.authorization,
+      },
       data: {
-        // userIdx: localStorage.getItem("idx"),
-        userIdx: Number(localStorage.getItem("idx")),
-
-        email: localStorage.getItem("email"),
+        userIdx: authState.userInfo.id,
+        email: authState.userInfo.email,
       },
     });
     if (response.status == 200) setBlock(true);
@@ -47,25 +48,33 @@ const SecondAuth = () => {
   const SendInput = async () => {
     if (inputnumber.length !== 6) return; // <- 안내창띄우기
 
+    (document.getElementById("inputbox") as HTMLInputElement).value = "";
     const response = await axios({
       method: "PATCH",
       url: `${server_domain}/users/second`,
       // url: `http://localhost:4000/users/second`,
       data: {
         // userIdx: localStorage.getItem("idx"),
-        userIdx: Number(localStorage.getItem("idx")),
+        userIdx: authState.userInfo.id,
         code: Number(inputnumber),
       },
     });
-    if (response.status == 200) {
-      if (!authState.chatSocket) return;
-      authState.chatSocket.emit("set_user_status", {
-        userStatus: { nickname: response.data.nickname },
-      });
-      return router.push("/home");
+    if (response.status == 200 && response.data.result.checkTFA) {
+      // if (!authState.chatSocket) return;
+      // authState.chatSocket.emit("set_user_status", {
+      //   userStatus: { nickname: response.data.nickname },
+      // });
+      return router.push("/");
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
-    else console.log("fail");
+    else if (
+       response.status == 200 &&
+       response.data.result.checkTFA === false
+     ) {
+       console.log("fail");
+       alert("잘못된 입력입니다. 재시도 해주세요.");
+       setBlock(false); // 여기서 비우기.
+     }
     //재입력 필요
   };
 
@@ -123,6 +132,7 @@ const SecondAuth = () => {
               }}
             >
               <input
+                id="inputbox"
                 type="text"
                 maxLength={6}
                 style={{
@@ -142,6 +152,7 @@ const SecondAuth = () => {
                 onChange={(event) => {
                   setInputNumber(event?.target.value);
                 }}
+                disabled={block == true ? false : true}
               />
               <Button
                 style={{
@@ -149,6 +160,7 @@ const SecondAuth = () => {
                   backgroundColor: "lightGray",
                 }}
                 onClick={SendInput}
+                disabled={block == true ? false : true}
               >
                 입력
               </Button>
