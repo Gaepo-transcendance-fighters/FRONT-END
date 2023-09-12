@@ -41,18 +41,21 @@ const myProfileStyle = {
 import { main } from "@/type/type";
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SecondAuth() {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [verified, setVerified] = useState<string>("");
+  const [verified, setVerified] = useState<boolean>(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const verified = localStorage.getItem("check2Auth");
-    if (verified === "" || verified === null) return;
+  const { authState, authDispatch } = useAuth();
 
-    setVerified(verified);
+  useEffect(() => {
+    const verified = authState.userInfo.check2Auth;
+    // if (verified === "" || verified === null) return;
+
+    // setVerified(verified);
   }, []);
 
   //값을 서버에서 받아오므로, useRef는 받아온 값으로 변경되어야할것.
@@ -68,28 +71,33 @@ export default function SecondAuth() {
 
   const onChangeSecondAuth = async () => {
     let newVerifiedValue = false;
-    if (verified === "true") {
-      newVerifiedValue = false;
-    } else if (verified === "false") {
-      newVerifiedValue = true;
-    }
-
+    // if (verified) {
+    //   newVerifiedValue = false;
+    // } else if (verified === false) {
+    //   newVerifiedValue = true;
+    // }
+    newVerifiedValue = !verified;
     const response = await axios({
       method: "patch",
       // url: "http://localhost:4000/users/profile/second",
       url: `${server_domain}/users/profile/second`,
       headers: {
         "Content-Type": "Application/json",
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
+        Authorization: "Bearer " + authState.userInfo.authorization,
       },
       data: {
-        userIdx: Number(localStorage.getItem("idx")),
+        userIdx: Number(authState.userInfo.id),
         check2Auth: newVerifiedValue,
       }, // 불리언 값을 JSON 문자열로 변환하여 전달
     }).then((res) => {
       if (res.status === 200) {
-        setVerified(newVerifiedValue ? "true" : "false");
-        localStorage.setItem("check2Auth", newVerifiedValue ? "true" : "false");
+        setVerified(newVerifiedValue);
+        authDispatch({
+          type: "SET_CHECK2AUTH",
+          value: newVerifiedValue,
+        });
+
+        // localStorage.setItem("check2Auth", newVerifiedValue ? "true" : "false");
         if (!newVerifiedValue) return router.push("/home");
         location.reload();
         //       if (response.status == 200) {
@@ -183,7 +191,7 @@ export default function SecondAuth() {
                   backgroundColor: "#49EC62",
                   border: "1px solid black",
                 }}
-                disabled={verified === "true" ? true : false}
+                disabled={verified}
                 onClick={onChangeSecondAuth}
               >
                 활성화
@@ -198,7 +206,7 @@ export default function SecondAuth() {
                   backgroundColor: "#FF6364",
                   border: "1px solid black",
                 }}
-                disabled={verified === "false" ? true : false}
+                disabled={verified}
                 onClick={onChangeSecondAuth}
               >
                 비활성화
