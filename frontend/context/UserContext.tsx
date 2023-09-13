@@ -23,7 +23,7 @@ const UserReducer = (
 ): UserContextData => {
   switch (action.type) {
     case "CHANGE_IMG":
-      return { ...state, imgUri: action.value };
+      return { ...state, imgUri: action.value + "?" + Date.now().toString() };
     case "CHANGE_NICK_NAME":
       return { ...state, nickname: action.value };
     case "SET_USER_IDX":

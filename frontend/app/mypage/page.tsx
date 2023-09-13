@@ -131,7 +131,7 @@ export default function PageRedir() {
     if (isSet)
       userDispatch({
         type: "CHANGE_IMG",
-        value: userData.imgUri + "?" + Date.now().toString(),
+        value: userData.imgUri,
       });
   }, [isSet]);
 
