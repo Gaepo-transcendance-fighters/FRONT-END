@@ -196,7 +196,7 @@ export default function MemberModal({
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            RoomEnter(existingRoom, roomState, userState, roomDispatch);
+            RoomEnter(existingRoom, roomState, userState, roomDispatch, authState.chatSocket!);
             handleCloseModal();
           } else {
             console.log(ret.msg);

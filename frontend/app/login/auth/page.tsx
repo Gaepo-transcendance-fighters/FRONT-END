@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useAuth } from "@/context/AuthContext";
+import { useUser } from "@/context/UserContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -29,6 +30,7 @@ interface Data {
   token: string;
   email: string;
   check2Auth: boolean;
+  available: boolean;
 }
 
 const Auth = () => {
@@ -36,6 +38,7 @@ const Auth = () => {
   const router = useRouter();
   const [client, setClient] = useState(false);
   const { authState, authDispatch } = useAuth();
+  const { userDispatch } = useUser();
 
   const setupCookies = () => {
     let expire = new Date();
@@ -49,7 +52,8 @@ const Auth = () => {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
+        Authorization: "Bearer " + authState.userInfo.authorization,
+        // Authorization: "Bearer " + localStorage.getItem("authorization"),
       },
       body: JSON.stringify({
         code: code,
@@ -65,7 +69,9 @@ const Auth = () => {
             authState.chatSocket.emit("set_user_status", {
               userStatus: { nickname: data.nickname },
             });
-
+          userDispatch({ type: "SET_USER_IDX", value: data.userIdx });
+          userDispatch({ type: "CHANGE_NICK_NAME", value: data.nickname });
+          userDispatch({ type: "CHANGE_IMG", value: data.imgUri });
           authDispatch({
             type: "SET_ID",
             value: data.userIdx,
@@ -92,8 +98,13 @@ const Auth = () => {
           });
           setupCookies();
 
-          if (data.check2Auth === true) return router.push("/secondauth");
+          if (data.available &&data.check2Auth === true) return router.push("../secondauth");
+          else if (data.available === false ) return router.push("../init"); 
           else return router.push(`/`);
+        } else if (res.status === 400) {
+          const message = await res.json().then((data) => data.message);
+          alert(message);
+          return router.push("/login");
         }
       })
       .catch((error) => {

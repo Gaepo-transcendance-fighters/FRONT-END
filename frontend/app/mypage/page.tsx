@@ -95,7 +95,7 @@ export default function PageRedir() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
 
-  const [verified, setVerified] = useState(false);
+  const [verified, setVerified] = useState(authState.userInfo.check2Auth);
 
   const [inputName, setInputName] = useState<string>("");
 
@@ -104,7 +104,11 @@ export default function PageRedir() {
   const fetch = async () => {
     await axios
       // .get("http://localhost:4000/users/profile", {
-      .get(`${server_domain}/users/profile`)
+      .get(`${server_domain}/users/profile`, {
+        headers: {
+          Authorization: "Bearer " + authState.userInfo.authorization,
+        },
+      })
       .then((response) => {
         console.log(response.data)
         setUserData(response.data);
@@ -112,11 +116,16 @@ export default function PageRedir() {
   };
 
   useEffect(() => {
-    const verified = authState.userInfo.check2Auth;
-    if (!verified) return;
-    setVerified(verified);
+    if (!authState) return ;
     fetch();
-  }, [reload, verified]);
+  }, [reload])
+
+  useEffect(() => {
+    // const verified = authState.userInfo.check2Auth;
+    // if (!verified) return;
+    setVerified(authState.userInfo.check2Auth);
+    // fetch();
+  }, [authState.userInfo.check2Auth]);
 
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
@@ -207,7 +216,8 @@ export default function PageRedir() {
         url: `${server_domain}/users/profile`,
         headers: {
           "Content-Type": "Application/json",
-          Authorization: "Bearer " + localStorage.getItem("authorization"),
+          Authorization: "Bearer " + authState.userInfo.authorization,
+          // Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
         data: JSON.stringify({
           userIdx: Number(authState.userInfo.id),
@@ -410,7 +420,7 @@ export default function PageRedir() {
                           />
                         </form>
 
-                        <Button
+                        {/* <Button
                           type="submit"
                           style={{
                             minWidth: "max-content",
@@ -419,7 +429,7 @@ export default function PageRedir() {
                           onClick={handleOpenModal}
                         >
                           닉네임변경
-                        </Button>
+                        </Button> */}
                         <Modal open={openModal} onClose={handleCloseModal}>
                           <Box sx={modalStyle} borderRadius={"10px"}>
                             <Card
