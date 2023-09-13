@@ -56,6 +56,7 @@ export interface IUserObject {
 
 export interface IMaindata {
   channelList: IChatRoom[];
+  dmChannelList: IChatRoom[];
   friendList: IFriend[];
   blockList: IBlock[];
   userObject: IUserObject;
