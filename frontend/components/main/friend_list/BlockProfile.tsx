@@ -201,10 +201,9 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
             >
               <Image
                 // src="/seal.png" // mockdata
-                src={
-                  friendData?.imgUri + "?" + Date.now().toString() ||
-                  `${server_domain}/img/${prop.blockedUserIdx}.png?${Date.now().toString()}`
-                } // < !mockdata
+                src={`${server_domain}/img/${
+                  prop.blockedUserIdx
+                }.png?${Date.now().toString()}`} // < !mockdata
                 alt="user img"
                 width={100}
                 height={100}
