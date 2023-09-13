@@ -2,6 +2,7 @@
 
 import { useInitMsg } from "@/context/InitMsgContext";
 import { useRoom } from "@/context/RoomContext";
+import { useFriend } from "@/context/FriendContext"
 import { IDMChatFromServer } from "@/type/RoomType";
 import { IChat } from "@/type/type";
 import { Box, Typography } from "@mui/material";
@@ -25,6 +26,7 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
   const [pageNum, setPageNum] = useState(0);
   const { roomState } = useRoom();
   const { initMsgState } = useInitMsg();
+  const { friendState } = useFriend();
   const observerTarget = useRef(null);
 
   useEffect(() => {
@@ -126,9 +128,20 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
             }}
           >
             <Typography variant="h6">
-              {value.senderIdx === roomState.currentDmRoomMemberList?.userIdx1
-                ? `${roomState.currentDmRoomMemberList?.userNickname1}: ${value.msg}`
-                : `${roomState.currentDmRoomMemberList?.userNickname2}: ${value.msg}`}
+              {(value.senderIdx === roomState.currentDmRoomMemberList?.userIdx1
+                ? `${roomState.currentDmRoomMemberList?.userNickname1}: ` + 
+                (friendState.blockList?.find(
+                  (data) => data.blockedUserIdx === roomState.currentDmRoomMemberList?.userIdx1
+                )
+                  ? "this msg from blocked person"
+                  : value.msg)
+                : `${roomState.currentDmRoomMemberList?.userNickname2}: ` + 
+                (friendState.blockList?.find(
+                  (data) => data.blockedUserIdx === roomState.currentDmRoomMemberList?.userIdx2
+                )
+                  ? "this msg from blocked person"
+                  : value.msg))
+              }
             </Typography>
           </div>
         );
