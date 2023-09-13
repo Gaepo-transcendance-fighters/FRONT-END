@@ -91,11 +91,11 @@ export default function PageRedir() {
     })
       .then((res) => {
         setUserData(res.data.result);
+        userDispatch({ type: "CHANGE_IMG", value: res.data.result.imgUri });
       })
       .catch((error) => {
         console.error("업로드 실패", error);
       });
-    console.log("ho");
     setIsSet(true);
   };
 
@@ -346,7 +346,7 @@ export default function PageRedir() {
                           onClick={handleOpenModal}
                         >
                           닉네임변경
-                        </Button> */}
+                        </Button>
                         <Modal open={openModal} onClose={handleCloseModal}>
                           <Box sx={nicknameModalStyle} borderRadius={"10px"}>
                             <Card

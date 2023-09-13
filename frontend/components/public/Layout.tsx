@@ -22,9 +22,7 @@ const Layout = () => {
   const { authState } = useAuth();
 
   useEffect(() => {
-    console.log("effect");
     if (!authState.chatSocket) return;
-    console.log("pass");
     const MainEnter = (data: IMaindata) => {
       console.log("main_enter", data);
       console.log(data.userObject.imgUri);
