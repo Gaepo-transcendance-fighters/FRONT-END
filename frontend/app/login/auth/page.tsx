@@ -80,7 +80,10 @@ const Auth = () => {
 
           userDispatch({ type: "SET_USER_IDX", value: data.userIdx });
           userDispatch({ type: "CHANGE_NICK_NAME", value: data.nickname });
-          userDispatch({ type: "CHANGE_IMG", value: data.imgUri });
+          userDispatch({
+            type: "CHANGE_IMG",
+            value: data.imgUri,
+          });
           authDispatch({
             type: "SET_ID",
             value: data.userIdx,

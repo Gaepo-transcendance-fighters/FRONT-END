@@ -254,7 +254,7 @@ export default function MemberModal({
             mx={5}
           >
             <Image
-              src={person.imgUri!}
+              src={person.imgUri! + "?" + Date.now().toString()}
               alt="user img"
               width={100}
               height={100}
