@@ -24,7 +24,9 @@ const GamePlaying = () => {
   const backToMain = () => {
     if (!authState.gameSocket) return;
     gameDispatch({ type: "SCORE_RESET" });
-    authState.gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
+    authState.gameSocket.emit("game_queue_quit", gameState.aPlayer.id, (data) => {
+      console.log(data)
+    });
     authState.gameSocket.disconnect();
     router.replace("/home");
   };
@@ -84,7 +86,7 @@ const GamePlaying = () => {
     addEventListener("keydown", preventRefresh);
     addEventListener("beforeunload", preventRefreshButton);
 
-    authState.gameSocket.emit("game_force_quit", { userIdx: authState.userInfo.id });
+    // authState.gameSocket.emit("game_force_quit", { userIdx: authState.userInfo.id });
     authState.gameSocket.on("game_force_quit", (msg: string) => {
       console.log(`game force quit: ${msg}`)
       setOpenModal(true);
