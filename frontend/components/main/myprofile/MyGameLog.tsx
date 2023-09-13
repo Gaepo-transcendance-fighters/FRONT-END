@@ -41,12 +41,29 @@ interface GameRecord {
   type: type;
   result: result;
 }
+// const MockGamelog: GameRecord[] = [
+//   {
+//     matchUserIdx: 1,
+//     matchUserNickname: "jeekim",
+//     score: "202",
+//     type: 1,
+//     result: 1,
+//   },
+//   {
+//     matchUserIdx: 2,
+//     matchUserNickname: "jujeon",
+//     score: "204",
+//     type: 0,
+//     result: 1,
+//   },
+// ];
 
 const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
 
   const [gameRecord, setGameRecord] = useState<GameRecord[]>([]);
+  // const [gameRecord, setGameRecord] = useState<GameRecord[]>(MockGamelog);
 
   const [lastElement, setLastElement] = useState<HTMLDivElement | null>(null);
   const { userState } = useUser();
@@ -82,7 +99,7 @@ const MyGameLog = () => {
   const callUser = useCallback(async () => {
     await axios
       .get(
-        `${server_domain}/game/records/userIdx=${authState.userInfo.id}&page=${pageNum}`,
+        `${server_domain}/records/userIdx=${authState.userInfo.id}&page=${pageNum}`,
         // .get(`${server_domain}/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
         {
           headers: {
@@ -119,7 +136,7 @@ const MyGameLog = () => {
           overflowAnchor: "none",
           position: "sticky",
           width: "100%",
-          height: "15vh",
+          height: "70%",
         }}
       >
         {gameRecord.map((gameRecord, i) => {
@@ -130,9 +147,9 @@ const MyGameLog = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                margin: "0px 0 0 0",
+                margin: "10px 0 0 0",
                 color: "black",
-                width: "90%",
+                width: "80%",
                 height: "70%",
                 // backgroundColor: "#48a0ed",
                 border: "1px solid black",
@@ -182,9 +199,8 @@ const MyGameLog = () => {
                       backgroundColor: main.main0,
                     }}
                   >
-                    <Typography sx={{ fontSize: "0.8rem" }}>
-                      친선/랭크
-                      {gameRecord.type === 0 ? <>Rank</> : <>Normal</>}
+                    <Typography sx={{ fontSize: "1.1rem" }}>
+                      {gameRecord.type === 0 ? <>Normal</> : <>Rank</>}
                     </Typography>
                   </div>
                   <div
@@ -200,8 +216,8 @@ const MyGameLog = () => {
                       backgroundColor: main.main0,
                     }}
                   >
-                    <Typography sx={{ fontSize: "0.8rem" }}>
-                      {gameRecord.result === 0 ? <>Rank</> : <>Normal</>}
+                    <Typography sx={{ fontSize: "1.1rem" }}>
+                      {gameRecord.result === 0 ? <>Win</> : <>Lose</>}
                     </Typography>
                   </div>
                 </div>
@@ -211,15 +227,15 @@ const MyGameLog = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    width: "70%",
+                    width: "80%",
                     height: "80%",
 
                     // backgroundColor: "#48a0ed",
                     backgroundColor: main.main0,
                   }}
                 >
-                  <Typography sx={{ fontSize: "1rem" }}>
-                    내닉네임 | 점수 : 점수 | 상대닉네임
+                  <Typography sx={{ fontSize: "1.5rem" }}>
+                    {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
                     {userState.nickname} {gameRecord.score}{" "}
                     {gameRecord.matchUserNickname}
                   </Typography>
