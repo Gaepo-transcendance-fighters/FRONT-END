@@ -1,5 +1,6 @@
 "use client";
 
+import { createTheme } from "@mui/material";
 import { IChatRoom } from "./RoomType";
 
 export const main = {
@@ -112,3 +113,9 @@ export interface IChat {
   msg: string;
   msgDate: string;
 }
+
+export const font = createTheme({
+  typography: {
+    fontFamily: "neodgm",
+  },
+});

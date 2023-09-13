@@ -9,7 +9,6 @@ import { useUser } from "@/context/UserContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -74,7 +73,10 @@ const Auth = () => {
             });
           userDispatch({ type: "SET_USER_IDX", value: data.userIdx });
           userDispatch({ type: "CHANGE_NICK_NAME", value: data.nickname });
-          userDispatch({ type: "CHANGE_IMG", value: data.imgUri });
+          userDispatch({
+            type: "CHANGE_IMG",
+            value: data.imgUri,
+          });
           authDispatch({
             type: "SET_ID",
             value: data.userIdx,

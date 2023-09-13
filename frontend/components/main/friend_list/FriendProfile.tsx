@@ -147,7 +147,13 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            RoomEnter(existingRoom, roomState, userState, roomDispatch, authState.chatSocket!);
+            RoomEnter(
+              existingRoom,
+              roomState,
+              userState,
+              roomDispatch,
+              authState.chatSocket!
+            );
             handleCloseModal();
           } else {
             console.log(ret.msg);
@@ -300,10 +306,9 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
             >
               <Image
                 // src="/seal.png" // mockdata
-                src={
-                  friendData?.imgUri ||
-                  `${server_domain}/img/${prop.friendIdx}.png`
-                } // < !mockdata
+                src={`${server_domain}/img/${
+                  prop.friendIdx
+                }.png?${Date.now().toString()}`} // < !mockdata
                 alt="user img"
                 width={100}
                 height={100}
