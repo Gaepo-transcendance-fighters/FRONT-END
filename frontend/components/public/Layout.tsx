@@ -31,7 +31,8 @@ const Layout = () => {
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
       friendDispatch({ type: "SET_BLOCKLIST", value: data.blockList });
-      userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
+      if (!data.userObject.imgUri)
+        userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
       userDispatch({
         type: "CHANGE_NICK_NAME",
         value: data.userObject.nickname,

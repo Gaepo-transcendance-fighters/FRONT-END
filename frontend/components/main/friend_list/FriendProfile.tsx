@@ -301,8 +301,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
               <Image
                 // src="/seal.png" // mockdata
                 src={
-                  friendData?.imgUri ||
-                  `${server_domain}/img/${prop.friendIdx}.png`
+                  friendData?.imgUri + "?" + Date.now().toString() ||
+                  `${server_domain}/img/${prop.friendIdx}.png?${Date.now().toString()}`
                 } // < !mockdata
                 alt="user img"
                 width={100}

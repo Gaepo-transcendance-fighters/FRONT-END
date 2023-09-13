@@ -118,18 +118,18 @@ export default function PageRedir() {
 
   const [reload, setReload] = useState<boolean>(false);
 
-  const fetch = async () => {
-    await axios
-      .get(`${server_domain}/users/profile`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("authorization"),
-        }, // 헤더 객체를 설정합니다.
-      })
-      .then((response) => {
-        console.log(response.data);
-        setUserData(response.data);
-      });
-  };
+  // const fetch = async () => {
+  //   await axios
+  //     .get(`${server_domain}/users/profile`, {
+  //       headers: {
+  //         Authorization: "Bearer " + localStorage.getItem("authorization"),
+  //       }, // 헤더 객체를 설정합니다.
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setUserData(response.data);
+  //     });
+  // };
 
   useEffect(() => {
     console.log("userData : ", userData);
@@ -141,7 +141,7 @@ export default function PageRedir() {
     // setVerified(verified);
     console.log("isSet : ", isSet);
     if (!isSet) return;
-    fetch();
+    // fetch();
   }, [reload, verified]);
 
   const OpenFileInput = () => {
@@ -155,7 +155,6 @@ export default function PageRedir() {
     if (files) {
       uploadImage(files[0]);
       setReload((curr) => !curr);
-      setIsSet(true);
     }
   };
 
@@ -173,9 +172,9 @@ export default function PageRedir() {
     await axios({
       method: "post",
       url: `${server_domain}/users/profile`,
-      // url: `http://localhost:4000/users/profile`,
       headers: {
         "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + localStorage.getItem("authorization"),
       },
       data: {
         userIdx: Number(authState.userInfo.id) || "",
@@ -186,6 +185,7 @@ export default function PageRedir() {
     })
       .then((res) => {
         console.log("res : ", res);
+        setUserData(res.data.result);
       })
       .catch((error) => {
         console.error("업로드 실패", error);
@@ -222,13 +222,20 @@ export default function PageRedir() {
     });
   };
 
+  useEffect(() => {
+    console.log(
+      "userData.imgUri + Date.now() : ",
+      userData.imgUri + "?" + Date.now().toString()
+    );
+    if (isSet)
+      userDispatch({ type: "CHANGE_IMG", value: userData.imgUri + "?" + Date.now().toString() });
+  }, [isSet]);
   //body가 아니라 data로 보내야한다고함..?data에 객체를 직접 전달해도 axios가 JSON형태로 변환함.
   const onChangeNickName = async () => {
     if (inputName === "") return alert("입력값이 없습니다");
     if (inputName === userData?.nickname) {
       return alert("현재 닉네임과 동일합니다!");
     }
-
     try {
       const response = await axios({
         method: "POST",
@@ -261,7 +268,6 @@ export default function PageRedir() {
       console.log("닉네임 변경중 문제가 발생");
     }
     setReload((curr) => !curr);
-    setIsSet(true);
   };
 
   const handleOpenModal = () => {
@@ -276,15 +282,14 @@ export default function PageRedir() {
   };
 
   const BackToHome = () => {
-    setReload(false);
     router.push("/home");
   };
 
   const RankImgSelect = (data: IUserData) => {
-    if (data.rank < 800) return "./rank/exp_medal_bronze.png";
-    else if (data.rank >= 800 && data.rank < 1100)
+    if (data.rankpoint < 800) return "./rank/exp_medal_bronze.png";
+    else if (data.rankpoint >= 800 && data.rankpoint < 1100)
       return "./rank/exp_medal_silver.png";
-    else if (data.rank >= 1100) return "./rank/exp_medal_gold.png";
+    else if (data.rankpoint >= 1100) return "./rank/exp_medal_gold.png";
   };
 
   const RankSrc = RankImgSelect(userData);
@@ -367,7 +372,26 @@ export default function PageRedir() {
                       }}
                       mx={5}
                     >
-                      <Avatar
+                      {isSet ? (
+                        <Avatar
+                          src={`${userData?.imgUri}?${Date.now()}`}
+                          style={{
+                            width: "100%",
+                            height: "75%",
+                            border: "4px solid #8CCAE5",
+                          }}
+                        />
+                      ) : (
+                        <Avatar
+                          src={`${server_domain}/img/${userState.userIdx}.png?${Date.now()}`}
+                          style={{
+                            width: "100%",
+                            height: "75%",
+                            border: "4px solid #8CCAE5",
+                          }}
+                        />
+                      )}
+                      {/* <Avatar
                         src={
                           userData.imgUri
                             ? `${userData.imgUri}?${Date.now()}`
@@ -386,7 +410,7 @@ export default function PageRedir() {
                           height: "75%",
                           border: "4px solid #8CCAE5",
                         }}
-                      />
+                      /> */}
                     </Box>
                     {/* 이미지, 닉네임, 2차인증, */}
                     <Stack
