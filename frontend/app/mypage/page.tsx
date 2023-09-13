@@ -346,7 +346,7 @@ export default function PageRedir() {
                           onClick={handleOpenModal}
                         >
                           닉네임변경
-                        </Button>
+                        </Button> */}
                         <Modal open={openModal} onClose={handleCloseModal}>
                           <Box sx={nicknameModalStyle} borderRadius={"10px"}>
                             <Card
