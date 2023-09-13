@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, CardContent } from "@mui/material";
+import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
@@ -106,7 +106,9 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
             alignItems: "center",
           }}
         >
+          <Typography>
           게임초대
+          </Typography>
         </CardContent>
       </Card>
       <Card
@@ -126,9 +128,12 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            backgroundColor: main.main2,
           }}
         >
+          <Typography>
           {nickname} 님께서 친선전 경기를 요청하셨습니다.
+          </Typography>
         </CardContent>
         <CardContent
           style={{
@@ -138,6 +143,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "row",
+            backgroundColor: main.main2,
           }}
           sx={{ display: "flex", gap: "20%", flexDirection: "row" }}
         >
