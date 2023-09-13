@@ -272,9 +272,7 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        src={`${server_domain}/img/${
-                          userState.userIdx
-                        }.png?${Date.now()}`}
+                        src={userState.imgUri}
                         style={{
                           width: "100%",
                           height: "75%",

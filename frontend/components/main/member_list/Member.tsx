@@ -264,9 +264,10 @@ export default function Member({
         }}
       >
         <div className="memimg">
-          {/* <Image src="/seal.png" alt="profile" width={53} height={53} /> */}
           <Image
-            src={`${server_domain}/img/${person.userIdx}.png?${Date.now().toString()}`}
+            src={`${server_domain}/img/${
+              person.userIdx
+            }.png?${Date.now().toString()}`}
             alt="profile"
             width={53}
             height={53}
