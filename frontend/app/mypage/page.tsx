@@ -19,7 +19,7 @@ import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
-import { IUserData, myProfileStyle, nicknameModalStyle } from "@/type/My";
+import { IUserData, myProfileStyle } from "@/type/My";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -27,7 +27,6 @@ export default function PageRedir() {
   const router = useRouter();
   const { userState, userDispatch } = useUser();
   const { authState } = useAuth();
-  const [isSet, setIsSet] = useState<boolean>(false);
   const [userData, setUserData] = useState<IUserData>({
     available: false,
     check2Auth: false,
@@ -44,11 +43,7 @@ export default function PageRedir() {
     userIdx: 0,
   });
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
   //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
-  const [verified, setVerified] = useState(false);
-  const [inputName, setInputName] = useState<string>("");
-
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
@@ -117,55 +112,6 @@ export default function PageRedir() {
 
       reader.readAsDataURL(file);
     });
-  };
-
-  const onChangeNickName = async () => {
-    if (inputName === "") return alert("입력값이 없습니다");
-    if (inputName === userData?.nickname) {
-      return alert("현재 닉네임과 동일합니다!");
-    }
-
-    const formData = new FormData();
-    formData.append("userIdx", authState.userInfo.id.toString() || "");
-    formData.append("userNickname", inputName);
-    formData.append("imgData", authState.userInfo.imgUrl);
-
-    try {
-      const response = await axios({
-        method: "POST",
-        url: `${server_domain}/users/profile`,
-        headers: {
-          "Content-Type": "Application/json",
-          Authorization: "Bearer " + authState.userInfo.authorization,
-        },
-        data: formData,
-      });
-      if (response.status === 400) alert("이미 존재하는 닉네임입니다");
-      else if (response.status === 200) {
-        if (!authState.chatSocket) return;
-        userDispatch({
-          type: "CHANGE_NICK_NAME",
-          value: response.data.result.nickname,
-        });
-        authState.chatSocket.emit("set_user_status", {
-          userStatus: { nickname: response.data.nickname },
-        });
-        handleCloseModal();
-      }
-    } catch (error) {
-      console.log("닉네임 변경중 문제가 발생");
-    }
-  };
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, "");
   };
 
   const BackToHome = () => {
@@ -313,17 +259,6 @@ export default function PageRedir() {
                             onChange={handleChange}
                           />
                         </form>
-                        <Modal open={openModal} onClose={handleCloseModal}>
-                          <Box sx={nicknameModalStyle} borderRadius={"10px"}>
-                            <Card
-                              sx={{
-                                backgroundColor: main.main4,
-                                height: "170px",
-                                margin: -1,
-                              }}
-                            ></Card>
-                          </Box>
-                        </Modal>
                         <SecondAuth />
                       </Stack>
                     </Stack>
