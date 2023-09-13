@@ -280,7 +280,7 @@ export default function PageRedir() {
                     sx={{ backgroundColor: main.main7 }}
                     style={{ width: "100%", border: "1px solid black" }}
                   >
-                    <CardContent sx={{ paddingBottom: 0 }}>
+                    <CardContent sx={{ paddingBottom: 0, pl: 2.7 }}>
                       <Typography style={{ fontSize: "1.4rem" }}>
                         전적
                       </Typography>
@@ -288,17 +288,21 @@ export default function PageRedir() {
                     <br />
                     <Stack
                       direction={"row"}
+                      sx={{
+                        justifyContent: "space-evenly",
+                        flexDirection: "row",
+                      }}
                     >
                       {/* 이미지 */}
                       <Card
                         sx={{
                           p: 1,
+                          margin: 1,
                           marginRight: 0,
                           width: "30%",
-                          border: "1px black solid",
-                          backgroundColor: main.main3,
+                          // backgroundColor: main.main3,
                           alignItems: "center",
-                          justifyContent : "space-evenly",
+                          justifyContent: "space-evenly",
                         }}
                       >
                         <Box
@@ -328,7 +332,7 @@ export default function PageRedir() {
                       <Card
                         sx={{
                           margin: 1,
-                          marginLeft : 0,
+                          marginLeft: 0,
                           width: "70%",
                           // height: "60%",
                           // backgroundColor: "magenta",
