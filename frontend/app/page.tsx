@@ -24,7 +24,7 @@ export default function HomePage() {
       autoConnect: false,
     });
 
-    const gameSocket = io(`${server_domain}/game`, {
+    const gameSocket = io(`${server_domain}/game/playroom`, {
       query: { userId: localStorage.getItem("idx") },
       autoConnect: false,
     });

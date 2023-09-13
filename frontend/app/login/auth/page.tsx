@@ -73,39 +73,39 @@ const Auth = () => {
           localStorage.setItem("token", data.token);
           localStorage.setItem("nickname", data.nickname);
           localStorage.setItem("imgUri", data.imgUri);
-          localStorage.setItem("userIdx", data.userIdx.toString());
+          localStorage.setItem("idx", data.userIdx.toString());
           localStorage.setItem("check2Auth", data.check2Auth.toString());
           localStorage.setItem("email", data.email);
           localStorage.setItem("available", data.available.toString());
 
-          // userDispatch({ type: "SET_USER_IDX", value: data.userIdx });
-          // userDispatch({ type: "CHANGE_NICK_NAME", value: data.nickname });
-          // userDispatch({ type: "CHANGE_IMG", value: data.imgUri });
-          // authDispatch({
-          //   type: "SET_ID",
-          //   value: data.userIdx,
-          // });
-          // authDispatch({
-          //   type: "SET_NICKNAME",
-          //   value: data.nickname,
-          // });
-          // authDispatch({
-          //   type: "SET_IMGURL",
-          //   value: data.imgUri,
-          // });
-          // authDispatch({
-          //   type: "SET_AUTHORIZATION",
-          //   value: data.token,
-          // });
-          // authDispatch({
-          //   type: "SET_CHECK2AUTH",
-          //   value: data.check2Auth,
-          // });
-          // authDispatch({
-          //   type: "SET_EMAIL",
-          //   value: data.email,
-          // });
-          // setupCookies();
+          userDispatch({ type: "SET_USER_IDX", value: data.userIdx });
+          userDispatch({ type: "CHANGE_NICK_NAME", value: data.nickname });
+          userDispatch({ type: "CHANGE_IMG", value: data.imgUri });
+          authDispatch({
+            type: "SET_ID",
+            value: data.userIdx,
+          });
+          authDispatch({
+            type: "SET_NICKNAME",
+            value: data.nickname,
+          });
+          authDispatch({
+            type: "SET_IMGURL",
+            value: data.imgUri,
+          });
+          authDispatch({
+            type: "SET_AUTHORIZATION",
+            value: data.token,
+          });
+          authDispatch({
+            type: "SET_CHECK2AUTH",
+            value: data.check2Auth,
+          });
+          authDispatch({
+            type: "SET_EMAIL",
+            value: data.email,
+          });
+          setupCookies();
 
           if (data.available && data.check2Auth === true)
             return router.push("../secondauth");

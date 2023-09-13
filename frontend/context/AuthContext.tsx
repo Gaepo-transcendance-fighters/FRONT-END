@@ -110,23 +110,58 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (localStorage.getItem("idx")) {
+      const chat = io(`${server_domain}/chat`, {
+        query: { userId: localStorage.getItem("idx") },
+        autoConnect: false,
+      }).connect()
+
+      const gameSocket = io(`${server_domain}/game/playroom`, {
+        query: { userId: localStorage.getItem("idx") },
+        autoConnect: false,
+      })
+
       authDispatch({
         type: "SET_CHAT_SOCKET",
-        value: io(`${server_domain}/chat`, {
-          query: { idx: localStorage.getItem("idx") },
-          autoConnect: false,
-          transports: ["websocket"],
-        }),
+        value: chat
       });
 
       authDispatch({
         type: "SET_GAME_SOCKET",
-        value: io(`${server_domain}/game`, {
-          query: { idx: localStorage.getItem("idx") },
-          autoConnect: false,
-          transports: ["websocket"],
-        }),
+        value: gameSocket
       });
+      const nickname = localStorage.getItem("nickname")
+      const idx = localStorage.getItem("idx")
+      const email = localStorage.getItem("email")
+      const imgUri = localStorage.getItem("imgUri")
+      const token = localStorage.getItem("token")
+      const auth = localStorage.getItem("check2Auth")
+
+      if (!idx || !nickname || !email || !imgUri || !token ) {
+        authDispatch({
+          type: "SET_ID",
+          value: parseInt(idx!),
+        });
+        authDispatch({
+          type: "SET_NICKNAME",
+          value: nickname!,
+        });
+        authDispatch({
+          type: "SET_IMGURL",
+          value: imgUri!,
+        });
+        authDispatch({
+          type: "SET_AUTHORIZATION",
+          value: token!,
+        });
+        authDispatch({
+          type: "SET_CHECK2AUTH",
+          value: Boolean(auth!),
+        });
+        authDispatch({
+          type: "SET_EMAIL",
+          value: email!,
+        });
+      }
     }
   }, []);
 
