@@ -93,7 +93,6 @@ export default function PageRedir() {
       .catch((error) => {
         console.error("업로드 실패", error);
       });
-    setIsSet(true);
   };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
@@ -123,14 +122,6 @@ export default function PageRedir() {
       reader.readAsDataURL(file);
     });
   };
-
-  useEffect(() => {
-    if (isSet)
-      userDispatch({
-        type: "CHANGE_IMG",
-        value: userData.imgUri,
-      });
-  }, [isSet]);
 
   const onChangeNickName = async () => {
     if (inputName === "") return alert("입력값이 없습니다");
