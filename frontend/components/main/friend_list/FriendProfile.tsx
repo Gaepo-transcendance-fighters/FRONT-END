@@ -305,10 +305,9 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
               mx={5}
             >
               <Image
-                // src="/seal.png" // mockdata
                 src={`${server_domain}/img/${
                   prop.friendIdx
-                }.png?${Date.now().toString()}`} // < !mockdata
+                }.png?${Date.now().toString()}`}
                 alt="user img"
                 width={100}
                 height={100}
@@ -327,15 +326,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 }}
               >
                 닉네임: {friendData?.targetNickname}
-              </Typography>
-              <Typography>
-                상태:{" "}
-                {friendData?.isOnline === IOnlineStatus.ONLINE
-                  ? loginOn
-                  : friendData?.isOnline === IOnlineStatus.OFFLINE
-                  ? loginOff
-                  : ""}
-              </Typography>
+              </Typography> 
               <Stack direction={"row"} spacing={2}>
                 {/* <FriendGameButton prop={prop as IFriend} /> */}
                 <Button
