@@ -170,20 +170,20 @@ export default function PageRedir() {
                   backgroundColor: "green",
                 }}
               >
-                {/* <Card
+                <Card
                   sx={{
                     width: "100%",
                     height: "37%",
                     backgroundColor: "cyan",
                     flexDirection: "row",
                     display: "flex",
-                    float : "left",
+                    float: "left",
                     // padding: 3,
                     border: "1px solid black",
                   }}
-                > */}
-                {/* 아바타박스 */}
-                {/* <Box
+                >
+                  {/* 아바타박스 */}
+                  <Box
                     sx={{
                       borderRadius: "4%",
                       display: "flex",
@@ -202,9 +202,9 @@ export default function PageRedir() {
                       height={232}
                       alt="my profile img"
                     />
-                  </Box> */}
-                {/* 이미지, 닉네임, 2차인증, */}
-                {/* <Stack
+                  </Box>
+                  {/* 이미지, 닉네임, 2차인증, */}
+                  <Stack
                     sx={{
                       width: "70vw",
                       ml: 3,
@@ -225,9 +225,9 @@ export default function PageRedir() {
                     </Typography>
                     <Typography style={{ fontSize: "1.2rem" }}>
                       Email : {authState.userInfo.email}
-                    </Typography> */}
-                {/* 버튼관련 스택 */}
-                {/* <Stack
+                    </Typography>
+                    {/* 버튼관련 스택 */}
+                    <Stack
                       direction={"row"}
                       spacing={7}
                       // padding={"20px 0px 0px 2px"}
@@ -253,12 +253,15 @@ export default function PageRedir() {
                       <SecondAuth />
                     </Stack>
                   </Stack>
-                </Card> */}
+                </Card>
                 {/* <br /> */}
-                {/* <Card
+                <Card
                   // sx={{ backgroundColor: main.main7 }}
                   sx={{ backgroundColor: "magenta" }}
-                  style={{ width: "100%", border: "1px solid black" }}
+                  style={{
+                    width: "100%",
+                    border: "1px solid black",
+                  }}
                 >
                   <CardContent sx={{ paddingBottom: 0 }}>전적</CardContent>
                   <Stack direction={"row"}>
@@ -286,9 +289,9 @@ export default function PageRedir() {
                           }}
                         ></img>
                       </CardContent>
-                    </Card> */}
-                {/* !이미지 */}
-                {/* <Card
+                    </Card>
+                    {/* !이미지 */}
+                    <Card
                       sx={{
                         margin: 1,
                         width: "70%",
@@ -320,8 +323,8 @@ export default function PageRedir() {
                     </Card>
                   </Stack>
                 </Card>
-                
-                <br /> */}
+
+                <br />
               </Stack>
               {/* 전적기록파트 */}
 
