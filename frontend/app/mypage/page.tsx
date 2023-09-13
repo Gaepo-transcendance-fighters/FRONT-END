@@ -110,15 +110,15 @@ export default function PageRedir() {
         },
       })
       .then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         setUserData(response.data);
       });
   };
 
   useEffect(() => {
-    if (!authState) return ;
+    if (!authState) return;
     fetch();
-  }, [reload])
+  }, [reload]);
 
   useEffect(() => {
     // const verified = authState.userInfo.check2Auth;
@@ -377,7 +377,7 @@ export default function PageRedir() {
                       </Typography>
 
                       <CardContent style={{ width: "100%" }}>
-                        {verified  ? (
+                        {verified ? (
                           <Typography style={{ fontSize: "1.5rem" }}>
                             2차인증 여부 : Y
                           </Typography>
@@ -623,7 +623,7 @@ export default function PageRedir() {
                         width: "100%",
                       }}
                     >
-                      {/* <MyGameLog /> */}
+                      <MyGameLog />
                     </Box>
                   </Card>
                 </Stack>
