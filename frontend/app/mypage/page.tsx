@@ -7,7 +7,6 @@ import {
   Card,
   Box,
   CardContent,
-  Modal,
   Stack,
   Typography,
 } from "@mui/material";
@@ -387,7 +386,7 @@ export default function PageRedir() {
                         width: "100%",
                       }}
                     >
-                      {/* <MyGameLog /> */}
+                      <MyGameLog />
                     </Box>
                   </Card>
                 </Stack>

@@ -1,54 +1,21 @@
 "use client";
 
-import { Typography, Box, CardContent } from "@mui/material";
-
-import { Card } from "@mui/material";
-
+import { Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
-
 import { main } from "@/type/type";
-
 import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
+import { IGameRecord, gameLogOptions } from "@/type/GameType";
+
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 const TOTAL_PAGES = 100;
 
-const options = {
-  threshold: 0.1,
-};
-
-interface ChatMessage {
-  channelIdx: number;
-  sender: string;
-  msg: string;
-}
-
-enum type {
-  nomal,
-  rank,
-}
-enum result {
-  win,
-  lose,
-}
-
-interface GameRecord {
-  matchUserIdx: number;
-  matchUserNickname: string;
-  score: string;
-  type: type;
-  result: result;
-}
-
 const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
-
-  const [gameRecord, setGameRecord] = useState<GameRecord[]>([]);
-
-  const [lastElement, setLastElement] = useState<HTMLDivElement | null>(null);
+  const [gameRecord, setGameRecord] = useState<IGameRecord[]>([]);
   const { userState } = useUser();
   const { authState } = useAuth();
   const observerTarget = useRef(null);
@@ -58,7 +25,7 @@ const MyGameLog = () => {
       if (entries[0]?.isIntersecting) {
         setPageNum((num) => num + 1);
       }
-    }, options);
+    }, gameLogOptions);
 
     if (observerTarget.current) {
       observer.observe(observerTarget.current);
@@ -71,24 +38,14 @@ const MyGameLog = () => {
     };
   }, [observerTarget]);
 
-  //dev original
-  // .get(
-  //   `${server_domain}/game/records/userIdx=${localStorage.getItem(
-  //     "idx"
-  //   )}&page=${pageNum}`,
-  // )
-  //haryu's server
-  // .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
   const callUser = useCallback(async () => {
     await axios
       .get(
-        `${server_domain}/game/records/userIdx=${authState.userInfo.id}&page=${pageNum}`,
-        // .get(`${server_domain}/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+        `${server_domain}/game/records?userIdx=${authState.userInfo.id}&page=${pageNum}`,
         {
           headers: {
             Authorization: "Bearer " + authState.userInfo.authorization,
           },
-          // headers: {Authorization: "Bearer " + localStorage.getItem("authorization"),},
         }
       )
       .then((res) => {
