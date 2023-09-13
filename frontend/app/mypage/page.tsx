@@ -12,20 +12,18 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import {
-  IOnlineStatus,
-  IUserData,
-  font,
-  main,
-  myProfileStyle,
-  nicknameModalStyle,
-} from "@/type/type";
+import { IOnlineStatus, font, main } from "@/type/type";
 import React, { useEffect, useState, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
+import {
+  IUserData,
+  myProfileStyle,
+  nicknameModalStyle,
+} from "@/type/My";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -42,7 +40,6 @@ export default function PageRedir() {
     imgUri: "",
     win: 0,
     lose: 0,
-    rank: 0,
     email: "",
     intra: "",
     isOnline: IOnlineStatus.ONLINE,
@@ -461,7 +458,7 @@ export default function PageRedir() {
                           }}
                         >
                           <Typography margin={1}>
-                            랭크(포인트) : {userData.rank}
+                            랭크(포인트) : {userData?.rankpoint}
                           </Typography>
                           <Typography margin={1}>
                             승률 :{" "}
