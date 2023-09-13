@@ -16,7 +16,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IChatDmEnter, IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
-import { socket } from "@/app/page";
 import RoomEnter from "@/external_functions/RoomEnter";
 import { useUser } from "@/context/UserContext";
 import axios from "axios";
@@ -30,6 +29,7 @@ import {
   friendProfileModalStyle,
 } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
+import { useAuth } from "@/context/AuthContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -55,6 +55,7 @@ export default function MemberModal({
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const { friendState, friendDispatch } = useFriend();
+  const { authState } = useAuth();
 
   useEffect(() => {
     setCurFriend({
@@ -124,6 +125,7 @@ export default function MemberModal({
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatBlock = (data: IChatBlock) => {
       console.log("mmm ChatBlock : ", data);
       const blockList = data.blockInfo
@@ -147,10 +149,11 @@ export default function MemberModal({
       handleCloseMenu();
       handleCloseModal();
     };
-    socket.on("chat_block", ChatBlock);
+    authState.chatSocket.on("chat_block", ChatBlock);
 
     return () => {
-      socket.off("chat_block", ChatBlock);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_block", ChatBlock);
     };
   }, []);
 
@@ -165,32 +168,35 @@ export default function MemberModal({
   }, [friendState.isFriend, friendState.friendList]);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatGetDmRoomList = (payload?: IChatRoom[]) => {
       payload ? roomDispatch({ type: "SET_DM_ROOMS", value: payload }) : null;
       handleCloseModal();
       roomDispatch({ type: "SET_NEW_DM_ROOM_ALERT", value: true });
     };
 
-    socket.on("create_dm", ChatGetDmRoomList);
+    authState.chatSocket.on("create_dm", ChatGetDmRoomList);
     return () => {
-      socket.off("create_dm", ChatGetDmRoomList);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("create_dm", ChatGetDmRoomList);
     };
   }, []);
 
   const sendDM = () => {
+    if (!authState.chatSocket) return;
     const existingRoom = roomState.dmRooms.find(
       (element) => element.targetNickname === person.nickname
     );
     if (existingRoom) {
       // 이미 dm 방이 존재. 그럼 기존 방 리디렉션
-      socket.emit(
+      authState.chatSocket.emit(
         "chat_get_DM",
         {
           channelIdx: existingRoom.channelIdx,
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            RoomEnter(existingRoom, roomState, userState, roomDispatch);
+            RoomEnter(existingRoom, roomState, userState, roomDispatch, authState.chatSocket!);
             handleCloseModal();
           } else {
             console.log(ret.msg);
@@ -200,7 +206,7 @@ export default function MemberModal({
       );
     } else {
       // 방이 존재하지 않는다. 그럼 새로운 방만들기
-      socket.emit(
+      authState.chatSocket.emit(
         "create_dm",
         { targetNickname: person.nickname, targetIdx: person.userIdx },
         (ret: ReturnMsgDto) => {
@@ -215,7 +221,8 @@ export default function MemberModal({
   };
 
   const blockFriend = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_block",
       {
         targetNickname: person.nickname,

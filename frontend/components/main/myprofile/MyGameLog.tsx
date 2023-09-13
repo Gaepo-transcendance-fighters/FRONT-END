@@ -10,6 +10,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { main } from "@/type/type";
 
 import { useUser } from "@/context/UserContext";
+import { useAuth } from "@/context/AuthContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -45,11 +46,10 @@ interface GameRecord {
 const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
-
   const [gameRecord, setGameRecord] = useState<GameRecord[]>([]);
-
   const [lastElement, setLastElement] = useState<HTMLDivElement | null>(null);
   const { userState } = useUser();
+  const { authState } = useAuth();
   const observerTarget = useRef(null);
 
   useEffect(() => {
@@ -81,13 +81,11 @@ const MyGameLog = () => {
   const callUser = useCallback(async () => {
     await axios
       .get(
-        `${server_domain}/game/records/userIdx=${localStorage.getItem(
-          "idx"
-        )}&page=${pageNum}`,
+        `${server_domain}/game/records/userIdx=${authState.userInfo.id}&page=${pageNum}`,
+        // .get(`${server_domain}/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
         {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("authorization"),
-          },
+          headers: {Authorization: "Bearer " + authState.userInfo.authorization,},
+          // headers: {Authorization: "Bearer " + localStorage.getItem("authorization"),},
         }
       )
       .then((res) => {

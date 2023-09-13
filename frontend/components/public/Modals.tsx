@@ -94,8 +94,11 @@ const Modals = ({
                 <CardContent>
                   <Button
                     onClick={() => {
-                      gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
-                      gameSocket.disconnect();
+                      authState.gameSocketemit(
+                        "game_queue_quit",
+                        gameState.aPlayer.id
+                      );
+                      authState.gameSocketdisconnect();
                       router.replace(routing);
                     }}
                   >

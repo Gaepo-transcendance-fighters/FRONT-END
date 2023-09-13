@@ -21,7 +21,15 @@ import {
 import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
-import { socket } from "@/app/page";
+import { useAuth } from "@/context/AuthContext";
+
+const strings = [
+  "now an administrator",
+  "not an administrator anymore",
+  "muted",
+  "kicked",
+  "banned",
+];
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 export default function Member({
@@ -41,13 +49,7 @@ export default function Member({
   // const [isGranted, setIsGranted] = useState<boolean>(false);
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
-  const strings = [
-    "now an administrator",
-    "not an administrator anymore",
-    "muted",
-    "kicked",
-    "banned",
-  ];
+  const { authState } = useAuth();
 
   const handleOpenModal = () => {
     userState.nickname === person.nickname
@@ -59,10 +61,10 @@ export default function Member({
   //   const CheckGrant = (payload: Permission) => {
   //     payload === Permission.MEMBER ? setIsGranted(false) : setIsGranted(true);
   //   };
-  //   socket.on("chat_get_grant", CheckGrant);
+  //   authState.chatSocket.on("chat_get_grant", CheckGrant);
 
   //   return () => {
-  //     socket.off("chat_get_grant", CheckGrant);
+  //     authState.chatSocket.off("chat_get_grant", CheckGrant);
   //   };
   // }, []);
 
@@ -105,18 +107,21 @@ export default function Member({
   }, [showAlert]);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatRoomAdmin = (payload: IChatRoomAdmin) => {
       roomDispatch({ type: "SET_ADMIN_ARY", value: payload.admin });
     };
-    socket.on("chat_room_admin", ChatRoomAdmin);
+    authState.chatSocket.on("chat_room_admin", ChatRoomAdmin);
 
     return () => {
-      socket.off("chat_room_admin", ChatRoomAdmin);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_room_admin", ChatRoomAdmin);
     };
   }, []);
 
   const SetAdmin = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_room_admin",
       {
         channelIdx: roomState.currentRoom?.channelIdx,
@@ -135,21 +140,24 @@ export default function Member({
   }, [isAuthorized]);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatMute = (data: IChatMute) => {
       console.log("Mute : ", data);
       // console로 값 확인 후 아래
       // emit - roomId 채팅에 있던 사람들한테 알림 쏴주기
       // TODO : mute된 사람 전역? / useState
     };
-    socket.on("chat_mute", ChatMute);
+    authState.chatSocket.on("chat_mute", ChatMute);
 
     return () => {
-      socket.off("chat_mute", ChatMute);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_mute", ChatMute);
     };
   });
 
   const Mute = () => {
-    socket.emit("chat_mute", {
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit("chat_mute", {
       channelIdx: roomState.currentRoom?.channelIdx,
       targetNickname: person.nickname,
       targetIdx: person.userIdx,
@@ -159,6 +167,7 @@ export default function Member({
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatKick = (data: IChatKick) => {
       if (data.targetNickname === userState.nickname) {
         roomDispatch({ type: "SET_CUR_ROOM", value: null });
@@ -173,15 +182,17 @@ export default function Member({
       });
       roomDispatch({ type: "SET_CUR_MEM", value: list });
     };
-    socket.on("chat_kick", ChatKick);
+    authState.chatSocket.on("chat_kick", ChatKick);
 
     return () => {
-      socket.off("chat_kick", ChatKick);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_kick", ChatKick);
     };
   }, []);
 
   const Kick = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_kick",
       {
         channelIdx: roomState.currentRoom?.channelIdx,
@@ -197,6 +208,7 @@ export default function Member({
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatBan = (data: IChatKick) => {
       if (data.targetNickname === userState.nickname) {
         roomDispatch({ type: "SET_CUR_ROOM", value: null });
@@ -211,15 +223,17 @@ export default function Member({
       });
       roomDispatch({ type: "SET_CUR_MEM", value: list });
     };
-    socket.on("chat_ban", ChatBan);
+    authState.chatSocket.on("chat_ban", ChatBan);
 
     return () => {
-      socket.off("chat_ban", ChatBan);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_ban", ChatBan);
     };
   }, []);
 
   const Ban = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "chat_ban",
       {
         channelIdx: roomState.currentRoom?.channelIdx,

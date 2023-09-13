@@ -10,7 +10,6 @@ import { useRoom } from "@/context/RoomContext";
 import { IChat } from "@/type/type";
 import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
-import { socket } from "@/app/page";
 interface IPayload {
   channelIdx: number | undefined;
   senderIdx: number;
@@ -33,6 +32,7 @@ const BottomField = ({ setMsgs }: Props) => {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const messageHandler = (chatFromServer: IChat) => {
       let result;
       if (roomState.currentRoom?.mode === "private") {
@@ -74,20 +74,21 @@ const BottomField = ({ setMsgs }: Props) => {
         }
       }
     };
-    socket.on("chat_send_msg", messageHandler);
+    authState.chatSocket.on("chat_send_msg", messageHandler);
 
     return () => {
-      socket.off("chat_send_msg", messageHandler);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_send_msg", messageHandler);
     };
-  }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList]);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+  }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList, roomState.currentRoom]);
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
+      if (!authState.chatSocket) return;
       event.preventDefault();
+      if (!authState.chatSocket) return;
+      const e = event.nativeEvent as InputEvent;
+      if (e.isComposing) return;
       let payload: IPayload | undefined = undefined;
       if (msg === "") {
         return;
@@ -116,9 +117,9 @@ const BottomField = ({ setMsgs }: Props) => {
           msg: msg,
         };
       }
-      socket.emit("chat_send_msg", payload);
+
+      authState.chatSocket.emit("chat_send_msg", payload);
       setMsg("");
-      inputRef.current?.focus();
     },
     [msg]
   );
@@ -147,7 +148,7 @@ const BottomField = ({ setMsgs }: Props) => {
                 color: "white",
                 marginTop: "3%",
               }}
-              autoFocus
+              inputRef={(input) => input && input.focus()}
               ref={inputRef}
               value={msg}
               onChange={changeMsg}
@@ -157,9 +158,9 @@ const BottomField = ({ setMsgs }: Props) => {
                   height: "10px",
                 },
               }}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  onSubmit(event);
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  onSubmit(e);
                 }
               }}
             />

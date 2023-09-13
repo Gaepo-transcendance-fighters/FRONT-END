@@ -1,10 +1,17 @@
 "use client";
 
-import { Box, Button, Card, CardContent, Stack } from "@mui/material";
+import {
+  Button,
+  Card,
+  Box,
+  CardContent,
+  Stack,
+} from "@mui/material";
+
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { main } from "@/type/type";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
@@ -22,59 +29,44 @@ const modalStyle = {
   p: 4,
 };
 
-const SecondAuth = () => {
+export default function InitUser() {
+  const router = useRouter();
   const [block, setBlock] = useState<boolean>(false);
   const { authState, authDispatch } = useAuth();
-  const [inputnumber, setInputNumber] = useState<string>("");
-  const router = useRouter();
-  const sendUri = `${server_domain}/users/second`;
-  const SendMail = async () => {
-    console.log("sendUri", sendUri);
-    const response = await axios({
-      method: "POST",
-      url: sendUri,
-      headers: {
-        Authorization: "Bearer " + authState.userInfo.authorization,
-      },
-      data: {
-        userIdx: authState.userInfo.id,
-        email: authState.userInfo.email,
-      },
-    });
-    if (response.status == 200) setBlock(true);
-    else console.log("재시도필요");
+  const [inputNick, setInputNick] = useState<string>("");
+  
+  const sendUri = `${server_domain}/users/profile`;
+  
+
+  const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
+    e.target.value = e.target.value.replace(/[^A-Za-z]/gi, "");
   };
 
-  const SendInput = async () => {
-    if (inputnumber.length !== 6) return; // <- 안내창띄우기
+  const SetNick = async () => {
 
     (document.getElementById("inputbox") as HTMLInputElement).value = "";
     const response = await axios({
-      method: "PATCH",
-      // url: `${server_domain}/users/second`,
-      url: `http://localhost:4000/users/second`,
+      method: "post",
+      url: sendUri,
       data: {
-        // userIdx: localStorage.getItem("idx"),
         userIdx: authState.userInfo.id,
-        code: Number(inputnumber),
+        userNickname: inputNick,
+        imgDate : "",
       },
     });
-    if (response.status == 200 && response.data.result.checkTFA) {
-      // if (!authState.chatSocket) return;
-      // authState.chatSocket.emit("set_user_status", {
-      //   userStatus: { nickname: response.data.nickname },
-      // });
+    if (response.status == 200 && response.data.result.nickname !== "") {
+      
       return router.push("/");
     }
-    // 라우터 연결 및 localstorage에 2차인증토큰값설정.
+    
     else if (
-      response.status == 200 &&
-      response.data.result.checkTFA === false
-    ) {
-      console.log("fail");
-      alert("잘못된 입력입니다. 재시도 해주세요.");
-      setBlock(false); // 여기서 비우기.
-    }
+       response.status == 200 &&
+       response.data.result.nickname === ""
+     ) {
+       console.log("fail");
+       alert("잘못된 입력입니다. 재시도 해주세요.");
+       setBlock(false); // 여기서 비우기.
+     }
     //재입력 필요
   };
 
@@ -88,14 +80,6 @@ const SecondAuth = () => {
             justifyContent: "center",
           }}
         >
-          <Button
-            variant="contained"
-            style={{ border: "1px solid black" }}
-            onClick={SendMail}
-            disabled={block == true ? true : false}
-          >
-            2차인증 메일 보내기
-          </Button>
           <br />
           <br />
           <br />
@@ -121,7 +105,7 @@ const SecondAuth = () => {
                 justifyContent: "center",
               }}
             >
-              메일로 전송된 6자리 숫자를 입력해주세요.
+              사용할 닉네임을 입력해주세요.
             </CardContent>
             <Stack
               direction={"row"}
@@ -134,33 +118,28 @@ const SecondAuth = () => {
               <input
                 id="inputbox"
                 type="text"
-                maxLength={6}
+                maxLength={10}
                 style={{
                   width: "40%",
                   height: "32px",
                   fontSize: "15px",
                   border: 0,
-                  borderRadius: "5px",
+                  borderRadius: "15px",
                   outline: "none",
                   paddingLeft: "10px",
                   backgroundColor: "#E9E9E9",
                 }}
-                onInput={(event) => {
-                  const input = event.target as HTMLInputElement;
-                  const value = input.value.replace(/[^0-9]/g, "");
-                }}
+                onInput={handleOnInput}
                 onChange={(event) => {
-                  setInputNumber(event?.target.value);
+                  setInputNick(event?.target.value);
                 }}
-                disabled={block == true ? false : true}
               />
               <Button
                 style={{
                   border: "0.1px solid black",
                   backgroundColor: "lightGray",
                 }}
-                onClick={SendInput}
-                disabled={block == true ? false : true}
+                onClick={SetNick}
               >
                 입력
               </Button>
@@ -171,5 +150,3 @@ const SecondAuth = () => {
     </Box>
   );
 };
-
-export default SecondAuth;

@@ -12,8 +12,8 @@ import "@/components/main/room_list/RoomList.css";
 import Modal from "@mui/material/Modal";
 import { useRoom } from "@/context/RoomContext";
 import { IChatRoom, Mode, Permission, ReturnMsgDto } from "@/type/RoomType";
-import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
+import { useAuth } from "@/context/AuthContext";
 
 const style = {
   position: "absolute" as "absolute",
@@ -38,6 +38,7 @@ export default function CreateRoomModal({
   const [value, setValue] = useState("");
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
+  const { authState } = useAuth();
 
   const handleClose = () => {
     setValue("");
@@ -45,14 +46,16 @@ export default function CreateRoomModal({
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatCreateRoom = (data: IChatRoom) => {
+      if (!authState.chatSocket) return;
       roomDispatch({ type: "ADD_ROOM", value: data });
       if (data.owner !== userState.nickname) return;
       if (
         roomState.currentRoom &&
         roomState.currentRoom.mode !== Mode.PRIVATE
       ) {
-        socket.emit(
+        authState.chatSocket.emit(
           "chat_goto_lobby",
           {
             channelIdx: roomState.currentRoom.channelIdx,
@@ -79,15 +82,17 @@ export default function CreateRoomModal({
       setValue("");
       setOpen(false);
     };
-    socket.on("BR_chat_create_room", ChatCreateRoom);
+    authState.chatSocket.on("BR_chat_create_room", ChatCreateRoom);
 
     return () => {
-      socket.off("BR_chat_create_room", ChatCreateRoom);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("BR_chat_create_room", ChatCreateRoom);
     };
   }, [userState.userIdx, roomState.currentRoom]);
 
   const OnClick = () => {
-    socket.emit(
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
       "BR_chat_create_room",
       { password: value },
       (ret: ReturnMsgDto) => {
@@ -98,7 +103,8 @@ export default function CreateRoomModal({
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
-      socket.emit(
+      if (!authState.chatSocket) return;
+      authState.chatSocket.emit(
         "BR_chat_create_room",
         { password: value },
         (ret: ReturnMsgDto) => {

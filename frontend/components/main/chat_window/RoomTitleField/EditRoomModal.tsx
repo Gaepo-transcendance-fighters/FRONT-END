@@ -5,8 +5,8 @@ import { useRoom } from "@/context/RoomContext";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { socket } from "@/app/page";
 import { useUser } from "@/context/UserContext";
+import { useAuth } from "@/context/AuthContext";
 
 const style = {
   position: "absolute" as "absolute",
@@ -33,6 +33,7 @@ export default function EditRoomModal({
   const { roomState, roomDispatch } = useRoom();
   const [value, setValue] = useState("");
   const { userState } = useUser();
+  const { authState } = useAuth();
   const payload = {
     channelIdx: roomState.currentRoom?.channelIdx,
     userIdx: userState.userIdx, // [번경필요]나중에 나의 userIdx 로 변경필요
@@ -40,17 +41,23 @@ export default function EditRoomModal({
   };
 
   const handleClose = () => {
+    if (!authState.chatSocket) return;
     prop();
-    socket.emit("BR_chat_room_password", payload, (ret: ReturnMsgDto) => {
-      if (ret.code === 200) {
-        console.log("pw changing success");
-      } else {
-        setShowAlert(true);
+    authState.chatSocket.emit(
+      "BR_chat_room_password",
+      payload,
+      (ret: ReturnMsgDto) => {
+        if (ret.code === 200) {
+          console.log("pw changing success");
+        } else {
+          setShowAlert(true);
+        }
       }
-    });
+    );
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const roomSettingHandler = (channels: IChatRoom[]) => {
       const targetChannelIdx = roomState.currentRoom?.channelIdx;
       const targetChannel: IChatRoom | undefined = channels.find(
@@ -63,10 +70,11 @@ export default function EditRoomModal({
         console.log("error ocurrued!");
       }
     };
-    socket.on("BR_chat_room_password", roomSettingHandler);
+    authState.chatSocket.on("BR_chat_room_password", roomSettingHandler);
 
     return () => {
-      socket.off("BR_chat_room_password", roomSettingHandler);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("BR_chat_room_password", roomSettingHandler);
     };
   });
 

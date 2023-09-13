@@ -4,9 +4,8 @@ import { Box, Card, CircularProgress, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { main } from "@/font/color";
-import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
-import { socket } from "@/app/page";
+import { useUser } from "@/context/UserContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -30,14 +29,15 @@ interface Data {
   token: string;
   email: string;
   check2Auth: boolean;
+  available: boolean;
 }
 
 const Auth = () => {
   const searchParam = useSearchParams();
   const router = useRouter();
   const [client, setClient] = useState(false);
+  const { authState, authDispatch } = useAuth();
   const { userDispatch } = useUser();
-  const { authDispatch } = useAuth();
 
   const setupCookies = () => {
     let expire = new Date();
@@ -54,7 +54,8 @@ const Auth = () => {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
+        Authorization: "Bearer " + authState.userInfo.authorization,
+        // Authorization: "Bearer " + localStorage.getItem("authorization"),
       },
       body: JSON.stringify({
         code: code,
@@ -63,30 +64,50 @@ const Auth = () => {
       .then(async (res) => {
         if (res.status === 200) {
           const data: Data = await res.json();
-          if (data.imgUri === `${server_domain}/img/0.png`)
-            // if (data.imgUri === "http://localhost:4000/img/0.png")
-            socket.emit("set_user_status", {
+          if (
+            data.imgUri === `${server_domain}/img/0.png` &&
+            authState.chatSocket
+          )
+            authState.chatSocket.emit("set_user_status", {
               userStatus: { nickname: data.nickname },
             });
-
-          console.log("data : ", data);
-          localStorage.setItem("authorization", data.token); // 서버에서 받은 토큰을 저장
-          localStorage.setItem("intra", data.intra);
-          localStorage.setItem("idx", data.userIdx.toString());
-          localStorage.setItem("imgUri", data.imgUri);
-          localStorage.setItem("email", data.email);
-          localStorage.setItem("check2Auth", data.check2Auth.toString());
-          userDispatch({
-            type: "CHANGE_NICK_NAME",
+          userDispatch({ type: "SET_USER_IDX", value: data.userIdx });
+          userDispatch({ type: "CHANGE_NICK_NAME", value: data.nickname });
+          userDispatch({ type: "CHANGE_IMG", value: data.imgUri });
+          authDispatch({
+            type: "SET_ID",
+            value: data.userIdx,
+          });
+          authDispatch({
+            type: "SET_NICKNAME",
             value: data.nickname,
           });
-          authDispatch({ type: "SET_ID", value: data.userIdx });
-          localStorage.setItem("nickname", data.nickname);
-          // authDispatch({ type: "SET_NICKNAME", value: data.nickname });
+          authDispatch({
+            type: "SET_IMGURL",
+            value: data.imgUri,
+          });
+          authDispatch({
+            type: "SET_AUTHORIZATION",
+            value: data.token,
+          });
+          authDispatch({
+            type: "SET_CHECK2AUTH",
+            value: data.check2Auth,
+          });
+          authDispatch({
+            type: "SET_EMAIL",
+            value: data.email,
+          });
           setupCookies();
 
-          if (data.check2Auth === true) return router.push("../secondauth");
-          else return router.push(`/home`);
+          if (data.available && data.check2Auth === true)
+            return router.push("../secondauth");
+          else if (data.available === false) return router.push("../init");
+          else return router.push(`/`);
+        } else if (res.status === 400) {
+          const message = await res.json().then((data) => data.message);
+          alert(message);
+          return router.push("/login");
         }
       })
       .catch((error) => {
@@ -112,9 +133,6 @@ const Auth = () => {
       <Card sx={modalStyle}>
         <CircularProgress sx={{ color: "white" }} />
         <Typography sx={{ color: "white" }}>Loading...</Typography>
-        <Typography sx={{ color: "white" }}>
-          {searchParam.get("code")}
-        </Typography>
       </Card>
     </Box>
   );

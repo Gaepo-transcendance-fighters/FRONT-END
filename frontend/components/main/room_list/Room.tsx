@@ -17,11 +17,11 @@ import {
   ILeftMember,
   ReturnMsgDto,
 } from "@/type/RoomType";
-import { socket } from "@/app/page";
 import Alert from "@mui/material/Alert";
 import { useUser } from "@/context/UserContext";
 import { useInitMsg } from "@/context/InitMsgContext";
 import RoomEnter from "@/external_functions/RoomEnter";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [open, setOpen] = useState(false);
@@ -31,9 +31,11 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   const [newMem, setNewMem] = useState("");
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
+  const { authState } = useAuth();
   const { initMsgDispatch } = useInitMsg();
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatExitRoom = ({
       leftMember,
       owner,
@@ -41,6 +43,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       leftMember: ILeftMember[];
       owner: string;
     }) => {
+      if (!authState.chatSocket) return;
       if (!leftMember) {
         roomDispatch({ type: "SET_CUR_ROOM", value: null });
         roomDispatch({ type: "SET_IS_OPEN", value: false });
@@ -62,24 +65,27 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       roomDispatch({ type: "SET_CUR_MEM", value: list });
       roomDispatch({ type: "SET_CUR_ROOM", value: newRoom });
     };
-    socket.on("chat_room_exit", ChatExitRoom);
+    authState.chatSocket.on("chat_room_exit", ChatExitRoom);
 
     return () => {
-      socket.off("chat_room_exit", ChatExitRoom);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_room_exit", ChatExitRoom);
     };
   }, [roomState.currentRoom]);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatEnterNoti = (data: IChatEnterNoti) => {
       setShowAlert(true);
       setNewMem(data.newMember);
       roomDispatch({ type: "SET_CUR_MEM", value: data.member });
       roomDispatch({ type: "SET_ADMIN_ARY", value: data.admin });
     };
-    socket.on("chat_enter_noti", ChatEnterNoti);
+    authState.chatSocket.on("chat_enter_noti", ChatEnterNoti);
 
     return () => {
-      socket.off("chat_enter_noti", ChatEnterNoti);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_enter_noti", ChatEnterNoti);
     };
   }, []);
 
@@ -122,18 +128,21 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
   };
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatEnter = (payload: IChatEnter) => {
       roomDispatch({ type: "SET_CUR_MEM", value: payload.member });
       roomDispatch({ type: "SET_ADMIN_ARY", value: payload.admin });
     };
-    socket.on("chat_enter", ChatEnter);
+    authState.chatSocket.on("chat_enter", ChatEnter);
 
     return () => {
-      socket.off("chat_enter", ChatEnter);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_enter", ChatEnter);
     };
   }, []);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const ChatDmEnter = (payload: IChatDmEnter) => {
       roomDispatch({
         type: "SET_CUR_DM_MEM",
@@ -148,52 +157,64 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       });
       initMsgDispatch({ type: "SET_INIT_MSG", value: payload });
     };
-    socket.on("chat_get_DM", ChatDmEnter);
+    authState.chatSocket.on("chat_get_DM", ChatDmEnter);
 
     return () => {
-      socket.off("chat_get_DM", ChatDmEnter);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_get_DM", ChatDmEnter);
     };
   }, []);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const NoMember = (payload: IChatRoom[]) => {
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
-    socket.on("BR_chat_room_delete", NoMember);
+    authState.chatSocket.on("BR_chat_room_delete", NoMember);
 
     return () => {
-      socket.off("BR_chat_room_delete", NoMember);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("BR_chat_room_delete", NoMember);
     };
   }, []);
 
   useEffect(() => {
+    if (!authState.chatSocket) return;
     const GoToLobby = (payload: IChatRoom[]) => {
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
-    socket.on("chat_goto_lobby", GoToLobby);
+    authState.chatSocket.on("chat_goto_lobby", GoToLobby);
 
     return () => {
-      socket.off("chat_goto_lobby", GoToLobby);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_goto_lobby", GoToLobby);
     };
   }, []);
 
   const RoomClick = (room: IChatRoom) => {
+    if (!authState.chatSocket) return;
     if (roomState.currentRoom?.channelIdx !== room.channelIdx) {
       if (room.mode === Mode.PROTECTED) handleOpen();
       else if (room.mode === Mode.PRIVATE) {
-        socket.emit(
+        authState.chatSocket.emit(
           "chat_get_DM",
           {
             channelIdx: room.channelIdx,
           },
           (ret: ReturnMsgDto) => {
             if (ret.code === 200) {
-              RoomEnter(room, roomState, userState, roomDispatch);
+              RoomEnter(
+                room,
+                roomState,
+                userState,
+                roomDispatch,
+                authState.chatSocket!
+              );
             }
           }
         );
       } else {
-        socket.emit(
+        authState.chatSocket.emit(
           "chat_enter",
           {
             userNickname: userState.nickname,
@@ -202,9 +223,15 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           },
           (ret: ReturnMsgDto) => {
             if (ret.code === 200) {
-              RoomEnter(room, roomState, userState, roomDispatch);
-            }
-            else if (ret.code === 201) { // Banned user
+              RoomEnter(
+                room,
+                roomState,
+                userState,
+                roomDispatch,
+                authState.chatSocket!
+              );
+            } else if (ret.code === 201) {
+              // Banned user
               setShowAlertBan(true);
             }
           }
