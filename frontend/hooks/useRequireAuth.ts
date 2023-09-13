@@ -22,11 +22,17 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
 
     if (cookies_value) {
       if (
-        !authState.userInfo.id ||
-        !authState.userInfo.nickname ||
-        !authState.userInfo.email ||
-        !authState.userInfo.authorization ||
-        !authState.userInfo.imgUrl
+        !localStorage.getItem("idx") ||
+        !localStorage.getItem("nickname") ||
+        !localStorage.getItem("email") ||
+        !localStorage.getItem("authorization") ||
+        !localStorage.getItem("imgUrl") ||
+        !localStorage.getItem("token")
+        // !authState.userInfo.id ||
+        // !authState.userInfo.nickname ||
+        // !authState.userInfo.email ||
+        // !authState.userInfo.authorization ||
+        // !authState.userInfo.imgUrl
       )
         return router.push(redirectUrl);
       return router.push("/home");
