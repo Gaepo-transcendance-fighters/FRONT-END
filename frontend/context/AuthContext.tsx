@@ -7,6 +7,7 @@ import {
 } from "react";
 import { Socket, io } from "socket.io-client";
 import { server_domain } from "@/app/page";
+import { useUser } from "./UserContext";
 
 interface IBlockPerson {
   targetNickname: string;
@@ -107,36 +108,40 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authState, authDispatch] = useReducer(AuthReducer, initialState);
+  const { userDispatch } = useUser();
 
   useEffect(() => {
     if (localStorage.getItem("idx")) {
       const chat = io(`${server_domain}/chat`, {
         query: { userId: localStorage.getItem("idx") },
         autoConnect: false,
-      }).connect()
+      }).connect();
 
       const gameSocket = io(`${server_domain}/game/playroom`, {
         query: { userId: localStorage.getItem("idx") },
         autoConnect: false,
-      })
+      });
 
       authDispatch({
         type: "SET_CHAT_SOCKET",
-        value: chat
+        value: chat,
       });
 
       authDispatch({
         type: "SET_GAME_SOCKET",
-        value: gameSocket
+        value: gameSocket,
       });
-      const nickname = localStorage.getItem("nickname")
-      const idx = localStorage.getItem("idx")
-      const email = localStorage.getItem("email")
-      const imgUri = localStorage.getItem("imgUri")
-      const token = localStorage.getItem("token")
-      const auth = localStorage.getItem("check2Auth")
+      const nickname = localStorage.getItem("nickname");
+      const idx = localStorage.getItem("idx");
+      const email = localStorage.getItem("email");
+      const imgUri = localStorage.getItem("imgUri");
+      const token = localStorage.getItem("token");
+      const auth = localStorage.getItem("check2Auth");
 
-      if (!idx || !nickname || !email || !imgUri || !token ) {
+      if (!idx || !nickname || !email || !imgUri || !token) {
+        userDispatch({ type: "SET_USER_IDX", value: parseInt(idx!) });
+        userDispatch({ type: "CHANGE_NICK_NAME", value: nickname! });
+        userDispatch({ type: "CHANGE_IMG", value: imgUri! });
         authDispatch({
           type: "SET_ID",
           value: parseInt(idx!),
