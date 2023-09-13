@@ -19,11 +19,7 @@ import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
-import {
-  IUserData,
-  myProfileStyle,
-  nicknameModalStyle,
-} from "@/type/My";
+import { IUserData, myProfileStyle, nicknameModalStyle } from "@/type/My";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -282,22 +278,14 @@ export default function PageRedir() {
                         }}
                         style={{ fontSize: "3rem" }}
                       >
-                        {userData?.nickname}
+                        {userState.nickname}
                       </Typography>
                       <CardContent style={{ width: "100%" }}>
-                        {verified ? (
-                          <Typography style={{ fontSize: "1.5rem" }}>
-                            2차인증 여부 : Y
-                          </Typography>
-                        ) : (
-                          <Typography style={{ fontSize: "1.5rem" }}>
-                            2차인증 여부 : N
-                          </Typography>
-                        )}
+                        2차인증 여부 : {userData.check2Auth ? "Y" : "N"}
                       </CardContent>
                       <CardContent style={{ width: "100%" }}>
                         <Typography style={{ fontSize: "1.2rem" }}>
-                          Email : {userData?.email}
+                          Email : {authState.userInfo.email}
                         </Typography>
                       </CardContent>
                       {/* 버튼관련 스택 */}
@@ -325,16 +313,6 @@ export default function PageRedir() {
                             onChange={handleChange}
                           />
                         </form>
-                        <Button
-                          type="submit"
-                          style={{
-                            minWidth: "max-content",
-                          }}
-                          variant="contained"
-                          onClick={handleOpenModal}
-                        >
-                          닉네임변경
-                        </Button>
                         <Modal open={openModal} onClose={handleCloseModal}>
                           <Box sx={nicknameModalStyle} borderRadius={"10px"}>
                             <Card
@@ -343,57 +321,7 @@ export default function PageRedir() {
                                 height: "170px",
                                 margin: -1,
                               }}
-                            >
-                              <CardContent
-                                sx={{ paddingBottom: 0, textAlign: "center" }}
-                              >
-                                변경할 닉네임을 입력하세요
-                              </CardContent>
-                              <Stack direction={"row"}>
-                                <Card
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                  }}
-                                  sx={{
-                                    margin: 1,
-                                    width: "100%",
-                                    height: "120px",
-                                    backgroundColor: main.main1,
-                                    overflow: "scroll",
-                                  }}
-                                >
-                                  <input
-                                    type="text"
-                                    maxLength={10}
-                                    style={{
-                                      width: "40%",
-                                      height: "32px",
-                                      fontSize: "15px",
-                                      border: 0,
-                                      borderRadius: "15px",
-                                      outline: "none",
-                                      paddingLeft: "10px",
-                                      backgroundColor: "#E9E9E9",
-                                    }}
-                                    onInput={handleOnInput}
-                                    onChange={(event) => {
-                                      setInputName(event?.target.value);
-                                    }}
-                                  />
-                                  <Button
-                                    style={{
-                                      border: "0.1px solid black",
-                                      backgroundColor: "lightGray",
-                                    }}
-                                    onClick={onChangeNickName}
-                                  >
-                                    입력
-                                  </Button>
-                                </Card>
-                              </Stack>
-                            </Card>
+                            ></Card>
                           </Box>
                         </Modal>
                         <SecondAuth />
@@ -524,7 +452,7 @@ export default function PageRedir() {
                         width: "100%",
                       }}
                     >
-                      <MyGameLog />
+                      {/* <MyGameLog /> */}
                     </Box>
                   </Card>
                 </Stack>
