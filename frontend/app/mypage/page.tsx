@@ -12,13 +12,14 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { IOnlineStatus, font, main } from "@/type/type";
-import React, { useEffect, useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
 import { IUserData, myProfileStyle } from "@/type/My";
+import Image from "next/image";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -47,7 +48,7 @@ export default function PageRedir() {
     document.getElementById("file_input")?.click();
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
     const files = event.target.files;
@@ -151,7 +152,8 @@ export default function PageRedir() {
             sx={{
               width: "80%",
               height: "100vh",
-              backgroundColor: main.main3,
+              backgroundColor: "orange",
+              // backgroundColor: main.main3,
               padding: 0,
               margin: 0,
             }}
@@ -165,54 +167,64 @@ export default function PageRedir() {
                   display: "flex",
                   alignItems: "center",
                   flexDirection: "row",
-                  justifyContent: "space-around",
+                  justifyContent: "space-between",
                 }}
               >
                 <Stack
                   style={{
-                    width: "50%",
+                    width: "57%",
                     height: "100%",
                     display: "flex",
                     alignItems: "center",
-
                     backgroundColor: main.main8,
                   }}
                 >
                   <Card
                     sx={{
                       backgroundColor: main.main7,
+                      width: "100%",
                       flexDirection: "row",
                       display: "flex",
-                      padding: 3,
                     }}
                     style={{ border: "1px solid black" }}
                   >
                     {/* 아바타박스 */}
                     <Box
                       sx={{
-                        borderRadius: "70%",
-                        width: "30%",
-                        height: "100%",
-                        overflow: "hidden",
                         display: "flex",
                         justifyContent: "space-around",
+                        width: "100%",
+                        height: "100%",
                         alignItems: "center",
+                        overflow: "hidden",
                       }}
-                      mx={5}
                     >
-                      <Avatar
-                        src={userState.imgUri}
-                        style={{
-                          width: "100%",
-                          height: "75%",
-                          border: "4px solid #8CCAE5",
+                      <Box
+                        sx={{
+                          borderRadius: "4%",
+                          display: "flex",
+                          justifyContent: "space-around",
+                          width: "150px",
+                          height: "150px",
+                          alignItems: "center",
+                          overflow: "hidden",
+                          border: "1px solid",
+                          backgroundColor: "brown",
                         }}
-                      />
+                      >
+                        <Image
+                          src={userState.imgUri}
+                          width={150}
+                          height={150}
+                          alt="my profile img"
+                        />
+                      </Box>
                     </Box>
                     {/* 이미지, 닉네임, 2차인증, */}
                     <Stack
                       sx={{
-                        width: "20vw",
+                        width: "70vw",
+                        pb :3,
                       }}
                       spacing={0.5}
                     >
@@ -225,21 +237,21 @@ export default function PageRedir() {
                       >
                         {userState.nickname}
                       </Typography>
-                      <CardContent style={{ width: "100%" }}>
+                      <Typography style={{ fontSize: "1.2rem" }}>
                         2차인증 여부 : {userData.check2Auth ? "Y" : "N"}
-                      </CardContent>
-                      <CardContent style={{ width: "100%" }}>
-                        <Typography style={{ fontSize: "1.2rem" }}>
-                          Email : {authState.userInfo.email}
-                        </Typography>
-                      </CardContent>
+                      </Typography>
+                      <Typography style={{ fontSize: "1.2rem" }}>
+                        Email : {authState.userInfo.email}
+                      </Typography>
                       {/* 버튼관련 스택 */}
                       <Stack
                         direction={"row"}
-                        spacing={2}
-                        padding={"20px 0px 0px 2px"}
+                        spacing={3}
+                        padding={"17px 0px 0px 0px"}
+                        // p={3}
                       >
                         <form>
+                          {/* TODO : 버튼 배열 어떻게? */}
                           <Button
                             onClick={OpenFileInput}
                             style={{
@@ -267,7 +279,11 @@ export default function PageRedir() {
                     sx={{ backgroundColor: main.main7 }}
                     style={{ width: "100%", border: "1px solid black" }}
                   >
-                    <CardContent sx={{ paddingBottom: 0 }}>전적</CardContent>
+                    <CardContent sx={{ paddingBottom: 0 }}>
+                      <Typography style={{ fontSize: "1.2rem" }}>
+                        전적
+                      </Typography>
+                    </CardContent>
                     <Stack direction={"row"}>
                       {/* 이미지 */}
                       <Card
@@ -333,12 +349,13 @@ export default function PageRedir() {
                 {/* 전적기록파트 */}
                 <Stack
                   style={{
-                    width: "45%",
+                    width: "41%",
                     height: "100%",
                     backgroundColor: main.main7,
                     border: "1px solid black",
                     display: "flex",
                     alignItems: "center",
+                    borderRadius: "4px",
                   }}
                 >
                   <br />
@@ -370,7 +387,7 @@ export default function PageRedir() {
                           border: "2px solid black",
                         }}
                       >
-                        <Typography style={{ fontSize: "2rem" }}>
+                        <Typography style={{ fontSize: "1.7rem" }}>
                           전적 기록
                         </Typography>
                       </Card>
