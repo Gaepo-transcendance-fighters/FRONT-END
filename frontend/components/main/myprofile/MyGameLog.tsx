@@ -97,9 +97,10 @@ const MyGameLog = () => {
   //haryu's server
   // .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
   const callUser = useCallback(async () => {
+    console.log(`${server_domain}/records/userIdx=${authState.userInfo.id}`);
     await axios
       .get(
-        `${server_domain}/records/userIdx=${authState.userInfo.id}&page=${pageNum}`,
+        `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
         // .get(`${server_domain}/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
         {
           headers: {
