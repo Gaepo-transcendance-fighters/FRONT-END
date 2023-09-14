@@ -1,13 +1,10 @@
 "use client";
 
-import Layout from "@/components/public/Layout";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { ModalPortal } from "@/components/public/ModalPortal";
-import { useModalContext } from "@/context/ModalContext";
-import InviteGame from "@/components/main/InviteGame/InviteGame";
+import secureLocalStorage from "react-secure-storage";
 
 export const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -20,12 +17,12 @@ export default function HomePage() {
     setClient(true);
 
     const socket = io(`${server_domain}/chat`, {
-      query: { userId: localStorage.getItem("idx") },
+      query: { userId: secureLocalStorage.getItem("idx") },
       autoConnect: false,
     });
 
     const gameSocket = io(`${server_domain}/game/playroom`, {
-      query: { userId: localStorage.getItem("idx") },
+      query: { userId: secureLocalStorage.getItem("idx") },
       autoConnect: false,
     });
 

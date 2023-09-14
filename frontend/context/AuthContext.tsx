@@ -8,6 +8,7 @@ import {
 import { Socket, io } from "socket.io-client";
 import { server_domain } from "@/app/page";
 import { useUser } from "./UserContext";
+import secureLocalStorage from "react-secure-storage";
 
 interface IBlockPerson {
   targetNickname: string;
@@ -111,14 +112,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { userDispatch } = useUser();
 
   useEffect(() => {
-    if (localStorage.getItem("idx")) {
+    if (secureLocalStorage.getItem("idx")) {
       const chat = io(`${server_domain}/chat`, {
-        query: { userId: localStorage.getItem("idx") },
+        query: { userId: secureLocalStorage.getItem("idx") },
         autoConnect: false,
       }).connect();
 
       const gameSocket = io(`${server_domain}/game/playroom`, {
-        query: { userId: localStorage.getItem("idx") },
+        query: { userId: secureLocalStorage.getItem("idx") },
         autoConnect: false,
       });
 
@@ -131,12 +132,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         type: "SET_GAME_SOCKET",
         value: gameSocket,
       });
-      const nickname = localStorage.getItem("nickname");
-      const idx = localStorage.getItem("idx");
-      const email = localStorage.getItem("email");
-      const imgUri = localStorage.getItem("imgUri");
-      const token = localStorage.getItem("token");
-      const auth = localStorage.getItem("check2Auth");
+      const nickname = secureLocalStorage.getItem("nickname") as string;
+      const idx = secureLocalStorage.getItem("idx") as string;
+      const email = secureLocalStorage.getItem("email") as string;
+      const imgUri = secureLocalStorage.getItem("imgUri") as string;
+      const token = secureLocalStorage.getItem("token") as string;
+      const auth = secureLocalStorage.getItem("check2Auth") as string;
 
       if (!idx || !nickname || !email || !imgUri || !token) {
         userDispatch({ type: "SET_USER_IDX", value: parseInt(idx!) });

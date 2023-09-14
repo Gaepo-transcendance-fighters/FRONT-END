@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
+import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -70,13 +71,13 @@ const Auth = () => {
               userStatus: { nickname: data.nickname },
             });
 
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("nickname", data.nickname);
-          localStorage.setItem("imgUri", data.imgUri);
-          localStorage.setItem("idx", data.userIdx.toString());
-          localStorage.setItem("check2Auth", data.check2Auth.toString());
-          localStorage.setItem("email", data.email);
-          localStorage.setItem("available", data.available.toString());
+          secureLocalStorage.setItem("token", data.token);
+          secureLocalStorage.setItem("nickname", data.nickname);
+          secureLocalStorage.setItem("imgUri", data.imgUri);
+          secureLocalStorage.setItem("idx", data.userIdx.toString());
+          secureLocalStorage.setItem("check2Auth", data.check2Auth.toString());
+          secureLocalStorage.setItem("email", data.email);
+          secureLocalStorage.setItem("available", data.available.toString());
 
           userDispatch({ type: "SET_USER_IDX", value: data.userIdx });
           userDispatch({ type: "CHANGE_NICK_NAME", value: data.nickname });
