@@ -62,7 +62,7 @@ const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
 
-  const [gameRecordData, setGameRecordData] = useState<GameLog[]>([]);
+  const [gameRecordData, setGameRecordData] = useState<GameRecord[]>([]);
   // const [gameRecord, setGameRecordData] = useState<GameRecord[]>(MockGamelog);
 
   const [lastElement, setLastElement] = useState<HTMLDivElement | null>(null);
@@ -105,19 +105,24 @@ const MyGameLog = () => {
         }
       )
       .then((res) => {
-        const newData = Array.isArray(res.data) ? res.data : [res.data];
+        console.log("res.data : ",res.data);
+        const newData = res.data.gameRecord;
+        // console.log("newData : ",newData);
         setGameRecordData((prevRecord) => [...prevRecord, ...newData]);
+        console.log("gameRecordData : ",gameRecordData);
         setLoading(false);
       });
   }, [pageNum]);
-
   useEffect(() => {
-    if (pageNum <= TOTAL_PAGES) {
+    console.log("gameRecordData : ",gameRecordData);
+  }, [gameRecordData]);
+  useEffect(() => {
+    if (pageNum > 0) {
       setTimeout(() => {
         callUser();
       }, 500);
       setLoading(true);
-      console.log(allUsers);
+      console.log("allUsers : ",allUsers);
     }
   }, [pageNum]);
 
@@ -197,7 +202,7 @@ const MyGameLog = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecordData.gameList.GameRecord.type === 0 ? (
+                      {gameRecordData.type === 0 ? (
                         <>Normal</>
                       ) : (
                         <>Rank</>
@@ -219,7 +224,7 @@ const MyGameLog = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecordData.gameList.GameRecord.result === 0 ? (
+                      {gameRecordData.result === 0 ? (
                         <>Win</>
                       ) : (
                         <>Lose</>
@@ -245,8 +250,8 @@ const MyGameLog = () => {
                     {/* {allUsers.} */}
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
                     {userState.nickname}{" "}
-                    {gameRecordData.gameList.GameRecord.score}{" "}
-                    {gameRecordData.gameList.GameRecord.matchUserNickname}
+                    {gameRecordData.score}{" "}
+                    {gameRecordData.matchUserNickname}
                   </Typography>
                 </div>
               </div>
