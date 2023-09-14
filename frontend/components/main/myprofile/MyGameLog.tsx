@@ -73,6 +73,7 @@ const MyGameLog = () => {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0]?.isIntersecting) {
+        console.log(pageNum);
         setPageNum((num) => num + 1);
       }
     }, options);
@@ -95,12 +96,12 @@ const MyGameLog = () => {
   const callUser = useCallback(async () => {
     // console.log(`${server_domain}/records/userIdx=${authState.userInfo.id}`);
     await axios
-      .get(
-        `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
-        // .get(`${server_domain}/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+      // .get(
+        // `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
+        .get(`${server_domain}/game/records?userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
         {
           headers: {
-            Authorization: "Bearer " + authState.userInfo.authorization,
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         }
       )
@@ -117,7 +118,7 @@ const MyGameLog = () => {
     console.log("gameRecordData : ",gameRecordData);
   }, [gameRecordData]);
   useEffect(() => {
-    if (pageNum > 0) {
+    if (pageNum >= 0) {
       setTimeout(() => {
         callUser();
       }, 500);
