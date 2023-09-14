@@ -30,6 +30,7 @@ import RoomEnter from "@/external_functions/RoomEnter";
 import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import FriendGameLog from "./FriendGameLog";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -473,14 +474,14 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
             <Box
               sx={{
                 listStyleType: "none",
-                overflowY: "scroll",
+                // overflowY: "scroll",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 width: "100%",
               }}
             >
-              {/* <MyGameLog /> */}
+              <FriendGameLog person={prop}/>
             </Box>
           </Card>
         </Box>
