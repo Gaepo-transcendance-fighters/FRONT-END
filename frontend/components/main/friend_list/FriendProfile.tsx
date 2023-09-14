@@ -147,7 +147,13 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            RoomEnter(existingRoom, roomState, userState, roomDispatch, authState.chatSocket!);
+            RoomEnter(
+              existingRoom,
+              roomState,
+              userState,
+              roomDispatch,
+              authState.chatSocket!
+            );
             handleCloseModal();
           } else {
             console.log(ret.msg);
@@ -323,14 +329,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
               >
                 닉네임: {friendData?.targetNickname}
               </Typography>
-              <Typography>
-                상태:{" "}
-                {friendData?.isOnline === IOnlineStatus.ONLINE
-                  ? loginOn
-                  : friendData?.isOnline === IOnlineStatus.OFFLINE
-                  ? loginOff
-                  : ""}
-              </Typography>
+
               <Stack direction={"row"} spacing={2}>
                 {/* <FriendGameButton prop={prop as IFriend} /> */}
                 <Button

@@ -196,7 +196,13 @@ export default function MemberModal({
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            RoomEnter(existingRoom, roomState, userState, roomDispatch, authState.chatSocket!);
+            RoomEnter(
+              existingRoom,
+              roomState,
+              userState,
+              roomDispatch,
+              authState.chatSocket!
+            );
             handleCloseModal();
           } else {
             console.log(ret.msg);
@@ -274,14 +280,7 @@ export default function MemberModal({
             >
               닉네임: {curFriend?.friendNickname}
             </Typography>
-            <Typography>
-              상태:
-              {curFriend?.isOnline === IOnlineStatus.ONLINE
-                ? loginOn
-                : curFriend?.isOnline === IOnlineStatus.OFFLINE
-                ? loginOff
-                : ""}
-            </Typography>
+
             <Stack direction={"row"} spacing={2}>
               <MemberGameButton prop={person} />
               <Button

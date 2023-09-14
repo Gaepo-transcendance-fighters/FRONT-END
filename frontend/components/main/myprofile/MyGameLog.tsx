@@ -39,31 +39,31 @@ interface GameRecord {
   matchUserNickname: string;
   score: string;
   type: type;
-  result: result;
+  result: RecordResult;
 }
-// const MockGamelog: GameRecord[] = [
-//   {
-//     matchUserIdx: 1,
-//     matchUserNickname: "jeekim",
-//     score: "202",
-//     type: 1,
-//     result: 1,
-//   },
-//   {
-//     matchUserIdx: 2,
-//     matchUserNickname: "jujeon",
-//     score: "204",
-//     type: 0,
-//     result: 1,
-//   },
-// ];
+
+export enum RecordResult {
+  DEFAULT = 0,
+  PLAYING,
+  WIN,
+  LOSE,
+  DONE,
+  SHUTDOWN,
+}
+
+interface GameLog {
+  userInfo: { win: number; lose: number };
+  gameList: {
+    GameRecord: GameRecord;
+  }; // 나의 게임 레코드 전부 보내주시면 됩니다 - 전부인가요?
+}
 
 const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
 
-  const [gameRecord, setGameRecord] = useState<GameRecord[]>([]);
-  // const [gameRecord, setGameRecord] = useState<GameRecord[]>(MockGamelog);
+  const [gameRecordData, setGameRecordData] = useState<GameLog[]>([]);
+  // const [gameRecord, setGameRecordData] = useState<GameRecord[]>(MockGamelog);
 
   const [lastElement, setLastElement] = useState<HTMLDivElement | null>(null);
   const { userState } = useUser();
@@ -88,16 +88,12 @@ const MyGameLog = () => {
     };
   }, [observerTarget]);
 
-  //dev original
-  // .get(
-  //   `${server_domain}/game/records/userIdx=${localStorage.getItem(
-  //     "idx"
-  //   )}&page=${pageNum}`,
-  // )
   //haryu's server
   // .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+  const [allUsers, setAllUsers] = useState([]);
+
   const callUser = useCallback(async () => {
-    console.log(`${server_domain}/records/userIdx=${authState.userInfo.id}`);
+    // console.log(`${server_domain}/records/userIdx=${authState.userInfo.id}`);
     await axios
       .get(
         `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
@@ -106,12 +102,11 @@ const MyGameLog = () => {
           headers: {
             Authorization: "Bearer " + authState.userInfo.authorization,
           },
-          // headers: {Authorization: "Bearer " + localStorage.getItem("authorization"),},
         }
       )
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
-        setGameRecord((prevRecord) => [...prevRecord, ...newData]);
+        setGameRecordData((prevRecord) => [...prevRecord, ...newData]);
         setLoading(false);
       });
   }, [pageNum]);
@@ -122,6 +117,7 @@ const MyGameLog = () => {
         callUser();
       }, 500);
       setLoading(true);
+      console.log(allUsers);
     }
   }, [pageNum]);
 
@@ -140,7 +136,7 @@ const MyGameLog = () => {
           height: "70%",
         }}
       >
-        {gameRecord.map((gameRecord, i) => {
+        {gameRecordData.map((gameRecordData, i) => {
           return (
             <div
               key={i}
@@ -201,7 +197,12 @@ const MyGameLog = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecord.type === 0 ? <>Normal</> : <>Rank</>}
+                      {gameRecordData.gameList.GameRecord.type === 0 ? (
+                        <>Normal</>
+                      ) : (
+                        <>Rank</>
+                      )}
+                      {/* {gameRecord.type === 0 ? <>Normal</> : <>Rank</>} */}
                     </Typography>
                   </div>
                   <div
@@ -218,7 +219,12 @@ const MyGameLog = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecord.result === 0 ? <>Win</> : <>Lose</>}
+                      {gameRecordData.gameList.GameRecord.result === 0 ? (
+                        <>Win</>
+                      ) : (
+                        <>Lose</>
+                      )}
+                      {/* {gameRecord.result === 0 ? <>Win</> : <>Lose</>} */}
                     </Typography>
                   </div>
                 </div>
@@ -236,9 +242,11 @@ const MyGameLog = () => {
                   }}
                 >
                   <Typography sx={{ fontSize: "1.5rem" }}>
+                    {/* {allUsers.} */}
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
-                    {userState.nickname} {gameRecord.score}{" "}
-                    {gameRecord.matchUserNickname}
+                    {userState.nickname}{" "}
+                    {gameRecordData.gameList.GameRecord.score}{" "}
+                    {gameRecordData.gameList.GameRecord.matchUserNickname}
                   </Typography>
                 </div>
               </div>
