@@ -517,7 +517,6 @@ export default function PageRedir() {
                     <Box
                       sx={{
                         listStyleType: "none",
-                        overflowY: "scroll",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",

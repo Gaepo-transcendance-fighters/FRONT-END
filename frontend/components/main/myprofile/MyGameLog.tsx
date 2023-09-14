@@ -1,37 +1,20 @@
 "use client";
 
-import { Typography, Box, CardContent } from "@mui/material";
-
-import { Card } from "@mui/material";
-
+import { Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
-
 import { main } from "@/type/type";
-
 import { useUser } from "@/context/UserContext";
-import { useAuth } from "@/context/AuthContext";
-const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-const TOTAL_PAGES = 100;
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 const options = {
   threshold: 0.1,
 };
 
-interface ChatMessage {
-  channelIdx: number;
-  sender: string;
-  msg: string;
-}
-
 enum type {
   nomal,
   rank,
-}
-enum result {
-  win,
-  lose,
 }
 
 interface GameRecord {
@@ -51,23 +34,12 @@ export enum RecordResult {
   SHUTDOWN,
 }
 
-interface GameLog {
-  userInfo: { win: number; lose: number };
-  gameList: {
-    GameRecord: GameRecord;
-  }; // 나의 게임 레코드 전부 보내주시면 됩니다 - 전부인가요?
-}
-
 const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
+  const [end, setEnd] = useState(false);
   const [pageNum, setPageNum] = useState(0);
-
   const [gameRecordData, setGameRecordData] = useState<GameRecord[]>([]);
-  // const [gameRecord, setGameRecordData] = useState<GameRecord[]>(MockGamelog);
-
-  const [lastElement, setLastElement] = useState<HTMLDivElement | null>(null);
   const { userState } = useUser();
-  const { authState } = useAuth();
   const observerTarget = useRef(null);
 
   useEffect(() => {
@@ -87,14 +59,9 @@ const MyGameLog = () => {
         observer.unobserve(observerTarget.current);
       }
     };
-  }, [observerTarget]);
-
-  //haryu's server
-  // .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
-  const [allUsers, setAllUsers] = useState([]);
+  }, [observerTarget, loading]);
 
   const callUser = useCallback(async () => {
-    // console.log(`${server_domain}/records/userIdx=${authState.userInfo.id}`);
     await axios
       // .get(
         // `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
@@ -106,24 +73,22 @@ const MyGameLog = () => {
         }
       )
       .then((res) => {
-        console.log("res.data : ",res.data);
-        const newData = res.data.gameRecord;
-        // console.log("newData : ",newData);
-        setGameRecordData((prevRecord) => [...prevRecord, ...newData]);
-        console.log("gameRecordData : ",gameRecordData);
-        setLoading(false);
+        if (res.data.gameRecord.length > 0) {
+          const newData = res.data.gameRecord;
+          setGameRecordData((prevRecord) => [...prevRecord, ...newData]);
+          setLoading(false);
+        }
+        else {
+          setLoading(false);
+          setEnd(true);
+        }
       });
   }, [pageNum]);
+  
   useEffect(() => {
-    console.log("gameRecordData : ",gameRecordData);
-  }, [gameRecordData]);
-  useEffect(() => {
-    if (pageNum >= 0) {
-      setTimeout(() => {
+    if (end === false) {
         callUser();
-      }, 500);
       setLoading(true);
-      console.log("allUsers : ",allUsers);
     }
   }, [pageNum]);
 
@@ -135,7 +100,7 @@ const MyGameLog = () => {
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-          overflowY: "scroll",
+          // overflowY: "scroll",
           overflowAnchor: "none",
           position: "sticky",
           width: "100%",
@@ -154,7 +119,6 @@ const MyGameLog = () => {
                 color: "black",
                 width: "80%",
                 height: "70%",
-                // backgroundColor: "#48a0ed",
                 border: "1px solid black",
                 backgroundColor: main.main1,
                 borderRadius: "5px",
@@ -170,7 +134,6 @@ const MyGameLog = () => {
                   color: "black",
                   width: "90%",
                   height: "80%",
-                  // backgroundColor: "#48a0ed",
                   backgroundColor: main.main0,
                   borderRadius: "5px",
                 }}
@@ -185,8 +148,6 @@ const MyGameLog = () => {
                     flexDirection: "column",
                     width: "30%",
                     height: "80%",
-
-                    // backgroundColor: "#48a0ed",
                     backgroundColor: main.main0,
                   }}
                 >
@@ -198,7 +159,6 @@ const MyGameLog = () => {
                       flexDirection: "column",
                       width: "80%",
                       height: "40%",
-                      // backgroundColor: "#48a0ed",
                       backgroundColor: main.main0,
                     }}
                   >
@@ -208,7 +168,6 @@ const MyGameLog = () => {
                       ) : (
                         <>Rank</>
                       )}
-                      {/* {gameRecord.type === 0 ? <>Normal</> : <>Rank</>} */}
                     </Typography>
                   </div>
                   <div
@@ -219,8 +178,6 @@ const MyGameLog = () => {
                       flexDirection: "column",
                       width: "80%",
                       height: "40%",
-
-                      // backgroundColor: "#48a0ed",
                       backgroundColor: main.main0,
                     }}
                   >
@@ -230,7 +187,6 @@ const MyGameLog = () => {
                       ) : (
                         <>Lose</>
                       )}
-                      {/* {gameRecord.result === 0 ? <>Win</> : <>Lose</>} */}
                     </Typography>
                   </div>
                 </div>
@@ -242,13 +198,10 @@ const MyGameLog = () => {
                     justifyContent: "center",
                     width: "80%",
                     height: "80%",
-
-                    // backgroundColor: "#48a0ed",
                     backgroundColor: main.main0,
                   }}
                 >
                   <Typography sx={{ fontSize: "1.5rem" }}>
-                    {/* {allUsers.} */}
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
                     {userState.nickname}{" "}
                     {gameRecordData.score}{" "}
@@ -262,6 +215,9 @@ const MyGameLog = () => {
         <div ref={observerTarget}></div>
         {loading === true && (
           <Typography component={"div"}>loading...</Typography>
+        )} 
+        {loading === false && (
+          <Typography component={"div"}>end of list...</Typography>
         )}
       </div>
     </>
