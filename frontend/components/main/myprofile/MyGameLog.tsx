@@ -39,14 +39,31 @@ interface GameRecord {
   matchUserNickname: string;
   score: string;
   type: type;
-  result: result;
+  result: RecordResult;
+}
+
+export enum RecordResult {
+  DEFAULT = 0,
+  PLAYING,
+  WIN,
+  LOSE,
+  DONE,
+  SHUTDOWN,
+}
+
+interface GameLog {
+  userInfo: { win: number; lose: number };
+  gameList: {
+    GameRecord: GameRecord;
+  }; // 나의 게임 레코드 전부 보내주시면 됩니다 - 전부인가요?
 }
 
 const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
 
-  const [gameRecord, setGameRecord] = useState<GameRecord[]>([]);
+  const [gameRecordData, setGameRecordData] = useState<GameRecord[]>([]);
+  // const [gameRecord, setGameRecordData] = useState<GameRecord[]>(MockGamelog);
 
   const [lastElement, setLastElement] = useState<HTMLDivElement | null>(null);
   const { userState } = useUser();
@@ -71,39 +88,41 @@ const MyGameLog = () => {
     };
   }, [observerTarget]);
 
-  //dev original
-  // .get(
-  //   `${server_domain}/game/records/userIdx=${localStorage.getItem(
-  //     "idx"
-  //   )}&page=${pageNum}`,
-  // )
   //haryu's server
   // .get(`http://paulryu9309.ddns.net:4000/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+  const [allUsers, setAllUsers] = useState([]);
+
   const callUser = useCallback(async () => {
+    // console.log(`${server_domain}/records/userIdx=${authState.userInfo.id}`);
     await axios
       .get(
-        `${server_domain}/game/records/userIdx=${authState.userInfo.id}&page=${pageNum}`,
+        `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
         // .get(`${server_domain}/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
         {
           headers: {
             Authorization: "Bearer " + authState.userInfo.authorization,
           },
-          // headers: {Authorization: "Bearer " + localStorage.getItem("authorization"),},
         }
       )
       .then((res) => {
-        const newData = Array.isArray(res.data) ? res.data : [res.data];
-        setGameRecord((prevRecord) => [...prevRecord, ...newData]);
+        console.log("res.data : ",res.data);
+        const newData = res.data.gameRecord;
+        // console.log("newData : ",newData);
+        setGameRecordData((prevRecord) => [...prevRecord, ...newData]);
+        console.log("gameRecordData : ",gameRecordData);
         setLoading(false);
       });
   }, [pageNum]);
-
   useEffect(() => {
-    if (pageNum <= TOTAL_PAGES) {
+    console.log("gameRecordData : ",gameRecordData);
+  }, [gameRecordData]);
+  useEffect(() => {
+    if (pageNum > 0) {
       setTimeout(() => {
         callUser();
       }, 500);
       setLoading(true);
+      console.log("allUsers : ",allUsers);
     }
   }, [pageNum]);
 
@@ -119,10 +138,10 @@ const MyGameLog = () => {
           overflowAnchor: "none",
           position: "sticky",
           width: "100%",
-          height: "15vh",
+          height: "70%",
         }}
       >
-        {gameRecord.map((gameRecord, i) => {
+        {gameRecordData.map((gameRecordData, i) => {
           return (
             <div
               key={i}
@@ -130,9 +149,9 @@ const MyGameLog = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                margin: "0px 0 0 0",
+                margin: "10px 0 0 0",
                 color: "black",
-                width: "90%",
+                width: "80%",
                 height: "70%",
                 // backgroundColor: "#48a0ed",
                 border: "1px solid black",
@@ -182,9 +201,13 @@ const MyGameLog = () => {
                       backgroundColor: main.main0,
                     }}
                   >
-                    <Typography sx={{ fontSize: "0.8rem" }}>
-                      친선/랭크
-                      {gameRecord.type === 0 ? <>Rank</> : <>Normal</>}
+                    <Typography sx={{ fontSize: "1.1rem" }}>
+                      {gameRecordData.type === 0 ? (
+                        <>Normal</>
+                      ) : (
+                        <>Rank</>
+                      )}
+                      {/* {gameRecord.type === 0 ? <>Normal</> : <>Rank</>} */}
                     </Typography>
                   </div>
                   <div
@@ -200,8 +223,13 @@ const MyGameLog = () => {
                       backgroundColor: main.main0,
                     }}
                   >
-                    <Typography sx={{ fontSize: "0.8rem" }}>
-                      {gameRecord.result === 0 ? <>Rank</> : <>Normal</>}
+                    <Typography sx={{ fontSize: "1.1rem" }}>
+                      {gameRecordData.result === 0 ? (
+                        <>Win</>
+                      ) : (
+                        <>Lose</>
+                      )}
+                      {/* {gameRecord.result === 0 ? <>Win</> : <>Lose</>} */}
                     </Typography>
                   </div>
                 </div>
@@ -211,17 +239,19 @@ const MyGameLog = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    width: "70%",
+                    width: "80%",
                     height: "80%",
 
                     // backgroundColor: "#48a0ed",
                     backgroundColor: main.main0,
                   }}
                 >
-                  <Typography sx={{ fontSize: "1rem" }}>
-                    내닉네임 | 점수 : 점수 | 상대닉네임
-                    {userState.nickname} {gameRecord.score}{" "}
-                    {gameRecord.matchUserNickname}
+                  <Typography sx={{ fontSize: "1.5rem" }}>
+                    {/* {allUsers.} */}
+                    {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
+                    {userState.nickname}{" "}
+                    {gameRecordData.score}{" "}
+                    {gameRecordData.matchUserNickname}
                   </Typography>
                 </div>
               </div>
