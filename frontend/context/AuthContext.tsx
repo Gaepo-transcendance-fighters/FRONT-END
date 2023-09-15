@@ -1,5 +1,13 @@
-import { ReactNode, createContext, useContext, useReducer } from "react";
-import { Socket } from "socket.io-client";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
+import { Socket, io } from "socket.io-client";
+import { server_domain } from "@/app/page";
+import { useUser } from "./UserContext";
 
 interface IBlockPerson {
   targetNickname: string;
@@ -47,8 +55,6 @@ const initialState: AuthContextData = {
     check2Auth: false,
   },
   blockList: null,
-  chatSocket: undefined,
-  gameSocket: undefined,
 };
 
 const AuthReducer = (state: AuthContextData, action: AuthAction) => {
@@ -56,15 +62,27 @@ const AuthReducer = (state: AuthContextData, action: AuthAction) => {
     case "SET_ID":
       return { ...state, userInfo: { ...state.userInfo, id: action.value } };
     case "SET_IMGURL":
-      return { ...state, userInfo: { ...state.userInfo, imgUrl: action.value } };
+      return {
+        ...state,
+        userInfo: { ...state.userInfo, imgUrl: action.value },
+      };
     case "SET_NICKNAME":
-      return { ...state, userInfo: { ...state.userInfo,nickname : action.value } };
+      return {
+        ...state,
+        userInfo: { ...state.userInfo, nickname: action.value },
+      };
     case "SET_EMAIL":
-      return {... state ,userInfo:{... state .userInfo,email :action .value }};
+      return { ...state, userInfo: { ...state.userInfo, email: action.value } };
     case "SET_AUTHORIZATION":
-      return {... state ,userInfo:{... state .userInfo ,authorization :action .value }};
+      return {
+        ...state,
+        userInfo: { ...state.userInfo, authorization: action.value },
+      };
     case "SET_CHECK2AUTH":
-      return {... state ,userInfo:{... state .userInfo ,check2Auth :action .value }};
+      return {
+        ...state,
+        userInfo: { ...state.userInfo, check2Auth: action.value },
+      };
     case "SET_BLOCK":
       return { ...state, blockList: action.value };
     case "SET_CHAT_SOCKET":
@@ -90,6 +108,67 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authState, authDispatch] = useReducer(AuthReducer, initialState);
+  const { userDispatch } = useUser();
+
+  useEffect(() => {
+    if (localStorage.getItem("idx")) {
+      const chat = io(`${server_domain}/chat`, {
+        query: { userId: localStorage.getItem("idx") },
+        autoConnect: false,
+      }).connect();
+
+      const gameSocket = io(`${server_domain}/game/playroom`, {
+        query: { userId: localStorage.getItem("idx") },
+        autoConnect: false,
+      });
+
+      authDispatch({
+        type: "SET_CHAT_SOCKET",
+        value: chat,
+      });
+
+      authDispatch({
+        type: "SET_GAME_SOCKET",
+        value: gameSocket,
+      });
+      const nickname = localStorage.getItem("nickname");
+      const idx = localStorage.getItem("idx");
+      const email = localStorage.getItem("email");
+      const imgUri = localStorage.getItem("imgUri");
+      const token = localStorage.getItem("token");
+      const auth = localStorage.getItem("check2Auth");
+
+      if (!idx || !nickname || !email || !imgUri || !token) {
+        userDispatch({ type: "SET_USER_IDX", value: parseInt(idx!) });
+        userDispatch({ type: "CHANGE_NICK_NAME", value: nickname! });
+        userDispatch({ type: "CHANGE_IMG", value: imgUri! });
+        authDispatch({
+          type: "SET_ID",
+          value: parseInt(idx!),
+        });
+        authDispatch({
+          type: "SET_NICKNAME",
+          value: nickname!,
+        });
+        authDispatch({
+          type: "SET_IMGURL",
+          value: imgUri!,
+        });
+        authDispatch({
+          type: "SET_AUTHORIZATION",
+          value: token!,
+        });
+        authDispatch({
+          type: "SET_CHECK2AUTH",
+          value: Boolean(auth!),
+        });
+        authDispatch({
+          type: "SET_EMAIL",
+          value: email!,
+        });
+      }
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ authState, authDispatch }}>

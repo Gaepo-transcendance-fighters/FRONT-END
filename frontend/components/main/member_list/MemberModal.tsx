@@ -30,6 +30,7 @@ import {
 } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
 import { useAuth } from "@/context/AuthContext";
+import MemberGameLog from "./MemberGameLog";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -51,19 +52,10 @@ export default function MemberModal({
   person: IMember;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [curFriend, setCurFriend] = useState<IFriend | null>(null);
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const { friendState, friendDispatch } = useFriend();
   const { authState } = useAuth();
-
-  useEffect(() => {
-    setCurFriend({
-      friendNickname: person.nickname!,
-      friendIdx: person.userIdx!,
-      isOnline: IOnlineStatus.ONLINE,
-    });
-  }, []);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -254,7 +246,7 @@ export default function MemberModal({
             mx={5}
           >
             <Image
-              src={person.imgUri!}
+              src={person.imgUri! + "?" + Date.now().toString()}
               alt="user img"
               width={100}
               height={100}
@@ -272,15 +264,7 @@ export default function MemberModal({
                 textOverflow: "ellipsis",
               }}
             >
-              닉네임: {curFriend?.friendNickname}
-            </Typography>
-            <Typography>
-              상태:
-              {curFriend?.isOnline === IOnlineStatus.ONLINE
-                ? loginOn
-                : curFriend?.isOnline === IOnlineStatus.OFFLINE
-                ? loginOff
-                : ""}
+              닉네임: {person.nickname}
             </Typography>
             <Stack direction={"row"} spacing={2}>
               <MemberGameButton prop={person} />
@@ -383,20 +367,20 @@ export default function MemberModal({
         <Card
           sx={{
             backgroundColor: "#3478c5",
-            height: "170px",
+            height: "50%",
           }}
         >
           <CardContent sx={{ paddingBottom: 0 }}>
             <Typography>전적 기록</Typography>
           </CardContent>
-          <Stack direction={"row"}>
+          <Stack direction={"row"}  sx={{height:"400px"}}>
             <Card
               sx={{
                 margin: 1,
                 width: "100%",
-                height: "120px",
+                height: "72%",
                 backgroundColor: "#48a0ed",
-                overflow: "scroll",
+                overflowY: "scroll",
               }}
             >
               <Card
@@ -405,8 +389,9 @@ export default function MemberModal({
                   margin: 1,
                 }}
               >
-                <Stack direction={"row"}>
-                  <CardContent
+                <MemberGameLog person={person}/>
+                {/* <Stack direction={"row"}> */}
+                  {/* <CardContent
                     sx={{ "&:last-child": { paddingBottom: "16px" } }}
                   >
                     <Typography>WIN</Typography>
@@ -420,8 +405,8 @@ export default function MemberModal({
                     sx={{ "&:last-child": { paddingBottom: "16px" } }}
                   >
                     <Typography>5 : 3</Typography>
-                  </CardContent>
-                </Stack>
+                  </CardContent> */}
+                {/* </Stack> */}
               </Card>
             </Card>
           </Stack>

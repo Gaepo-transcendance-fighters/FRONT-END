@@ -9,7 +9,7 @@ import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
 
-const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+export const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 export default function HomePage() {
   const router = useRouter();
@@ -22,19 +22,19 @@ export default function HomePage() {
     console.log(`${server_domain}/chat`)
 
     const socket = io(`${server_domain}/chat`, {
-      query: { userId: authState.userInfo.id },
+      query: { userId: localStorage.getItem("idx") },
       autoConnect: false,
     });
 
     const gameSocket = io(`${server_domain}/game/playroom`, {
-      query: { userId: authState.userInfo.id },
+      query: { userId: localStorage.getItem("idx") },
       autoConnect: false,
     });
 
     authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
     authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
 
-    router.replace("/home")
+    router.replace("/home");
   }, []);
 
   return null;

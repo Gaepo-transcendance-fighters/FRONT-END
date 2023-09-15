@@ -1,131 +1,57 @@
 "use client";
-import { ThemeProvider } from "@emotion/react";
 
+import { ThemeProvider } from "@emotion/react";
 import {
   Avatar,
   Button,
   Card,
-  createTheme,
   Box,
   CardContent,
   Modal,
   Stack,
   Typography,
-  Input,
-  Switch,
 } from "@mui/material";
-
-const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
-
-const font = createTheme({
-  typography: {
-    fontFamily: "neodgm",
-  },
-});
-
-interface UserEditprofileDto {
-  userIdx: number;
-  userNickname: string;
-  imgUrl: string;
-}
-
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  height: 150,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-const myProfileStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "75vw",
-  height: "80%",
-  bgcolor: "#65d9f9",
-  border: "1px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-interface IUserData {
-  nickname: string;
-  imgUrl: string;
-  win: number;
-  lose: number;
-  rank: number;
-  email: string;
-}
-
-interface Modals {
-  nickNameModal: boolean;
-  authModal: boolean;
-}
-
-import { useRouter, useSearchParams } from "next/navigation";
-import { main } from "@/type/type";
+import { useRouter } from "next/navigation";
+import { IOnlineStatus, font, main } from "@/type/type";
 import React, { useEffect, useState, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
-import axios from "axios";
-
-import SecondAuth from "@/components/main/myprofile/SecondAuth";
 import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
+import SecondAuth from "@/components/main/myprofile/SecondAuth";
+import {
+  IUserData,
+  myProfileStyle,
+  nicknameModalStyle,
+} from "@/type/My";
+
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 export default function PageRedir() {
   const router = useRouter();
   const { userState, userDispatch } = useUser();
   const { authState } = useAuth();
+  const [isSet, setIsSet] = useState<boolean>(false);
   const [userData, setUserData] = useState<IUserData>({
+    available: false,
+    check2Auth: false,
+    createdAt: "",
     nickname: "",
-    imgUrl: "",
+    imgUri: "",
     win: 0,
     lose: 0,
-    rank: 0,
     email: "",
+    intra: "",
+    isOnline: IOnlineStatus.ONLINE,
+    rankpoint: 0,
+    updatedAt: "",
+    userIdx: 0,
   });
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
-
-  const [verified, setVerified] = useState(authState.userInfo.check2Auth);
-
+  const [verified, setVerified] = useState(false);
   const [inputName, setInputName] = useState<string>("");
-
-  const [reload, setReload] = useState<boolean>(false);
-
-  const fetch = async () => {
-    await axios
-      // .get("http://localhost:4000/users/profile", {
-      .get(`${server_domain}/users/profile`, {
-        headers: {
-          Authorization: "Bearer " + authState.userInfo.authorization,
-        },
-      })
-      .then((response) => {
-        console.log(response.data)
-        setUserData(response.data);
-      });
-  };
-
-  useEffect(() => {
-    if (!authState) return ;
-    fetch();
-  }, [reload])
-
-  useEffect(() => {
-    // const verified = authState.userInfo.check2Auth;
-    // if (!verified) return;
-    setVerified(authState.userInfo.check2Auth);
-    // fetch();
-  }, [authState.userInfo.check2Auth]);
 
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
@@ -137,7 +63,6 @@ export default function PageRedir() {
     const files = event.target.files;
     if (files) {
       uploadImage(files[0]);
-      setReload((curr) => !curr);
     }
   };
 
@@ -155,30 +80,26 @@ export default function PageRedir() {
     await axios({
       method: "post",
       url: `${server_domain}/users/profile`,
-      // url: `http://localhost:4000/users/profile`,
       headers: {
         "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + authState.userInfo.authorization,
       },
-      data: {
-        userIdx: Number(authState.userInfo.id) || "",
-        userNickname: "",
-        imgData: dataUrl,
-      },
-      // data: formData,
+      data: formData,
     })
       .then((res) => {
-        console.log("res : ", res);
+        setUserData(res.data.result);
+        userDispatch({ type: "CHANGE_IMG", value: res.data.result.imgUri });
       })
       .catch((error) => {
         console.error("업로드 실패", error);
       });
-    setReload((curr) => !curr);
   };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
     console.log("file", file.size);
     if (file.size > 2000000) {
       // 임의의 값. 아직 파일 사이즈 미정.
+      //TODO : 사이즈 정하기
       alert("더 작은 사이즈의 파일을 선택해주세요.");
       return new Promise(() => "");
     }
@@ -202,30 +123,27 @@ export default function PageRedir() {
     });
   };
 
-  //body가 아니라 data로 보내야한다고함..?data에 객체를 직접 전달해도 axios가 JSON형태로 변환함.
   const onChangeNickName = async () => {
     if (inputName === "") return alert("입력값이 없습니다");
     if (inputName === userData?.nickname) {
       return alert("현재 닉네임과 동일합니다!");
     }
 
+    const formData = new FormData();
+    formData.append("userIdx", authState.userInfo.id.toString() || "");
+    formData.append("userNickname", inputName);
+    formData.append("imgData", authState.userInfo.imgUrl);
+
     try {
       const response = await axios({
         method: "POST",
-        // url: `http://localhost:4000/users/profile`,
         url: `${server_domain}/users/profile`,
         headers: {
           "Content-Type": "Application/json",
           Authorization: "Bearer " + authState.userInfo.authorization,
-          // Authorization: "Bearer " + localStorage.getItem("authorization"),
         },
-        data: JSON.stringify({
-          userIdx: Number(authState.userInfo.id),
-          userNickname: inputName,
-          imgUrl: authState.userInfo.imgUrl,
-        }),
+        data: formData,
       });
-      console.log("response : ", response);
       if (response.status === 400) alert("이미 존재하는 닉네임입니다");
       else if (response.status === 200) {
         if (!authState.chatSocket) return;
@@ -241,7 +159,6 @@ export default function PageRedir() {
     } catch (error) {
       console.log("닉네임 변경중 문제가 발생");
     }
-    setReload((curr) => !curr);
   };
 
   const handleOpenModal = () => {
@@ -260,10 +177,10 @@ export default function PageRedir() {
   };
 
   const RankImgSelect = (data: IUserData) => {
-    if (data.rank < 800) return "./rank/exp_medal_bronze.png";
-    else if (data.rank >= 800 && data.rank < 1100)
+    if (data.rankpoint < 800) return "./rank/exp_medal_bronze.png";
+    else if (data.rankpoint >= 800 && data.rankpoint < 1100)
       return "./rank/exp_medal_silver.png";
-    else if (data.rank >= 1100) return "./rank/exp_medal_gold.png";
+    else if (data.rankpoint >= 1100) return "./rank/exp_medal_gold.png";
   };
 
   const RankSrc = RankImgSelect(userData);
@@ -289,8 +206,6 @@ export default function PageRedir() {
               홈으로 돌아가기
             </Button>
           </Stack>
-
-          {/* 중앙에 위치한 파트 */}
           <Stack
             sx={{
               width: "80%",
@@ -300,7 +215,6 @@ export default function PageRedir() {
               margin: 0,
             }}
           >
-            {/* <RedirMyProfile /> */}
             {/* 중앙에 위치한 스택에 올리는 메인 카드 */}
             <Card sx={myProfileStyle}>
               <Stack
@@ -327,7 +241,6 @@ export default function PageRedir() {
                     sx={{
                       backgroundColor: main.main7,
                       flexDirection: "row",
-                      // backgroundColor: "RED",
                       display: "flex",
                       padding: 3,
                     }}
@@ -347,11 +260,7 @@ export default function PageRedir() {
                       mx={5}
                     >
                       <Avatar
-                        src={`${userData?.imgUrl}?${Date.now()}`}
-                        // 이미지가 새로 고쳐지지 않는 문제는 브라우저가 이미지를 캐시하고 있기 때문에 이미지가 바뀌어도 계속 똑같은 이미지 띄움.
-                        // 이미지 URL에 쿼리 매개변수를 추가하여 이미지 URL을 변경
-                        // 이렇게 하면 브라우저는 이미지를 다시 다운로드하고 갱신된 이미지를 표시
-                        // src={userData?.imgUrl}
+                        src={userState.imgUri}
                         style={{
                           width: "100%",
                           height: "75%",
@@ -375,9 +284,8 @@ export default function PageRedir() {
                       >
                         {userData?.nickname}
                       </Typography>
-
                       <CardContent style={{ width: "100%" }}>
-                        {verified  ? (
+                        {verified ? (
                           <Typography style={{ fontSize: "1.5rem" }}>
                             2차인증 여부 : Y
                           </Typography>
@@ -399,7 +307,6 @@ export default function PageRedir() {
                         padding={"20px 0px 0px 2px"}
                       >
                         <form>
-                          {/* <label htmlFor="profile-upload" /> */}
                           <Button
                             onClick={OpenFileInput}
                             style={{
@@ -415,12 +322,10 @@ export default function PageRedir() {
                             name="Change_IMG"
                             style={{ display: "none" }}
                             accept="image/png, image/jpg, image/jpeg"
-                            // onChange={onChangeImg}
                             onChange={handleChange}
                           />
                         </form>
-
-                        {/* <Button
+                        <Button
                           type="submit"
                           style={{
                             minWidth: "max-content",
@@ -429,9 +334,9 @@ export default function PageRedir() {
                           onClick={handleOpenModal}
                         >
                           닉네임변경
-                        </Button> */}
+                        </Button>
                         <Modal open={openModal} onClose={handleCloseModal}>
-                          <Box sx={modalStyle} borderRadius={"10px"}>
+                          <Box sx={nicknameModalStyle} borderRadius={"10px"}>
                             <Card
                               sx={{
                                 backgroundColor: main.main4,
@@ -444,7 +349,6 @@ export default function PageRedir() {
                               >
                                 변경할 닉네임을 입력하세요
                               </CardContent>
-
                               <Stack direction={"row"}>
                                 <Card
                                   style={{
@@ -509,7 +413,6 @@ export default function PageRedir() {
                           margin: 1,
                           marginRight: 0,
                           width: "30%",
-                          // height: "90%",
                         }}
                       >
                         <CardContent
@@ -546,7 +449,7 @@ export default function PageRedir() {
                           }}
                         >
                           <Typography margin={1}>
-                            랭크(포인트) : {userData.rank}
+                            랭크(포인트) : {userData?.rankpoint}
                           </Typography>
                           <Typography margin={1}>
                             승률 :{" "}
@@ -579,8 +482,6 @@ export default function PageRedir() {
                   <br />
                   <Card
                     sx={{
-                      // backgroundColor: "RED",
-                      // backgroundColor: "#3478c5",
                       backgroundColor: main.main3,
                       height: "95%",
                       width: "95%",
@@ -616,21 +517,19 @@ export default function PageRedir() {
                     <Box
                       sx={{
                         listStyleType: "none",
-                        overflowY: "scroll",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         width: "100%",
                       }}
                     >
-                      {/* <MyGameLog /> */}
+                      <MyGameLog />
                     </Box>
                   </Card>
                 </Stack>
               </Stack>
             </Card>
           </Stack>
-
           <Stack
             sx={{
               width: "10%",
