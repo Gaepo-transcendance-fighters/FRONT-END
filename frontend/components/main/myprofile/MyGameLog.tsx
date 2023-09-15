@@ -5,7 +5,6 @@ import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { main } from "@/type/type";
 import { useUser } from "@/context/UserContext";
-import { useAuth } from "@/context/AuthContext";
 import { IGameRecord, gameLogOptions } from "@/type/GameType";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
@@ -40,7 +39,9 @@ const MyGameLog = () => {
   const callUser = useCallback(async () => {
     await axios
       .get(
-        `${server_domain}/game/records?userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+        `${server_domain}/game/records?userIdx=${localStorage.getItem(
+          "idx"
+        )}&page=${pageNum}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),

@@ -12,13 +12,12 @@ import {
   IChatMute,
   IChatRoomAdmin,
   IMember,
-  Permission,
   ReturnMsgDto,
   alert,
   ILeftMember,
   Mode,
 } from "@/type/RoomType";
-import { Menu, MenuItem, Paper, makeStyles } from "@mui/material";
+import { Menu, MenuItem } from "@mui/material";
 import { useUser } from "@/context/UserContext";
 import Alert from "@mui/material/Alert";
 import { useAuth } from "@/context/AuthContext";
@@ -46,7 +45,6 @@ export default function Member({
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
-  // const [isGranted, setIsGranted] = useState<boolean>(false);
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const { authState } = useAuth();
@@ -56,17 +54,6 @@ export default function Member({
       ? setOpenModal(false)
       : setOpenModal(true);
   };
-
-  // useEffect(() => {
-  //   const CheckGrant = (payload: Permission) => {
-  //     payload === Permission.MEMBER ? setIsGranted(false) : setIsGranted(true);
-  //   };
-  //   authState.chatSocket.on("chat_get_grant", CheckGrant);
-
-  //   return () => {
-  //     authState.chatSocket.off("chat_get_grant", CheckGrant);
-  //   };
-  // }, []);
 
   const CheckOwner = (nickname: string) => {
     nickname === roomState.currentRoom?.owner

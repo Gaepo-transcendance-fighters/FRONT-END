@@ -1,15 +1,7 @@
 "use client";
 
 import { main } from "@/font/color";
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  createTheme,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Button, Card, ThemeProvider, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { useUser } from "@/context/UserContext";

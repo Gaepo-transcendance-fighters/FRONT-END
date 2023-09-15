@@ -4,10 +4,9 @@ import { CardContent, Stack, Box } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../main/chat_window/ChatWindow";
-import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { useUser } from "@/context/UserContext";
@@ -16,9 +15,9 @@ import { IMaindata } from "@/type/type";
 import { ReturnMsgDto } from "@/type/RoomType";
 
 const Layout = () => {
-  const { roomState, roomDispatch } = useRoom();
-  const { friendState, friendDispatch } = useFriend();
-  const { userState, userDispatch } = useUser();
+  const { roomDispatch } = useRoom();
+  const { friendDispatch } = useFriend();
+  const { userDispatch } = useUser();
   const { authState } = useAuth();
 
   useEffect(() => {

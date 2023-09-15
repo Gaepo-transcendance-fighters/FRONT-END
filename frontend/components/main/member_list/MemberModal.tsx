@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { IChatDmEnter, IChatRoom, ReturnMsgDto } from "@/type/RoomType";
+import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
 import RoomEnter from "@/external_functions/RoomEnter";
@@ -24,8 +24,6 @@ import {
   FriendReqData,
   IBlock,
   IChatBlock,
-  IFriend,
-  IOnlineStatus,
   friendProfileModalStyle,
 } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
@@ -34,14 +32,6 @@ import MemberGameLog from "./MemberGameLog";
 import { IGameRecord, IGameUserInfo } from "@/type/GameType";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
-
-const loginOn = (
-  <Image src="/status/logon.png" alt="online" width={10} height={10} />
-);
-
-const loginOff = (
-  <Image src="/status/logoff.png" alt="offline" width={10} height={10} />
-);
 
 export default function MemberModal({
   setOpenModal,
