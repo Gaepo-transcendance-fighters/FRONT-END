@@ -256,7 +256,6 @@ export default function PageRedir() {
                             onClick={OpenFileInput}
                             style={{
                               minWidth: "max-content",
-                              border: "1px black solid",
                             }}
                             variant="contained"
                           >
@@ -280,71 +279,51 @@ export default function PageRedir() {
                     sx={{ backgroundColor: main.main7 }}
                     style={{ width: "100%", border: "1px solid black" }}
                   >
-                    <CardContent sx={{ paddingBottom: 0, pl: 2.7 }}>
+                    <CardContent sx={{ paddingBottom: 0 }}>
                       <Typography style={{ fontSize: "1.4rem" }}>
                         전적
                       </Typography>
                     </CardContent>
-                    <br />
-                    <Stack
-                      direction={"row"}
-                      sx={{
-                        justifyContent: "space-evenly",
-                        flexDirection: "row",
-                      }}
-                    >
+                    <Stack direction={"row"}>
                       {/* 이미지 */}
                       <Card
                         sx={{
-                          p: 1,
                           margin: 1,
                           marginRight: 0,
                           width: "30%",
-                          // backgroundColor: main.main3,
-                          alignItems: "center",
-                          justifyContent: "space-evenly",
                         }}
                       >
-                        <Box
+                        <CardContent
                           sx={{
-                            borderRadius: "4%",
-                            display: "flex",
-                            width: "142px",
-                            height: "142px",
-                            alignItems: "center",
-                            overflow: "hidden",
-                            border: "1px solid",
-                            // backgroundColor: "brown",
+                            backgroundColor: main.main3,
+                            height: "100%",
+                            "&:last-child": { paddingBottom: "16px" },
                           }}
                         >
                           <img
                             src={RankSrc}
                             style={{
-                              width: "30%",
-                              height: "30%",
+                              width: "50px",
+                              height: "50px",
                               display: "block",
                               margin: "0 auto",
                             }}
-                          />
-                        </Box>
+                          ></img>
+                        </CardContent>
                       </Card>
                       {/* !이미지 */}
                       <Card
                         sx={{
                           margin: 1,
-                          marginLeft: 0,
                           width: "70%",
-                          // height: "60%",
-                          // backgroundColor: "magenta",
+                          height: "60%",
                         }}
                       >
                         <CardContent
                           sx={{
-                            // backgroundColor: main.main3,
-                            backgroundColor: "magenta",
+                            backgroundColor: main.main3,
                             height: "100%",
                             "&:last-child": { paddingBottom: "16px" },
-                            border: "1px black solid",
                           }}
                         >
                           <Typography margin={1}>

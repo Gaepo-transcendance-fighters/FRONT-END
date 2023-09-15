@@ -82,7 +82,6 @@ export default function SecondAuth() {
       <Button
         style={{
           minWidth: "max-content",
-          border : "1px black solid"
         }}
         variant="contained"
         onClick={handleOpenModal}
