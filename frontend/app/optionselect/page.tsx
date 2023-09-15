@@ -111,62 +111,72 @@ const OptionSelect = () => {
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
     gameDispatch({ type: "SCORE_RESET" });
 
-    console.log(gameState.gameMode)
+    console.log(gameState.gameMode);
 
     if (gameState.gameMode === GameType.FRIEND) {
-      console.log("me", localStorage.getItem("idx"), localStorage.getItem("nickname"))
-      console.log("you", gameState.bPlayer.id, gameState.bPlayer.nick)
+      console.log(
+        "me",
+        localStorage.getItem("idx"),
+        localStorage.getItem("nickname")
+      );
+      console.log("you", gameState.bPlayer.id, gameState.bPlayer.nick);
       await axios({
         method: "post",
         url: `${server_domain}/game/friend-match`,
         data: {
-          userIdx: parseInt(localStorage.getItem('idx')!),
+          userIdx: parseInt(localStorage.getItem("idx")!),
           targetIdx: gameState.bPlayer.id,
           gameType: gameState.gameMode,
           speed: selectedSpeedOption,
           mapNumber: selectedMapOption,
         },
-      }).then((res) => {
-        console.log(res)
-        if (res.status === 200) {
-          console.log('gameSocket', authState.gameSocket!)
-          authState.gameSocket!.connect();
-          router.replace("/inwaiting");
-        } else {
-          console.log("게임방 생성 실패");
-          router.replace("/home?from=game");
-        }
-      }).catch((err) => {
-        console.log(err)
-        router.replace("/home?from=game");
       })
-    } 
-    // else {
-    //   await axios({
-    //     method: "post",
-    //     url: `${server_domain}/game/normal-match`,
-    //     data: {
-    //       gameType: gameState.gameMode,
-    //       userIdx: parseInt(localStorage.getItem('idx')!),
-    //       speed: selectedSpeedOption,
-    //       mapNumber: selectedMapOption,
-    //     },
-    //   }).then((res) => {
-    //     console.log(res)
-    //     if (res.status === 200) {
-    //       console.log('gameSocket', authState.gameSocket!)
-    //       authState.gameSocket!.connect();
-    //       router.replace("/inwaiting");
-    //     } else {
-    //       console.log("게임방 생성 실패");
-    //       router.replace("/home?from=game");
-    //     }
-    //   }).catch((err) => {
-    //     console.log(err)
-    //     router.replace("/home?from=game");
-    //   })
-    // }
-
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            console.log("gameSocket", authState.gameSocket!);
+            authState.gameSocket!.connect();
+            router.replace("/inwaiting");
+          } else {
+            console.log("게임방 생성 실패");
+            router.replace("/home?from=game");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          router.replace("/home?from=game");
+        });
+      return;
+    } else if (
+      gameState.gameMode === GameType.RANK ||
+      gameState.gameMode === GameType.NORMAL
+    ) {
+      await axios({
+        method: "post",
+        url: `${server_domain}/game/normal-match`,
+        data: {
+          gameType: gameState.gameMode,
+          userIdx: parseInt(localStorage.getItem("idx")!),
+          speed: selectedSpeedOption,
+          mapNumber: selectedMapOption,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            console.log("gameSocket", authState.gameSocket!);
+            authState.gameSocket!.connect();
+            router.replace("/inwaiting");
+          } else {
+            console.log("게임방 생성 실패");
+            router.replace("/home?from=game");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          router.replace("/home?from=game");
+        });
+    }
   };
 
   useEffect(() => {
