@@ -228,7 +228,6 @@ export default function MemberModal({
 
   useEffect(() => {
     if (gameUserInfo) {
-      console.log("gameUserInfo : ", gameUserInfo);
       gameUserInfo.win + gameUserInfo.lose === 0
         ? setWinningRate(0)
         : setWinningRate(

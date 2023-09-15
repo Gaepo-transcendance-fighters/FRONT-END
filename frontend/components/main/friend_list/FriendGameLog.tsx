@@ -38,9 +38,6 @@ const FriendGameLog = ({ person }: { person: IFriend }) => {
 
   const callUser = useCallback(async () => {
     await axios
-      // .get(
-      // `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
-      // .get(`${server_domain}/game/records?userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
       .get(
         `${server_domain}/game/records?userIdx=${person.friendIdx}&page=${pageNum}`,
         {
@@ -171,7 +168,7 @@ const FriendGameLog = ({ person }: { person: IFriend }) => {
                 >
                   <Typography sx={{ fontSize: "1.5rem" }}>
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
-                    {userState.nickname} {gameRecordData.score}{" "}
+                    {userState.nickname}{" "} {gameRecordData.score}{" "}
                     {gameRecordData.matchUserNickname}
                   </Typography>
                 </div>
