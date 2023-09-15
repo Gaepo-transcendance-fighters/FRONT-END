@@ -266,7 +266,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   useEffect(() => {
     if (!authState.chatSocket) return;
     const userProfile = (data: IFriendData) => {
-      console.log("userProfile : ", userProfile);
       setFriendData(data);
     };
     authState.chatSocket.on("user_profile", userProfile);
