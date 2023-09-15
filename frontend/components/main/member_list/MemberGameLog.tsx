@@ -5,6 +5,7 @@ import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { main } from "@/type/type";
 import { useUser } from "@/context/UserContext";
+import { IMember } from "@/type/RoomType";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -34,7 +35,7 @@ export enum RecordResult {
   SHUTDOWN,
 }
 
-const MyGameLog = () => {
+const MemberGameLog = ({person}: {person:IMember}) => {
   const [loading, setLoading] = useState(true);
   const [end, setEnd] = useState(false);
   const [pageNum, setPageNum] = useState(0);
@@ -65,7 +66,8 @@ const MyGameLog = () => {
     await axios
       // .get(
         // `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
-        .get(`${server_domain}/game/records?userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+        // .get(`${server_domain}/game/records?userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+        .get(`${server_domain}/game/records?userIdx=${person.userIdx}&page=${pageNum}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -224,4 +226,4 @@ const MyGameLog = () => {
   );
 };
 
-export default MyGameLog;
+export default MemberGameLog;

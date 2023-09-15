@@ -30,6 +30,7 @@ import {
 } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
 import { useAuth } from "@/context/AuthContext";
+import MemberGameLog from "./MemberGameLog";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -366,20 +367,20 @@ export default function MemberModal({
         <Card
           sx={{
             backgroundColor: "#3478c5",
-            height: "170px",
+            height: "50%",
           }}
         >
           <CardContent sx={{ paddingBottom: 0 }}>
             <Typography>전적 기록</Typography>
           </CardContent>
-          <Stack direction={"row"}>
+          <Stack direction={"row"}  sx={{height:"400px"}}>
             <Card
               sx={{
                 margin: 1,
                 width: "100%",
-                height: "120px",
+                height: "72%",
                 backgroundColor: "#48a0ed",
-                overflow: "scroll",
+                overflowY: "scroll",
               }}
             >
               <Card
@@ -388,8 +389,9 @@ export default function MemberModal({
                   margin: 1,
                 }}
               >
-                <Stack direction={"row"}>
-                  <CardContent
+                <MemberGameLog person={person}/>
+                {/* <Stack direction={"row"}> */}
+                  {/* <CardContent
                     sx={{ "&:last-child": { paddingBottom: "16px" } }}
                   >
                     <Typography>WIN</Typography>
@@ -403,8 +405,8 @@ export default function MemberModal({
                     sx={{ "&:last-child": { paddingBottom: "16px" } }}
                   >
                     <Typography>5 : 3</Typography>
-                  </CardContent>
-                </Stack>
+                  </CardContent> */}
+                {/* </Stack> */}
               </Card>
             </Card>
           </Stack>
