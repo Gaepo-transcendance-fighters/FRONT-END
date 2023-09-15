@@ -60,7 +60,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       "chat_invite_answer",
       {
         inviteUserIdx: idx,
-        targetUserIdx: authState.userInfo.id,
+        targetUserIdx: parseInt(localStorage.getItem("idx")!),
         answer: 1,
       },
       (res: any) => {

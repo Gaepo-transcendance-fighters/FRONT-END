@@ -31,6 +31,7 @@ import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import FriendGameLog from "./FriendGameLog";
+import FriendGameButton from "../InviteGame/FriendGameButton"
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -329,7 +330,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 닉네임: {friendData?.targetNickname}
               </Typography> 
               <Stack direction={"row"} spacing={2}>
-                {/* <FriendGameButton prop={prop as IFriend} /> */}
+                <FriendGameButton prop={prop as IFriend} />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}

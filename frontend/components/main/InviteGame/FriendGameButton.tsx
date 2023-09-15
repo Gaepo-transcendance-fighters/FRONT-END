@@ -17,7 +17,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
   const handleOpenModal = () => {
     if (!authState.chatSocket) return;
     authState.chatSocket.emit("chat_invite_ask", {
-      myUserIdx: authState.userInfo.id,
+      myUserIdx: parseInt(localStorage.getItem("idx")!),
       targetUserIdx: prop.friendIdx,
     });
     openModal({
