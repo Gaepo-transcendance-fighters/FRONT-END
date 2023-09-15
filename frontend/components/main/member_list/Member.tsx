@@ -291,28 +291,26 @@ export default function Member({
           )}
         </div>
       </div>
-      <Paper sx={{ width: "500px" }}>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleCloseMenu}
-          style={{ minWidth: 300 }}
-        >
-          {isOwner ? (
-            <MenuItem onClick={SetAdmin}>
-              {isAuthorized ? "Unset Admin" : "Set Admin"}
-            </MenuItem>
-          ) : null}
-          <MenuItem onClick={Mute}>Mute</MenuItem>
-          <MenuItem onClick={Kick}>Kick</MenuItem>
-          <MenuItem onClick={Ban}>Ban</MenuItem>
-        </Menu>
-        {showAlert ? (
-          <Alert sx={alert} severity="info" style={{ width: "333px" }}>
-            {person.nickname} is {string}
-          </Alert>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        style={{ minWidth: 300 }}
+      >
+        {isOwner ? (
+          <MenuItem onClick={SetAdmin}>
+            {isAuthorized ? "Unset Admin" : "Set Admin"}
+          </MenuItem>
         ) : null}
-      </Paper>
+        <MenuItem onClick={Mute}>Mute</MenuItem>
+        <MenuItem onClick={Kick}>Kick</MenuItem>
+        <MenuItem onClick={Ban}>Ban</MenuItem>
+      </Menu>
+      {showAlert ? (
+        <Alert sx={alert} severity="info" style={{ width: "333px" }}>
+          {person.nickname} is {string}
+        </Alert>
+      ) : null}
       <MemberModal
         openModal={openModal}
         setOpenModal={setOpenModal}

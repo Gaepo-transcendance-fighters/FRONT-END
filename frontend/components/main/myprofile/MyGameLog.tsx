@@ -10,8 +10,6 @@ import { IGameRecord, gameLogOptions } from "@/type/GameType";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-const TOTAL_PAGES = 100;
-
 const MyGameLog = () => {
   const [loading, setLoading] = useState(true);
   const [end, setEnd] = useState(false);

@@ -54,12 +54,14 @@ const Myprofile = () => {
             backgroundColor: "black",
           }}
         >
-          <Image
-            src={userState.imgUri}
-            width={150}
-            height={150}
-            alt="main my profile img"
-          />
+          {userState.imgUri ? (
+            <Image
+              src={userState.imgUri}
+              width={150}
+              height={150}
+              alt="main my profile img"
+            />
+          ) : null}
         </div>
         <div style={{ padding: 10 }}>
           <Card

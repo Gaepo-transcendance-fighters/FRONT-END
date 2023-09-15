@@ -31,6 +31,7 @@ import {
 import { useRoom } from "@/context/RoomContext";
 import { useAuth } from "@/context/AuthContext";
 import MemberGameLog from "./MemberGameLog";
+import { IGameRecord, IGameUserInfo } from "@/type/GameType";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -56,6 +57,9 @@ export default function MemberModal({
   const { userState } = useUser();
   const { friendState, friendDispatch } = useFriend();
   const { authState } = useAuth();
+  const [gameRecordData, setGameRecordData] = useState<IGameRecord[]>([]);
+  const [gameUserInfo, setGameUserInfo] = useState<IGameUserInfo | null>(null);
+  const [winningRate, setWinningRate] = useState<number>(0);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -188,7 +192,13 @@ export default function MemberModal({
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            RoomEnter(existingRoom, roomState, userState, roomDispatch, authState.chatSocket!);
+            RoomEnter(
+              existingRoom,
+              roomState,
+              userState,
+              roomDispatch,
+              authState.chatSocket!
+            );
             handleCloseModal();
           } else {
             console.log(ret.msg);
@@ -226,6 +236,19 @@ export default function MemberModal({
     );
   };
 
+  useEffect(() => {
+    if (gameUserInfo) {
+      console.log("gameUserInfo : ", gameUserInfo);
+      gameUserInfo.win + gameUserInfo.lose === 0
+        ? setWinningRate(0)
+        : setWinningRate(
+            Math.floor(
+              (gameUserInfo.win / (gameUserInfo.win + gameUserInfo.lose)) * 100
+            )
+          );
+    }
+  }, [gameRecordData, gameUserInfo]);
+
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
       <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
@@ -246,7 +269,9 @@ export default function MemberModal({
             mx={5}
           >
             <Image
-              src={person.imgUri! + "?" + Date.now().toString()}
+              src={`${server_domain}/img/${
+                person.userIdx
+              }.png?${Date.now().toString()}`}
               alt="user img"
               width={100}
               height={100}
@@ -340,7 +365,7 @@ export default function MemberModal({
                 <Typography margin={1} minWidth={"max-content"}>
                   랭크(포인트)
                 </Typography>
-                <Typography margin={1}>승률</Typography>
+                <Typography margin={1}></Typography>
               </CardContent>
             </Card>
             <Card
@@ -357,8 +382,8 @@ export default function MemberModal({
                   "&:last-child": { paddingBottom: "16px" },
                 }}
               >
-                <Typography margin={1}>3000</Typography>
-                <Typography margin={1}>0%</Typography>
+                <Typography margin={1}></Typography>
+                <Typography margin={1}>승률 : {winningRate}%</Typography>
               </CardContent>
             </Card>
           </Stack>
@@ -373,7 +398,7 @@ export default function MemberModal({
           <CardContent sx={{ paddingBottom: 0 }}>
             <Typography>전적 기록</Typography>
           </CardContent>
-          <Stack direction={"row"}  sx={{height:"400px"}}>
+          <Stack direction={"row"} sx={{ height: "400px" }}>
             <Card
               sx={{
                 margin: 1,
@@ -389,9 +414,15 @@ export default function MemberModal({
                   margin: 1,
                 }}
               >
-                <MemberGameLog person={person}/>
+                <MemberGameLog
+                  person={person}
+                  setGameRecordData={setGameRecordData}
+                  gameRecordData={gameRecordData}
+                  gameUserInfo={gameUserInfo}
+                  setGameUserInfo={setGameUserInfo}
+                />
                 {/* <Stack direction={"row"}> */}
-                  {/* <CardContent
+                {/* <CardContent
                     sx={{ "&:last-child": { paddingBottom: "16px" } }}
                   >
                     <Typography>WIN</Typography>

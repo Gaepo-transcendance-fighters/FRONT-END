@@ -25,3 +25,8 @@ export enum RecordResult {
   DONE,
   SHUTDOWN,
 }
+
+export interface IGameUserInfo {
+  lose: 0;
+  win: 0;
+}
