@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useFriend } from "@/context/FriendContext";
 import { useAuth } from "@/context/AuthContext";
-import { IOnlineStatus } from "@/type/type";
+import { user_status } from "@/type/type";
 
 const selectedButton = {
   backgroundColor: main.main1,
@@ -38,12 +38,6 @@ const unselectedButton = {
   px: 2,
   flex: 1,
 };
-
-interface user_status {
-  nickname: string;
-  userIdx: number;
-  isOnline: IOnlineStatus;
-}
 
 const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
