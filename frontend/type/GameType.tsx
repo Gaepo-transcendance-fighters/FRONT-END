@@ -27,6 +27,7 @@ export enum RecordResult {
 }
 
 export interface IGameUserInfo {
-  lose: 0;
-  win: 0;
+  lose: number;
+  win: number;
+  rankpoint: number;
 }

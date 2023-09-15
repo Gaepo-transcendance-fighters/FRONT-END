@@ -362,9 +362,6 @@ export default function MemberModal({
                   "&:last-child": { paddingBottom: "16px" },
                 }}
               >
-                <Typography margin={1} minWidth={"max-content"}>
-                  랭크(포인트)
-                </Typography>
                 <Typography margin={1}></Typography>
               </CardContent>
             </Card>
@@ -382,7 +379,9 @@ export default function MemberModal({
                   "&:last-child": { paddingBottom: "16px" },
                 }}
               >
-                <Typography margin={1}></Typography>
+                <Typography margin={1}>
+                  랭크(포인트) : {gameUserInfo ? gameUserInfo.rankpoint : 0}
+                </Typography>
                 <Typography margin={1}>승률 : {winningRate}%</Typography>
               </CardContent>
             </Card>
