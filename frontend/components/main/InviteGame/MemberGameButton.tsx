@@ -46,7 +46,10 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       console.log("receive invite", answer);
       if (answer === 0) closeModal();
       else if (answer === 1) {
-        gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
+        gameDispatch({type: "SET_GAME_MODE", value: GameType.FRIEND})
+        const target = {nick: inviteUserNickname, id: inviteUserIdx}
+        console.log("target", target)
+        gameDispatch({type: "B_PLAYER", value: target})
         closeModal();
         router.push("./optionselect");
       }
@@ -54,11 +57,9 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_answer", recieveInvite);
 
-    authState.chatSocket.on("chat_invite_ask", () => {});
-
     return () => {
       if (!authState.chatSocket) return;
-      authState.chatSocket.off("chat_invite_ask");
+      authState.chatSocket.off("chat_receive_answer");
       authState.chatSocket.off("chat_invite_answer");
     };
   }, []);

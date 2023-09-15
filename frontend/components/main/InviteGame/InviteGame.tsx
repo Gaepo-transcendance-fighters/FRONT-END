@@ -6,6 +6,8 @@ import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useModalContext } from "@/context/ModalContext";
 import { useAuth } from "@/context/AuthContext";
+import { useGame } from "@/context/GameContext"
+import { GameType } from "@/type/type"
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -22,35 +24,43 @@ const modalStyle = {
 
 const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   const { closeModal } = useModalContext();
+  const { gameDispatch } = useGame();
   const { authState } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!authState.chatSocket) return;
-    const recieveInvite = ({
-      inviteUserIdx, // 초대 한 사람
-      inviteUserNickname,
-      targetUserIdx, // 초대 받은 사람
-      targetUserNickname,
-      answer,
-    }: {
-      inviteUserIdx: number; // 초대 한 사람
-      inviteUserNickname: string;
-      targetUserIdx: number; // 초대 받은 사람
-      targetUserNickname: string;
-      answer: number;
-    }) => {
-      console.log("recieve invite", answer);
-      if (answer === 0) closeModal();
-      else if (answer === 1) router.push("./optionselect");
-    };
-    authState.chatSocket.on("chat_receive_answer", recieveInvite);
-    authState.chatSocket.on("chat_invite_answer", recieveInvite);
+    // const recieveInvite = ({
+    //   inviteUserIdx, // 초대 한 사람
+    //   inviteUserNickname,
+    //   targetUserIdx, // 초대 받은 사람
+    //   targetUserNickname,
+    //   answer,
+    // }: {
+    //   inviteUserIdx: number; // 초대 한 사람
+    //   inviteUserNickname: string;
+    //   targetUserIdx: number; // 초대 받은 사람
+    //   targetUserNickname: string;
+    //   answer: number;
+    // }) => {
+    //   console.log("recieve invite", answer);
+    //   if (answer === 0) closeModal();
+    //   else if (answer === 1) {
+    //     gameDispatch({type: "SET_GAME_MODE", value: GameType.FRIEND})
+    //     const target = {nick: targetUserNickname, id: targetUserIdx}
+    //     console.log("target", target)
+    //     gameDispatch({type: "B_PLAYER", value: target})
+    //     closeModal();
+    //     router.push("./optionselect");
+    //   }
+    // };
+    // authState.chatSocket.on("chat_receive_answer", recieveInvite);
+    authState.chatSocket.on("chat_invite_answer", () => {});
 
     return () => {
       if (!authState.chatSocket) return;
       authState.chatSocket.off("chat_invite_answer");
-      authState.chatSocket.off("chat_receive_answer");
+      // authState.chatSocket.off("chat_receive_answer");
     };
   }, []);
 
@@ -75,7 +85,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       "chat_invite_answer",
       {
         inviteUserIdx: idx,
-        targetUserIdx: authState.userInfo.id,
+        targetUserIdx: parseInt(localStorage.getItem("idx")!),
         answer: 0,
       },
       (res: any) => {
