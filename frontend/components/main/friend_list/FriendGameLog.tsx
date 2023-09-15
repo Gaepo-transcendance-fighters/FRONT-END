@@ -205,7 +205,7 @@ const FriendGameLog = ({person}: {person:IFriend}) => {
                 >
                   <Typography sx={{ fontSize: "1.5rem" }}>
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
-                    {userState.nickname}{" "}
+                    {person.friendNickname}{" "}
                     {gameRecordData.score}{" "}
                     {gameRecordData.matchUserNickname}
                   </Typography>
