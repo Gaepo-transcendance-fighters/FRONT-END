@@ -51,19 +51,10 @@ export default function MemberModal({
   person: IMember;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [curFriend, setCurFriend] = useState<IFriend | null>(null);
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
   const { friendState, friendDispatch } = useFriend();
   const { authState } = useAuth();
-
-  useEffect(() => {
-    setCurFriend({
-      friendNickname: person.nickname!,
-      friendIdx: person.userIdx!,
-      isOnline: IOnlineStatus.ONLINE,
-    });
-  }, []);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -272,15 +263,7 @@ export default function MemberModal({
                 textOverflow: "ellipsis",
               }}
             >
-              닉네임: {curFriend?.friendNickname}
-            </Typography>
-            <Typography>
-              상태:
-              {curFriend?.isOnline === IOnlineStatus.ONLINE
-                ? loginOn
-                : curFriend?.isOnline === IOnlineStatus.OFFLINE
-                ? loginOff
-                : ""}
+              닉네임: {person.nickname}
             </Typography>
             <Stack direction={"row"} spacing={2}>
               <MemberGameButton prop={person} />
