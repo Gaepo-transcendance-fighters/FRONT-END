@@ -437,7 +437,6 @@ export default function MemberModal({
                   person={person}
                   setGameRecordData={setGameRecordData}
                   gameRecordData={gameRecordData}
-                  gameUserInfo={gameUserInfo}
                   setGameUserInfo={setGameUserInfo}
                 />
                 {/* <Stack direction={"row"}> */}

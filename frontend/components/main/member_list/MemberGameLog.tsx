@@ -21,13 +21,11 @@ const MemberGameLog = ({
   person,
   gameRecordData,
   setGameRecordData,
-  gameUserInfo,
   setGameUserInfo,
 }: {
   person: IMember;
   gameRecordData: IGameRecord[];
   setGameRecordData: Dispatch<SetStateAction<IGameRecord[]>>;
-  gameUserInfo: IGameUserInfo | null;
   setGameUserInfo: Dispatch<SetStateAction<IGameUserInfo | null>>;
 }) => {
   const [loading, setLoading] = useState(true);
