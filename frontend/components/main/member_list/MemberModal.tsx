@@ -249,6 +249,18 @@ export default function MemberModal({
     }
   }, [gameRecordData, gameUserInfo]);
 
+  const RankImgSelect = (data: IGameUserInfo | null) => {
+    if (!data) return "./rank/exp_medal_bronze.png";
+    if (data) {
+      if (data.rankpoint < 800) return "./rank/exp_medal_bronze.png";
+      else if (data.rankpoint >= 800 && data.rankpoint < 1100)
+        return "./rank/exp_medal_silver.png";
+      else if (data.rankpoint >= 1100) return "./rank/exp_medal_gold.png";
+    }
+  };
+
+  const RankSrc = RankImgSelect(gameUserInfo);
+
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
       <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
@@ -362,7 +374,15 @@ export default function MemberModal({
                   "&:last-child": { paddingBottom: "16px" },
                 }}
               >
-                <Typography margin={1}></Typography>
+                <img
+                  src={RankSrc}
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    display: "block",
+                    margin: "0 auto",
+                  }}
+                ></img>
               </CardContent>
             </Card>
             <Card
