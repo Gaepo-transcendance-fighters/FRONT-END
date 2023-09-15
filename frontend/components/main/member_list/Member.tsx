@@ -268,7 +268,7 @@ export default function Member({
             src={`${server_domain}/img/${
               person.userIdx
             }.png?${Date.now().toString()}`}
-            alt="profile"
+            alt="mem profile"
             width={53}
             height={53}
           />

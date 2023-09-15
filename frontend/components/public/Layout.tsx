@@ -36,8 +36,6 @@ const Layout = () => {
         type: "CHANGE_IMG",
         value: data.userObject.imgUri,
       });
-      // if (!data.userObject.imgUri)
-      //   userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
       userDispatch({
         type: "CHANGE_NICK_NAME",
         value: data.userObject.nickname,
@@ -81,7 +79,6 @@ const Layout = () => {
           }}
         >
           <Myprofile />
-          {/* <Myprofile Img={소켓으로받아온 imguri링크} Nickname={소켓으로받아온 닉네임}/> */}
           {/* <InviteGame /> */}
           {/* <WaitAccept /> */}
         </CardContent>
