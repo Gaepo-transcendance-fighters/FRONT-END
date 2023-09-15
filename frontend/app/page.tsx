@@ -21,7 +21,7 @@ export default function HomePage() {
   useEffect(() => {
     setClient(true);
 
-    console.log(`${server_domain}/chat`)
+    console.log(`${server_domain}/chat`);
 
     const socket = io(`${server_domain}/chat`, {
       query: { userId: localStorage.getItem("idx") },
@@ -73,7 +73,7 @@ export default function HomePage() {
       });
       router.replace("/home");
     }
-    router.replace("/login")
+    router.replace("/login");
   }, []);
 
   return null;
