@@ -105,9 +105,20 @@ const PingPong = () => {
 
     setClient(true);
 
-    authState.gameSocket.emit("game_start", { userIdx: authState.userInfo.id });
     authState.gameSocket.on("game_start", (res) => {
       console.log("game_start", res);
+    });
+
+    authState.gameSocket.on("game_ping", ({serverTime}: {serverTime: number}) => {
+      const now = new Date().getTime();
+      authState.gameSocket!.emit(
+        "game_ping_receive",
+        {
+          userIdx: authState.userInfo.id,
+          serverTime: serverTime,
+          clientTime: now
+        }
+      );
     });
 
     authState.gameSocket.emit("game_frame");
