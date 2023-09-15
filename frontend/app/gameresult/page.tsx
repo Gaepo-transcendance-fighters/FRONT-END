@@ -96,7 +96,7 @@ const GameResult = () => {
                 //   onClick={}
                 >
                   <Typography sx={{ fontSize: "2rem" }}>
-                    MY NICK NAME
+                    {gameState.aPlayer.nick}
                   </Typography>
                 </Card>
                 <Card>
@@ -162,7 +162,7 @@ const GameResult = () => {
                 //   닉네임 클릭시, 프로필 모달 띄우는 파트
                 //   onClick={}
                 >
-                  <Typography sx={{ fontSize: "2rem" }}>O_NICK NAME</Typography>
+                  <Typography sx={{ fontSize: "2rem" }}>{gameState.bPlayer.nick}</Typography>
                 </Card>
                 <Card>
                   <Typography sx={{ fontSize: "2rem" }}>

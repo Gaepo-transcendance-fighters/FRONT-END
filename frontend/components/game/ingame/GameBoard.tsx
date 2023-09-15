@@ -19,6 +19,7 @@ const GameBoard = () => {
         backgroundSize: "100px 100px",
         position: "relative",
         minWidth: "1000px",
+        maxWidth: "1000px",
         minHeight: "500px",
         border: "1px solid black",
         display: "flex",

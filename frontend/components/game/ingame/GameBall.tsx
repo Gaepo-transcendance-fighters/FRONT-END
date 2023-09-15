@@ -9,6 +9,7 @@ const GameBall = ({ x, y }: { x: number; y: number }) => {
       height={80}
       style={{
         position: "absolute",
+        border: 'solid',
         transform: `translate(${x}px, ${y}px)`,
         // transition: "transform 50ms linear",
         zIndex: 3,

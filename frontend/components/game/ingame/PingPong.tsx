@@ -114,7 +114,7 @@ const PingPong = () => {
       authState.gameSocket!.emit(
         "game_ping_receive",
         {
-          userIdx: authState.userInfo.id,
+          userIdx: parseInt(localStorage.getItem('idx')!),
           serverTime: serverTime,
           clientTime: now
         }
@@ -125,7 +125,7 @@ const PingPong = () => {
     authState.gameSocket.on("game_frame", (res: IGameProps) => {
       setGameProps(res);
       authState.gameSocket!.emit("game_move_paddle", {
-        userIdx: authState.userInfo.id,
+        userIdx: parseInt(localStorage.getItem('idx')!),
         paddle: keyboard,
         serverTime: gameProps.serverTime,
         clientTime: Date.now(),
@@ -143,10 +143,15 @@ const PingPong = () => {
     );
     
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
-      console.log("game_pause_score");
+      console.log("game_pause_score", data);
+      if (data.gameStatus === EGameStatus.END) {
+        gameDispatch({ type: "SCORE_RESET" });
+        router.push("/gameresult");
+        return ;
+      }
       authState.gameSocket!.emit(
         "game_pause_score",
-        { userIdx: authState.userInfo.id },
+        { userIdx: parseInt(localStorage.getItem('idx')!) },
         (res: ReturnMsgDto) => {
           console.log(res);
           if (res.code === 200) {
@@ -173,6 +178,8 @@ const PingPong = () => {
       authState.gameSocket.off("game_frame");
       authState.gameSocket.off("game_move_paddle");
       authState.gameSocket.off("game_pause_score");
+      authState.gameSocket.off("game_ping");
+      authState.gameSocket.off("game_ping_receive");
 
       window.removeEventListener("keydown", downPaddle);
       window.removeEventListener("keyup", upPaddle);

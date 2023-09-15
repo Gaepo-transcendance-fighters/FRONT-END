@@ -115,7 +115,7 @@ const OptionSelect = () => {
       url: `${server_domain}/game`,
       data: {
         gameType: gameState.gameMode,
-        userIdx: authState.userInfo.id,
+        userIdx: parseInt(localStorage.getItem('idx')!),
         speed: selectedSpeedOption,
         mapNumber: selectedMapOption,
       },
@@ -129,7 +129,10 @@ const OptionSelect = () => {
         console.log("게임방 생성 실패");
         router.replace("/home/?from=game");
       }
-    });
+    }).catch((err) => {
+      console.log(err)
+      router.replace("/home/?from=game");
+    })
   };
 
   useEffect(() => {

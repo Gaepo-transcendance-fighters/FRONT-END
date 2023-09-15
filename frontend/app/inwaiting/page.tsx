@@ -83,7 +83,7 @@ const Inwaiting = () => {
     //게임 소켓 - 게임 큐 취소
     authState.gameSocket.emit(
       "game_queue_quit",
-      { userIdx: authState.userInfo.id },
+      { userIdx: parseInt(localStorage.getItem('idx')!) },
       (res: ReturnMsgDto) => {
         if (res.code === 200) {
           console.log("game_queue_quit");
@@ -118,7 +118,7 @@ const Inwaiting = () => {
       authState.gameSocket!.emit(
         "game_ping_receive",
         {
-          userIdx: authState.userInfo.id,
+          userIdx: parseInt(localStorage.getItem('idx')!),
           serverTime: serverTime,
           clientTime: now
         }
@@ -126,7 +126,7 @@ const Inwaiting = () => {
     });
 
     authState.gameSocket.on("game_queue_success", (data: IGameQueueSuccess) => {
-      authState.gameSocket!.emit("game_queue_success", { userIdx: authState.userInfo.id }, () =>{
+      authState.gameSocket!.emit("game_queue_success", { userIdx: parseInt(localStorage.getItem('idx')!) }, () =>{
           console.log("game_queue_success");
           gameDispatch({
             type: "A_PLAYER",
