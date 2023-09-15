@@ -2,19 +2,6 @@
 
 import { IOnlineStatus } from "./type";
 
-export const nicknameModalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  height: 150,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
 export const myProfileStyle = {
   position: "absolute",
   top: "50%",
@@ -43,3 +30,16 @@ export interface IUserData {
   updatedAt: string;
   userIdx: number;
 }
+
+export const secondAuthModalStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 350,
+  height: 150,
+  bgcolor: "#65d9f9",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
