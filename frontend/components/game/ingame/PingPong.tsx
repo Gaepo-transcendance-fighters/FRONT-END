@@ -121,7 +121,7 @@ const PingPong = () => {
       );
     });
 
-    authState.gameSocket.emit("game_frame");
+    // authState.gameSocket.emit("game_frame");
     authState.gameSocket.on("game_frame", (res: IGameProps) => {
       setGameProps(res);
       authState.gameSocket!.emit("game_move_paddle", {
@@ -144,8 +144,10 @@ const PingPong = () => {
     
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
       console.log("game_pause_score", data);
-      if (data.gameStatus === EGameStatus.END) {
-        gameDispatch({ type: "SCORE_RESET" });
+      if (
+          data.gameStatus === EGameStatus.END ||
+          data.gameStatus === EGameStatus.JUDGE
+        ) {
         router.push("/gameresult");
         return ;
       }

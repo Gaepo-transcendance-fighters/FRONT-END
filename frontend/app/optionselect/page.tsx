@@ -109,6 +109,7 @@ const OptionSelect = () => {
     if (!authState.gameSocket) return;
     gameDispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
+    gameDispatch({ type: "SCORE_RESET" });
 
     await axios({
       method: "post",

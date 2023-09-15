@@ -15,7 +15,7 @@ const GameResult = () => {
 
   const BackToMain = () => {
     gameDispatch({ type: "SCORE_RESET" });
-    router.push("/home");
+    router.replace("/?from=game");
   };
 
   useEffect(() => {
@@ -91,10 +91,7 @@ const GameResult = () => {
                   flexDirection: "column",
                 }}
               >
-                <Card
-                //   닉네임 클릭시, 프로필 모달 띄우는 파트
-                //   onClick={}
-                >
+                <Card>
                   <Typography sx={{ fontSize: "2rem" }}>
                     {gameState.aPlayer.nick}
                   </Typography>
