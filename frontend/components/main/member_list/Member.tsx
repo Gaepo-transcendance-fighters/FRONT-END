@@ -291,6 +291,7 @@ export default function Member({
           )}
         </div>
       </div>
+      {/* menu css 관련 컴포넌트였는데, 지금 급한거 아니기에 지움 */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
