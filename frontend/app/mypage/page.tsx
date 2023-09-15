@@ -152,8 +152,7 @@ export default function PageRedir() {
             sx={{
               width: "80%",
               height: "100vh",
-              backgroundColor: "orange",
-              // backgroundColor: main.main3,
+              backgroundColor: main.main3,
               padding: 0,
               margin: 0,
             }}
