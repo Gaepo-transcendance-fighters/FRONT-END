@@ -1,47 +1,14 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  createTheme,
-  Box,
-  CardContent,
-  Modal,
-} from "@mui/material";
+import { Button, Card, Box, CardContent, Modal } from "@mui/material";
 import { useRouter } from "next/navigation";
-
-const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
-
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 350,
-  height: 150,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-const myProfileStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "75vw",
-  height: "80%",
-  bgcolor: "#65d9f9",
-  border: "1px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
 import { main } from "@/type/type";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import { secondAuthModalStyle } from "@/type/My";
+
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 export default function SecondAuth() {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -78,7 +45,6 @@ export default function SecondAuth() {
     // }
     const response = await axios({
       method: "patch",
-      // url: "http://localhost:4000/users/profile/second",
       url: `${server_domain}/users/profile/second`,
       headers: {
         "Content-Type": "Application/json",
@@ -97,7 +63,6 @@ export default function SecondAuth() {
         });
         setOpenModal(false);
 
-
         // localStorage.setItem("check2Auth", newVerifiedValue ? "true" : "false");
         // if (!newVerifiedValue) return router.push("/home");
         // location.reload();
@@ -113,17 +78,18 @@ export default function SecondAuth() {
   };
 
   return (
-    <Button
-      type="button"
-      style={{
-        minWidth: "max-content",
-      }}
-      variant="contained"
-      onClick={handleOpenModal}
-    >
-      2차인증
+    <>
+      <Button
+        style={{
+          minWidth: "max-content",
+        }}
+        variant="contained"
+        onClick={handleOpenModal}
+      >
+        2차인증
+      </Button>
       <Modal open={openModal} onClose={handleCloseModal}>
-        <Box sx={modalStyle} borderRadius={"10px"}>
+        <Box sx={secondAuthModalStyle} borderRadius={"10px"}>
           <Card
             style={{
               width: "100%",
@@ -216,6 +182,6 @@ export default function SecondAuth() {
           </Card>
         </Box>
       </Modal>
-    </Button>
+    </>
   );
 }
