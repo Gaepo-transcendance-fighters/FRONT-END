@@ -3,21 +3,43 @@
 import { Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { main } from "@/type/type";
+import { IFriend, main } from "@/type/type";
 import { useUser } from "@/context/UserContext";
-import { useAuth } from "@/context/AuthContext";
-import { IGameRecord, gameLogOptions } from "@/type/GameType";
+import { IMember } from "@/type/RoomType";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-const TOTAL_PAGES = 100;
+const options = {
+  threshold: 0.1,
+};
 
+enum type {
+  nomal,
+  rank,
+}
 
-const MyGameLog = () => {
+interface GameRecord {
+  matchUserIdx: number;
+  matchUserNickname: string;
+  score: string;
+  type: type;
+  result: RecordResult;
+}
+
+export enum RecordResult {
+  DEFAULT = 0,
+  PLAYING,
+  WIN,
+  LOSE,
+  DONE,
+  SHUTDOWN,
+}
+
+const FriendGameLog = ({person}: {person:IFriend}) => {
   const [loading, setLoading] = useState(true);
   const [end, setEnd] = useState(false);
   const [pageNum, setPageNum] = useState(0);
-  const [gameRecordData, setGameRecordData] = useState<IGameRecord[]>([]);
+  const [gameRecordData, setGameRecordData] = useState<GameRecord[]>([]);
   const { userState } = useUser();
   const observerTarget = useRef(null);
 
@@ -27,7 +49,7 @@ const MyGameLog = () => {
         console.log(pageNum);
         setPageNum((num) => num + 1);
       }
-    }, gameLogOptions);
+    }, options);
 
     if (observerTarget.current) {
       observer.observe(observerTarget.current);
@@ -42,8 +64,10 @@ const MyGameLog = () => {
 
   const callUser = useCallback(async () => {
     await axios
-      .get(
-        `${server_domain}/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+      // .get(
+        // `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
+        // .get(`${server_domain}/game/records?userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+        .get(`${server_domain}/game/records?userIdx=${person.friendIdx}&page=${pageNum}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -202,4 +226,4 @@ const MyGameLog = () => {
   );
 };
 
-export default MyGameLog;
+export default FriendGameLog;

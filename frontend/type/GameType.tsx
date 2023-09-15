@@ -5,13 +5,8 @@ export const gameLogOptions = {
 };
 
 enum type {
-  nomal,
+  normal,
   rank,
-}
-
-enum result {
-  win,
-  lose,
 }
 
 export interface IGameRecord {
@@ -19,5 +14,14 @@ export interface IGameRecord {
   matchUserNickname: string;
   score: string;
   type: type;
-  result: result;
+  result: RecordResult;
+}
+
+export enum RecordResult {
+  DEFAULT = 0,
+  PLAYING,
+  WIN,
+  LOSE,
+  DONE,
+  SHUTDOWN,
 }
