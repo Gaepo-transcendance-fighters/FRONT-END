@@ -31,6 +31,7 @@ import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import FriendGameLog from "./FriendGameLog";
+import FriendGameButton from "../InviteGame/FriendGameButton";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -188,7 +189,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     await axios({
       method: "delete",
       url: `${server_domain}/users/unfollow`,
-      // url: "http://localhost:4000/users/unfollow",
       data: friendReqData,
     })
       .then((res) => {
@@ -276,12 +276,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     };
   }, [friendData]);
 
-  // useEffect(() => {
-  //   const find = friendState.blockList.find((block) =>
-  //     block.targetIdx === idx
-  //   );
-  // }, [openModal]);
-
   return (
     <>
       <Button type="button" onClick={handleOpenNdataModal}>
@@ -327,9 +321,9 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 }}
               >
                 닉네임: {friendData?.targetNickname}
-              </Typography> 
+              </Typography>
               <Stack direction={"row"} spacing={2}>
-                {/* <FriendGameButton prop={prop as IFriend} /> */}
+                <FriendGameButton prop={prop as IFriend} />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
@@ -472,7 +466,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 width: "100%",
               }}
             >
-              <FriendGameLog person={prop}/>
+              <FriendGameLog person={prop} />
             </Box>
           </Card>
         </Box>
