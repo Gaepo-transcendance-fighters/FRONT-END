@@ -8,6 +8,7 @@ import { io } from "socket.io-client";
 import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 const Page = () => {
   const param = useSearchParams();
@@ -15,6 +16,7 @@ const Page = () => {
   const [client, setClient] = useState(false);
   const { authState, authDispatch } = useAuth();
   const { openModal } = useModalContext();
+  const [count, setCount] = useState(3);
 
   useEffect(() => {
     if (param.get("from") === "game") {
@@ -52,6 +54,40 @@ const Page = () => {
       authState.chatSocket.off("chat_invite_answer");
     };
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!authState.chatSocket) return;
+      authState.chatSocket.emit("health_check", {}, (res: ReturnMsgDto) => {
+  
+        if (res.code === 200) {
+          // console.log(res.msg);
+          setCount(3);
+        }
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("health_check");
+    };
+  }, [count, setCount]);
+
+  useEffect(() => {
+    const interval_check = setInterval(() => {
+      setCount((prev) => prev - 1);
+      // console.log("count : ", count);
+    }, 1000)
+    if (count < 0) {
+      // console.log("count : 0 end ");
+      router.replace("/login");
+    }
+
+    return () => {
+      clearInterval(interval_check);
+    }
+  }, [count, setCount]);
 
   if (!client) return <></>;
 
