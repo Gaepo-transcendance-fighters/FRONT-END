@@ -3,7 +3,9 @@
 import GameBoard from "./GameBoard";
 import GamePaddle from "./GamePaddle";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import GameBall from "./GameBall";
+import { Stack } from "@mui/material";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -34,13 +36,17 @@ interface IGameEnd {
   gameStatus: EGameStatus; // 게임 속행, 게임 종료, 연결문제 판정승, 0, 1, 2
 }
 
+const water = <Image src="/water.png" width="50" height="50" alt="water" />;
+
+const images = [water, water, water];
+
 const PingPong = () => {
   const [client, setClient] = useState(false);
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
   const [keyboard, setKeyboard] = useState(0);
-  const [waterbomb, setWaterbomb] = useState(false)
+  const [waterbomb, setWaterbomb] = useState<JSX.Element[]>([]);
   const [gameProps, setGameProps] = useState<IGameProps>({
     ballX: 0,
     ballY: 0,
@@ -103,7 +109,8 @@ const PingPong = () => {
   };
 
   useEffect(() => {
-    if (!authState.gameSocket) return console.log("no connection to gamesocket")
+    if (!authState.gameSocket)
+      return console.log("no connection to gamesocket");
 
     setClient(true);
 
@@ -111,23 +118,23 @@ const PingPong = () => {
       console.log("game_start", res);
     });
 
-    authState.gameSocket.on("game_ping", ({serverTime}: {serverTime: number}) => {
-      const now = new Date().getTime();
-      authState.gameSocket!.emit(
-        "game_ping_receive",
-        {
-          userIdx: parseInt(localStorage.getItem('idx')!),
+    authState.gameSocket.on(
+      "game_ping",
+      ({ serverTime }: { serverTime: number }) => {
+        const now = new Date().getTime();
+        authState.gameSocket!.emit("game_ping_receive", {
+          userIdx: parseInt(localStorage.getItem("idx")!),
           serverTime: serverTime,
-          clientTime: now
-        }
-      );
-    });
+          clientTime: now,
+        });
+      }
+    );
 
     // authState.gameSocket.emit("game_frame");
     authState.gameSocket.on("game_frame", (res: IGameProps) => {
       setGameProps(res);
       authState.gameSocket!.emit("game_move_paddle", {
-        userIdx: parseInt(localStorage.getItem('idx')!),
+        userIdx: parseInt(localStorage.getItem("idx")!),
         paddle: keyboard,
         serverTime: gameProps.serverTime,
         clientTime: Date.now(),
@@ -143,24 +150,24 @@ const PingPong = () => {
         }
       }
     );
-    
+
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
       console.log("game_pause_score", data);
-      setWaterbomb(true)
+      setWaterbomb(images);
       if (
-          data.gameStatus === EGameStatus.END ||
-          data.gameStatus === EGameStatus.JUDGE
-        ) {
+        data.gameStatus === EGameStatus.END ||
+        data.gameStatus === EGameStatus.JUDGE
+      ) {
         router.push("/gameresult");
-        return ;
+        return;
       }
       authState.gameSocket!.emit(
         "game_pause_score",
-        { userIdx: parseInt(localStorage.getItem('idx')!) },
+        { userIdx: parseInt(localStorage.getItem("idx")!) },
         (res: ReturnMsgDto) => {
           console.log(res);
           if (res.code === 200) {
-            setWaterbomb(false)
+            setWaterbomb([]);
             gameDispatch({ type: "A_SCORE", value: data.userScore1 });
             gameDispatch({ type: "B_SCORE", value: data.userScore2 });
             if (
@@ -179,7 +186,8 @@ const PingPong = () => {
     window.addEventListener("keyup", upPaddle);
 
     return () => {
-      if (!authState.gameSocket) return console.log("no connection to gamesocket")
+      if (!authState.gameSocket)
+        return console.log("no connection to gamesocket");
       authState.gameSocket.off("game_start");
       authState.gameSocket.off("game_frame");
       authState.gameSocket.off("game_move_paddle");
@@ -212,7 +220,16 @@ const PingPong = () => {
       >
         <GameBoard />
       </div>
-        {waterbomb && <WaterBomb x={-480} y={0} />}
+
+      <Stack
+        style={{
+          zIndex: 4,
+          transform: `translate(${gameProps.ballX}px, ${gameProps.ballY}px)`,
+          position: "absolute",
+        }}
+      >
+        <WaterBomb images={waterbomb} />
+      </Stack>
       <GamePaddle x={-470} y={gameProps.paddle1} />
       <GamePaddle x={470} y={gameProps.paddle2} />
       <GameBall x={gameProps.ballX} y={gameProps.ballY} />
