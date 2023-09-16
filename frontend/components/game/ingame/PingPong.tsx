@@ -36,9 +36,44 @@ interface IGameEnd {
   gameStatus: EGameStatus; // 게임 속행, 게임 종료, 연결문제 판정승, 0, 1, 2
 }
 
-const water = <Image src="/water.png" width="50" height="50" alt="water" />;
 
-const images = [water, water, water];
+const transparency = (
+  <Image
+    style={{
+      opacity: 0,
+    }}
+    src="/water.png"
+    width="50"
+    height="50"
+    alt="water"
+  />
+);
+
+const water_end_up = (
+  <Image src="/water_up.png" width="50" height="50" alt="water end" />
+);
+
+const water_end_down = (
+  <Image
+    style={{
+      transform: "rotate(180deg)",
+    }}
+    src="/water_up.png"
+    width="50"
+    height="50"
+    alt="water end"
+  />
+);
+
+
+const water = <Image 
+style={{
+  margin: 0,
+  padding: 0,
+}}
+ src="/water.png" width="50" height="50" alt="water" />;
+
+const images = [water_end_up, water, water_end_down];
 
 const PingPong = () => {
   const [client, setClient] = useState(false);
@@ -63,23 +98,6 @@ const PingPong = () => {
     } else if (e.code === "ArrowDown") {
       setKeyboard(0);
     }
-    // if (e.code === "ArrowUp") {
-    //   authState.gameSocket.emit("game_move_paddle", {
-    //     userIdx: authState.id,
-    //     paddle: 0,
-    //     serverTime: gameProps.serverTime,
-    //     clientTime: Date.now(),
-    //     cntPerFrame: gameProps.cntPerFrame,
-    //   });
-    // } else if (e.code === "ArrowDown") {
-    //   authState.gameSocket.emit("game_move_paddle", {
-    //     userIdx: authState.id,
-    //     paddle: 0,
-    //     serverTime: gameProps.serverTime,
-    //     clientTime: Date.now(),
-    //     cntPerFrame: gameProps.cntPerFrame,
-    //   });
-    // }
   };
 
   const downPaddle = (e: KeyboardEvent) => {
@@ -89,23 +107,6 @@ const PingPong = () => {
     } else if (e.code === "ArrowDown") {
       setKeyboard(-1);
     }
-    // if (e.code === "ArrowUp") {
-    //   authState.gameSocket.emit("game_move_paddle", {
-    //     userIdx: authState.id,
-    //     paddle: 1,
-    //     serverTime: gameProps.serverTime,
-    //     clientTime: Date.now(),
-    //     cntPerFrame: gameProps.cntPerFrame,
-    //   });
-    // } else if (e.code === "ArrowDown") {
-    //   authState.gameSocket.emit("game_move_paddle", {
-    //     userIdx: authState.id,
-    //     paddle: -1,
-    //     serverTime: gameProps.serverTime,
-    //     clientTime: Date.now(),
-    //     cntPerFrame: gameProps.cntPerFrame,
-    //   });
-    // }
   };
 
   useEffect(() => {
@@ -115,6 +116,7 @@ const PingPong = () => {
     setClient(true);
 
     authState.gameSocket.on("game_start", (res) => {
+      setWaterbomb([]);
       console.log("game_start", res);
     });
 
@@ -153,6 +155,7 @@ const PingPong = () => {
 
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
       console.log("game_pause_score", data);
+      console.log("Add images")
       setWaterbomb(images);
       if (
         data.gameStatus === EGameStatus.END ||
@@ -167,7 +170,6 @@ const PingPong = () => {
         (res: ReturnMsgDto) => {
           console.log(res);
           if (res.code === 200) {
-            setWaterbomb([]);
             gameDispatch({ type: "A_SCORE", value: data.userScore1 });
             gameDispatch({ type: "B_SCORE", value: data.userScore2 });
             if (
