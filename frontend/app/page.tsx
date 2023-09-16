@@ -43,7 +43,7 @@ export default function HomePage() {
     const token = localStorage.getItem("token");
     const auth = localStorage.getItem("check2Auth");
 
-    if (!idx || !nickname || !email || !imgUri || !token) {
+    if (idx && nickname && email && imgUri && token) {
       userDispatch({ type: "SET_USER_IDX", value: parseInt(idx!) });
       userDispatch({ type: "CHANGE_NICK_NAME", value: nickname! });
       userDispatch({ type: "CHANGE_IMG", value: imgUri! });
@@ -71,9 +71,11 @@ export default function HomePage() {
         type: "SET_EMAIL",
         value: email!,
       });
-      router.replace("/home");
+      console.log("go to home")
+      return router.replace("/home");
     }
-    router.replace("/login");
+    console.log("go to login")
+    return router.replace("/login");
   }, []);
 
   return null;

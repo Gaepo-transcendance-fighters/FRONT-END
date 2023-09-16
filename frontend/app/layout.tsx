@@ -10,8 +10,6 @@ import { GameProvider } from "@/context/GameContext";
 import { UserProvider } from "@/context/UserContext";
 import { InitMsgProvider } from "@/context/InitMsgContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-import { io } from "socket.io-client";
-import { use, useEffect } from "react";
 import { ModalContextProvider } from "@/context/ModalContext";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -33,7 +31,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // useRequireAuth();
+  useRequireAuth();
 
   return (
     <ThemeProvider theme={font}>
@@ -45,7 +43,7 @@ export default function RootLayout({
                 <FriendProvider>
                   <InitMsgProvider>
                     <html lang="en">
-                      <body className={inter.className}>
+                      <body>
                         <div
                           style={{
                             backgroundImage: `url("/background.png")`,

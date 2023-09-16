@@ -8,6 +8,7 @@ import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { ReturnMsgDto } from "@/type/RoomType";
+import WaterBomb from "./WaterBomb";
 
 enum EGameStatus {
   ONGOING,
@@ -39,6 +40,7 @@ const PingPong = () => {
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
   const [keyboard, setKeyboard] = useState(0);
+  const [waterbomb, setWaterbomb] = useState(false)
   const [gameProps, setGameProps] = useState<IGameProps>({
     ballX: 0,
     ballY: 0,
@@ -144,6 +146,7 @@ const PingPong = () => {
     
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
       console.log("game_pause_score", data);
+      setWaterbomb(true)
       if (
           data.gameStatus === EGameStatus.END ||
           data.gameStatus === EGameStatus.JUDGE
@@ -157,6 +160,7 @@ const PingPong = () => {
         (res: ReturnMsgDto) => {
           console.log(res);
           if (res.code === 200) {
+            setWaterbomb(false)
             gameDispatch({ type: "A_SCORE", value: data.userScore1 });
             gameDispatch({ type: "B_SCORE", value: data.userScore2 });
             if (
@@ -186,7 +190,7 @@ const PingPong = () => {
       window.removeEventListener("keydown", downPaddle);
       window.removeEventListener("keyup", upPaddle);
     };
-  }, [keyboard]);
+  }, [keyboard, waterbomb]);
 
   if (!client) return <></>;
 
@@ -208,6 +212,7 @@ const PingPong = () => {
       >
         <GameBoard />
       </div>
+        {waterbomb && <WaterBomb x={-480} y={0} />}
       <GamePaddle x={-470} y={gameProps.paddle1} />
       <GamePaddle x={470} y={gameProps.paddle2} />
       <GameBall x={gameProps.ballX} y={gameProps.ballY} />

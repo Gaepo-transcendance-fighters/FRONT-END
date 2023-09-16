@@ -46,11 +46,6 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
         !email ||
         !imgUri ||
         !token 
-        // !authState.userInfo.id ||
-        // !authState.userInfo.nickname ||
-        // !authState.userInfo.email ||
-        // !authState.userInfo.authorization ||
-        // !authState.userInfo.imgUrl
       ) {
         console.log("im gone", nickname)
         return router.push(redirectUrl);
