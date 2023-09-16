@@ -22,6 +22,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
       myUserIdx: parseInt(localStorage.getItem("idx")!),
       targetUserIdx: prop.friendIdx,
     });
+    console.log("friend invited", authState.chatSocket)
     openModal({
       children: <WaitAccept nickname={prop.friendNickname} />,
     });
@@ -30,7 +31,6 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
   useEffect(() => {
     if (!authState.chatSocket) return;
     const askInvite = () => {
-      console.log("friend invited")
       handleOpenModal();
     };
     const recieveInvite = ({

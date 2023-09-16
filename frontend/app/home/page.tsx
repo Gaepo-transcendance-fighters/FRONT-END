@@ -11,6 +11,7 @@ import InviteGame from "@/components/main/InviteGame/InviteGame";
 import { useGame } from "@/context/GameContext"
 import { GameType } from "@/type/type"
 import { server_domain } from "../page";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 const Page = () => {
   const param = useSearchParams();
@@ -19,6 +20,7 @@ const Page = () => {
   const [client, setClient] = useState(false);
   const { authState, authDispatch } = useAuth();
   const { openModal, closeModal } = useModalContext();
+  const [count, setCount] = useState(3);
 
   useEffect(() => {
     if (param.get("from") === "game") {
@@ -35,15 +37,16 @@ const Page = () => {
   }, []);
   
   useEffect(() => {
+    setClient(true);
     console.log("home", authState.chatSocket)
     if (authState.chatSocket === undefined) {
       console.log("chat is null")
+      router.replace("/")
       return 
     }
-    console.log(authState.chatSocket)
-    setClient(true);
-
+    
     authState.chatSocket.connect();
+    console.log("connect", authState.chatSocket)
     const askInvite = ({
       userIdx,
       userNickname,
@@ -88,6 +91,40 @@ const Page = () => {
       authState.chatSocket.off("chat_invite_answer");
     };
   }, []);
+
+  useEffect(() => {
+    if (authState.chatSocket === undefined) return;
+    const interval = setInterval(() => {
+      authState.chatSocket!.emit("health_check", {}, (res: ReturnMsgDto) => {
+  
+        if (res.code === 200) {
+          // console.log(res.msg);
+          setCount(3);
+        }
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+      if (!authState.chatSocket) return;
+      authState.chatSocket.off("health_check");
+    };
+  }, [count, setCount]);
+
+  useEffect(() => {
+    const interval_check = setInterval(() => {
+      setCount((prev) => prev - 1);
+      // console.log("count : ", count);
+    }, 1000)
+    if (count < 0) {
+      // console.log("count : 0 end ");
+      router.replace("/login");
+    }
+
+    return () => {
+      clearInterval(interval_check);
+    }
+  }, [count, setCount]);
 
   if (!client) return <></>;
 

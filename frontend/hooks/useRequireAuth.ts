@@ -80,21 +80,8 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
           type: "SET_EMAIL",
           value: email,
         });
-        const socket = io(`${server_domain}/chat`, {
-          query: { userId: localStorage.getItem("idx") },
-          autoConnect: false,
-        });
-    
-        const gameSocket = io(`${server_domain}/game/playroom`, {
-          query: { userId: localStorage.getItem("idx") },
-          autoConnect: false,
-        });
 
-        console.log("use", socket)
-        authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
-        authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
-
-      return router.replace("/");
+      return router.replace("/home");
     } else if (cookies_value === "") router.push(redirectUrl);
   }, []);
 };
