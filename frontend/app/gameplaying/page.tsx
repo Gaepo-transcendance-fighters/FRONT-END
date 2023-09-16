@@ -24,9 +24,7 @@ const GamePlaying = () => {
   const backToMain = () => {
     if (!authState.gameSocket) return;
     gameDispatch({ type: "SCORE_RESET" });
-    authState.gameSocket.emit("game_queue_quit", gameState.aPlayer.id, (data) => {
-      console.log(data)
-    });
+    authState.gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
     authState.gameSocket.disconnect();
     router.replace("/home");
   };
@@ -41,7 +39,7 @@ const GamePlaying = () => {
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
-  }
+  };
 
   const otherNickname = {
     width: "max-content",
@@ -52,7 +50,7 @@ const GamePlaying = () => {
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
-  }
+  };
 
   useEffect(() => {
     if (!authState.gameSocket) return;
@@ -86,9 +84,8 @@ const GamePlaying = () => {
     addEventListener("keydown", preventRefresh);
     addEventListener("beforeunload", preventRefreshButton);
 
-    // authState.gameSocket.emit("game_force_quit", { userIdx: authState.userInfo.id });
     authState.gameSocket.on("game_force_quit", (msg: string) => {
-      console.log(`game force quit: ${msg}`)
+      console.log(`game force quit: ${msg}`);
       setOpenModal(true);
     });
     return () => {
@@ -159,14 +156,22 @@ const GamePlaying = () => {
               }}
             >
               <Card
-                style={gameState.aPlayer.id === authState.userInfo.id ? myNickname : otherNickname}
+                style={
+                  gameState.aPlayer.id === authState.userInfo.id
+                    ? myNickname
+                    : otherNickname
+                }
               >
                 <Typography>{gameState.aPlayer.nick}</Typography>
               </Card>
               <PingPong />
 
               <Card
-                style={gameState.bPlayer.id === authState.userInfo.id ? myNickname : otherNickname}
+                style={
+                  gameState.bPlayer.id === authState.userInfo.id
+                    ? myNickname
+                    : otherNickname
+                }
               >
                 <Typography>{gameState.bPlayer.nick}</Typography>
               </Card>
