@@ -4,6 +4,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { io } from "socket.io-client";
+import { server_domain } from "@/app/page";
 
 export const useRequireAuth = (redirectUrl: string = "/login") => {
   const router = useRouter();
@@ -50,7 +52,7 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
         console.log("im gone", nickname)
         return router.push(redirectUrl);
       }
-
+        console.log("go to  setup")
         userDispatch({ type: "SET_USER_IDX", value: parseInt(idx) });
         userDispatch({ type: "CHANGE_NICK_NAME", value: nickname });
         userDispatch({ type: "CHANGE_IMG", value: imgUri });
@@ -78,7 +80,21 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
           type: "SET_EMAIL",
           value: email,
         });
-      return router.push("/home");
+        const socket = io(`${server_domain}/chat`, {
+          query: { userId: localStorage.getItem("idx") },
+          autoConnect: false,
+        });
+    
+        const gameSocket = io(`${server_domain}/game/playroom`, {
+          query: { userId: localStorage.getItem("idx") },
+          autoConnect: false,
+        });
+
+        console.log("use", socket)
+        authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
+        authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
+
+      return router.replace("/");
     } else if (cookies_value === "") router.push(redirectUrl);
   }, []);
 };

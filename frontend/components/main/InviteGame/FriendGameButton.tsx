@@ -30,6 +30,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
   useEffect(() => {
     if (!authState.chatSocket) return;
     const askInvite = () => {
+      console.log("friend invited")
       handleOpenModal();
     };
     const recieveInvite = ({

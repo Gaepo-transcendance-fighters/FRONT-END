@@ -42,7 +42,7 @@ const MyGameLog = () => {
   const callUser = useCallback(async () => {
     await axios
       .get(
-        `${server_domain}/game/records/userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
+        `${server_domain}/game/records?userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),

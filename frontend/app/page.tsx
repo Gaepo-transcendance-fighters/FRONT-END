@@ -19,7 +19,6 @@ export default function HomePage() {
   const { userDispatch } = useUser();
 
   useEffect(() => {
-    setClient(true);
 
     console.log(`${server_domain}/chat`);
 
@@ -34,8 +33,10 @@ export default function HomePage() {
     });
 
     authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
-    authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
 
+    console.log(socket)
+    authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
+    
     const nickname = localStorage.getItem("nickname");
     const idx = localStorage.getItem("idx");
     const email = localStorage.getItem("email");
@@ -44,6 +45,8 @@ export default function HomePage() {
     const auth = localStorage.getItem("check2Auth");
 
     if (idx && nickname && email && imgUri && token) {
+      console.log("road to home")
+      
       userDispatch({ type: "SET_USER_IDX", value: parseInt(idx!) });
       userDispatch({ type: "CHANGE_NICK_NAME", value: nickname! });
       userDispatch({ type: "CHANGE_IMG", value: imgUri! });

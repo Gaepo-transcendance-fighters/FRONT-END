@@ -21,7 +21,7 @@ const WaterBomb = ({ images }: { images: JSX.Element[] }) => {
 
   return (
     <>
-      {visibleImage.map((image, id) => (
+      {visibleImage.length && visibleImage.map((image, id) => (
         <>
           <div
             style={{

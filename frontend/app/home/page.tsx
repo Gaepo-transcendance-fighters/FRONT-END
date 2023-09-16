@@ -10,6 +10,7 @@ import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
 import { useGame } from "@/context/GameContext"
 import { GameType } from "@/type/type"
+import { server_domain } from "../page";
 
 const Page = () => {
   const param = useSearchParams();
@@ -32,11 +33,16 @@ const Page = () => {
       };
     }
   }, []);
-
+  
   useEffect(() => {
+    console.log("home", authState.chatSocket)
+    if (authState.chatSocket === undefined) {
+      console.log("chat is null")
+      return 
+    }
+    console.log(authState.chatSocket)
     setClient(true);
 
-    if (!authState.chatSocket) return;
     authState.chatSocket.connect();
     const askInvite = ({
       userIdx,
@@ -63,7 +69,7 @@ const Page = () => {
       targetUserNickname: string;
       answer: number;
     }) => {
-      console.log("recieve invite", answer);
+      console.log("receive invite", answer);
       if (answer === 0) closeModal();
       else if (answer === 1) {
         gameDispatch({type: "SET_GAME_MODE", value: GameType.FRIEND})
