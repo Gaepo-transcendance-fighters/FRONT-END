@@ -21,7 +21,7 @@ const RoomEnter = (
       "chat_goto_lobby",
       {
         channelIdx: roomState.currentRoom.channelIdx,
-        userIdx: userState.userIdx,
+        userIdx: parseInt(localStorage.getItem("idx")!),
       },
       (ret: ReturnMsgDto) => {}
     );
