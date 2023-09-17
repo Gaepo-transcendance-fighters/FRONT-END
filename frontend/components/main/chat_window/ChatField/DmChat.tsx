@@ -49,12 +49,9 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
 
   const callUser = useCallback(async () => {
     await axios
-      // dev original
       .get(
         `${server_domain}/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`
       )
-      // haryu's server
-      // .get(`http://localhost:4000/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`)
       .then((res) => {
         const newData = Array.isArray(res.data) ? res.data : [res.data];
         setMsgs((prevMsgs) => [...prevMsgs, ...newData]);

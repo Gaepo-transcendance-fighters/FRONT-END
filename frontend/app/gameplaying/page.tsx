@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
-
 import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useEffect, useState } from "react";
@@ -9,24 +8,52 @@ import PingPong from "@/components/game/ingame/PingPong";
 import { useGame } from "@/context/GameContext";
 import useModal from "@/hooks/useModal";
 import Modals from "@/components/public/Modals";
-import { gameSocket } from "../page";
+import { useAuth } from "@/context/AuthContext";
+import { Style } from "@mui/icons-material";
 
 const GamePlaying = () => {
   const router = useRouter();
+  const { authState } = useAuth();
   const [client, setClient] = useState<boolean>(false);
   const { gameState, gameDispatch } = useGame();
   const { isShowing, toggle } = useModal();
   const { isShowing: isShowing2, toggle: toggle2 } = useModal();
+  const [msg, setMsg] = useState<string>("");
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const backToMain = () => {
+    if (!authState.gameSocket) return;
     gameDispatch({ type: "SCORE_RESET" });
-    gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
-    gameSocket.disconnect();
+    authState.gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
+    authState.gameSocket.disconnect();
     router.replace("/home");
   };
 
+  const myNickname = {
+    width: "max-content",
+    padding: "20px",
+    margin: "30px",
+    height: "15%",
+    border: "2px solid black",
+    background: "orange",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+  };
+
+  const otherNickname = {
+    width: "max-content",
+    padding: "20px",
+    margin: "30px",
+    height: "15%",
+    border: "2px solid black",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+  };
+
   useEffect(() => {
+    if (!authState.gameSocket) return;
     setClient(true);
     const preventGoBack = (e: PopStateEvent) => {
       e.preventDefault();
@@ -35,6 +62,7 @@ const GamePlaying = () => {
 
     const preventRefresh = (e: KeyboardEvent) => {
       e.preventDefault();
+      console.log(e.key, e.metaKey);
       if (
         e.key === "F5" ||
         ((e.ctrlKey === true || e.metaKey === true) && e.key === "r")
@@ -56,26 +84,13 @@ const GamePlaying = () => {
     addEventListener("keydown", preventRefresh);
     addEventListener("beforeunload", preventRefreshButton);
 
-    //탈주시
-    // gameSocket.on("game_queue_quit", (res: number) => {
-    //   console.log("상대가 나감", res);
-    //   gameDispatch({ type: "A_SCORE", value: 5 });
-    //   gameDispatch({ type: "B_SCORE", value: 0 });
-    //   gameSocket.emit("game_get_score", {
-    //     userIdx1: gameState.aPlayer.id,
-    //     userScore1: 5,
-    //     userIdx2: gameState.bPlayer.id,
-    //     userScore2: 0,
-    //     issueDate: Date.now(),
-    //     gameStatus: "game_quit",
-    //     winner: gameState.aPlayer.id,
-    //   });
-    //   setOpenModal(true);
-    //   setTimeout(() => {
-    //     router.replace("./gameresult");
-    //   }, 2000);
-    // });
+    authState.gameSocket.on("game_force_quit", (msg: string) => {
+      console.log(`game force quit: ${msg}`);
+      setOpenModal(true);
+    });
     return () => {
+      if (!authState.gameSocket) return;
+      authState.gameSocket.off("game_force_quit");
       removeEventListener("popstate", preventGoBack);
       removeEventListener("keydown", preventRefresh);
       removeEventListener("beforeunload", preventRefreshButton);
@@ -97,7 +112,10 @@ const GamePlaying = () => {
           }}
         >
           <CardContent
-            style={{
+            sx={{
+              ".MuiCardContent-root": {
+                p: 0,
+              },
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -120,48 +138,42 @@ const GamePlaying = () => {
             </Card>
           </CardContent>
 
-          <CardContent sx={{ mx: "auto" }}>
+          <CardContent
+            sx={{
+              p: 0,
+              mx: "auto",
+            }}
+          >
             <Card
               style={{
                 width: "max-content",
                 height: "max-content",
-                border: "2px solid black",
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
-                backgroundColor: main.main3,
+                boxShadow: "none",
+                backgroundColor: "transparent",
               }}
             >
               <Card
-                style={{
-                  width: "max-content",
-                  padding: "20px",
-                  margin: "30px",
-                  height: "15%",
-                  border: "2px solid black",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
+                style={
+                  gameState.aPlayer.id === authState.userInfo.id
+                    ? myNickname
+                    : otherNickname
+                }
               >
-                Player 1
+                <Typography>{gameState.aPlayer.nick}</Typography>
               </Card>
-
               <PingPong />
 
               <Card
-                style={{
-                  width: "max-content",
-                  padding: "20px",
-                  margin: "30px",
-                  height: "15%",
-                  border: "2px solid black",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
+                style={
+                  gameState.bPlayer.id === authState.userInfo.id
+                    ? myNickname
+                    : otherNickname
+                }
               >
-                Player 2
+                <Typography>{gameState.bPlayer.nick}</Typography>
               </Card>
             </Card>
           </CardContent>
@@ -170,13 +182,13 @@ const GamePlaying = () => {
             style={{
               width: "100%",
               height: "30vh",
-
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
             <Card
+              sx={{ px: "30px" }}
               style={{
                 width: "20%",
                 height: "max-content",
@@ -184,7 +196,9 @@ const GamePlaying = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 border: "1px solid black",
-                backgroundColor: "#05BEFF",
+                backgroundColor: main.main3,
+                color: "white",
+                wordSpacing: "1rem",
               }}
             >
               <Typography>
@@ -194,16 +208,16 @@ const GamePlaying = () => {
                   : gameState.gameMode === 1
                   ? "Normal"
                   : "Rank"}
-                <br />
+              </Typography>
+              <Typography>
                 Speed:{" "}
                 {gameState.ballSpeedOption === 2
                   ? "Slow"
                   : gameState.ballSpeedOption === 3
                   ? "Normal"
                   : "Fast"}
-                <br />
-                Map: {gameState.mapType}
               </Typography>
+              <Typography>Map: {gameState.mapType}</Typography>
             </Card>
             <Modals
               isShowing={isShowing}
@@ -211,7 +225,6 @@ const GamePlaying = () => {
               message="뒤로가기 멈춰!"
               routing="/?from=game"
             />
-            <Button onClick={() => setOpenModal(true)}>탈주시</Button>
             <Modals
               isShowing={openModal}
               message="상대방이 탈주했습니다. 결과페이지로 이동합니다"

@@ -11,6 +11,7 @@ const GameBall = ({ x, y }: { x: number; y: number }) => {
         position: "absolute",
         transform: `translate(${x}px, ${y}px)`,
         // transition: "transform 50ms linear",
+        zIndex: 3,
       }}
     />
   );

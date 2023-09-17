@@ -4,6 +4,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { io } from "socket.io-client";
+import { server_domain } from "@/app/page";
 
 export const useRequireAuth = (redirectUrl: string = "/login") => {
   const router = useRouter();
@@ -29,22 +31,10 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
       const token = localStorage.getItem("token");
       const auth = localStorage.getItem("check2Auth");
 
-      if (
-        !idx ||
-        !nickname ||
-        !email ||
-        !imgUri ||
-        !token
-        // !authState.userInfo.id ||
-        // !authState.userInfo.nickname ||
-        // !authState.userInfo.email ||
-        // !authState.userInfo.authorization ||
-        // !authState.userInfo.imgUrl
-      ) {
+      if (!idx || !nickname || !email || !imgUri || !token) {
         console.log("im gone", nickname);
         return router.push(redirectUrl);
       }
-
       userDispatch({ type: "SET_USER_IDX", value: parseInt(idx) });
       userDispatch({ type: "CHANGE_NICK_NAME", value: nickname });
       userDispatch({ type: "CHANGE_IMG", value: imgUri });
@@ -72,7 +62,8 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
         type: "SET_EMAIL",
         value: email,
       });
-      return router.push("/home");
+
+      return router.replace("/home");
     } else if (cookies_value === "") router.push(redirectUrl);
   }, []);
 };

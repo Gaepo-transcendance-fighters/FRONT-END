@@ -11,8 +11,8 @@ import {
 import { createPortal } from "react-dom";
 import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
-import { gameSocket } from "@/app/page";
 import { useGame } from "@/context/GameContext";
+import { useAuth } from "@/context/AuthContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -41,6 +41,7 @@ const Modals = ({
 }) => {
   const router = useRouter();
   const { gameState } = useGame();
+  const { authState } = useAuth();
   return isShowing
     ? createPortal(
         <Modal open={isShowing} onClose={hide}>
@@ -94,11 +95,11 @@ const Modals = ({
                 <CardContent>
                   <Button
                     onClick={() => {
-                      authState.gameSocketemit(
+                      authState.gameSocket!.emit(
                         "game_queue_quit",
                         gameState.aPlayer.id
                       );
-                      authState.gameSocketdisconnect();
+                      authState.gameSocket!.disconnect();
                       router.replace(routing);
                     }}
                   >

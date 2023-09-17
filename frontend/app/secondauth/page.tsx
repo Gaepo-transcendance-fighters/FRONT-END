@@ -52,7 +52,6 @@ const SecondAuth = () => {
     const response = await axios({
       method: "PATCH",
       url: `${server_domain}/users/second`,
-      // url: `http://localhost:4000/users/second`,
       data: {
         // userIdx: localStorage.getItem("idx"),
         userIdx: authState.userInfo.id,
@@ -68,13 +67,13 @@ const SecondAuth = () => {
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
     else if (
-       response.status == 200 &&
-       response.data.result.checkTFA === false
-     ) {
-       console.log("fail");
-       alert("잘못된 입력입니다. 재시도 해주세요.");
-       setBlock(false); // 여기서 비우기.
-     }
+      response.status == 200 &&
+      response.data.result.checkTFA === false
+    ) {
+      console.log("fail");
+      alert("잘못된 입력입니다. 재시도 해주세요.");
+      setBlock(false); // 여기서 비우기.
+    }
     //재입력 필요
   };
 

@@ -9,7 +9,7 @@ import { useFriend } from "@/context/FriendContext";
 import { useAuth } from "@/context/AuthContext";
 import { user_status } from "@/type/type";
 
-const selectedButton = {
+const unselectedButton = {
   backgroundColor: main.main1,
   color: "white",
   "&:hover": {
@@ -24,7 +24,7 @@ const selectedButton = {
   flex: 1,
 };
 
-const unselectedButton = {
+const selectedButton = {
   backgroundColor: main.main5,
   color: "white",
   "&:hover": {

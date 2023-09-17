@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import { main } from "@/font/color";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -30,6 +31,7 @@ const Login = () => {
   const router = useRouter();
   const [url, setUrl] = useState("");
   const [client, setClient] = useState(false);
+  const { authState } = useAuth();
 
   const handleLogin = () => {
     router.push(url);
@@ -37,10 +39,9 @@ const Login = () => {
 
   useEffect(() => {
     setUrl(process.env.NEXT_PUBLIC_REDIRECTURL!);
-  }, []);
-
-  useEffect(() => {
     setClient(true);
+    if (authState.chatSocket) authState.chatSocket.disconnect();
+    if (authState.gameSocket) authState.gameSocket.disconnect();
   }, []);
 
   if (!client) return <></>;

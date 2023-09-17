@@ -22,7 +22,6 @@ const Layout = () => {
 
   useEffect(() => {
     if (!authState.chatSocket) return;
-
     const MainEnter = (data: IMaindata) => {
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       roomDispatch({ type: "SET_DM_ROOMS", value: data.dmChannelList });
