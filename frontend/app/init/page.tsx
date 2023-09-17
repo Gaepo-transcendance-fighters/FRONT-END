@@ -47,10 +47,11 @@ export default function InitUser() {
         imgDate: "",
       },
     }).then((response) => {
-      if (response.status == 200 && response.data.result.nickname !== "") {
+      if (response.status === 200 && response.data.result.nickname !== "") {
+        secureLocalStorage.setItem("nickname", response.data.result.nickname);
         return router.push("/");
       } else if (
-        response.status == 200 &&
+        response.status === 200 &&
         response.data.result.nickname === ""
       ) {
         console.log("fail");
