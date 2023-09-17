@@ -116,6 +116,8 @@ const Auth = () => {
           const message = await res.json().then((data) => data.message);
           alert(message);
           return router.push("/login");
+        } else {
+          console.log(res.status, res);
         }
       })
       .catch((error) => {
