@@ -38,17 +38,17 @@ const Page = () => {
 
   useEffect(() => {
     setClient(true);
-    console.log("🕚", server_domain)
+    console.log("🕚", server_domain);
     if (authState.chatSocket === undefined) {
-      console.log("go to /")
+      console.log("go to /");
       router.push("/");
       return;
     }
-    console.log(`🐒`, authState.chatSocket)
+    console.log(`🐒`, authState.chatSocket);
 
     console.log("chat socket connect", authState.chatSocket);
     authState.chatSocket.connect();
-    
+
     console.log("chat socket connect", authState.chatSocket);
     const askInvite = ({
       userIdx,
@@ -57,7 +57,7 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
-      console.log("😍", userIdx, userNickname)
+      console.log("😍", userIdx, userNickname);
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
@@ -77,11 +77,11 @@ const Page = () => {
       answer: number;
     }) => {
       if (answer === 0) {
-        closeModal()
+        closeModal();
       } else if (answer === 1) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
-        console.log("💻target", target)
+        console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
         closeModal();
         router.push("./optionselect");
@@ -97,37 +97,37 @@ const Page = () => {
     };
   }, [authState.chatSocket]);
 
-  useEffect(() => {
-    if (authState.chatSocket === undefined) return;
-    const interval = setInterval(() => {
-      authState.chatSocket!.emit("health_check", {}, (res: ReturnMsgDto) => {
-        if (res.code === 200) {
-          setCount(3);
-        }
-      });
-    }, 1000);
+  // useEffect(() => {
+  //   if (authState.chatSocket === undefined) return;
+  //   const interval = setInterval(() => {
+  //     authState.chatSocket!.emit("health_check", {}, (res: ReturnMsgDto) => {
+  //       if (res.code === 200) {
+  //         setCount(3);
+  //       }
+  //     });
+  //   }, 1000);
 
-    return () => {
-      clearInterval(interval);
-      if (!authState.chatSocket) return;
-      authState.chatSocket.off("health_check");
-    };
-  }, [count, setCount]);
+  //   return () => {
+  //     clearInterval(interval);
+  //     if (!authState.chatSocket) return;
+  //     authState.chatSocket.off("health_check");
+  //   };
+  // }, [count, setCount]);
 
-  useEffect(() => {
-    const interval_check = setInterval(() => {
-      setCount((prev) => prev - 1);
-      // console.log("count : ", count);
-    }, 1000);
-    if (count < 0) {
-      // console.log("count : 0 end ");
-      router.replace("/login");
-    }
+  // useEffect(() => {
+  //   const interval_check = setInterval(() => {
+  //     setCount((prev) => prev - 1);
+  //     // console.log("count : ", count);
+  //   }, 1000);
+  //   if (count < 0) {
+  //     // console.log("count : 0 end ");
+  //     router.replace("/login");
+  //   }
 
-    return () => {
-      clearInterval(interval_check);
-    };
-  }, [count, setCount]);
+  //   return () => {
+  //     clearInterval(interval_check);
+  //   };
+  // }, [count, setCount]);
 
   if (!client) return <></>;
 
