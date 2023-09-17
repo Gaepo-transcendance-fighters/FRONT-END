@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { IChatDmEnter, IChatRoom, ReturnMsgDto } from "@/type/RoomType";
+import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { IMember } from "@/type/RoomType";
 import { useFriend } from "@/context/FriendContext";
 import RoomEnter from "@/external_functions/RoomEnter";
@@ -24,23 +24,14 @@ import {
   FriendReqData,
   IBlock,
   IChatBlock,
-  IFriend,
-  IOnlineStatus,
   friendProfileModalStyle,
 } from "@/type/type";
 import { useRoom } from "@/context/RoomContext";
 import { useAuth } from "@/context/AuthContext";
 import MemberGameLog from "./MemberGameLog";
+import { IGameRecord, IGameUserInfo } from "@/type/GameType";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
-
-const loginOn = (
-  <Image src="/status/logon.png" alt="online" width={10} height={10} />
-);
-
-const loginOff = (
-  <Image src="/status/logoff.png" alt="offline" width={10} height={10} />
-);
 
 export default function MemberModal({
   setOpenModal,
@@ -56,6 +47,9 @@ export default function MemberModal({
   const { userState } = useUser();
   const { friendState, friendDispatch } = useFriend();
   const { authState } = useAuth();
+  const [gameRecordData, setGameRecordData] = useState<IGameRecord[]>([]);
+  const [gameUserInfo, setGameUserInfo] = useState<IGameUserInfo | null>(null);
+  const [winningRate, setWinningRate] = useState<number>(0);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -188,7 +182,13 @@ export default function MemberModal({
         },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            RoomEnter(existingRoom, roomState, userState, roomDispatch, authState.chatSocket!);
+            RoomEnter(
+              existingRoom,
+              roomState,
+              userState,
+              roomDispatch,
+              authState.chatSocket!
+            );
             handleCloseModal();
           } else {
             console.log(ret.msg);
@@ -226,6 +226,30 @@ export default function MemberModal({
     );
   };
 
+  useEffect(() => {
+    if (gameUserInfo) {
+      gameUserInfo.win + gameUserInfo.lose === 0
+        ? setWinningRate(0)
+        : setWinningRate(
+            Math.floor(
+              (gameUserInfo.win / (gameUserInfo.win + gameUserInfo.lose)) * 100
+            )
+          );
+    }
+  }, [gameRecordData, gameUserInfo]);
+
+  const RankImgSelect = (data: IGameUserInfo | null) => {
+    if (!data) return "./rank/exp_medal_bronze.png";
+    if (data) {
+      if (data.rankpoint < 800) return "./rank/exp_medal_bronze.png";
+      else if (data.rankpoint >= 800 && data.rankpoint < 1100)
+        return "./rank/exp_medal_silver.png";
+      else if (data.rankpoint >= 1100) return "./rank/exp_medal_gold.png";
+    }
+  };
+
+  const RankSrc = RankImgSelect(gameUserInfo);
+
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
       <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
@@ -246,7 +270,9 @@ export default function MemberModal({
             mx={5}
           >
             <Image
-              src={person.imgUri! + "?" + Date.now().toString()}
+              src={`${server_domain}/img/${
+                person.userIdx
+              }.png?${Date.now().toString()}`}
               alt="user img"
               width={100}
               height={100}
@@ -337,10 +363,15 @@ export default function MemberModal({
                   "&:last-child": { paddingBottom: "16px" },
                 }}
               >
-                <Typography margin={1} minWidth={"max-content"}>
-                  랭크(포인트)
-                </Typography>
-                <Typography margin={1}>승률</Typography>
+                <img
+                  src={RankSrc}
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    display: "block",
+                    margin: "0 auto",
+                  }}
+                ></img>
               </CardContent>
             </Card>
             <Card
@@ -357,8 +388,10 @@ export default function MemberModal({
                   "&:last-child": { paddingBottom: "16px" },
                 }}
               >
-                <Typography margin={1}>3000</Typography>
-                <Typography margin={1}>0%</Typography>
+                <Typography margin={1}>
+                  랭크(포인트) : {gameUserInfo ? gameUserInfo.rankpoint : 0}
+                </Typography>
+                <Typography margin={1}>승률 : {winningRate}%</Typography>
               </CardContent>
             </Card>
           </Stack>
@@ -373,7 +406,7 @@ export default function MemberModal({
           <CardContent sx={{ paddingBottom: 0 }}>
             <Typography>전적 기록</Typography>
           </CardContent>
-          <Stack direction={"row"}  sx={{height:"400px"}}>
+          <Stack direction={"row"} sx={{ height: "400px" }}>
             <Card
               sx={{
                 margin: 1,
@@ -389,9 +422,14 @@ export default function MemberModal({
                   margin: 1,
                 }}
               >
-                <MemberGameLog person={person}/>
+                <MemberGameLog
+                  person={person}
+                  setGameRecordData={setGameRecordData}
+                  gameRecordData={gameRecordData}
+                  setGameUserInfo={setGameUserInfo}
+                />
                 {/* <Stack direction={"row"}> */}
-                  {/* <CardContent
+                {/* <CardContent
                     sx={{ "&:last-child": { paddingBottom: "16px" } }}
                   >
                     <Typography>WIN</Typography>

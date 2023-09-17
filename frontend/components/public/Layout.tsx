@@ -4,10 +4,9 @@ import { CardContent, Stack, Box } from "@mui/material";
 import FriendList from "../main/friend_list/FriendList";
 import RoomList from "../main/room_list/RoomList";
 import ChatWindow from "../main/chat_window/ChatWindow";
-import { useRequireAuth } from "@/hooks/useRequireAuth";
 import Myprofile from "../main/myprofile/MyProfile";
 import GameStartButton from "../game/GameStartButton";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRoom } from "@/context/RoomContext";
 import { useUser } from "@/context/UserContext";
@@ -16,18 +15,15 @@ import { IMaindata } from "@/type/type";
 import { ReturnMsgDto } from "@/type/RoomType";
 
 const Layout = () => {
-  const { roomState, roomDispatch } = useRoom();
-  const { friendState, friendDispatch } = useFriend();
-  const { userState, userDispatch } = useUser();
+  const { roomDispatch } = useRoom();
+  const { friendDispatch } = useFriend();
+  const { userDispatch } = useUser();
   const { authState } = useAuth();
 
   useEffect(() => {
     if (!authState.chatSocket) return;
 
     const MainEnter = (data: IMaindata) => {
-      console.log("main_enter", data);
-      console.log("main_enter", data);
-      console.log(data.userObject.imgUri);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: data.channelList });
       roomDispatch({ type: "SET_DM_ROOMS", value: data.dmChannelList });
       friendDispatch({ type: "SET_FRIENDLIST", value: data.friendList });
@@ -36,8 +32,6 @@ const Layout = () => {
         type: "CHANGE_IMG",
         value: data.userObject.imgUri,
       });
-      // if (!data.userObject.imgUri)
-      //   userDispatch({ type: "CHANGE_IMG", value: data.userObject.imgUri });
       userDispatch({
         type: "CHANGE_NICK_NAME",
         value: data.userObject.nickname,
@@ -81,7 +75,6 @@ const Layout = () => {
           }}
         >
           <Myprofile />
-          {/* <Myprofile Img={소켓으로받아온 imguri링크} Nickname={소켓으로받아온 닉네임}/> */}
           {/* <InviteGame /> */}
           {/* <WaitAccept /> */}
         </CardContent>

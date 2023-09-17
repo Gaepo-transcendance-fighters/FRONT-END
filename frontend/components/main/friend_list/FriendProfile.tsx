@@ -31,6 +31,7 @@ import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import FriendGameLog from "./FriendGameLog";
+import FriendGameButton from "../InviteGame/FriendGameButton";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -188,7 +189,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     await axios({
       method: "delete",
       url: `${server_domain}/users/unfollow`,
-      // url: "http://localhost:4000/users/unfollow",
       data: friendReqData,
     })
       .then((res) => {
@@ -266,7 +266,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   useEffect(() => {
     if (!authState.chatSocket) return;
     const userProfile = (data: IFriendData) => {
-      console.log("userProfile : ", userProfile);
       setFriendData(data);
     };
     authState.chatSocket.on("user_profile", userProfile);
@@ -275,12 +274,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       authState.chatSocket.off("user_profile");
     };
   }, [friendData]);
-
-  // useEffect(() => {
-  //   const find = friendState.blockList.find((block) =>
-  //     block.targetIdx === idx
-  //   );
-  // }, [openModal]);
 
   return (
     <>
@@ -327,9 +320,9 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 }}
               >
                 닉네임: {friendData?.targetNickname}
-              </Typography> 
+              </Typography>
               <Stack direction={"row"} spacing={2}>
-                {/* <FriendGameButton prop={prop as IFriend} /> */}
+                <FriendGameButton prop={prop as IFriend} />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
@@ -472,7 +465,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
                 width: "100%",
               }}
             >
-              <FriendGameLog person={prop}/>
+              <FriendGameLog person={prop} />
             </Box>
           </Card>
         </Box>

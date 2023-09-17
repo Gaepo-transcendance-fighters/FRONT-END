@@ -5,51 +5,24 @@ import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { IFriend, main } from "@/type/type";
 import { useUser } from "@/context/UserContext";
-import { IMember } from "@/type/RoomType";
+import { IGameRecord, gameLogOptions } from "@/type/GameType";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-const options = {
-  threshold: 0.1,
-};
-
-enum type {
-  nomal,
-  rank,
-}
-
-interface GameRecord {
-  matchUserIdx: number;
-  matchUserNickname: string;
-  score: string;
-  type: type;
-  result: RecordResult;
-}
-
-export enum RecordResult {
-  DEFAULT = 0,
-  PLAYING,
-  WIN,
-  LOSE,
-  DONE,
-  SHUTDOWN,
-}
-
-const FriendGameLog = ({person}: {person:IFriend}) => {
+const FriendGameLog = ({ person }: { person: IFriend }) => {
   const [loading, setLoading] = useState(true);
   const [end, setEnd] = useState(false);
   const [pageNum, setPageNum] = useState(0);
-  const [gameRecordData, setGameRecordData] = useState<GameRecord[]>([]);
+  const [gameRecordData, setGameRecordData] = useState<IGameRecord[]>([]);
   const { userState } = useUser();
   const observerTarget = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0]?.isIntersecting) {
-        console.log(pageNum);
         setPageNum((num) => num + 1);
       }
-    }, options);
+    }, gameLogOptions);
 
     if (observerTarget.current) {
       observer.observe(observerTarget.current);
@@ -64,10 +37,8 @@ const FriendGameLog = ({person}: {person:IFriend}) => {
 
   const callUser = useCallback(async () => {
     await axios
-      // .get(
-        // `${server_domain}/game/records/?userIdx=${authState.userInfo.id}&page=${pageNum}`,
-        // .get(`${server_domain}/game/records?userIdx=${localStorage.getItem("idx")}&page=${pageNum}`,
-        .get(`${server_domain}/game/records?userIdx=${person.friendIdx}&page=${pageNum}`,
+      .get(
+        `${server_domain}/game/records?userIdx=${person.friendIdx}&page=${pageNum}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -79,17 +50,16 @@ const FriendGameLog = ({person}: {person:IFriend}) => {
           const newData = res.data.gameRecord;
           setGameRecordData((prevRecord) => [...prevRecord, ...newData]);
           setLoading(false);
-        }
-        else {
+        } else {
           setLoading(false);
           setEnd(true);
         }
       });
   }, [pageNum]);
-  
+
   useEffect(() => {
     if (end === false) {
-        callUser();
+      callUser();
       setLoading(true);
     }
   }, [pageNum]);
@@ -165,11 +135,7 @@ const FriendGameLog = ({person}: {person:IFriend}) => {
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecordData.type === 0 ? (
-                        <>Normal</>
-                      ) : (
-                        <>Rank</>
-                      )}
+                      {gameRecordData.type === 0 ? <>Normal</> : <>Rank</>}
                     </Typography>
                   </div>
                   <div
@@ -184,11 +150,7 @@ const FriendGameLog = ({person}: {person:IFriend}) => {
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecordData.result === 0 ? (
-                        <>Win</>
-                      ) : (
-                        <>Lose</>
-                      )}
+                      {gameRecordData.result === 0 ? <>Win</> : <>Lose</>}
                     </Typography>
                   </div>
                 </div>
@@ -217,7 +179,7 @@ const FriendGameLog = ({person}: {person:IFriend}) => {
         <div ref={observerTarget}></div>
         {loading === true && (
           <Typography component={"div"}>loading...</Typography>
-        )} 
+        )}
         {loading === false && (
           <Typography component={"div"}>end of list...</Typography>
         )}

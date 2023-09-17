@@ -17,7 +17,6 @@ const RoomEnter = (
 ) => {
   if (!chatSocket) return;
   if (roomState.currentRoom && roomState.currentRoom.mode !== Mode.PRIVATE) {
-    console.log("[RoomEnter 조건문 안에 들어왔따. ]");
     chatSocket.emit(
       "chat_goto_lobby",
       {

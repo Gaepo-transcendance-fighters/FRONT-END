@@ -48,7 +48,6 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
   }, [observerTarget]);
 
   const callUser = useCallback(async () => {
-    console.log(pageNum);
     await axios
       // dev original
       .get(
