@@ -97,6 +97,7 @@ const Page = () => {
     };
   }, [authState.chatSocket]);
 
+  //TODO : 0917기준 나중에 push 할 때, 이 부분 주석 해제 필요.
   // useEffect(() => {
   //   if (authState.chatSocket === undefined) return;
   //   const interval = setInterval(() => {

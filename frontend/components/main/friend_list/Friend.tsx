@@ -19,6 +19,8 @@ const playing = (
   <Image src="/status/gameplaying.png" alt="playing" width={10} height={10} />
 );
 
+useEffect(() => {}, [IOnlineStatus]);
+
 const Friend = ({ prop }: { prop: IFriend }) => {
   return (
     <>
