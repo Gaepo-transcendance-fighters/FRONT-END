@@ -18,6 +18,7 @@ import { useGame } from "@/context/GameContext";
 import secureLocalStorage from "react-secure-storage";
 import { server_domain } from "../page";
 import axios from "axios";
+import { SpeedOption } from "./friend/optionselect/page";
 
 const infomodalStyle = {
   position: "absolute" as "absolute",
@@ -59,7 +60,7 @@ const Game = () => {
       data: {
         gameType: gameState.gameMode,
         userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-        speed: GameType.RANK,
+        speed: SpeedOption.speed2,
         mapNumber: 1,
       },
     })

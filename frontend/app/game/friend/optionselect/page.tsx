@@ -24,7 +24,7 @@ import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-enum SpeedOption {
+export enum SpeedOption {
   speed1,
   speed2,
   speed3,
