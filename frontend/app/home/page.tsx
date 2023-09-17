@@ -73,7 +73,6 @@ const Page = () => {
       else if (answer === 1) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
-        console.log("target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
         closeModal();
         router.push("./optionselect");
@@ -93,7 +92,6 @@ const Page = () => {
     const interval = setInterval(() => {
       authState.chatSocket!.emit("health_check", {}, (res: ReturnMsgDto) => {
         if (res.code === 200) {
-          console.log(res.msg);
           setCount(3);
         }
       });
