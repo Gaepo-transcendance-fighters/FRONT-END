@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { ReturnMsgDto } from "@/type/RoomType";
 import WaterBomb from "./WaterBomb";
+import secureLocalStorage from "react-secure-storage";
 
 enum EGameStatus {
   ONGOING,
@@ -129,7 +130,7 @@ const PingPong = () => {
       ({ serverTime }: { serverTime: number }) => {
         const now = new Date().getTime();
         authState.gameSocket!.emit("game_ping_receive", {
-          userIdx: parseInt(localStorage.getItem("idx")!),
+          userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           serverTime: serverTime,
           clientTime: now,
         });
@@ -140,7 +141,7 @@ const PingPong = () => {
     authState.gameSocket.on("game_frame", (res: IGameProps) => {
       setGameProps(res);
       authState.gameSocket!.emit("game_move_paddle", {
-        userIdx: parseInt(localStorage.getItem("idx")!),
+        userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
         paddle: keyboard,
         serverTime: gameProps.serverTime,
         clientTime: Date.now(),
@@ -168,7 +169,7 @@ const PingPong = () => {
       }
       authState.gameSocket!.emit(
         "game_pause_score",
-        { userIdx: parseInt(localStorage.getItem("idx")!) },
+        { userIdx: parseInt(secureLocalStorage.getItem("idx") as string) },
         (res: ReturnMsgDto) => {
           console.log(res);
           if (res.code === 200) {

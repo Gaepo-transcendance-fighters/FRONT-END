@@ -6,8 +6,9 @@ import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useModalContext } from "@/context/ModalContext";
 import { useAuth } from "@/context/AuthContext";
-import { useGame } from "@/context/GameContext"
-import { GameType } from "@/type/type"
+import { useGame } from "@/context/GameContext";
+import { GameType } from "@/type/type";
+import secureLocalStorage from "react-secure-storage";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -70,7 +71,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       "chat_invite_answer",
       {
         inviteUserIdx: idx,
-        targetUserIdx: parseInt(localStorage.getItem("idx")!),
+        targetUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
         answer: 1,
       },
       (res: any) => {
@@ -85,7 +86,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       "chat_invite_answer",
       {
         inviteUserIdx: idx,
-        targetUserIdx: parseInt(localStorage.getItem("idx")!),
+        targetUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
         answer: 0,
       },
       (res: any) => {
@@ -116,9 +117,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
             alignItems: "center",
           }}
         >
-          <Typography>
-          게임초대
-          </Typography>
+          <Typography>게임초대</Typography>
         </CardContent>
       </Card>
       <Card
@@ -142,7 +141,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
           }}
         >
           <Typography>
-          {nickname} 님께서 친선전 경기를 요청하셨습니다.
+            {nickname} 님께서 친선전 경기를 요청하셨습니다.
           </Typography>
         </CardContent>
         <CardContent

@@ -14,6 +14,7 @@ import { main } from "@/type/type";
 import { useUser } from "@/context/UserContext";
 import { IMember } from "@/type/RoomType";
 import { IGameRecord, IGameUserInfo, gameLogOptions } from "@/type/GameType";
+import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -58,7 +59,8 @@ const MemberGameLog = ({
         `${server_domain}/game/records?userIdx=${person.userIdx}&page=${pageNum}`,
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: ("Bearer " +
+              secureLocalStorage.getItem("token")) as string,
           },
         }
       )
@@ -185,8 +187,7 @@ const MemberGameLog = ({
                 >
                   <Typography sx={{ fontSize: "1.5rem" }}>
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
-                    {person.nickname}{" "}
-                    {gameRecordData.score}{" "}
+                    {person.nickname} {gameRecordData.score}{" "}
                     {gameRecordData.matchUserNickname}
                   </Typography>
                 </div>

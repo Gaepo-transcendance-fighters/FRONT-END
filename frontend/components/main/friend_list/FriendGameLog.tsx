@@ -6,6 +6,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { IFriend, main } from "@/type/type";
 import { useUser } from "@/context/UserContext";
 import { IGameRecord, gameLogOptions } from "@/type/GameType";
+import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -41,7 +42,8 @@ const FriendGameLog = ({ person }: { person: IFriend }) => {
         `${server_domain}/game/records?userIdx=${person.friendIdx}&page=${pageNum}`,
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: ("Bearer " +
+              secureLocalStorage.getItem("token")) as string,
           },
         }
       )
@@ -167,8 +169,7 @@ const FriendGameLog = ({ person }: { person: IFriend }) => {
                 >
                   <Typography sx={{ fontSize: "1.5rem" }}>
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
-                    {person.friendNickname}{" "}
-                    {gameRecordData.score}{" "}
+                    {person.friendNickname} {gameRecordData.score}{" "}
                     {gameRecordData.matchUserNickname}
                   </Typography>
                 </div>

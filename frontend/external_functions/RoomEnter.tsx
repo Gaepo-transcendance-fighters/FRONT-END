@@ -7,6 +7,7 @@ import { RoomContextData, RoomAction } from "@/context/RoomContext";
 import { UserContextData } from "@/context/UserContext";
 import { Dispatch } from "react";
 import { useAuth } from "@/context/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 const RoomEnter = (
   room: IChatRoom,
@@ -21,7 +22,7 @@ const RoomEnter = (
       "chat_goto_lobby",
       {
         channelIdx: roomState.currentRoom.channelIdx,
-        userIdx: parseInt(localStorage.getItem("idx")!),
+        userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
       },
       (ret: ReturnMsgDto) => {}
     );
