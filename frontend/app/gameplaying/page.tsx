@@ -164,7 +164,7 @@ const GamePlaying = () => {
               >
                 <Typography>{gameState.aPlayer.nick}</Typography>
               </Card>
-              <PingPong />
+              <PingPong setter={setOpenModal} />
 
               <Card
                 style={

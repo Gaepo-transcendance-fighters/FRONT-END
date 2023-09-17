@@ -56,6 +56,10 @@ export default function InitUser() {
         console.log("fail");
         alert("잘못된 입력입니다. 재시도 해주세요.");
         setBlock(false); // 여기서 비우기.
+      } else {
+        console.log("fail");
+        alert("잘못된 입력입니다. 재시도 해주세요.");
+        setBlock(false); // 여기서 비우기.
       }
     });
     //재입력 필요

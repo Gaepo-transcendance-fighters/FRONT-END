@@ -2,7 +2,7 @@
 
 import GameBoard from "./GameBoard";
 import GamePaddle from "./GamePaddle";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
 import GameBall from "./GameBall";
 import { Stack } from "@mui/material";
@@ -80,7 +80,11 @@ const water = (
 
 const images = [water_end_up, water, water_end_down];
 
-const PingPong = () => {
+const PingPong = ({
+  setter,
+}: {
+  setter: Dispatch<SetStateAction<boolean>>;
+}) => {
   const [client, setClient] = useState(false);
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
