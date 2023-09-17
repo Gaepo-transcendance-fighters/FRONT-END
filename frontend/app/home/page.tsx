@@ -55,7 +55,7 @@ const Page = () => {
     );
     authState.chatSocket.connect();
 
-    console.log("chat socket connect", authState.chatSocket.connected);
+    console.log("chat socket connect", authState.chatSocket);
     const askInvite = ({
       userIdx,
       userNickname,
@@ -80,13 +80,14 @@ const Page = () => {
       inviteUserNickname: string;
       targetUserIdx: number; // 초대 받은 사람
       targetUserNickname: string;
-      answer: number;
+      answer: boolean;
     }) => {
-      if (answer === 0) {
+      if (answer === false) {
         closeModal();
-      } else if (answer === 1) {
+      } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
+        console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
         if (roomState.currentRoom?.mode !== "private") {
           authState.chatSocket!.emit(
