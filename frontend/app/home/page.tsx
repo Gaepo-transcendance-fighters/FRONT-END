@@ -88,7 +88,7 @@ const Page = () => {
     const interval = setInterval(() => {
       authState.chatSocket!.emit("health_check", {}, (res: ReturnMsgDto) => {
         if (res.code === 200) {
-          // console.log(res.msg);
+          console.log(res.msg);
           setCount(3);
         }
       });

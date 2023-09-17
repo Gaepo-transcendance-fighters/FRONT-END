@@ -19,7 +19,7 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
   };
 
   useEffect(() => {
-    if (document.URL.includes("/login/auth")) return;
+    if (document.URL.includes("/login/auth")) return
     const cookies_value = getCookies();
 
     if (cookies_value) {
@@ -30,28 +30,12 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
       const token = secureLocalStorage.getItem("token") as string;
       const auth = secureLocalStorage.getItem("check2Auth") as string;
 
-      console.log(
-        `
-        localstorage:
-          ${idx},
-          ${nickname},
-          ${email},
-          ${imgUri},
-          ${token},
-          ${auth}
-        `
-      );
       if (
         !idx ||
         !nickname ||
         !email ||
         !imgUri ||
         !token
-        // !authState.userInfo.id ||
-        // !authState.userInfo.nickname ||
-        // !authState.userInfo.email ||
-        // !authState.userInfo.authorization ||
-        // !authState.userInfo.imgUrl
       ) {
         console.log("im gone", nickname);
         return router.push(redirectUrl);

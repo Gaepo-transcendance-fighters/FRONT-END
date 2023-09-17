@@ -33,12 +33,24 @@ export default function HomePage() {
     console.log(socket);
     authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
 
-    const nickname = localStorage.getItem("nickname");
-    const idx = localStorage.getItem("idx");
-    const email = localStorage.getItem("email");
-    const imgUri = localStorage.getItem("imgUri");
-    const token = localStorage.getItem("token");
-    const auth = localStorage.getItem("check2Auth");
+    const nickname = secureLocalStorage.getItem("nickname") as string;
+    const idx = secureLocalStorage.getItem("idx") as string;
+    const email = secureLocalStorage.getItem("email") as string;
+    const imgUri = secureLocalStorage.getItem("imgUri") as string;
+    const token = secureLocalStorage.getItem("token") as string;
+    const auth = secureLocalStorage.getItem("check2Auth") as string;
+
+    console.log(
+      `
+      page localstorage:
+        ${idx},
+        ${nickname},
+        ${email},
+        ${imgUri},
+        ${token},
+        ${auth}
+      `
+    );
 
     if (idx && nickname && email && imgUri && token) {
       console.log("road to home");
