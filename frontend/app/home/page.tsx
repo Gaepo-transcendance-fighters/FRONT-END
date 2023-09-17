@@ -76,14 +76,6 @@ const Page = () => {
       targetUserNickname: string;
       answer: boolean;
     }) => {
-      console.log(
-        "receiveInvite : ",
-        inviteUserIdx, // 초대 한 사람
-        inviteUserNickname,
-        targetUserIdx, // 초대 받은 사람
-        targetUserNickname,
-        answer
-      );
       if (answer === false) {
         closeModal();
       } else if (answer === true) {
