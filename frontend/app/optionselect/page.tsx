@@ -111,15 +111,7 @@ const OptionSelect = () => {
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
     gameDispatch({ type: "SCORE_RESET" });
 
-    console.log(gameState.gameMode);
-
     if (gameState.gameMode === GameType.FRIEND) {
-      console.log(
-        "me",
-        localStorage.getItem("idx"),
-        localStorage.getItem("nickname")
-      );
-      console.log("you", gameState.bPlayer.id, gameState.bPlayer.nick);
       await axios({
         method: "post",
         url: `${server_domain}/game/friend-match`,
