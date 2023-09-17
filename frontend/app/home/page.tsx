@@ -38,18 +38,12 @@ const Page = () => {
 
   useEffect(() => {
     setClient(true);
-    console.log("🕚", server_domain)
     if (authState.chatSocket === undefined) {
-      console.log("go to /")
       router.push("/");
       return;
     }
-    console.log(`🐒`, authState.chatSocket)
+    if (authState.chatSocket.connected) authState.chatSocket.connect();
 
-    console.log("chat socket connect", authState.chatSocket);
-    authState.chatSocket.connect();
-    
-    console.log("chat socket connect", authState.chatSocket);
     const askInvite = ({
       userIdx,
       userNickname,
@@ -57,7 +51,6 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
-      console.log("😍", userIdx, userNickname)
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
@@ -77,11 +70,11 @@ const Page = () => {
       answer: number;
     }) => {
       if (answer === 0) {
-        closeModal()
+        closeModal();
       } else if (answer === 1) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
-        console.log("💻target", target)
+        console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
         closeModal();
         router.push("./optionselect");
