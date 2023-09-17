@@ -95,7 +95,7 @@ const Page = () => {
           setCount(3);
         }
       });
-    }, 1000);
+    }, 30);
 
     return () => {
       clearInterval(interval);
@@ -107,10 +107,10 @@ const Page = () => {
   useEffect(() => {
     const interval_check = setInterval(() => {
       setCount((prev) => prev - 1);
-      // console.log("count : ", count);
-    }, 1000);
+      console.log("count : ", count);
+    }, 50);
     if (count < 0) {
-      // console.log("count : 0 end ");
+      console.log("count : 0 end ");
       router.replace("/login");
     }
 
