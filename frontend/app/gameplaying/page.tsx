@@ -18,15 +18,12 @@ const GamePlaying = () => {
   const { gameState, gameDispatch } = useGame();
   const { isShowing, toggle } = useModal();
   const { isShowing: isShowing2, toggle: toggle2 } = useModal();
-  const [msg, setMsg] = useState<string>("");
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const backToMain = () => {
     if (!authState.gameSocket) return;
     gameDispatch({ type: "SCORE_RESET" });
     authState.gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
-    authState.gameSocket.disconnect();
-    router.replace("/home");
   };
 
   const myNickname = {
@@ -87,6 +84,11 @@ const GamePlaying = () => {
     authState.gameSocket.on("game_force_quit", (msg: string) => {
       console.log(`game force quit: ${msg}`);
       setOpenModal(true);
+      setTimeout(() => {
+        setOpenModal(false)
+        authState.gameSocket!.disconnect();
+        router.replace("/home");
+      }, 3000)
     });
     return () => {
       if (!authState.gameSocket) return;
@@ -164,6 +166,7 @@ const GamePlaying = () => {
               >
                 <Typography>{gameState.aPlayer.nick}</Typography>
               </Card>
+              
               <PingPong />
 
               <Card

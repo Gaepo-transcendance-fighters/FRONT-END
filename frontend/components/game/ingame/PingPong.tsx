@@ -133,6 +133,12 @@ const PingPong = () => {
           userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           serverTime: serverTime,
           clientTime: now,
+        }, (res: ReturnMsgDto) => {
+          if (res.code === 200) {
+            console.log("good ping")
+          } else if (res.code === 400)
+            console.log("bad ping")
+            
         });
       }
     );

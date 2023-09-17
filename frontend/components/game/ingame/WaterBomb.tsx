@@ -16,12 +16,13 @@ const WaterBomb = ({ images }: { images: JSX.Element[] }) => {
 
   useEffect(() => {
     console.log("play water bomb", images)
-    setVisibleImage(images);
+    if (images.length !== 0)
+      setVisibleImage(images);
   }, [images]);
 
   return (
     <>
-      {visibleImage.length && visibleImage.map((image, id) => (
+      {visibleImage.map((image, id) => (
         <>
           <div
             style={{
