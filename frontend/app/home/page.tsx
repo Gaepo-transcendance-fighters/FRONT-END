@@ -12,6 +12,7 @@ import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import { server_domain } from "../page";
 import { ReturnMsgDto } from "@/type/RoomType";
+import { useRoom } from "@/context/RoomContext";
 
 const Page = () => {
   const param = useSearchParams();
@@ -21,6 +22,7 @@ const Page = () => {
   const { authState, authDispatch } = useAuth();
   const { openModal, closeModal } = useModalContext();
   const [count, setCount] = useState(3);
+  const { roomDispatch } = useRoom();
 
   useEffect(() => {
     if (param.get("from") === "game") {
@@ -83,15 +85,23 @@ const Page = () => {
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
         console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
+        roomDispatch({ type: "SET_IS_OPEN", value: false });
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
         closeModal();
         router.push("./optionselect");
       }
     };
 
+    const HomeGoToLobby = (payload: any) => {
+      console.log("HomeGoToLobby : ", payload);
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
+    };
+    authState.chatSocket.on("chat_goto_lobby", HomeGoToLobby);
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_answer", askInvite);
     return () => {
       if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_goto_lobby", HomeGoToLobby);
       authState.chatSocket.off("chat_receive_answer");
       authState.chatSocket.off("chat_invite_answer");
     };
