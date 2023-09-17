@@ -15,11 +15,22 @@ const GameResult = () => {
 
   const BackToMain = () => {
     gameDispatch({ type: "SCORE_RESET" });
-    router.replace("/?from=game");
+    router.replace("/home?from=game");
   };
 
   useEffect(() => {
     setClient(true);
+
+    const goToBack = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      router.replace("/home?from=game");
+    };
+
+    addEventListener("beforeunload", goToBack);
+
+    return () => {
+      removeEventListener("beforeunload", goToBack);
+    };
   }, []);
 
   if (!client) return <></>;
@@ -159,7 +170,9 @@ const GameResult = () => {
                 //   닉네임 클릭시, 프로필 모달 띄우는 파트
                 //   onClick={}
                 >
-                  <Typography sx={{ fontSize: "2rem" }}>{gameState.bPlayer.nick}</Typography>
+                  <Typography sx={{ fontSize: "2rem" }}>
+                    {gameState.bPlayer.nick}
+                  </Typography>
                 </Card>
                 <Card>
                   <Typography sx={{ fontSize: "2rem" }}>
