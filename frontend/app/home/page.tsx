@@ -38,17 +38,17 @@ const Page = () => {
 
   useEffect(() => {
     setClient(true);
-    console.log("🕚", server_domain)
+    console.log("🕚", server_domain);
     if (authState.chatSocket === undefined) {
-      console.log("go to /")
+      console.log("go to /");
       router.push("/");
       return;
     }
-    console.log(`🐒`, authState.chatSocket)
+    console.log(`🐒`, authState.chatSocket);
 
     console.log("chat socket connect", authState.chatSocket);
     authState.chatSocket.connect();
-    
+
     console.log("chat socket connect", authState.chatSocket);
     const askInvite = ({
       userIdx,
@@ -57,7 +57,7 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
-      console.log("😍", userIdx, userNickname)
+      console.log("😍", userIdx, userNickname);
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
@@ -74,14 +74,22 @@ const Page = () => {
       inviteUserNickname: string;
       targetUserIdx: number; // 초대 받은 사람
       targetUserNickname: string;
-      answer: number;
+      answer: boolean;
     }) => {
-      if (answer === 0) {
-        closeModal()
-      } else if (answer === 1) {
+      console.log(
+        "receiveInvite : ",
+        inviteUserIdx, // 초대 한 사람
+        inviteUserNickname,
+        targetUserIdx, // 초대 받은 사람
+        targetUserNickname,
+        answer
+      );
+      if (answer === false) {
+        closeModal();
+      } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
-        console.log("💻target", target)
+        console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
         closeModal();
         router.push("./optionselect");
