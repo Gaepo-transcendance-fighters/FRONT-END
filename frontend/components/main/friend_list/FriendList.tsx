@@ -50,9 +50,7 @@ const FriendList = () => {
   }, [select]);
 
   const updateFriendStatus = useCallback((data: user_status) => {
-    console.log("updateFriendStatus", friendState.friendList);
     if (friendState.friendList.length === 0) return;
-    console.log(data);
     const friendList = friendState.friendList.map((friend) => {
       if (friend.friendIdx === data.userIdx) {
         return { ...friend, isOnline: data.isOnline };

@@ -1,24 +1,12 @@
 "use client";
 
 import { main } from "@/font/color";
-import {
-  Avatar,
-  Button,
-  Card,
-  createTheme,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
-
+import { Button, Card, ThemeProvider, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
-const font = createTheme({
-  typography: {
-    fontFamily: "neodgm",
-  },
-});
-
 import { useUser } from "@/context/UserContext";
+import { font } from "@/type/type";
+import Image from "next/image";
 
 const Myprofile = () => {
   const router = useRouter();
@@ -41,16 +29,31 @@ const Myprofile = () => {
 
   return (
     <ThemeProvider theme={font}>
-      <div style={{ padding: 10 }}>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Avatar
-            src={userState.imgUri}
-            style={{
-              width: "70%",
-              height: "22vh",
-              border: "4px solid #8CCAE5",
-            }}
-          />
+      <div
+        style={{
+          padding: 10,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            borderRadius: "10px",
+            height: "150px",
+            width: "150px",
+            overflow: "hidden",
+            margin: "auto",
+            backgroundColor: "black",
+          }}
+        >
+          {userState.imgUri ? (
+            <Image
+              src={userState.imgUri}
+              width={150}
+              height={150}
+              alt="main my profile img"
+            />
+          ) : null}
         </div>
         <div style={{ padding: 10 }}>
           <Card
@@ -75,11 +78,9 @@ const Myprofile = () => {
               }}
             >
               {userState.nickname}
-              {/* props.Nickname*/}
             </Typography>
           </Card>
         </div>
-
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
             type="button"
@@ -93,13 +94,6 @@ const Myprofile = () => {
           >
             더보기
           </Button>
-          {/* <Button
-            onClick={() => {
-              router.push("/secondauth");
-            }}
-          >
-            2차인증페이지
-          </Button> */}
         </div>
       </div>
     </ThemeProvider>

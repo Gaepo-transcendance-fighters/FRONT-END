@@ -48,7 +48,6 @@ const DmChats = ({ msgs, setMsgs }: Props) => {
   }, [observerTarget]);
 
   const callUser = useCallback(async () => {
-    console.log(pageNum);
     await axios
       .get(
         `${server_domain}/chat/messages?channelIdx=${roomState.currentRoom?.channelIdx}&page=${pageNum}`

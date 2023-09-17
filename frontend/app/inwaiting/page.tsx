@@ -83,7 +83,7 @@ const Inwaiting = () => {
     //게임 소켓 - 게임 큐 취소
     authState.gameSocket.emit(
       "game_queue_quit",
-      { userIdx: parseInt(localStorage.getItem('idx')!) },
+      { userIdx: parseInt(localStorage.getItem("idx")!) },
       (res: ReturnMsgDto) => {
         if (res.code === 200) {
           console.log("game_queue_quit");
@@ -101,7 +101,7 @@ const Inwaiting = () => {
 
   useEffect(() => {
     if (!authState.gameSocket) return;
-    console.log("waiting")
+    console.log("waiting");
     setClient(true);
 
     //게임 소켓 - 이벤트 등록
@@ -111,22 +111,25 @@ const Inwaiting = () => {
       setTimeout(() => {
         router.replace("/gameplaying");
       }, 2000);
-    })
-
-    authState.gameSocket.on("game_ping", ({serverTime}: {serverTime: number}) => {
-      const now = new Date().getTime();
-      authState.gameSocket!.emit(
-        "game_ping_receive",
-        {
-          userIdx: parseInt(localStorage.getItem('idx')!),
-          serverTime: serverTime,
-          clientTime: now
-        }
-      );
     });
 
+    authState.gameSocket.on(
+      "game_ping",
+      ({ serverTime }: { serverTime: number }) => {
+        const now = new Date().getTime();
+        authState.gameSocket!.emit("game_ping_receive", {
+          userIdx: parseInt(localStorage.getItem("idx")!),
+          serverTime: serverTime,
+          clientTime: now,
+        });
+      }
+    );
+
     authState.gameSocket.on("game_queue_success", (data: IGameQueueSuccess) => {
-      authState.gameSocket!.emit("game_queue_success", { userIdx: parseInt(localStorage.getItem('idx')!) }, () =>{
+      authState.gameSocket!.emit(
+        "game_queue_success",
+        { userIdx: parseInt(localStorage.getItem("idx")!) },
+        () => {
           console.log("game_queue_success");
           gameDispatch({
             type: "A_PLAYER",
@@ -137,16 +140,20 @@ const Inwaiting = () => {
             value: { nick: data.userNicknameSecond, id: data.userIdxSecond },
           });
           gameDispatch({
-            type: "SET_BALL_SPEED_OPTION", value: data.speed
-          })
+            type: "SET_BALL_SPEED_OPTION",
+            value: data.speed,
+          });
           gameDispatch({
-            type: "SET_MAP_TYPE", value: data.mapNumber
-          })
+            type: "SET_MAP_TYPE",
+            value: data.mapNumber,
+          });
           gameDispatch({
-            type: "SET_GAME_MODE", value: data.gameType
-          })
+            type: "SET_GAME_MODE",
+            value: data.gameType,
+          });
           setOpenModal(true);
-      })
+        }
+      );
     });
 
     //큐 대기 중 페이지 탈주 방지
@@ -271,7 +278,7 @@ const Inwaiting = () => {
                         alignItems: "center",
                       }}
                     >
-                      매칭되었습니다
+                      <Typography>매칭되었습니다</Typography>
                     </CardContent>
                   </CardContent>
                 </Card>
@@ -294,7 +301,7 @@ const Inwaiting = () => {
                       alignItems: "center",
                     }}
                   >
-                    잠시후 게임화면으로 이동합니다.
+                    <Typography>잠시후 게임화면으로 이동합니다.</Typography>
                   </CardContent>
                 </Card>
               </Box>
