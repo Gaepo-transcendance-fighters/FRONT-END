@@ -39,7 +39,12 @@ const Page = () => {
   useEffect(() => {
     setClient(true);
     if (authState.chatSocket === undefined) return router.replace("/");
-    authState.chatSocket.connect();
+
+    console.log("chat socket connect", authState.chatSocket.connected);
+    if (!authState.chatSocket.connected) {
+      authState.chatSocket.connect();
+    }
+
     const askInvite = ({
       userIdx,
       userNickname,

@@ -66,7 +66,6 @@ const Game = () => {
   };
 
   useEffect(() => {
-    authState.chatSocket!.disconnect();
     setClient(true);
   }, []);
 

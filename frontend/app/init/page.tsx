@@ -1,18 +1,13 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  Box,
-  CardContent,
-  Stack,
-} from "@mui/material";
+import { Button, Card, Box, CardContent, Stack } from "@mui/material";
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { main } from "@/type/type";
 import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
+import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -34,39 +29,35 @@ export default function InitUser() {
   const [block, setBlock] = useState<boolean>(false);
   const { authState, authDispatch } = useAuth();
   const [inputNick, setInputNick] = useState<string>("");
-  
+
   const sendUri = `${server_domain}/users/profile`;
-  
 
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^A-Za-z]/gi, "");
   };
 
   const SetNick = async () => {
-
     (document.getElementById("inputbox") as HTMLInputElement).value = "";
-    const response = await axios({
+    await axios({
       method: "post",
       url: sendUri,
       data: {
-        userIdx: authState.userInfo.id,
+        userIdx: secureLocalStorage.getItem("idx") as number,
         userNickname: inputNick,
-        imgDate : "",
+        imgDate: "",
       },
+    }).then((response) => {
+      if (response.status == 200 && response.data.result.nickname !== "") {
+        return router.push("/");
+      } else if (
+        response.status == 200 &&
+        response.data.result.nickname === ""
+      ) {
+        console.log("fail");
+        alert("잘못된 입력입니다. 재시도 해주세요.");
+        setBlock(false); // 여기서 비우기.
+      }
     });
-    if (response.status == 200 && response.data.result.nickname !== "") {
-      
-      return router.push("/");
-    }
-    
-    else if (
-       response.status == 200 &&
-       response.data.result.nickname === ""
-     ) {
-       console.log("fail");
-       alert("잘못된 입력입니다. 재시도 해주세요.");
-       setBlock(false); // 여기서 비우기.
-     }
     //재입력 필요
   };
 
@@ -149,4 +140,4 @@ export default function InitUser() {
       </Card>
     </Box>
   );
-};
+}
