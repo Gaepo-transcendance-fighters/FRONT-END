@@ -19,18 +19,16 @@ export default function HomePage() {
     console.log(`${server_domain}/chat`);
 
     const socket = io(`${server_domain}/chat`, {
-      query: { userId: secureLocalStorage.getItem("idx") },
+      query: { userId: secureLocalStorage.getItem("idx") as string },
       autoConnect: false,
     });
 
     const gameSocket = io(`${server_domain}/game/playroom`, {
-      query: { userId: secureLocalStorage.getItem("idx") },
+      query: { userId: secureLocalStorage.getItem("idx") as string },
       autoConnect: false,
     });
 
     authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
-
-    console.log(socket);
     authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
 
     const nickname = secureLocalStorage.getItem("nickname") as string;
