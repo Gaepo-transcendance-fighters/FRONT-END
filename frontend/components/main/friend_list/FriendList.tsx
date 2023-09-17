@@ -3,11 +3,13 @@
 import { ToggleButton, Card, Typography, Box, Stack } from "@mui/material";
 import Friend from "./Friend";
 import Block from "./Block";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { main } from "@/font/color";
 import { useFriend } from "@/context/FriendContext";
+import { useAuth } from "@/context/AuthContext";
+import { user_status } from "@/type/type";
 
-const selectedButton = {
+const unselectedButton = {
   backgroundColor: main.main1,
   color: "white",
   "&:hover": {
@@ -22,7 +24,7 @@ const selectedButton = {
   flex: 1,
 };
 
-const unselectedButton = {
+const selectedButton = {
   backgroundColor: main.main5,
   color: "white",
   "&:hover": {
@@ -39,12 +41,35 @@ const unselectedButton = {
 
 const FriendList = () => {
   const [select, setSelect] = useState<boolean>(false);
-  const { friendState } = useFriend();
+  const { friendState, friendDispatch } = useFriend();
   const [client, setClient] = useState(false);
+  const { authState } = useAuth();
 
   useEffect(() => {
     setClient(true);
   }, [select]);
+
+  const updateFriendStatus = useCallback((data: user_status) => {
+    if (friendState.friendList.length === 0) return;
+    const friendList = friendState.friendList.map((friend) => {
+      if (friend.friendIdx === data.userIdx) {
+        return { ...friend, isOnline: data.isOnline };
+      } else {
+        return friend;
+      }
+    });
+    friendDispatch({ type: "SET_FRIENDLIST", value: friendList });
+  }, [friendState.friendList, friendDispatch]);
+
+  useEffect(() => {
+    if (authState.chatSocket)
+      authState.chatSocket.on("BR_main_enter", updateFriendStatus);
+
+    return () => {
+      if (authState.chatSocket)
+        authState.chatSocket.off("BR_main_enter", updateFriendStatus);
+    };
+  }, [updateFriendStatus]);
 
   if (!client) return <></>;
 

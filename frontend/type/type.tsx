@@ -119,3 +119,9 @@ export const font = createTheme({
     fontFamily: "neodgm",
   },
 });
+
+export interface user_status {
+  nickname: string;
+  userIdx: number;
+  isOnline: IOnlineStatus;
+}

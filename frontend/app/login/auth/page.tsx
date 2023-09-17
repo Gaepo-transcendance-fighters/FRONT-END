@@ -47,10 +47,7 @@ const Auth = () => {
     document.cookie = "login=1; path=/; expires=" + expire.toUTCString() + ";";
   };
 
-  // haryu's server
-  // await fetch("http://localhost:4000/login/auth", {
   const postCode = async (code: string) => {
-    // dev original
     await fetch(`${server_domain}/login/auth`, {
       method: "POST",
       headers: {
@@ -142,8 +139,8 @@ const Auth = () => {
   return (
     <Box>
       <Card sx={modalStyle}>
-        <CircularProgress sx={{ color: "white" }} />
         <Typography sx={{ color: "white" }}>Loading...</Typography>
+        <CircularProgress sx={{ color: "white" }} />
       </Card>
     </Box>
   );

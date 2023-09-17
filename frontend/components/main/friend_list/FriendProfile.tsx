@@ -30,6 +30,8 @@ import RoomEnter from "@/external_functions/RoomEnter";
 import { useFriend } from "@/context/FriendContext";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import FriendGameLog from "./FriendGameLog";
+import FriendGameButton from "../InviteGame/FriendGameButton";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -187,7 +189,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
     await axios({
       method: "delete",
       url: `${server_domain}/users/unfollow`,
-      // url: "http://localhost:4000/users/unfollow",
       data: friendReqData,
     })
       .then((res) => {
@@ -265,7 +266,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   useEffect(() => {
     if (!authState.chatSocket) return;
     const userProfile = (data: IFriendData) => {
-      console.log("userProfile : ", userProfile);
       setFriendData(data);
     };
     authState.chatSocket.on("user_profile", userProfile);
@@ -274,12 +274,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       authState.chatSocket.off("user_profile");
     };
   }, [friendData]);
-
-  // useEffect(() => {
-  //   const find = friendState.blockList.find((block) =>
-  //     block.targetIdx === idx
-  //   );
-  // }, [openModal]);
 
   return (
     <>
@@ -305,10 +299,9 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
               mx={5}
             >
               <Image
-                // src="/seal.png" // mockdata
                 src={`${server_domain}/img/${
                   prop.friendIdx
-                }.png?${Date.now().toString()}`} // < !mockdata
+                }.png?${Date.now().toString()}`}
                 alt="user img"
                 width={100}
                 height={100}
@@ -328,16 +321,8 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
               >
                 닉네임: {friendData?.targetNickname}
               </Typography>
-              <Typography>
-                상태:{" "}
-                {friendData?.isOnline === IOnlineStatus.ONLINE
-                  ? loginOn
-                  : friendData?.isOnline === IOnlineStatus.OFFLINE
-                  ? loginOff
-                  : ""}
-              </Typography>
               <Stack direction={"row"} spacing={2}>
-                {/* <FriendGameButton prop={prop as IFriend} /> */}
+                <FriendGameButton prop={prop as IFriend} />
                 <Button
                   type="button"
                   sx={{ minWidth: "max-content" }}
@@ -473,14 +458,14 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
             <Box
               sx={{
                 listStyleType: "none",
-                overflowY: "scroll",
+                // overflowY: "scroll",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 width: "100%",
               }}
             >
-              {/* <MyGameLog /> */}
+              <FriendGameLog person={prop} />
             </Box>
           </Card>
         </Box>

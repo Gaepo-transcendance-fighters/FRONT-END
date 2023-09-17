@@ -9,6 +9,7 @@ import {
   Modal,
   Typography,
 } from "@mui/material";
+import Image from "next/image";
 
 import { main } from "@/type/type";
 
@@ -40,6 +41,7 @@ const Game = () => {
   const { gameState, gameDispatch } = useGame();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [client, setClient] = useState<boolean>(false);
+  const [cha, setCha] = useState<string>("");
 
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
@@ -67,6 +69,11 @@ const Game = () => {
     setClient(true);
   }, []);
 
+  useEffect(() => {
+    const random = Math.floor(Math.random() * 7) + 1;
+    setCha(`/character/cha${random}.png`);
+  }, [cha]);
+
   if (!client) return <></>;
 
   return (
@@ -80,6 +87,13 @@ const Game = () => {
           margin: 0,
         }}
       >
+        <Image
+          src={cha}
+          alt="gogoo1"
+          width={500}
+          height={500}
+          style={{ zIndex: 0, position: "absolute", top: "20%", left: "33%" }}
+        />
         <CardContent
           style={{
             display: "flex",
@@ -124,8 +138,7 @@ const Game = () => {
                       justifyContent: "center",
                     }}
                   >
-                    {/* 상단 안내메세지 */}
-                    How to?
+                    <Typography>How to?</Typography>
                   </Card>
 
                   <Card
@@ -136,7 +149,7 @@ const Game = () => {
                       alignItems: "center",
                       flexDirection: "column",
                       padding: "10px 0px 0px 0px",
-                      backgroundColor: "white",
+                      backgroundColor: main.main2,
                     }}
                   >
                     <CardContent
@@ -147,6 +160,7 @@ const Game = () => {
                         alignItems: "center",
                         flexDirection: "column",
                         padding: "10px 0px 0px 0px",
+                        marginBottom: "10px",
                       }}
                     >
                       {/* 일반게임 */}
@@ -160,8 +174,9 @@ const Game = () => {
                           backgroundColor: main.main3,
                         }}
                       >
-                        일반게임 안내
+                        <Typography>일반게임 안내</Typography>
                       </Card>
+                      <br></br>
                       {/* 일반설명 */}
                       <Card
                         style={{
@@ -173,10 +188,12 @@ const Game = () => {
                           border: "1px solid black",
                         }}
                       >
-                        <strong>일반 게임</strong>은 랭크 점수를 걸지 않고
-                        상대와 겨루는 모드입니다. 이 모드에선 공의 스피드와 맵의
-                        종류를 직접 고를 수 있고 각 옵션은 상대의 선택와
-                        플레이어의 선택 중 랜덤으로 적용됩니다.
+                        <Typography>
+                          <strong>일반 게임</strong>은 랭크 점수를 걸지 않고
+                          상대와 겨루는 모드입니다. 이 모드에선 공의 스피드와
+                          맵의 종류를 직접 고를 수 있고 각 옵션은 상대의 선택와
+                          플레이어의 선택 중 랜덤으로 적용됩니다.
+                        </Typography>
                       </Card>
                     </CardContent>
 
@@ -201,8 +218,9 @@ const Game = () => {
                           backgroundColor: main.main3,
                         }}
                       >
-                        랭크게임 안내
+                        <Typography>랭크게임 안내</Typography>
                       </Card>
+                      <br></br>
                       {/* 랭크설명 */}
                       <Card
                         style={{
@@ -259,62 +277,52 @@ const Game = () => {
             style={{
               width: "100%",
               height: "65vh",
-              border: "2px solid black",
+              boxShadow: "none",
               display: "flex",
               justifyContent: "space-around",
               alignItems: "center",
-              backgroundColor: main.main3,
+              backgroundColor: "transparent",
             }}
           >
-            <Card
+            <Button
               style={{
-                width: "80%",
-                height: "80%",
+                width: "35%",
+                height: "70%",
                 border: "2px solid black",
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
+                fontSize: "2rem",
+                backgroundColor: main.main4,
+                color: "white",
               }}
+              onClick={ClickNomalGame}
             >
-              <Button
-                style={{
-                  width: "35%",
-                  height: "70%",
-                  border: "2px solid black",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                  fontSize: "2rem",
-                  backgroundColor: main.main1,
-                }}
-                onClick={ClickNomalGame}
-              >
-                일반 게임 플레이!
-              </Button>
+              Normal Game Play!
+            </Button>
 
-              <Button
-                style={{
-                  width: "35%",
-                  height: "70%",
-                  border: "2px solid black",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                  fontSize: "2rem",
-                  backgroundColor: main.main1,
-                }}
-                onClick={ClickRankGame}
-              >
-                랭크 게임 플레이!
-              </Button>
-            </Card>
+            <Button
+              style={{
+                width: "35%",
+                height: "70%",
+                border: "2px solid black",
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+                fontSize: "2rem",
+                backgroundColor: main.main4,
+                color: "white",
+              }}
+              onClick={ClickRankGame}
+            >
+              Rank Game Play!
+            </Button>
           </Card>
         </CardContent>
         <CardContent
           style={{
             width: "100%",
             height: "30vh",
-
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -333,7 +341,7 @@ const Game = () => {
             }}
             onClick={BackToMain}
           >
-            메인화면으로 돌아가기
+            Back to Main
           </Button>
         </CardContent>
       </Stack>

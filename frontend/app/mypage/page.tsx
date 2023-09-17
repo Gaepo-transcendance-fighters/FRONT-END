@@ -7,23 +7,19 @@ import {
   Card,
   Box,
   CardContent,
-  Modal,
   Stack,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { IOnlineStatus, font, main } from "@/type/type";
-import React, { useEffect, useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
-import {
-  IUserData,
-  myProfileStyle,
-  nicknameModalStyle,
-} from "@/type/My";
+import { IUserData, myProfileStyle } from "@/type/My";
+import Image from "next/image";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -31,7 +27,6 @@ export default function PageRedir() {
   const router = useRouter();
   const { userState, userDispatch } = useUser();
   const { authState } = useAuth();
-  const [isSet, setIsSet] = useState<boolean>(false);
   const [userData, setUserData] = useState<IUserData>({
     available: false,
     check2Auth: false,
@@ -48,16 +43,12 @@ export default function PageRedir() {
     userIdx: 0,
   });
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
   //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
-  const [verified, setVerified] = useState(false);
-  const [inputName, setInputName] = useState<string>("");
-
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
     const files = event.target.files;
@@ -123,55 +114,6 @@ export default function PageRedir() {
     });
   };
 
-  const onChangeNickName = async () => {
-    if (inputName === "") return alert("입력값이 없습니다");
-    if (inputName === userData?.nickname) {
-      return alert("현재 닉네임과 동일합니다!");
-    }
-
-    const formData = new FormData();
-    formData.append("userIdx", authState.userInfo.id.toString() || "");
-    formData.append("userNickname", inputName);
-    formData.append("imgData", authState.userInfo.imgUrl);
-
-    try {
-      const response = await axios({
-        method: "POST",
-        url: `${server_domain}/users/profile`,
-        headers: {
-          "Content-Type": "Application/json",
-          Authorization: "Bearer " + authState.userInfo.authorization,
-        },
-        data: formData,
-      });
-      if (response.status === 400) alert("이미 존재하는 닉네임입니다");
-      else if (response.status === 200) {
-        if (!authState.chatSocket) return;
-        userDispatch({
-          type: "CHANGE_NICK_NAME",
-          value: response.data.result.nickname,
-        });
-        authState.chatSocket.emit("set_user_status", {
-          userStatus: { nickname: response.data.nickname },
-        });
-        handleCloseModal();
-      }
-    } catch (error) {
-      console.log("닉네임 변경중 문제가 발생");
-    }
-  };
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, "");
-  };
-
   const BackToHome = () => {
     router.push("/home");
   };
@@ -224,54 +166,64 @@ export default function PageRedir() {
                   display: "flex",
                   alignItems: "center",
                   flexDirection: "row",
-                  justifyContent: "space-around",
+                  justifyContent: "space-between",
                 }}
               >
                 <Stack
                   style={{
-                    width: "50%",
+                    width: "57%",
                     height: "100%",
                     display: "flex",
                     alignItems: "center",
-
                     backgroundColor: main.main8,
                   }}
                 >
                   <Card
                     sx={{
                       backgroundColor: main.main7,
+                      width: "100%",
                       flexDirection: "row",
                       display: "flex",
-                      padding: 3,
                     }}
                     style={{ border: "1px solid black" }}
                   >
                     {/* 아바타박스 */}
                     <Box
                       sx={{
-                        borderRadius: "70%",
-                        width: "30%",
-                        height: "100%",
-                        overflow: "hidden",
                         display: "flex",
                         justifyContent: "space-around",
+                        width: "100%",
+                        height: "100%",
                         alignItems: "center",
+                        overflow: "hidden",
                       }}
-                      mx={5}
                     >
-                      <Avatar
-                        src={userState.imgUri}
-                        style={{
-                          width: "100%",
-                          height: "75%",
-                          border: "4px solid #8CCAE5",
+                      <Box
+                        sx={{
+                          borderRadius: "4%",
+                          display: "flex",
+                          justifyContent: "space-around",
+                          width: "150px",
+                          height: "150px",
+                          alignItems: "center",
+                          overflow: "hidden",
+                          border: "1px solid",
+                          backgroundColor: "brown",
                         }}
-                      />
+                      >
+                        <Image
+                          src={userState.imgUri}
+                          width={150}
+                          height={150}
+                          alt="my profile img"
+                        />
+                      </Box>
                     </Box>
                     {/* 이미지, 닉네임, 2차인증, */}
                     <Stack
                       sx={{
-                        width: "20vw",
+                        width: "70vw",
+                        pb: 3,
                       }}
                       spacing={0.5}
                     >
@@ -282,31 +234,23 @@ export default function PageRedir() {
                         }}
                         style={{ fontSize: "3rem" }}
                       >
-                        {userData?.nickname}
+                        {userState.nickname}
                       </Typography>
-                      <CardContent style={{ width: "100%" }}>
-                        {verified ? (
-                          <Typography style={{ fontSize: "1.5rem" }}>
-                            2차인증 여부 : Y
-                          </Typography>
-                        ) : (
-                          <Typography style={{ fontSize: "1.5rem" }}>
-                            2차인증 여부 : N
-                          </Typography>
-                        )}
-                      </CardContent>
-                      <CardContent style={{ width: "100%" }}>
-                        <Typography style={{ fontSize: "1.2rem" }}>
-                          Email : {userData?.email}
-                        </Typography>
-                      </CardContent>
+                      <Typography style={{ fontSize: "1.2rem" }}>
+                        2차인증 여부 : {userData.check2Auth ? "Y" : "N"}
+                      </Typography>
+                      <Typography style={{ fontSize: "1.2rem" }}>
+                        Email : {authState.userInfo.email}
+                      </Typography>
                       {/* 버튼관련 스택 */}
                       <Stack
                         direction={"row"}
-                        spacing={2}
-                        padding={"20px 0px 0px 2px"}
+                        spacing={3}
+                        padding={"17px 0px 0px 0px"}
+                        // p={3}
                       >
                         <form>
+                          {/* TODO : 버튼 배열 어떻게? */}
                           <Button
                             onClick={OpenFileInput}
                             style={{
@@ -325,77 +269,6 @@ export default function PageRedir() {
                             onChange={handleChange}
                           />
                         </form>
-                        <Button
-                          type="submit"
-                          style={{
-                            minWidth: "max-content",
-                          }}
-                          variant="contained"
-                          onClick={handleOpenModal}
-                        >
-                          닉네임변경
-                        </Button>
-                        <Modal open={openModal} onClose={handleCloseModal}>
-                          <Box sx={nicknameModalStyle} borderRadius={"10px"}>
-                            <Card
-                              sx={{
-                                backgroundColor: main.main4,
-                                height: "170px",
-                                margin: -1,
-                              }}
-                            >
-                              <CardContent
-                                sx={{ paddingBottom: 0, textAlign: "center" }}
-                              >
-                                변경할 닉네임을 입력하세요
-                              </CardContent>
-                              <Stack direction={"row"}>
-                                <Card
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                  }}
-                                  sx={{
-                                    margin: 1,
-                                    width: "100%",
-                                    height: "120px",
-                                    backgroundColor: main.main1,
-                                    overflow: "scroll",
-                                  }}
-                                >
-                                  <input
-                                    type="text"
-                                    maxLength={10}
-                                    style={{
-                                      width: "40%",
-                                      height: "32px",
-                                      fontSize: "15px",
-                                      border: 0,
-                                      borderRadius: "15px",
-                                      outline: "none",
-                                      paddingLeft: "10px",
-                                      backgroundColor: "#E9E9E9",
-                                    }}
-                                    onInput={handleOnInput}
-                                    onChange={(event) => {
-                                      setInputName(event?.target.value);
-                                    }}
-                                  />
-                                  <Button
-                                    style={{
-                                      border: "0.1px solid black",
-                                      backgroundColor: "lightGray",
-                                    }}
-                                    onClick={onChangeNickName}
-                                  >
-                                    입력
-                                  </Button>
-                                </Card>
-                              </Stack>
-                            </Card>
-                          </Box>
-                        </Modal>
                         <SecondAuth />
                       </Stack>
                     </Stack>
@@ -405,7 +278,11 @@ export default function PageRedir() {
                     sx={{ backgroundColor: main.main7 }}
                     style={{ width: "100%", border: "1px solid black" }}
                   >
-                    <CardContent sx={{ paddingBottom: 0 }}>전적</CardContent>
+                    <CardContent sx={{ paddingBottom: 0 }}>
+                      <Typography style={{ fontSize: "1.4rem" }}>
+                        전적
+                      </Typography>
+                    </CardContent>
                     <Stack direction={"row"}>
                       {/* 이미지 */}
                       <Card
@@ -425,8 +302,8 @@ export default function PageRedir() {
                           <img
                             src={RankSrc}
                             style={{
-                              width: "70%",
-                              height: "70%",
+                              width: "50px",
+                              height: "50px",
                               display: "block",
                               margin: "0 auto",
                             }}
@@ -471,12 +348,13 @@ export default function PageRedir() {
                 {/* 전적기록파트 */}
                 <Stack
                   style={{
-                    width: "45%",
+                    width: "41%",
                     height: "100%",
                     backgroundColor: main.main7,
                     border: "1px solid black",
                     display: "flex",
                     alignItems: "center",
+                    borderRadius: "4px",
                   }}
                 >
                   <br />
@@ -508,7 +386,7 @@ export default function PageRedir() {
                           border: "2px solid black",
                         }}
                       >
-                        <Typography style={{ fontSize: "2rem" }}>
+                        <Typography style={{ fontSize: "1.7rem" }}>
                           전적 기록
                         </Typography>
                       </Card>
@@ -517,7 +395,6 @@ export default function PageRedir() {
                     <Box
                       sx={{
                         listStyleType: "none",
-                        overflowY: "scroll",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",

@@ -9,7 +9,7 @@ interface GameContextData {
   bPlayer: { nick: string; id: number };
   bScore: number;
   latency: number;
-  roomId: string;
+  roomId: number;
   serverDateTime: number;
   degree: { x: number; y: number };
 }
@@ -50,20 +50,20 @@ type GameAction =
   | { type: "B_SCORE"; value: number }
   | { type: "SCORE_RESET" }
   | { type: "GAME_RESET"; value: GameContextData }
-  | { type: "SET_ROOM_ID"; value: string }
+  | { type: "SET_ROOM_ID"; value: number }
   | { type: "SET_SERVER_DATE_TIME"; value: number }
   | { type: "SET_DEGREE"; value: { x: number; y: number } };
 
 const initialState: GameContextData = {
   gameMode: 1,
   ballSpeedOption: 3,
-  mapType: MapOption.map2,
+  mapType: MapOption.map1,
   latency: 0,
   aPlayer: { nick: "", id: 0 },
   aScore: 0,
   bPlayer: { nick: "", id: 0 },
   bScore: 0,
-  roomId: "",
+  roomId: 0,
   serverDateTime: 0,
   degree: { x: 0, y: 0 },
 };
@@ -72,19 +72,22 @@ export function resetGameContextData(): GameContextData {
   return {
     gameMode: 1,
     ballSpeedOption: 3,
-    mapType: MapOption.map2,
+    mapType: MapOption.map1,
     latency: 0,
     aPlayer: { nick: "", id: 0 },
     aScore: 0,
     bPlayer: { nick: "", id: 0 },
     bScore: 0,
-    roomId: "",
+    roomId: 0,
     serverDateTime: 0,
     degree: { x: 0, y: 0 },
   };
 }
 
-function gameReducer(state: GameContextData, action: GameAction) {
+function gameReducer(
+  state: GameContextData,
+  action: GameAction
+): GameContextData {
   switch (action.type) {
     case "SET_GAME_MODE": {
       return { ...state, gameMode: action.value };
@@ -112,7 +115,7 @@ function gameReducer(state: GameContextData, action: GameAction) {
     case "SCORE_RESET":
       return { ...state, aScore: 0, bScore: 0 };
     case "GAME_RESET":
-      return { ...state, state: action.value };
+      return { ...state, ...action.value };
     case "SET_ROOM_ID":
       return { ...state, roomId: action.value };
     case "SET_SERVER_DATE_TIME":

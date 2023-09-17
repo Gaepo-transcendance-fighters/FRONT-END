@@ -16,11 +16,12 @@ import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
-import { gameSocket } from "../page";
-import { io } from "authState.socketio-client";
+import axios from "axios";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";
+
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 enum SpeedOption {
   speed1,
@@ -83,17 +84,18 @@ const OptionSelect = () => {
   };
 
   useEffect(() => {
-    if (!gameSocket) return;
-    authState.gameSocketon("game_queue_regist", () => {
+    if (!authState.gameSocket) return;
+    authState.gameSocket.on("game_queue_regist", () => {
       console.log("game_queue_regist 받음");
     });
-    authState.gameSocketon("game_option", () => {
+    authState.gameSocket.on("game_option", () => {
       console.log("game_option 받음");
     });
 
     return () => {
-      authState.gameSocketoff("game_option");
-      authState.gameSocketoff("game_queue_regist");
+      if (!authState.gameSocket) return;
+      authState.gameSocket.off("game_option");
+      authState.gameSocket.off("game_queue_regist");
     };
   }, []);
 
@@ -103,56 +105,82 @@ const OptionSelect = () => {
     if (countdown == 0) cntRedir();
   }, [countdown]);
 
-  const cntRedir = () => {
-    if (!gameSocket) return;
+  const cntRedir = async () => {
+    if (!authState.gameSocket) return;
     gameDispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
+    gameDispatch({ type: "SCORE_RESET" });
 
-    console.log(authState.id);
+    console.log(gameState.gameMode);
 
-    authState.gameSocketemit(
-      "game_option",
-      {
-        gameType: gameState.gameMode,
-        userIdx: authState.id,
-        speed: selectedSpeedOption,
-        mapNumber: selectedMapOption,
-      },
-      (res: { code: number; msg: string }) => {
-        if (res.code === 200) {
-          console.log("queue regist start");
-
-          if (gameState.gameMode === GameType.FRIEND) {
-            console.log("친구게임");
-            setTimeout(() => {
-              router.replace("./inwaiting");
-            }, 300);
-            return;
+    if (gameState.gameMode === GameType.FRIEND) {
+      console.log(
+        "me",
+        localStorage.getItem("idx"),
+        localStorage.getItem("nickname")
+      );
+      console.log("you", gameState.bPlayer.id, gameState.bPlayer.nick);
+      await axios({
+        method: "post",
+        url: `${server_domain}/game/friend-match`,
+        data: {
+          userIdx: parseInt(localStorage.getItem("idx")!),
+          targetIdx: gameState.bPlayer.id,
+          gameType: gameState.gameMode,
+          speed: selectedSpeedOption,
+          mapNumber: selectedMapOption,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            console.log("gameSocket", authState.gameSocket!);
+            authState.gameSocket!.connect();
+            router.replace("/inwaiting");
+          } else {
+            console.log("게임방 생성 실패");
+            router.replace("/home?from=game");
           }
-
-          authState.gameSocketemit(
-            "game_queue_regist",
-            {
-              userIdx: authState.id,
-              queueDate: Date.now(),
-            },
-            (res: { code: number; msg: string }) => {
-              console.log(res);
-              if (res.code === 200) {
-                setTimeout(() => {
-                  router.replace("./inwaiting");
-                }, 300);
-              }
-            }
-          );
-        }
-      }
-    );
+        })
+        .catch((err) => {
+          console.log(err);
+          router.replace("/home?from=game");
+        });
+      return;
+    } else if (
+      gameState.gameMode === GameType.RANK ||
+      gameState.gameMode === GameType.NORMAL
+    ) {
+      await axios({
+        method: "post",
+        url: `${server_domain}/game/normal-match`,
+        data: {
+          gameType: gameState.gameMode,
+          userIdx: parseInt(localStorage.getItem("idx")!),
+          speed: selectedSpeedOption,
+          mapNumber: selectedMapOption,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            console.log("gameSocket", authState.gameSocket!);
+            authState.gameSocket!.connect();
+            router.replace("/inwaiting");
+          } else {
+            console.log("게임방 생성 실패");
+            router.replace("/home?from=game");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          router.replace("/home?from=game");
+        });
+    }
   };
 
   useEffect(() => {
     setClient(true);
-    authState.gameSocketconnect();
   }, []);
 
   if (!client) return <></>;
@@ -211,6 +239,7 @@ const OptionSelect = () => {
               justifyContent: "center",
               fontSize: "2rem",
               border: "2px solid black",
+              backgroundColor: main.main3,
             }}
           >
             <Typography sx={{ fontSize: "2rem" }}>Select Option</Typography>
@@ -221,9 +250,9 @@ const OptionSelect = () => {
             style={{
               width: "100%",
               height: "70vh",
-              border: "2px solid black",
+              boxShadow: "none",
               alignItems: "center",
-              backgroundColor: main.main3,
+              backgroundColor: "rgba(255, 255, 255, 0)",
             }}
             id={"middle_big"}
           >
@@ -232,7 +261,6 @@ const OptionSelect = () => {
             <Stack
               sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
               style={{
-                backgroundColor: main.main3,
                 padding: "10px 0px 0px 0px",
               }}
               id={"speedoption"}
@@ -246,6 +274,7 @@ const OptionSelect = () => {
                   display: "flex",
                   justifyContent: "space-around",
                   alignItems: "center",
+                  backgroundColor: main.main2,
                 }}
               >
                 <Typography sx={{ fontSize: "1.5rem" }}>Speed</Typography>
@@ -273,7 +302,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedSpeedOption === SpeedOption.speed1}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() =>
                         handleSpeedOptionChange(SpeedOption.speed1)
                       }
@@ -292,7 +324,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedSpeedOption === SpeedOption.speed2}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() =>
                         handleSpeedOptionChange(SpeedOption.speed2)
                       }
@@ -311,7 +346,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedSpeedOption === SpeedOption.speed3}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() =>
                         handleSpeedOptionChange(SpeedOption.speed3)
                       }
@@ -327,7 +365,6 @@ const OptionSelect = () => {
             <Stack
               sx={{ display: "flex", gap: "10px", flexDirection: "column" }}
               style={{
-                backgroundColor: main.main3,
                 padding: "10px 0px 0px 0px",
               }}
               id={"mapoption"}
@@ -341,6 +378,7 @@ const OptionSelect = () => {
                   display: "flex",
                   justifyContent: "space-around",
                   alignItems: "center",
+                  backgroundColor: main.main2,
                 }}
               >
                 <Typography sx={{ fontSize: "1.5rem" }}>Map</Typography>
@@ -368,7 +406,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedMapOption === MapOption.map1}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() => handleMapOptionChange(MapOption.map1)}
                     />
                   }
@@ -385,7 +426,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedMapOption === MapOption.map2}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() => handleMapOptionChange(MapOption.map2)}
                     />
                   }
@@ -402,7 +446,10 @@ const OptionSelect = () => {
                   control={
                     <Checkbox
                       checked={selectedMapOption === MapOption.map3}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: "3rem" } }}
+                      sx={{
+                        "& .MuiSvgIcon-root": { fontSize: "3rem" },
+                        "&.Mui-checked": { color: main.main3 },
+                      }}
                       onChange={() => handleMapOptionChange(MapOption.map3)}
                     />
                   }
@@ -419,10 +466,27 @@ const OptionSelect = () => {
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
-                backgroundColor: main.main3,
+                backgroundColor: main.main1,
               }}
             >
-              {countdown == 0 ? (
+              {countdown === 0 ? (
+                <>
+                  <Card
+                    style={{
+                      width: "100%",
+                      height: "90%",
+                      border: "5px solid black",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "2rem",
+                      backgroundColor: main.main0,
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "2rem" }}>Let's Go!</Typography>
+                  </Card>
+                </>
+              ) : (
                 <>
                   <Card
                     style={{
@@ -434,26 +498,6 @@ const OptionSelect = () => {
                       justifyContent: "center",
                       fontSize: "2rem",
                       backgroundColor: "#F8C800",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "2rem" }}>
-                      {" "}
-                      GET READY!{" "}
-                    </Typography>
-                  </Card>
-                </>
-              ) : (
-                <>
-                  <Card
-                    style={{
-                      width: "100%",
-                      height: "90%",
-                      border: "5px solid #265ECF",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "2rem",
-                      backgroundColor: main.main0,
                     }}
                   >
                     <Typography sx={{ fontSize: "2rem" }}>

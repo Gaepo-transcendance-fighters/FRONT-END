@@ -19,10 +19,10 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const handleOpenModal = () => {
     if (!authState.chatSocket) return;
     authState.chatSocket.emit("chat_invite_ask", {
-      myUserIdx: authState.userInfo.id,
+      myUserIdx: parseInt(localStorage.getItem("idx")!),
       targetUserIdx: prop.userIdx,
     });
-    console.log("open");
+    console.log("open", prop.nickname);
     openModal({
       children: <WaitAccept nickname={prop.nickname} />,
     });
@@ -30,6 +30,10 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
 
   useEffect(() => {
     if (!authState.chatSocket) return;
+    const askInvite = () => {
+      console.log("friend invited")
+      handleOpenModal();
+    };
     const recieveInvite = ({
       inviteUserIdx,
       inviteUserNickname,
@@ -46,20 +50,21 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       console.log("receive invite", answer);
       if (answer === 0) closeModal();
       else if (answer === 1) {
-        gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
+        gameDispatch({type: "SET_GAME_MODE", value: GameType.FRIEND})
+        const target = {nick: targetUserNickname, id: targetUserIdx}
+        console.log("target", target)
+        gameDispatch({type: "B_PLAYER", value: target})
         closeModal();
         router.push("./optionselect");
       }
     };
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
-    authState.chatSocket.on("chat_invite_answer", recieveInvite);
-
-    authState.chatSocket.on("chat_invite_ask", () => {});
+    authState.chatSocket.on("chat_invite_ask", askInvite);
 
     return () => {
       if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_receive_answer");
       authState.chatSocket.off("chat_invite_ask");
-      authState.chatSocket.off("chat_invite_answer");
     };
   }, []);
 
