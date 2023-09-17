@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import WaitAccept from "./WaitAccept";
-import { IMember } from "@/type/RoomType";
+import { IMember, ReturnMsgDto } from "@/type/RoomType";
 import { useAuth } from "@/context/AuthContext";
 import { useModalContext } from "@/context/ModalContext";
 import { useGame } from "@/context/GameContext";
@@ -22,10 +22,16 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
     authState.chatSocket.emit("chat_invite_ask", {
       myUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
       targetUserIdx: prop.userIdx,
-    });
-    console.log("open", prop.nickname);
-    openModal({
-      children: <WaitAccept nickname={prop.nickname} />,
+    }, (res: ReturnMsgDto) => {
+      console.log(res)
+      if (res.code === 200) {
+        console.log("open", prop.nickname);
+        openModal({
+          children: <WaitAccept nickname={prop.nickname} />,
+        });
+      } else if (res.code === 400) {
+        closeModal()
+      }
     });
   };
 

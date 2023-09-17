@@ -68,33 +68,6 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
         value: email,
       });
 
-      userDispatch({ type: "SET_USER_IDX", value: parseInt(idx) });
-      userDispatch({ type: "CHANGE_NICK_NAME", value: nickname });
-      userDispatch({ type: "CHANGE_IMG", value: imgUri });
-      authDispatch({
-        type: "SET_ID",
-        value: parseInt(idx),
-      });
-      authDispatch({
-        type: "SET_NICKNAME",
-        value: nickname,
-      });
-      authDispatch({
-        type: "SET_IMGURL",
-        value: imgUri,
-      });
-      authDispatch({
-        type: "SET_AUTHORIZATION",
-        value: token,
-      });
-      authDispatch({
-        type: "SET_CHECK2AUTH",
-        value: Boolean(auth),
-      });
-      authDispatch({
-        type: "SET_EMAIL",
-        value: email,
-      });
       return router.push("/home");
     } else if (cookies_value === "") router.push(redirectUrl);
   }, []);

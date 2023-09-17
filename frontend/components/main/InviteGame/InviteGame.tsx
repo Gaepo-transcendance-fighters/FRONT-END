@@ -29,42 +29,6 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   const { authState } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!authState.chatSocket) return;
-    // const recieveInvite = ({
-    //   inviteUserIdx, // 초대 한 사람
-    //   inviteUserNickname,
-    //   targetUserIdx, // 초대 받은 사람
-    //   targetUserNickname,
-    //   answer,
-    // }: {
-    //   inviteUserIdx: number; // 초대 한 사람
-    //   inviteUserNickname: string;
-    //   targetUserIdx: number; // 초대 받은 사람
-    //   targetUserNickname: string;
-    //   answer: number;
-    // }) => {
-    //   console.log("recieve invite", answer);
-    //   if (answer === 0) closeModal();
-    //   else if (answer === 1) {
-    //     gameDispatch({type: "SET_GAME_MODE", value: GameType.FRIEND})
-    //     const target = {nick: targetUserNickname, id: targetUserIdx}
-    //     console.log("target", target)
-    //     gameDispatch({type: "B_PLAYER", value: target})
-    //     closeModal();
-    //     router.push("./optionselect");
-    //   }
-    // };
-    // authState.chatSocket.on("chat_receive_answer", recieveInvite);
-    authState.chatSocket.on("chat_invite_answer", () => {});
-
-    return () => {
-      if (!authState.chatSocket) return;
-      authState.chatSocket.off("chat_invite_answer");
-      // authState.chatSocket.off("chat_receive_answer");
-    };
-  }, []);
-
   const handleYes = () => {
     if (!authState.chatSocket) return;
     authState.chatSocket.emit(
@@ -94,6 +58,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       }
     );
   };
+  
   return (
     <>
       <Card
