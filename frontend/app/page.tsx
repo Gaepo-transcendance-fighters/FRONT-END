@@ -1,14 +1,11 @@
 "use client";
 
-import Layout from "@/components/public/Layout";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { ModalPortal } from "@/components/public/ModalPortal";
-import { useModalContext } from "@/context/ModalContext";
+import secureLocalStorage from "react-secure-storage";
 import { useUser } from "@/context/UserContext";
-import InviteGame from "@/components/main/InviteGame/InviteGame";
 
 export const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -19,34 +16,45 @@ export default function HomePage() {
   const { userDispatch } = useUser();
 
   useEffect(() => {
-
     console.log(`${server_domain}/chat`);
 
     const socket = io(`${server_domain}/chat`, {
-      query: { userId: localStorage.getItem("idx") },
+      query: { userId: secureLocalStorage.getItem("idx") },
       autoConnect: false,
     });
 
     const gameSocket = io(`${server_domain}/game/playroom`, {
-      query: { userId: localStorage.getItem("idx") },
+      query: { userId: secureLocalStorage.getItem("idx") },
       autoConnect: false,
     });
 
     authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
 
-    console.log(socket)
+    console.log(socket);
     authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
-    
-    const nickname = localStorage.getItem("nickname");
-    const idx = localStorage.getItem("idx");
-    const email = localStorage.getItem("email");
-    const imgUri = localStorage.getItem("imgUri");
-    const token = localStorage.getItem("token");
-    const auth = localStorage.getItem("check2Auth");
+
+    const nickname = secureLocalStorage.getItem("nickname") as string;
+    const idx = secureLocalStorage.getItem("idx") as string;
+    const email = secureLocalStorage.getItem("email") as string;
+    const imgUri = secureLocalStorage.getItem("imgUri") as string;
+    const token = secureLocalStorage.getItem("token") as string;
+    const auth = secureLocalStorage.getItem("check2Auth") as string;
+
+    console.log(
+      `
+      page localstorage:
+        ${idx},
+        ${nickname},
+        ${email},
+        ${imgUri},
+        ${token},
+        ${auth}
+      `
+    );
 
     if (idx && nickname && email && imgUri && token) {
-      console.log("road to home")
-      
+      console.log("road to home");
+
       userDispatch({ type: "SET_USER_IDX", value: parseInt(idx!) });
       userDispatch({ type: "CHANGE_NICK_NAME", value: nickname! });
       userDispatch({ type: "CHANGE_IMG", value: imgUri! });
@@ -74,10 +82,10 @@ export default function HomePage() {
         type: "SET_EMAIL",
         value: email!,
       });
-      console.log("go to home")
+      console.log("go to home");
       return router.replace("/home");
     }
-    console.log("go to login")
+    console.log("go to login");
     return router.replace("/login");
   }, []);
 

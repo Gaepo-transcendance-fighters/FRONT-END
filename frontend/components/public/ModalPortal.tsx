@@ -11,7 +11,7 @@ export const ModalPortal = () => {
   const { children } = modalData;
 
   return (
-    <Dialog open={isOpen} onClose={closeModal}>
+    <Dialog open={isOpen}>
       <DialogContent>
         {/* The modal's content will be injected here */}
         {children}

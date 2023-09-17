@@ -2,7 +2,7 @@
 
 import GameBoard from "./GameBoard";
 import GamePaddle from "./GamePaddle";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
 import GameBall from "./GameBall";
 import { Stack } from "@mui/material";
@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { ReturnMsgDto } from "@/type/RoomType";
 import WaterBomb from "./WaterBomb";
+import secureLocalStorage from "react-secure-storage";
 
 enum EGameStatus {
   ONGOING,
@@ -35,7 +36,6 @@ interface IGameEnd {
   issueDate: number;
   gameStatus: EGameStatus; // 게임 속행, 게임 종료, 연결문제 판정승, 0, 1, 2
 }
-
 
 const transparency = (
   <Image
@@ -65,17 +65,26 @@ const water_end_down = (
   />
 );
 
-
-const water = <Image 
-style={{
-  margin: 0,
-  padding: 0,
-}}
- src="/water.png" width="50" height="50" alt="water" />;
+const water = (
+  <Image
+    style={{
+      margin: 0,
+      padding: 0,
+    }}
+    src="/water.png"
+    width="50"
+    height="50"
+    alt="water"
+  />
+);
 
 const images = [water_end_up, water, water_end_down];
 
-const PingPong = () => {
+const PingPong = ({
+  setter,
+}: {
+  setter: Dispatch<SetStateAction<boolean>>;
+}) => {
   const [client, setClient] = useState(false);
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
@@ -125,9 +134,15 @@ const PingPong = () => {
       ({ serverTime }: { serverTime: number }) => {
         const now = new Date().getTime();
         authState.gameSocket!.emit("game_ping_receive", {
-          userIdx: parseInt(localStorage.getItem("idx")!),
+          userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           serverTime: serverTime,
           clientTime: now,
+        }, (res: ReturnMsgDto) => {
+          if (res.code === 200) {
+            console.log("good ping")
+          } else if (res.code === 400)
+            console.log("bad ping")
+            
         });
       }
     );
@@ -136,7 +151,7 @@ const PingPong = () => {
     authState.gameSocket.on("game_frame", (res: IGameProps) => {
       setGameProps(res);
       authState.gameSocket!.emit("game_move_paddle", {
-        userIdx: parseInt(localStorage.getItem("idx")!),
+        userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
         paddle: keyboard,
         serverTime: gameProps.serverTime,
         clientTime: Date.now(),
@@ -154,8 +169,6 @@ const PingPong = () => {
     );
 
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
-      console.log("game_pause_score", data);
-      console.log("Add images")
       setWaterbomb(images);
       if (
         data.gameStatus === EGameStatus.END ||
@@ -166,7 +179,7 @@ const PingPong = () => {
       }
       authState.gameSocket!.emit(
         "game_pause_score",
-        { userIdx: parseInt(localStorage.getItem("idx")!) },
+        { userIdx: parseInt(secureLocalStorage.getItem("idx") as string) },
         (res: ReturnMsgDto) => {
           console.log(res);
           if (res.code === 200) {

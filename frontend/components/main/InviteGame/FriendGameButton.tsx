@@ -9,6 +9,7 @@ import { IFriend } from "@/type/type";
 import { useAuth } from "@/context/AuthContext";
 import { useModalContext } from "@/context/ModalContext";
 import { GameType } from "@/type/type";
+import secureLocalStorage from "react-secure-storage";
 
 const FriendGameButton = ({ prop }: { prop: IFriend }) => {
   const router = useRouter();
@@ -19,10 +20,10 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
   const handleOpenModal = () => {
     if (!authState.chatSocket) return;
     authState.chatSocket.emit("chat_invite_ask", {
-      myUserIdx: parseInt(localStorage.getItem("idx")!),
+      myUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
       targetUserIdx: prop.friendIdx,
     });
-    console.log("friend invited", authState.chatSocket)
+    console.log("friend invited", authState.chatSocket);
     openModal({
       children: <WaitAccept nickname={prop.friendNickname} />,
     });
@@ -48,13 +49,13 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
     }) => {
       console.log("receive invite", answer);
       if (answer === 0) {
-        console.log("fail")
+        console.log("fail");
         closeModal();
       } else if (answer === 1) {
-        gameDispatch({type: "SET_GAME_MODE", value: GameType.FRIEND})
-        const target = {nick: targetUserNickname, id: targetUserIdx}
-        console.log("target", target)
-        gameDispatch({type: "B_PLAYER", value: target})
+        gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
+        const target = { nick: targetUserNickname, id: targetUserIdx };
+        console.log("target", target);
+        gameDispatch({ type: "B_PLAYER", value: target });
         closeModal();
         router.push("./optionselect");
       }

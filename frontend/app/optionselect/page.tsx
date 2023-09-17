@@ -17,6 +17,7 @@ import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
+import secureLocalStorage from "react-secure-storage";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";
@@ -111,20 +112,12 @@ const OptionSelect = () => {
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
     gameDispatch({ type: "SCORE_RESET" });
 
-    console.log(gameState.gameMode);
-
     if (gameState.gameMode === GameType.FRIEND) {
-      console.log(
-        "me",
-        localStorage.getItem("idx"),
-        localStorage.getItem("nickname")
-      );
-      console.log("you", gameState.bPlayer.id, gameState.bPlayer.nick);
       await axios({
         method: "post",
         url: `${server_domain}/game/friend-match`,
         data: {
-          userIdx: parseInt(localStorage.getItem("idx")!),
+          userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           targetIdx: gameState.bPlayer.id,
           gameType: gameState.gameMode,
           speed: selectedSpeedOption,
@@ -156,7 +149,7 @@ const OptionSelect = () => {
         url: `${server_domain}/game/normal-match`,
         data: {
           gameType: gameState.gameMode,
-          userIdx: parseInt(localStorage.getItem("idx")!),
+          userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           speed: selectedSpeedOption,
           mapNumber: selectedMapOption,
         },

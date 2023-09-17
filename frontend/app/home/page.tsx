@@ -8,8 +8,8 @@ import { io } from "socket.io-client";
 import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
-import { useGame } from "@/context/GameContext"
-import { GameType } from "@/type/type"
+import { useGame } from "@/context/GameContext";
+import { GameType } from "@/type/type";
 import { server_domain } from "../page";
 import { ReturnMsgDto } from "@/type/RoomType";
 
@@ -35,18 +35,16 @@ const Page = () => {
       };
     }
   }, []);
-  
+
   useEffect(() => {
     setClient(true);
-    console.log("home", authState.chatSocket)
-    if (authState.chatSocket === undefined) {
-      console.log("chat is null")
-      router.replace("/")
-      return 
+    if (authState.chatSocket === undefined) return router.replace("/");
+
+    console.log("chat socket connect", authState.chatSocket.connected);
+    if (!authState.chatSocket.connected) {
+      authState.chatSocket.connect();
     }
-    
-    authState.chatSocket.connect();
-    console.log("connect", authState.chatSocket)
+
     const askInvite = ({
       userIdx,
       userNickname,
@@ -54,7 +52,6 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
-      console.log("invite")
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
@@ -72,13 +69,11 @@ const Page = () => {
       targetUserNickname: string;
       answer: number;
     }) => {
-      console.log("receive invite", answer);
       if (answer === 0) closeModal();
       else if (answer === 1) {
-        gameDispatch({type: "SET_GAME_MODE", value: GameType.FRIEND})
-        const target = {nick: inviteUserNickname, id: inviteUserIdx}
-        console.log("target", target)
-        gameDispatch({type: "B_PLAYER", value: target})
+        gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
+        const target = { nick: inviteUserNickname, id: inviteUserIdx };
+        gameDispatch({ type: "B_PLAYER", value: target });
         closeModal();
         router.push("./optionselect");
       }
@@ -96,9 +91,7 @@ const Page = () => {
     if (authState.chatSocket === undefined) return;
     const interval = setInterval(() => {
       authState.chatSocket!.emit("health_check", {}, (res: ReturnMsgDto) => {
-  
         if (res.code === 200) {
-          // console.log(res.msg);
           setCount(3);
         }
       });
@@ -115,7 +108,7 @@ const Page = () => {
     const interval_check = setInterval(() => {
       setCount((prev) => prev - 1);
       // console.log("count : ", count);
-    }, 1000)
+    }, 1000);
     if (count < 0) {
       // console.log("count : 0 end ");
       router.replace("/login");
@@ -123,7 +116,7 @@ const Page = () => {
 
     return () => {
       clearInterval(interval_check);
-    }
+    };
   }, [count, setCount]);
 
   if (!client) return <></>;

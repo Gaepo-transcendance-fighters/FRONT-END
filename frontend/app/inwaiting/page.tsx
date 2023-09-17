@@ -32,6 +32,7 @@ import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { ReturnMsgDto } from "@/type/RoomType";
+import secureLocalStorage from "react-secure-storage";
 
 enum SpeedOption {
   speed1,
@@ -83,7 +84,7 @@ const Inwaiting = () => {
     //게임 소켓 - 게임 큐 취소
     authState.gameSocket.emit(
       "game_queue_quit",
-      { userIdx: parseInt(localStorage.getItem("idx")!) },
+      { userIdx: parseInt(secureLocalStorage.getItem("idx") as string) },
       (res: ReturnMsgDto) => {
         if (res.code === 200) {
           console.log("game_queue_quit");
@@ -118,7 +119,7 @@ const Inwaiting = () => {
       ({ serverTime }: { serverTime: number }) => {
         const now = new Date().getTime();
         authState.gameSocket!.emit("game_ping_receive", {
-          userIdx: parseInt(localStorage.getItem("idx")!),
+          userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           serverTime: serverTime,
           clientTime: now,
         });
@@ -128,7 +129,7 @@ const Inwaiting = () => {
     authState.gameSocket.on("game_queue_success", (data: IGameQueueSuccess) => {
       authState.gameSocket!.emit(
         "game_queue_success",
-        { userIdx: parseInt(localStorage.getItem("idx")!) },
+        { userIdx: parseInt(secureLocalStorage.getItem("idx") as string) },
         () => {
           console.log("game_queue_success");
           gameDispatch({
