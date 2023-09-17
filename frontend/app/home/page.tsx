@@ -48,10 +48,14 @@ const Page = () => {
     }
     console.log(`🐒`, authState.chatSocket);
 
-    console.log("chat socket connect", authState.chatSocket);
+    console.log(
+      "chat socket connect",
+      authState.chatSocket.connected,
+      authState.chatSocket.disconnected
+    );
     authState.chatSocket.connect();
 
-    console.log("chat socket connect", authState.chatSocket);
+    console.log("chat socket connect", authState.chatSocket.connected);
     const askInvite = ({
       userIdx,
       userNickname,
