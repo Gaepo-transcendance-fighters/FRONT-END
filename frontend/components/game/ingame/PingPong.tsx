@@ -36,7 +36,6 @@ interface IGameEnd {
   gameStatus: EGameStatus; // 게임 속행, 게임 종료, 연결문제 판정승, 0, 1, 2
 }
 
-
 const transparency = (
   <Image
     style={{
@@ -65,13 +64,18 @@ const water_end_down = (
   />
 );
 
-
-const water = <Image 
-style={{
-  margin: 0,
-  padding: 0,
-}}
- src="/water.png" width="50" height="50" alt="water" />;
+const water = (
+  <Image
+    style={{
+      margin: 0,
+      padding: 0,
+    }}
+    src="/water.png"
+    width="50"
+    height="50"
+    alt="water"
+  />
+);
 
 const images = [water_end_up, water, water_end_down];
 
@@ -154,8 +158,6 @@ const PingPong = () => {
     );
 
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
-      console.log("game_pause_score", data);
-      console.log("Add images")
       setWaterbomb(images);
       if (
         data.gameStatus === EGameStatus.END ||
