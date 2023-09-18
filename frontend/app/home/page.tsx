@@ -89,22 +89,6 @@ const Page = () => {
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
         console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
-        if (roomState.currentRoom?.mode !== "private") {
-          authState.chatSocket!.emit(
-            "chat_goto_lobby",
-            {
-              channelIdx: roomState.currentRoom!.channelIdx,
-              userIdx: authState.userInfo.id,
-            },
-            (ret: ReturnMsgDto) => {
-              console.log("ChatCreateRoom chat_goto_lobby ret : ", ret);
-              if (ret.code === 200) {
-                roomDispatch({ type: "SET_CUR_ROOM", value: null });
-                roomDispatch({ type: "SET_IS_OPEN", value: false });
-              }
-            }
-          );
-        }
         closeModal();
         router.push("./optionselect");
       }
