@@ -42,19 +42,12 @@ const Page = () => {
 
   useEffect(() => {
     setClient(true);
-    console.log("🕚", server_domain);
     if (authState.chatSocket === undefined) {
       console.log("go to /");
       router.push("/");
       return;
     }
-    console.log(`🐒`, authState.chatSocket);
 
-    console.log(
-      "chat socket connect",
-      authState.chatSocket.connected,
-      authState.chatSocket.disconnected
-    );
     if (!authState.chatSocket.connected) authState.chatSocket.connect();
 
     console.log("chat socket connect", authState.chatSocket);
@@ -65,7 +58,6 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
-      console.log("😍", userIdx, userNickname);
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
@@ -89,7 +81,6 @@ const Page = () => {
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
-        console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
         authState.chatSocket?.emit(
           "chat_goto_lobby",
@@ -112,7 +103,6 @@ const Page = () => {
     };
 
     const HomeGoToLobby = (payload: IChatRoom[]) => {
-      console.log("HomeGoToLobby : ", payload);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
     authState.chatSocket.on("chat_goto_lobby", HomeGoToLobby);
@@ -130,6 +120,7 @@ const Page = () => {
     authState.chatSocket?.connected,
     userState,
     roomState,
+    roomState.currentRoom?.channelIdx,
   ]);
 
   useEffect(() => {

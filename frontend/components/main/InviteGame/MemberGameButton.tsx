@@ -60,13 +60,11 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       targetUserNickname: string;
       answer: boolean;
     }) => {
-      console.log("receive invite", answer);
       if (answer === false) {
         closeModal();
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: targetUserNickname, id: targetUserIdx };
-        console.log("target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
         authState.chatSocket?.emit(
           "chat_goto_lobby",
