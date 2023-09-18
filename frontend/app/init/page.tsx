@@ -41,6 +41,10 @@ export default function InitUser() {
     await axios({
       method: "post",
       url: sendUri,
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: "Bearer " + authState.userInfo.authorization,
+      },
       data: {
         userIdx: secureLocalStorage.getItem("idx") as number,
         userNickname: inputNick,
