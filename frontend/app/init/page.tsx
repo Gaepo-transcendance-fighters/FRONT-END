@@ -35,7 +35,7 @@ export default function InitUser() {
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^A-Za-z]/gi, "");
   };
-
+  
   const SetNick = async () => {
     (document.getElementById("inputbox") as HTMLInputElement).value = "";
     await axios({

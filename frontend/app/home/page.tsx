@@ -92,6 +92,9 @@ const Page = () => {
             if (ret.code === 200) {
               roomDispatch({ type: "SET_IS_OPEN", value: false });
               roomDispatch({ type: "SET_CUR_ROOM", value: null });
+            } else if (ret.code === 400) {
+              roomDispatch({ type: "SET_IS_OPEN", value: false });
+              roomDispatch({ type: "SET_CUR_ROOM", value: null });
             } else {
               console.log("HomeGoToLobby : ", ret.msg);
             }
