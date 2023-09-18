@@ -3,7 +3,7 @@
 import Layout from "@/components/public/Layout";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
@@ -25,6 +25,14 @@ const Page = () => {
   const { openModal, closeModal } = useModalContext();
   const [count, setCount] = useState(3);
   const { userState } = useUser();
+
+  useEffect(() => {
+    console.log("🐒 authState userinfo email", authState);
+  }, [authState]);
+
+  useEffect(() => {
+    console.log("socket connected : ", authState.chatSocket?.connected);
+  }, [authState.chatSocket?.connected]);
 
   useEffect(() => {
     if (param.get("from") === "game") {
@@ -50,7 +58,6 @@ const Page = () => {
 
     if (!authState.chatSocket.connected) authState.chatSocket.connect();
 
-    console.log("chat socket connect", authState.chatSocket);
     const askInvite = ({
       userIdx,
       userNickname,
@@ -146,7 +153,7 @@ const Page = () => {
   useEffect(() => {
     const interval_check = setInterval(() => {
       setCount((prev) => prev - 1);
-      // console.log("count : ", count);
+      console.log("count : ", count);
     }, 1000);
     if (count < 0) {
       // console.log("count : 0 end ");
