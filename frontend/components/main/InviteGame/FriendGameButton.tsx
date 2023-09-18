@@ -10,12 +10,15 @@ import { useAuth } from "@/context/AuthContext";
 import { useModalContext } from "@/context/ModalContext";
 import { GameType } from "@/type/type";
 import secureLocalStorage from "react-secure-storage";
+import { useRoom } from "@/context/RoomContext";
+import { IChatRoom } from "@/type/RoomType";
 
 const FriendGameButton = ({ prop }: { prop: IFriend }) => {
   const router = useRouter();
   const { authState } = useAuth();
   const { openModal, closeModal } = useModalContext();
   const { gameDispatch } = useGame();
+  const { roomDispatch } = useRoom();
 
   const handleOpenModal = () => {
     if (!authState.chatSocket) return;
@@ -56,15 +59,25 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
         const target = { nick: targetUserNickname, id: targetUserIdx };
         console.log("target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
+        roomDispatch({ type: "SET_IS_OPEN", value: false });
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
         closeModal();
         router.push("./optionselect");
       }
     };
+
+    const FriendGoToLobby = (payload: IChatRoom[]) => {
+      console.log("FriendGoToLobby : ", payload);
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
+    };
+
+    authState.chatSocket.on("chat_goto_lobby", FriendGoToLobby);
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_ask", askInvite);
 
     return () => {
       if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_goto_lobby", FriendGoToLobby);
       authState.chatSocket.off("chat_receive_answer");
       authState.chatSocket.off("chat_invite_answer");
     };

@@ -11,7 +11,7 @@ import InviteGame from "@/components/main/InviteGame/InviteGame";
 import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import { server_domain } from "../page";
-import { ReturnMsgDto } from "@/type/RoomType";
+import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
 
 const Page = () => {
@@ -92,13 +92,14 @@ const Page = () => {
       }
     };
 
-    const HomeGoToLobby = (payload: any) => {
+    const HomeGoToLobby = (payload: IChatRoom[]) => {
       console.log("HomeGoToLobby : ", payload);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
     authState.chatSocket.on("chat_goto_lobby", HomeGoToLobby);
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_answer", askInvite);
+
     return () => {
       if (!authState.chatSocket) return;
       authState.chatSocket.off("chat_goto_lobby", HomeGoToLobby);

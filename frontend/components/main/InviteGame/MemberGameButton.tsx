@@ -4,35 +4,41 @@ import { Button } from "@mui/material";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import WaitAccept from "./WaitAccept";
-import { IMember, ReturnMsgDto } from "@/type/RoomType";
+import { IChatRoom, IMember, ReturnMsgDto } from "@/type/RoomType";
 import { useAuth } from "@/context/AuthContext";
 import { useModalContext } from "@/context/ModalContext";
 import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import secureLocalStorage from "react-secure-storage";
+import { useRoom } from "@/context/RoomContext";
 
 const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const router = useRouter();
   const { authState } = useAuth();
   const { openModal, closeModal } = useModalContext();
   const { gameDispatch } = useGame();
+  const { roomDispatch } = useRoom();
 
   const handleOpenModal = () => {
     if (!authState.chatSocket) return;
-    authState.chatSocket.emit("chat_invite_ask", {
-      myUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-      targetUserIdx: prop.userIdx,
-    }, (res: ReturnMsgDto) => {
-      console.log(res)
-      if (res.code === 200) {
-        console.log("open", prop.nickname);
-        openModal({
-          children: <WaitAccept nickname={prop.nickname} />,
-        });
-      } else if (res.code === 400) {
-        closeModal()
+    authState.chatSocket.emit(
+      "chat_invite_ask",
+      {
+        myUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+        targetUserIdx: prop.userIdx,
+      },
+      (res: ReturnMsgDto) => {
+        console.log(res);
+        if (res.code === 200) {
+          console.log("open", prop.nickname);
+          openModal({
+            children: <WaitAccept nickname={prop.nickname} />,
+          });
+        } else if (res.code === 400) {
+          closeModal();
+        }
       }
-    });
+    );
   };
 
   useEffect(() => {
@@ -61,15 +67,24 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
         const target = { nick: targetUserNickname, id: targetUserIdx };
         console.log("target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
+        roomDispatch({ type: "SET_IS_OPEN", value: false });
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
         closeModal();
         router.push("./optionselect");
       }
     };
+
+    const MemGoToLobby = (payload: IChatRoom[]) => {
+      console.log("MemGoToLobby : ", payload);
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
+    };
+    authState.chatSocket.on("chat_goto_lobby", MemGoToLobby);
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_ask", askInvite);
 
     return () => {
       if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_goto_lobby", MemGoToLobby);
       authState.chatSocket.off("chat_receive_answer");
       authState.chatSocket.off("chat_invite_ask");
     };
