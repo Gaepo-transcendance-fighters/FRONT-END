@@ -20,19 +20,10 @@ const Page = () => {
   const router = useRouter();
   const { gameDispatch } = useGame();
   const [client, setClient] = useState(false);
-  const { authState, authDispatch } = useAuth();
+  const { authState } = useAuth();
   const { roomState, roomDispatch } = useRoom();
   const { openModal, closeModal } = useModalContext();
   const [count, setCount] = useState(3);
-  const { userState } = useUser();
-
-  useEffect(() => {
-    console.log("🐒 authState userinfo email", authState);
-  }, [authState]);
-
-  useEffect(() => {
-    console.log("socket connected : ", authState.chatSocket?.connected);
-  }, [authState.chatSocket?.connected]);
 
   useEffect(() => {
     if (param.get("from") === "game") {
@@ -51,7 +42,6 @@ const Page = () => {
   useEffect(() => {
     setClient(true);
     if (authState.chatSocket === undefined) {
-      console.log("go to /");
       router.push("/");
       return;
     }
@@ -65,6 +55,7 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
+      authState.gameSocket!.connect();
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
@@ -84,6 +75,7 @@ const Page = () => {
       answer: boolean;
     }) => {
       if (answer === false) {
+        authState.gameSocket!.disconnect();
         closeModal();
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
@@ -128,7 +120,6 @@ const Page = () => {
   }, [
     authState.chatSocket,
     authState.chatSocket?.connected,
-    userState,
     roomState,
     roomState.currentRoom?.channelIdx,
   ]);
@@ -153,7 +144,7 @@ const Page = () => {
   useEffect(() => {
     const interval_check = setInterval(() => {
       setCount((prev) => prev - 1);
-      console.log("count : ", count);
+      // console.log("count : ", count);
     }, 1000);
     if (count < 0) {
       // console.log("count : 0 end ");

@@ -73,8 +73,10 @@ export default function PageRedir() {
       method: "post",
       url: `${server_domain}/users/profile`,
       headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + authState.userInfo.authorization,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
       },
       data: formData,
     })

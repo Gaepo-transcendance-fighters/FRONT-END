@@ -18,44 +18,12 @@ import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
+import { GameType, MapOption, SpeedOption } from "@/type/type";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
-
-enum SpeedOption {
-  speed1,
-  speed2,
-  speed3,
-}
-
-enum MapOption {
-  map1,
-  map2,
-  map3,
-}
-
-enum GameType {
-  FRIEND,
-  NORMAL,
-  RANK,
-}
-
-interface IGameOption {
-  gameType: GameType; // FRIED, NORMAL, RANK
-  userIdx: number;
-  speed: SpeedOption; //NORMAL, FAST, FASTER
-  mapNumber: MapOption; // A, B, C
-}
-
-// export const gameSocket = io("http://10.19.205.41:4000/game", {
-// const userId =
-//   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
-
-// export const gameSocket = io("http://10.19.205.41:4000/game", {
-//   query: { userId: userId },
-// });
 
 const OptionSelect = () => {
   const router = useRouter();
@@ -127,8 +95,6 @@ const OptionSelect = () => {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
-            console.log("gameSocket", authState.gameSocket!);
-            authState.gameSocket!.connect();
             router.replace("/inwaiting");
           } else {
             console.log("게임방 생성 실패");
@@ -158,7 +124,6 @@ const OptionSelect = () => {
           console.log(res);
           if (res.status === 200) {
             console.log("gameSocket", authState.gameSocket!);
-            authState.gameSocket!.connect();
             router.replace("/inwaiting");
           } else {
             console.log("게임방 생성 실패");

@@ -18,7 +18,7 @@ import { useGame } from "@/context/GameContext";
 import secureLocalStorage from "react-secure-storage";
 import { server_domain } from "../page";
 import axios from "axios";
-import { SpeedOption } from "./friend/optionselect/page";
+import { SpeedOption } from "@/type/type";
 
 const infomodalStyle = {
   position: "absolute" as "absolute",
@@ -50,6 +50,7 @@ const Game = () => {
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
     router.replace("/optionselect");
+    authState.gameSocket!.connect();
   };
 
   const ClickRankGame = async () => {

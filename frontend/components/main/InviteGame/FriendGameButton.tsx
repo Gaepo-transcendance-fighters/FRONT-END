@@ -26,7 +26,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
       myUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
       targetUserIdx: prop.friendIdx,
     });
-    console.log("friend invited", authState.chatSocket);
+    authState.gameSocket!.connect();
     openModal({
       children: <WaitAccept nickname={prop.friendNickname} />,
     });
@@ -52,7 +52,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
     }) => {
       console.log("receive invite", answer);
       if (answer === false) {
-        console.log("fail");
+        authState.gameSocket!.disconnect();
         closeModal();
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });

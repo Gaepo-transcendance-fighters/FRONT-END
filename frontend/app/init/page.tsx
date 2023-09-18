@@ -1,6 +1,13 @@
 "use client";
 
-import { Button, Card, Box, CardContent, Stack } from "@mui/material";
+import {
+  Button,
+  Card,
+  Box,
+  CardContent,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
@@ -35,15 +42,17 @@ export default function InitUser() {
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^A-Za-z]/gi, "");
   };
-  
+
   const SetNick = async () => {
     (document.getElementById("inputbox") as HTMLInputElement).value = "";
     await axios({
       method: "post",
       url: sendUri,
       headers: {
-        "Content-Type": "Application/json",
-        Authorization: "Bearer " + authState.userInfo.authorization,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
       },
       data: {
         userIdx: secureLocalStorage.getItem("idx") as number,
@@ -105,7 +114,7 @@ export default function InitUser() {
                 justifyContent: "center",
               }}
             >
-              사용할 닉네임을 입력해주세요.
+              <Typography>사용할 닉네임을 입력해주세요.</Typography>
             </CardContent>
             <Stack
               direction={"row"}
