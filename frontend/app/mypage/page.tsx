@@ -20,6 +20,7 @@ import axios from "axios";
 import SecondAuth from "@/components/main/myprofile/SecondAuth";
 import { IUserData, myProfileStyle } from "@/type/My";
 import Image from "next/image";
+import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -241,6 +242,7 @@ export default function PageRedir() {
                       </Typography>
                       <Typography style={{ fontSize: "1.2rem" }}>
                         Email : {authState.userInfo.email}
+                        {/* Email : {secureLocalStorage.getItem("email") as string} */}
                       </Typography>
                       {/* 버튼관련 스택 */}
                       <Stack
