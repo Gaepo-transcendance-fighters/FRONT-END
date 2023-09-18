@@ -133,6 +133,10 @@ const Inwaiting = () => {
         () => {
           console.log("game_queue_success");
           gameDispatch({
+            type: "SET_ROOM_ID",
+            value: data.dbKey,
+          });
+          gameDispatch({
             type: "A_PLAYER",
             value: { nick: data.userNicknameFirst, id: data.userIdxFirst },
           });

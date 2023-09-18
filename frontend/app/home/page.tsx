@@ -4,7 +4,6 @@ import Layout from "@/components/public/Layout";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
@@ -12,6 +11,8 @@ import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import { server_domain } from "../page";
 import { ReturnMsgDto } from "@/type/RoomType";
+import { useRoom } from "@/context/RoomContext";
+import { IChatRoom } from "@/type/RoomType";
 
 const Page = () => {
   const param = useSearchParams();
@@ -19,6 +20,7 @@ const Page = () => {
   const { gameDispatch } = useGame();
   const [client, setClient] = useState(false);
   const { authState, authDispatch } = useAuth();
+  const { roomState, roomDispatch } = useRoom();
   const { openModal, closeModal } = useModalContext();
   const [count, setCount] = useState(3);
 
@@ -46,7 +48,11 @@ const Page = () => {
     }
     console.log(`🐒`, authState.chatSocket);
 
-    console.log("chat socket connect", authState.chatSocket);
+    console.log(
+      "chat socket connect",
+      authState.chatSocket.connected,
+      authState.chatSocket.disconnected
+    );
     authState.chatSocket.connect();
 
     console.log("chat socket connect", authState.chatSocket);
@@ -87,7 +93,6 @@ const Page = () => {
         router.push("./optionselect");
       }
     };
-
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_answer", askInvite);
     return () => {
