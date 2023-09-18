@@ -18,36 +18,12 @@ import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
+import { GameType, MapOption, SpeedOption } from "@/type/type";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
-
-enum SpeedOption {
-  speed1,
-  speed2,
-  speed3,
-}
-
-enum MapOption {
-  map1,
-  map2,
-  map3,
-}
-
-enum GameType {
-  FRIEND,
-  NORMAL,
-  RANK,
-}
-
-interface IGameOption {
-  gameType: GameType; // FRIED, NORMAL, RANK
-  userIdx: number;
-  speed: SpeedOption; //NORMAL, FAST, FASTER
-  mapNumber: MapOption; // A, B, C
-}
 
 const OptionSelect = () => {
   const router = useRouter();
