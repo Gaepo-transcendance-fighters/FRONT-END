@@ -28,9 +28,8 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
         targetUserIdx: prop.userIdx,
       },
       (res: ReturnMsgDto) => {
-        console.log(res);
         if (res.code === 200) {
-          console.log("open", prop.nickname);
+          authState.gameSocket!.connect();
           openModal({
             children: <WaitAccept nickname={prop.nickname} />,
           });
@@ -44,7 +43,6 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
   useEffect(() => {
     if (!authState.chatSocket) return;
     const askInvite = () => {
-      console.log("friend invited");
       handleOpenModal();
     };
     const recieveInvite = ({
@@ -61,6 +59,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       answer: boolean;
     }) => {
       if (answer === false) {
+        authState.gameSocket!.disconnect();
         closeModal();
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
