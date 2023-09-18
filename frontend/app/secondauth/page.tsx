@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { main } from "@/type/type";
 import React, { useState } from "react";
 import axios from "axios";
+import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -34,7 +35,10 @@ const SecondAuth = () => {
       method: "POST",
       url: sendUri,
       headers: {
-        Authorization: "Bearer " + authState.userInfo.authorization,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
       },
       data: {
         userIdx: authState.userInfo.id,
@@ -52,17 +56,18 @@ const SecondAuth = () => {
     const response = await axios({
       method: "PATCH",
       url: `${server_domain}/users/second`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
+      },
       data: {
-        // userIdx: localStorage.getItem("idx"),
-        userIdx: authState.userInfo.id,
+        userIdx: secureLocalStorage.getItem("idx") as number,
         code: Number(inputnumber),
       },
     });
     if (response.status == 200 && response.data.result.checkTFA) {
-      // if (!authState.chatSocket) return;
-      // authState.chatSocket.emit("set_user_status", {
-      //   userStatus: { nickname: response.data.nickname },
-      // });
       return router.push("/");
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.

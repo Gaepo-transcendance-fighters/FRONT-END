@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { secondAuthModalStyle } from "@/type/My";
+import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -38,17 +39,14 @@ export default function SecondAuth() {
 
   const onChangeSecondAuth = async () => {
     let newVerifiedValue = authState.userInfo.check2Auth;
-    // if (verified) {
-    //   newVerifiedValue = false;
-    // } else if (verified === false) {
-    //   newVerifiedValue = true;
-    // }
     const response = await axios({
       method: "patch",
       url: `${server_domain}/users/profile/second`,
       headers: {
-        "Content-Type": "Application/json",
-        Authorization: "Bearer " + authState.userInfo.authorization,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
       },
       data: {
         userIdx: Number(authState.userInfo.id),
@@ -62,17 +60,6 @@ export default function SecondAuth() {
           value: !newVerifiedValue,
         });
         setOpenModal(false);
-
-        // localStorage.setItem("check2Auth", newVerifiedValue ? "true" : "false");
-        // if (!newVerifiedValue) return router.push("/home");
-        // location.reload();
-        //       if (response.status == 200) {
-        //   if (response.data.check2Auth == true) {
-        //     console.log("success in check 2 auth");
-        //     return router.push("/");
-        //   } else if (response.data.check2Auth === false) {
-        //     console.log("success in check 2 auth");
-        //   }
       }
     });
   };
