@@ -10,9 +10,10 @@ import InviteGame from "@/components/main/InviteGame/InviteGame";
 import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import { server_domain } from "../page";
-import { ReturnMsgDto } from "@/type/RoomType";
+import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
-import { IChatRoom } from "@/type/RoomType";
+import secureLocalStorage from "react-secure-storage";
+import { useUser } from "@/context/UserContext";
 
 const Page = () => {
   const param = useSearchParams();
@@ -23,6 +24,7 @@ const Page = () => {
   const { roomState, roomDispatch } = useRoom();
   const { openModal, closeModal } = useModalContext();
   const [count, setCount] = useState(3);
+  const { userState } = useUser();
 
   useEffect(() => {
     console.log("🐒 authState userinfo email", authState);
@@ -48,14 +50,13 @@ const Page = () => {
 
   useEffect(() => {
     setClient(true);
-    console.log("🕚", server_domain);
     if (authState.chatSocket === undefined) {
       console.log("go to /");
       router.push("/");
       return;
     }
-    
-    authState.chatSocket.connect();
+
+    if (!authState.chatSocket.connected) authState.chatSocket.connect();
 
     const askInvite = ({
       userIdx,
@@ -64,7 +65,6 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
-      console.log("😍", userIdx, userNickname);
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
@@ -88,20 +88,50 @@ const Page = () => {
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
-        console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
+        authState.chatSocket?.emit(
+          "chat_goto_lobby",
+          {
+            channelIdx: roomState.currentRoom!.channelIdx,
+            userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+          },
+          (ret: ReturnMsgDto) => {
+            if (ret.code === 200) {
+              roomDispatch({ type: "SET_IS_OPEN", value: false });
+              roomDispatch({ type: "SET_CUR_ROOM", value: null });
+            } else if (ret.code === 400) {
+              roomDispatch({ type: "SET_IS_OPEN", value: false });
+              roomDispatch({ type: "SET_CUR_ROOM", value: null });
+            } else {
+              console.log("HomeGoToLobby : ", ret.msg);
+            }
+          }
+        );
         closeModal();
         router.push("./optionselect");
       }
     };
+
+    const HomeGoToLobby = (payload: IChatRoom[]) => {
+      roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
+    };
+    authState.chatSocket.on("chat_goto_lobby", HomeGoToLobby);
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_answer", askInvite);
+
     return () => {
       if (!authState.chatSocket) return;
+      authState.chatSocket.off("chat_goto_lobby", HomeGoToLobby);
       authState.chatSocket.off("chat_receive_answer");
       authState.chatSocket.off("chat_invite_answer");
     };
-  }, [authState.chatSocket]);
+  }, [
+    authState.chatSocket,
+    authState.chatSocket?.connected,
+    userState,
+    roomState,
+    roomState.currentRoom?.channelIdx,
+  ]);
 
   useEffect(() => {
     if (authState.chatSocket === undefined) return;

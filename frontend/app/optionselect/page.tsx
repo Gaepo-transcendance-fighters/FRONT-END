@@ -208,7 +208,7 @@ const OptionSelect = () => {
               backgroundColor: "White",
             }}
             onClick={() => {
-              router.replace("/?from=game");
+              router.replace("/home?from=game");
             }}
           >
             이전화면으로 돌아가기

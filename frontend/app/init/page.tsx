@@ -35,12 +35,16 @@ export default function InitUser() {
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^A-Za-z]/gi, "");
   };
-
+  
   const SetNick = async () => {
     (document.getElementById("inputbox") as HTMLInputElement).value = "";
     await axios({
       method: "post",
       url: sendUri,
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: "Bearer " + authState.userInfo.authorization,
+      },
       data: {
         userIdx: secureLocalStorage.getItem("idx") as number,
         userNickname: inputNick,
