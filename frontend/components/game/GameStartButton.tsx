@@ -10,10 +10,6 @@ const GameStartButton = () => {
   const { roomState, roomDispatch } = useRoom();
 
   const onClick = () => {
-    if (roomState.currentRoom?.mode !== "private") {
-      roomDispatch({ type: "SET_CUR_ROOM", value: null });
-      roomDispatch({ type: "SET_IS_OPEN", value: false });
-    }
     router.push("./game");
   };
 

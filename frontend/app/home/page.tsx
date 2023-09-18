@@ -109,10 +109,6 @@ const Page = () => {
         router.push("./optionselect");
       }
     };
-    const GoToLobby = (payload: IChatRoom[]) => {
-      roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
-    };
-    authState.chatSocket.on("chat_goto_lobby", GoToLobby);
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_answer", askInvite);
     return () => {
