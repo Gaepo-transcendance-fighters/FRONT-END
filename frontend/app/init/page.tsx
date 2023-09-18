@@ -55,14 +55,14 @@ export default function InitUser() {
         }`,
       },
       data: {
-        userIdx: secureLocalStorage.getItem("idx") as number,
+        userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
         userNickname: inputNick,
-        imgDate: "",
+        imgData: "",
       },
     }).then((response) => {
       if (response.status === 200 && response.data.result.nickname !== "") {
         secureLocalStorage.setItem("nickname", response.data.result.nickname);
-        return router.push("/");
+        return router.push("/home");
       } else if (
         response.status === 200 &&
         response.data.result.nickname === ""
