@@ -1,6 +1,13 @@
 "use client";
 
-import { Button, Card, Box, CardContent, Stack } from "@mui/material";
+import {
+  Button,
+  Card,
+  Box,
+  CardContent,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
@@ -101,7 +108,7 @@ export default function InitUser() {
                 justifyContent: "center",
               }}
             >
-              사용할 닉네임을 입력해주세요.
+              <Typography>사용할 닉네임을 입력해주세요.</Typography>
             </CardContent>
             <Stack
               direction={"row"}
