@@ -12,6 +12,8 @@ import { GameType } from "@/type/type";
 import { server_domain } from "../page";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
+import secureLocalStorage from "react-secure-storage";
+import { useUser } from "@/context/UserContext";
 
 const Page = () => {
   const param = useSearchParams();
@@ -22,7 +24,7 @@ const Page = () => {
   const { roomState, roomDispatch } = useRoom();
   const { openModal, closeModal } = useModalContext();
   const [count, setCount] = useState(3);
-  const { roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   useEffect(() => {
     if (param.get("from") === "game") {
@@ -53,7 +55,7 @@ const Page = () => {
       authState.chatSocket.connected,
       authState.chatSocket.disconnected
     );
-    authState.chatSocket.connect();
+    if (!authState.chatSocket.connected) authState.chatSocket.connect();
 
     console.log("chat socket connect", authState.chatSocket);
     const askInvite = ({
@@ -89,8 +91,21 @@ const Page = () => {
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
         console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
-        roomDispatch({ type: "SET_IS_OPEN", value: false });
-        roomDispatch({ type: "SET_CUR_ROOM", value: null });
+        authState.chatSocket?.emit(
+          "chat_goto_lobby",
+          {
+            channelIdx: roomState.currentRoom!.channelIdx,
+            userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+          },
+          (ret: ReturnMsgDto) => {
+            if (ret.code === 200) {
+              roomDispatch({ type: "SET_IS_OPEN", value: false });
+              roomDispatch({ type: "SET_CUR_ROOM", value: null });
+            } else {
+              console.log("HomeGoToLobby : ", ret.msg);
+            }
+          }
+        );
         closeModal();
         router.push("./optionselect");
       }
@@ -110,7 +125,12 @@ const Page = () => {
       authState.chatSocket.off("chat_receive_answer");
       authState.chatSocket.off("chat_invite_answer");
     };
-  }, [authState.chatSocket]);
+  }, [
+    authState.chatSocket,
+    authState.chatSocket?.connected,
+    userState,
+    roomState,
+  ]);
 
   useEffect(() => {
     if (authState.chatSocket === undefined) return;

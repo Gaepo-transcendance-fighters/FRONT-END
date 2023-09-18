@@ -17,7 +17,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const { authState } = useAuth();
   const { openModal, closeModal } = useModalContext();
   const { gameDispatch } = useGame();
-  const { roomDispatch } = useRoom();
+  const { roomState, roomDispatch } = useRoom();
 
   const handleOpenModal = () => {
     if (!authState.chatSocket) return;
@@ -58,17 +58,31 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       inviteUserNickname: string;
       targetUserIdx: number;
       targetUserNickname: string;
-      answer: number;
+      answer: boolean;
     }) => {
       console.log("receive invite", answer);
-      if (answer === 0) closeModal();
-      else if (answer === 1) {
+      if (answer === false) {
+        closeModal();
+      } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: targetUserNickname, id: targetUserIdx };
         console.log("target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
-        roomDispatch({ type: "SET_IS_OPEN", value: false });
-        roomDispatch({ type: "SET_CUR_ROOM", value: null });
+        authState.chatSocket?.emit(
+          "chat_goto_lobby",
+          {
+            channelIdx: roomState.currentRoom!.channelIdx,
+            userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+          },
+          (ret: ReturnMsgDto) => {
+            if (ret.code === 200) {
+              roomDispatch({ type: "SET_IS_OPEN", value: false });
+              roomDispatch({ type: "SET_CUR_ROOM", value: null });
+            } else {
+              console.log("MemGoToLobby : ", ret.msg);
+            }
+          }
+        );
         closeModal();
         router.push("./optionselect");
       }
