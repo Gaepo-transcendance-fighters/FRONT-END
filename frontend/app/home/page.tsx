@@ -4,7 +4,6 @@ import Layout from "@/components/public/Layout";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
@@ -20,6 +19,7 @@ const Page = () => {
   const { gameDispatch } = useGame();
   const [client, setClient] = useState(false);
   const { authState, authDispatch } = useAuth();
+  const { roomState, roomDispatch } = useRoom();
   const { openModal, closeModal } = useModalContext();
   const [count, setCount] = useState(3);
   const { roomDispatch } = useRoom();
@@ -48,7 +48,11 @@ const Page = () => {
     }
     console.log(`🐒`, authState.chatSocket);
 
-    console.log("chat socket connect", authState.chatSocket);
+    console.log(
+      "chat socket connect",
+      authState.chatSocket.connected,
+      authState.chatSocket.disconnected
+    );
     authState.chatSocket.connect();
 
     console.log("chat socket connect", authState.chatSocket);
