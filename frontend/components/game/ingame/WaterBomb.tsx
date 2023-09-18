@@ -15,9 +15,8 @@ const WaterBomb = ({ images }: { images: JSX.Element[] }) => {
   };
 
   useEffect(() => {
-    console.log("play water bomb", images)
-    if (images.length !== 0)
-      setVisibleImage(images);
+    console.log("play water bomb", images);
+    setVisibleImage(images);
   }, [images]);
 
   return (
@@ -51,11 +50,8 @@ const WaterBomb = ({ images }: { images: JSX.Element[] }) => {
           >
             {image}
           </div>
-        
         </>
       ))}
-
-
     </>
   );
 };

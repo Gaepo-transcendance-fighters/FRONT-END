@@ -36,7 +36,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       {
         inviteUserIdx: idx,
         targetUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-        answer: 1,
+        answer: true,
       },
       (res: any) => {
         console.log(res);
@@ -51,7 +51,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       {
         inviteUserIdx: idx,
         targetUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-        answer: 0,
+        answer: false,
       },
       (res: any) => {
         console.log(res);

@@ -6,20 +6,53 @@ import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { server_domain } from "../page";
+import { IGameLog } from "@/type/GameType";
 
 const GameResult = () => {
   const { gameState, gameDispatch } = useGame();
   const [client, setClient] = useState(false);
+  const [gameLog, setGameLog] = useState<IGameLog | null>(null);
+  const [user1Score, setUser1Score] = useState<number>(0);
+  const [user2Score, setUser2Score] = useState<number>(0);
 
   const router = useRouter();
 
   const BackToMain = () => {
     gameDispatch({ type: "SCORE_RESET" });
-    router.replace("/?from=game");
+    router.replace("/home?from=game");
+  };
+
+  const fetchData = async () => {
+    await axios({
+      method: "get",
+      url: `${server_domain}/game-result?gameKey=${gameState.roomId}`,
+    }).then((res) => {
+      console.log(res.data);
+      const gameLog: IGameLog = res.data;
+      setGameLog(gameLog);
+      const user1Score = gameLog.score.split(" : ")[0];
+      const user2Score = gameLog.score.split(" : ")[1];
+      setUser1Score(Number(user1Score));
+      setUser2Score(Number(user2Score));
+    });
   };
 
   useEffect(() => {
     setClient(true);
+    fetchData();
+
+    const goToBack = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      router.replace("/home?from=game");
+    };
+
+    addEventListener("beforeunload", goToBack);
+
+    return () => {
+      removeEventListener("beforeunload", goToBack);
+    };
   }, []);
 
   if (!client) return <></>;
@@ -93,12 +126,12 @@ const GameResult = () => {
               >
                 <Card>
                   <Typography sx={{ fontSize: "2rem" }}>
-                    {gameState.aPlayer.nick}
+                    {gameLog?.user1Nickname}
                   </Typography>
                 </Card>
                 <Card>
                   <Typography sx={{ fontSize: "2rem" }}>
-                    {gameState.aScore}
+                    {user1Score}
                   </Typography>
                 </Card>
                 <Card
@@ -119,7 +152,11 @@ const GameResult = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "2rem" }}>
-                      Win Rate: 70%
+                      Win Rate:{" "}
+                      {gameLog &&
+                        (gameLog?.user1win / (gameLog?.user1lose +
+                          gameLog?.user1win)) * 100}
+                      %
                     </Typography>
                   </Stack>
                   <Stack
@@ -129,7 +166,9 @@ const GameResult = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Typography sx={{ fontSize: "2rem" }}>100W 0L</Typography>
+                    <Typography sx={{ fontSize: "2rem" }}>
+                      {gameLog && gameLog.user1rankpoint}
+                    </Typography>
                   </Stack>
                 </Card>
               </Stack>
@@ -159,11 +198,13 @@ const GameResult = () => {
                 //   닉네임 클릭시, 프로필 모달 띄우는 파트
                 //   onClick={}
                 >
-                  <Typography sx={{ fontSize: "2rem" }}>{gameState.bPlayer.nick}</Typography>
+                  <Typography sx={{ fontSize: "2rem" }}>
+                    {gameLog?.user2Nickname}
+                  </Typography>
                 </Card>
                 <Card>
                   <Typography sx={{ fontSize: "2rem" }}>
-                    {gameState.bScore}
+                    {user2Score}
                   </Typography>
                 </Card>
                 <Card
@@ -184,7 +225,11 @@ const GameResult = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "2rem" }}>
-                      Win Rate: 70%
+                      Win Rate:{" "}
+                      {gameLog &&
+                        (gameLog?.user2win / (gameLog?.user2lose +
+                          gameLog?.user2win)) * 100}
+                      %
                     </Typography>
                   </Stack>
                   <Stack
@@ -194,7 +239,9 @@ const GameResult = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Typography sx={{ fontSize: "2rem" }}>100W 0L</Typography>
+                    <Typography sx={{ fontSize: "2rem" }}>
+                      {gameLog && gameLog.user2rankpoint}
+                    </Typography>
                   </Stack>
                 </Card>
               </Stack>
