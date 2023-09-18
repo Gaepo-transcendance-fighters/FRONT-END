@@ -24,7 +24,14 @@ const RoomEnter = (
         channelIdx: roomState.currentRoom.channelIdx,
         userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
       },
-      (ret: ReturnMsgDto) => {}
+      (ret: ReturnMsgDto) => {
+        console.log("RoomEnter ReturnMsgDto : ", ret);
+        if (ret.code == 200) {
+          roomDispatch({ type: "SET_CUR_ROOM", value: room });
+          roomDispatch({ type: "SET_IS_OPEN", value: true });
+          return;
+        }
+      }
     );
   }
   roomDispatch({ type: "SET_CUR_ROOM", value: room });

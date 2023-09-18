@@ -23,7 +23,6 @@ const GameStartButton = () => {
           userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
         },
         (ret: ReturnMsgDto) => {
-          console.log("GameStartButton : ", ret.msg);
           if (ret.code === 200) {
             roomDispatch({ type: "SET_IS_OPEN", value: false });
             roomDispatch({ type: "SET_CUR_ROOM", value: null });
