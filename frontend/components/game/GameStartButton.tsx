@@ -1,9 +1,13 @@
+"use client";
+
 import { Button } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useRoom } from "@/context/RoomContext";
 
 const GameStartButton = () => {
   const router = useRouter();
+  const { roomState, roomDispatch } = useRoom();
 
   const onClick = () => {
     router.push("./game");

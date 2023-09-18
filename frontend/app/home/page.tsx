@@ -4,15 +4,16 @@ import Layout from "@/components/public/Layout";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { ModalPortal } from "@/components/public/ModalPortal";
 import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
 import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import { server_domain } from "../page";
-import { ReturnMsgDto } from "@/type/RoomType";
+import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
+import secureLocalStorage from "react-secure-storage";
+import { useUser } from "@/context/UserContext";
 
 const Page = () => {
   const param = useSearchParams();
@@ -20,9 +21,10 @@ const Page = () => {
   const { gameDispatch } = useGame();
   const [client, setClient] = useState(false);
   const { authState, authDispatch } = useAuth();
+  const { roomState, roomDispatch } = useRoom();
   const { openModal, closeModal } = useModalContext();
   const [count, setCount] = useState(3);
-  const { roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   useEffect(() => {
     if (param.get("from") === "game") {
@@ -40,16 +42,13 @@ const Page = () => {
 
   useEffect(() => {
     setClient(true);
-    console.log("🕚", server_domain);
     if (authState.chatSocket === undefined) {
       console.log("go to /");
       router.push("/");
       return;
     }
-    console.log(`🐒`, authState.chatSocket);
 
-    console.log("chat socket connect", authState.chatSocket);
-    authState.chatSocket.connect();
+    if (!authState.chatSocket.connected) authState.chatSocket.connect();
 
     console.log("chat socket connect", authState.chatSocket);
     const askInvite = ({
@@ -59,7 +58,6 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
-      console.log("😍", userIdx, userNickname);
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
@@ -83,29 +81,47 @@ const Page = () => {
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
-        console.log("💻target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
-        roomDispatch({ type: "SET_IS_OPEN", value: false });
-        roomDispatch({ type: "SET_CUR_ROOM", value: null });
+        authState.chatSocket?.emit(
+          "chat_goto_lobby",
+          {
+            channelIdx: roomState.currentRoom!.channelIdx,
+            userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+          },
+          (ret: ReturnMsgDto) => {
+            if (ret.code === 200) {
+              roomDispatch({ type: "SET_IS_OPEN", value: false });
+              roomDispatch({ type: "SET_CUR_ROOM", value: null });
+            } else {
+              console.log("HomeGoToLobby : ", ret.msg);
+            }
+          }
+        );
         closeModal();
         router.push("./optionselect");
       }
     };
 
-    const HomeGoToLobby = (payload: any) => {
-      console.log("HomeGoToLobby : ", payload);
+    const HomeGoToLobby = (payload: IChatRoom[]) => {
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
     authState.chatSocket.on("chat_goto_lobby", HomeGoToLobby);
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_answer", askInvite);
+
     return () => {
       if (!authState.chatSocket) return;
       authState.chatSocket.off("chat_goto_lobby", HomeGoToLobby);
       authState.chatSocket.off("chat_receive_answer");
       authState.chatSocket.off("chat_invite_answer");
     };
-  }, [authState.chatSocket]);
+  }, [
+    authState.chatSocket,
+    authState.chatSocket?.connected,
+    userState,
+    roomState,
+    roomState.currentRoom?.channelIdx,
+  ]);
 
   useEffect(() => {
     if (authState.chatSocket === undefined) return;

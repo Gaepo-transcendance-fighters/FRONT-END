@@ -73,7 +73,7 @@ const GamePlaying = () => {
     const preventRefreshButton = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = "";
-      router.replace("/?from=game");
+      router.replace("/home?from=game");
     };
 
     history.pushState(null, "", location.href);
@@ -85,10 +85,10 @@ const GamePlaying = () => {
       console.log(`game force quit: ${msg}`);
       setOpenModal(true);
       setTimeout(() => {
-        setOpenModal(false)
+        setOpenModal(false);
         authState.gameSocket!.disconnect();
         router.replace("/home");
-      }, 3000)
+      }, 3000);
     });
     return () => {
       if (!authState.gameSocket) return;

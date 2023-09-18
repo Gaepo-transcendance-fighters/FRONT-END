@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import secureLocalStorage from "react-secure-storage";
+import { useRoom } from "@/context/RoomContext";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -28,6 +29,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   const { gameDispatch } = useGame();
   const { authState } = useAuth();
   const router = useRouter();
+  const { roomState } = useRoom();
 
   const handleYes = () => {
     if (!authState.chatSocket) return;

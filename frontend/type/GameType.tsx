@@ -9,6 +9,20 @@ enum type {
   rank,
 }
 
+export interface IGameLog {
+  user1Idx: number;
+  user1Nickname: string;
+  user1win: number;
+  user1lose: number;
+  user1rankpoint: number;
+  user2Idx: number;
+  user2Nickname: string;
+  user2win: number;
+  user2lose: number;
+  user2rankpoint: number;
+  score: string; // "score : score" 구조로 전 달함
+}
+
 export interface IGameRecord {
   matchUserIdx: number;
   matchUserNickname: string;
