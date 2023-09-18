@@ -50,6 +50,7 @@ const Game = () => {
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
     router.replace("/optionselect");
+    authState.gameSocket!.connect();
   };
 
   const ClickRankGame = async () => {
