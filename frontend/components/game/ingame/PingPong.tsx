@@ -50,7 +50,13 @@ const transparency = (
 );
 
 const water_end_up = (
-  <Image src="/water_up.png" width="50" height="50" alt="water end" />
+  <Image
+    src="/water_up.png"
+    width="50"
+    height="50"
+    alt="water end"
+    key="water_end_up"
+  />
 );
 
 const water_end_down = (
@@ -62,6 +68,7 @@ const water_end_down = (
     width="50"
     height="50"
     alt="water end"
+    key="water_end_down"
   />
 );
 
@@ -75,6 +82,7 @@ const water = (
     width="50"
     height="50"
     alt="water"
+    key="water"
   />
 );
 
@@ -133,17 +141,19 @@ const PingPong = ({
       "game_ping",
       ({ serverTime }: { serverTime: number }) => {
         const now = new Date().getTime();
-        authState.gameSocket!.emit("game_ping_receive", {
-          userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-          serverTime: serverTime,
-          clientTime: now,
-        }, (res: ReturnMsgDto) => {
-          if (res.code === 200) {
-            console.log("good ping")
-          } else if (res.code === 400)
-            console.log("bad ping")
-            
-        });
+        authState.gameSocket!.emit(
+          "game_ping_receive",
+          {
+            userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+            serverTime: serverTime,
+            clientTime: now,
+          },
+          (res: ReturnMsgDto) => {
+            if (res.code === 200) {
+              console.log("good ping");
+            } else if (res.code === 400) console.log("bad ping");
+          }
+        );
       }
     );
 
