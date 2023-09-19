@@ -81,7 +81,7 @@ const Page = () => {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
         gameDispatch({ type: "B_PLAYER", value: target });
-        if (!roomState.currentRoom) {
+        if (roomState.currentRoom) {
           authState.chatSocket?.emit(
             "chat_goto_lobby",
             {
