@@ -81,24 +81,26 @@ const Page = () => {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
         gameDispatch({ type: "B_PLAYER", value: target });
-        authState.chatSocket?.emit(
-          "chat_goto_lobby",
-          {
-            channelIdx: roomState.currentRoom!.channelIdx,
-            userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-          },
-          (ret: ReturnMsgDto) => {
-            if (ret.code === 200) {
-              roomDispatch({ type: "SET_IS_OPEN", value: false });
-              roomDispatch({ type: "SET_CUR_ROOM", value: null });
-            } else if (ret.code === 400) {
-              roomDispatch({ type: "SET_IS_OPEN", value: false });
-              roomDispatch({ type: "SET_CUR_ROOM", value: null });
-            } else {
-              console.log("HomeGoToLobby : ", ret.msg);
+        if (!roomState.currentRoom) {
+          authState.chatSocket?.emit(
+            "chat_goto_lobby",
+            {
+              channelIdx: roomState.currentRoom!.channelIdx,
+              userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+            },
+            (ret: ReturnMsgDto) => {
+              if (ret.code === 200) {
+                roomDispatch({ type: "SET_IS_OPEN", value: false });
+                roomDispatch({ type: "SET_CUR_ROOM", value: null });
+              } else if (ret.code === 400) {
+                roomDispatch({ type: "SET_IS_OPEN", value: false });
+                roomDispatch({ type: "SET_CUR_ROOM", value: null });
+              } else {
+                console.log("HomeGoToLobby : ", ret.msg);
+              }
             }
-          }
-        );
+          );
+        }
         closeModal();
         router.push("./optionselect");
       }

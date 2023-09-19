@@ -154,8 +154,10 @@ const GameResult = () => {
                     <Typography sx={{ fontSize: "2rem" }}>
                       Win Rate:{" "}
                       {gameLog &&
-                        (gameLog?.user1win / (gameLog?.user1lose +
-                          gameLog?.user1win)) * 100}
+                        Math.round(
+                          gameLog.user1win /
+                            (gameLog.user1lose + gameLog.user1win)
+                        ) * 100}
                       %
                     </Typography>
                   </Stack>
@@ -227,8 +229,10 @@ const GameResult = () => {
                     <Typography sx={{ fontSize: "2rem" }}>
                       Win Rate:{" "}
                       {gameLog &&
-                        (gameLog?.user2win / (gameLog?.user2lose +
-                          gameLog?.user2win)) * 100}
+                        Math.round(
+                          gameLog?.user2win /
+                            (gameLog?.user2lose + gameLog?.user2win)
+                        ) * 100}
                       %
                     </Typography>
                   </Stack>
