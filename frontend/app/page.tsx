@@ -17,7 +17,6 @@ export default function HomePage() {
 
   useEffect(() => {
     console.log("🙋🏻‍♂️ [app/page.tsx] You are in app/page.tsx");
-    console.log(`${server_domain}/chat`);
 
     const socket = io(`${server_domain}/chat`, {
       query: { userId: secureLocalStorage.getItem("idx") as string },
@@ -85,7 +84,7 @@ export default function HomePage() {
     //   return router.replace("/home");
     // }
     console.log("🙋🏻‍♂️ [app/page.tsx] go to login");
-    return router.replace("/login");
+    return router.push("/login");
   }, []);
 
   return null;

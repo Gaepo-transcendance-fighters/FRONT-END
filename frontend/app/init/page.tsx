@@ -12,9 +12,10 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { main } from "@/type/type";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
+import { io } from "socket.io-client";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -62,7 +63,20 @@ export default function InitUser() {
     }).then((response) => {
       if (response.status === 200 && response.data.result.nickname !== "") {
         secureLocalStorage.setItem("nickname", response.data.result.nickname);
-        return router.push("/home");
+        const socket = io(`${server_domain}/chat`, {
+          query: { userId: secureLocalStorage.getItem("idx") as string },
+          autoConnect: false,
+        });
+        
+        const gameSocket = io(`${server_domain}/game/playroom`, {
+          query: { userId: secureLocalStorage.getItem("idx") as string },
+          autoConnect: false,
+        });
+        
+        authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
+        authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
+        console.log("🙋🏻‍♂️ [app/init.tsx] go to home");
+        return router.replace("/home");
       } else if (
         response.status === 200 &&
         response.data.result.nickname === ""

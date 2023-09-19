@@ -45,8 +45,9 @@ const Page = () => {
       router.push("/");
       return;
     }
-
-    if (!authState.chatSocket.connected) authState.chatSocket.connect();
+    if (!authState.chatSocket.connected) {
+      authState.chatSocket.connect();
+    }
 
     const askInvite = ({
       userIdx,
@@ -144,7 +145,7 @@ const Page = () => {
   useEffect(() => {
     const interval_check = setInterval(() => {
       setCount((prev) => prev - 1);
-      // console.log("count : ", count);
+      console.log("count : ", count);
     }, 1000);
     if (count < 0) {
       // console.log("count : 0 end ");
