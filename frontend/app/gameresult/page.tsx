@@ -10,10 +10,33 @@ import axios from "axios";
 import { server_domain } from "../page";
 import { IGameLog } from "@/type/GameType";
 import { useAuth } from "@/context/AuthContext";
+import styled from "@emotion/styled";
+
+const winner = {
+  width: "35%",
+  height: "70%",
+  border: "2px solid black",
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+  fontSize: "2rem",
+  backgroundColor: "#49EC62",
+};
+
+const loser = {
+  width: "35%",
+  height: "70%",
+  border: "2px solid black",
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+  fontSize: "2rem",
+  backgroundColor: "#FF6364",
+};
 
 const GameResult = () => {
   const { gameState, gameDispatch } = useGame();
-  const { authState } = useAuth()
+  const { authState } = useAuth();
   const [client, setClient] = useState(false);
   const [gameLog, setGameLog] = useState<IGameLog | null>(null);
   const [user1Score, setUser1Score] = useState<number>(0);
@@ -22,7 +45,7 @@ const GameResult = () => {
   const router = useRouter();
 
   const BackToMain = () => {
-    authState.gameSocket!.disconnect()
+    authState.gameSocket!.disconnect();
     gameDispatch({ type: "SCORE_RESET" });
     router.replace("/home?from=game");
   };
@@ -106,18 +129,7 @@ const GameResult = () => {
               backgroundColor: main.main3,
             }}
           >
-            <Card
-              style={{
-                width: "35%",
-                height: "70%",
-                border: "2px solid black",
-                display: "flex",
-                justifyContent: "space-around",
-                alignItems: "center",
-                fontSize: "2rem",
-                backgroundColor: "#49EC62",
-              }}
-            >
+            <Card style={user1Score > user2Score ? winner : loser}>
               <Stack
                 sx={{
                   display: "flex",
@@ -178,18 +190,7 @@ const GameResult = () => {
                 </Card>
               </Stack>
             </Card>
-            <Card
-              style={{
-                width: "35%",
-                height: "70%",
-                border: "2px solid black",
-                display: "flex",
-                justifyContent: "space-around",
-                alignItems: "center",
-                fontSize: "2rem",
-                backgroundColor: "#FF6364",
-              }}
-            >
+            <Card style={user2Score > user1Score ? winner : loser}>
               <Stack
                 sx={{
                   display: "flex",
