@@ -63,12 +63,13 @@ const SecondAuth = () => {
         }`,
       },
       data: {
-        userIdx: secureLocalStorage.getItem("idx") as number,
+        // userIdx: secureLocalStorage.getItem("idx") as number,
+        userIdx: authState.userInfo.id,
         code: Number(inputnumber),
       },
     });
     if (response.status == 200 && response.data.result.checkTFA) {
-      return router.push("/");
+      return router.push("/home"); // <- 0920 "/" -> "/home" 으로 수정
     }
     // 라우터 연결 및 localstorage에 2차인증토큰값설정.
     else if (
