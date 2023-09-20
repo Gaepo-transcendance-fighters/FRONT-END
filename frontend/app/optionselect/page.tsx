@@ -97,6 +97,7 @@ const OptionSelect = () => {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
+            authState.gameSocket?.connect();
             router.replace("/inwaiting");
           } else {
             console.log("게임방 생성 실패");
@@ -125,7 +126,6 @@ const OptionSelect = () => {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
-            console.log("gameSocket", authState.gameSocket!);
             authState.gameSocket?.connect();
             router.replace("/inwaiting");
           } else {
