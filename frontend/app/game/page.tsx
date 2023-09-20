@@ -45,7 +45,7 @@ const Game = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [client, setClient] = useState<boolean>(false);
   const [cha, setCha] = useState<string>("");
-  const { authState } = useAuth()
+  const { authState } = useAuth();
 
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
@@ -54,6 +54,7 @@ const Game = () => {
 
   const ClickRankGame = async () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.RANK });
+    console.log("game mode", gameState.gameMode);
     await axios({
       method: "post",
       url: `${server_domain}/game/normal-match`,
@@ -66,6 +67,7 @@ const Game = () => {
     })
       .then((res) => {
         console.log(res);
+        console.log("game mode", gameState.gameMode);
         if (res.status === 200) {
           authState.gameSocket?.connect();
           router.replace("/inwaiting");

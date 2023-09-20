@@ -56,7 +56,6 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
-      authState.gameSocket!.connect();
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });
@@ -76,7 +75,6 @@ const Page = () => {
       answer: boolean;
     }) => {
       if (answer === false) {
-        authState.gameSocket!.disconnect();
         closeModal();
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
