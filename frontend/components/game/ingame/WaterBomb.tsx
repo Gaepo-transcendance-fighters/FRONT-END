@@ -27,23 +27,23 @@ const WaterBomb = ({ up, down }: { up: JSX.Element[], down: JSX.Element[] }) => 
   return (
     <>
       {upImage.map((image, id) => (
-        <>
+        
           <div
             style={{
               margin: 0,
               padding: 0,
             }}
-            key={id}
+            key={id + 100}
             className={styles.moveAndFadeUp}
-            onAnimationEnd={() => handleAnimationUpEnd(id)}
+            onAnimationEnd={() => handleAnimationUpEnd(id + 100)}
           >
             {image}
           </div>
-        </>
+        
       ))}
 
       {downImage.map((image, id) => (
-        <>
+        
           <div
             style={{
               margin: 0,
@@ -55,7 +55,7 @@ const WaterBomb = ({ up, down }: { up: JSX.Element[], down: JSX.Element[] }) => 
           >
             {image}
           </div>
-        </>
+        
       ))}
     </>
   );
