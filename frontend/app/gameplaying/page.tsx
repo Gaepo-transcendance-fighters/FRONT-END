@@ -75,13 +75,12 @@ const GamePlaying = () => {
     addEventListener("keydown", preventRefresh);
     addEventListener("beforeunload", preventRefreshButton);
 
-    authState.gameSocket.on("game_force_quit", (msg: string) => {
-      console.log(`game force quit: ${msg}`);
+    authState.gameSocket.on("game_force_quit", () => {
       setOpenModal(true);
       setTimeout(() => {
-        setOpenModal(false);
         authState.gameSocket!.disconnect();
-        router.replace("/home");
+        setOpenModal(false);
+        router.replace("/home?from=game");
       }, 3000);
     });
     return () => {
