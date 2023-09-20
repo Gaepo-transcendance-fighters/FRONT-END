@@ -18,6 +18,7 @@ import secureLocalStorage from "react-secure-storage";
 import { server_domain } from "../page";
 import axios from "axios";
 import { SpeedOption } from "@/type/type";
+import { useAuth } from "@/context/AuthContext";
 
 const infomodalStyle = {
   position: "absolute" as "absolute",
@@ -44,6 +45,7 @@ const Game = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [client, setClient] = useState<boolean>(false);
   const [cha, setCha] = useState<string>("");
+  const { authState } = useAuth()
 
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
@@ -65,6 +67,7 @@ const Game = () => {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
+          authState.gameSocket?.connect();
           router.replace("/inwaiting");
         } else {
           console.log("게임방 생성 실패");

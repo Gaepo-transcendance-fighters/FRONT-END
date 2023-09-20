@@ -110,7 +110,6 @@ const OptionSelect = () => {
         });
       return;
     } else if (
-      gameState.gameMode === GameType.RANK ||
       gameState.gameMode === GameType.NORMAL
     ) {
       await axios({
