@@ -29,7 +29,6 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       },
       (res: ReturnMsgDto) => {
         if (res.code === 200) {
-          authState.gameSocket!.connect();
           openModal({
             children: <WaitAccept nickname={prop.nickname} />,
           });
@@ -59,7 +58,6 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
       answer: boolean;
     }) => {
       if (answer === false) {
-        authState.gameSocket!.disconnect();
         closeModal();
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
