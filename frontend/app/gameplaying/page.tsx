@@ -11,6 +11,29 @@ import Modals from "@/components/public/Modals";
 import { useAuth } from "@/context/AuthContext";
 import { Style } from "@mui/icons-material";
 
+const myNickname = {
+  width: "max-content",
+  padding: "20px",
+  margin: "30px",
+  height: "15%",
+  border: "2px solid black",
+  background: "orange",
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+};
+
+const otherNickname = {
+  width: "max-content",
+  padding: "20px",
+  margin: "30px",
+  height: "15%",
+  border: "2px solid black",
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+};
+
 const GamePlaying = () => {
   const router = useRouter();
   const { authState } = useAuth();
@@ -19,35 +42,6 @@ const GamePlaying = () => {
   const { isShowing, toggle } = useModal();
   const { isShowing: isShowing2, toggle: toggle2 } = useModal();
   const [openModal, setOpenModal] = useState<boolean>(false);
-
-  const backToMain = () => {
-    if (!authState.gameSocket) return;
-    gameDispatch({ type: "SCORE_RESET" });
-    authState.gameSocket.emit("game_queue_quit", gameState.aPlayer.id);
-  };
-
-  const myNickname = {
-    width: "max-content",
-    padding: "20px",
-    margin: "30px",
-    height: "15%",
-    border: "2px solid black",
-    background: "orange",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-  };
-
-  const otherNickname = {
-    width: "max-content",
-    padding: "20px",
-    margin: "30px",
-    height: "15%",
-    border: "2px solid black",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-  };
 
   useEffect(() => {
     if (!authState.gameSocket) return;
@@ -166,7 +160,7 @@ const GamePlaying = () => {
               >
                 <Typography>{gameState.aPlayer.nick}</Typography>
               </Card>
-              <PingPong setter={setOpenModal} />
+              <PingPong />
 
               <Card
                 style={
@@ -237,31 +231,6 @@ const GamePlaying = () => {
               message="새로고침 멈춰!"
               routing="/?from=game"
             />
-          </CardContent>
-          <CardContent
-            style={{
-              width: "100%",
-              height: "30vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Button
-              style={{
-                width: "10%",
-                height: "40%",
-                border: "2px solid red",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "1.5rem",
-                backgroundColor: "#FB5C12",
-              }}
-              onClick={backToMain}
-            >
-              도망가기
-            </Button>
           </CardContent>
         </Stack>
       </Card>

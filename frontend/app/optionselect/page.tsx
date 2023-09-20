@@ -80,6 +80,8 @@ const OptionSelect = () => {
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
     gameDispatch({ type: "SCORE_RESET" });
 
+    console.log("mode", gameState.gameMode)
+
     if (gameState.gameMode === GameType.FRIEND) {
       await axios({
         method: "post",
@@ -124,6 +126,7 @@ const OptionSelect = () => {
           console.log(res);
           if (res.status === 200) {
             console.log("gameSocket", authState.gameSocket!);
+            authState.gameSocket?.connect();
             router.replace("/inwaiting");
           } else {
             console.log("게임방 생성 실패");

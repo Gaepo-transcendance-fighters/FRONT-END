@@ -37,23 +37,17 @@ interface IGameEnd {
   gameStatus: EGameStatus; // 게임 속행, 게임 종료, 연결문제 판정승, 0, 1, 2
 }
 
-const transparency = (
+const water_end_up_up = (
   <Image
-    style={{
-      opacity: 0,
-    }}
-    src="/water.png"
+    src="/water_up.png"
     width="50"
     height="50"
-    alt="water"
+    alt="water end"
+    key="water_end_up_up"
   />
 );
 
-const water_end_up = (
-  <Image src="/water_up.png" width="50" height="50" alt="water end" />
-);
-
-const water_end_down = (
+const water_end_down_up = (
   <Image
     style={{
       transform: "rotate(180deg)",
@@ -62,10 +56,11 @@ const water_end_down = (
     width="50"
     height="50"
     alt="water end"
+    key="water_end_down_up"
   />
 );
 
-const water = (
+const water_up = (
   <Image
     style={{
       margin: 0,
@@ -75,22 +70,59 @@ const water = (
     width="50"
     height="50"
     alt="water"
+    key="water_up"
   />
 );
 
-const images = [water_end_up, water, water_end_down];
+const water_end_up_down = (
+  <Image
+    src="/water_up.png"
+    width="50"
+    height="50"
+    alt="water end"
+    key="water_end_up_up"
+  />
+);
 
-const PingPong = ({
-  setter,
-}: {
-  setter: Dispatch<SetStateAction<boolean>>;
-}) => {
+const water_end_down_down = (
+  <Image
+    style={{
+      transform: "rotate(180deg)",
+    }}
+    src="/water_up.png"
+    width="50"
+    height="50"
+    alt="water end"
+    key="water_end_down_up"
+  />
+);
+
+const water_down = (
+  <Image
+    style={{
+      margin: 0,
+      padding: 0,
+    }}
+    src="/water.png"
+    width="50"
+    height="50"
+    alt="water"
+    key="water_up"
+  />
+);
+
+
+const images_up = [water_end_up_up, water_up, water_end_down_up];
+const images_down = [water_end_up_down, water_down, water_end_down_down];
+
+const PingPong = () => {
   const [client, setClient] = useState(false);
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
   const [keyboard, setKeyboard] = useState(0);
-  const [waterbomb, setWaterbomb] = useState<JSX.Element[]>([]);
+  const [waterbombup, setWaterbombup] = useState<JSX.Element[]>([]);
+  const [waterbombdown, setWaterbombdown] = useState<JSX.Element[]>([]);
   const [gameProps, setGameProps] = useState<IGameProps>({
     ballX: 0,
     ballY: 0,
@@ -125,7 +157,8 @@ const PingPong = ({
     setClient(true);
 
     authState.gameSocket.on("game_start", (res) => {
-      setWaterbomb([]);
+      setWaterbombup([]);
+      setWaterbombdown([]);
       console.log("game_start", res);
     });
 
@@ -133,17 +166,19 @@ const PingPong = ({
       "game_ping",
       ({ serverTime }: { serverTime: number }) => {
         const now = new Date().getTime();
-        authState.gameSocket!.emit("game_ping_receive", {
-          userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-          serverTime: serverTime,
-          clientTime: now,
-        }, (res: ReturnMsgDto) => {
-          if (res.code === 200) {
-            console.log("good ping")
-          } else if (res.code === 400)
-            console.log("bad ping")
-            
-        });
+        authState.gameSocket!.emit(
+          "game_ping_receive",
+          {
+            userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+            serverTime: serverTime,
+            clientTime: now,
+          },
+          (res: ReturnMsgDto) => {
+            if (res.code === 200) {
+              console.log("good ping");
+            } else if (res.code === 400) console.log("bad ping");
+          }
+        );
       }
     );
 
@@ -169,7 +204,8 @@ const PingPong = ({
     );
 
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
-      setWaterbomb(images);
+      setWaterbombup(images_up);
+      setWaterbombdown(images_down);
       if (
         data.gameStatus === EGameStatus.END ||
         data.gameStatus === EGameStatus.JUDGE
@@ -213,7 +249,7 @@ const PingPong = ({
       window.removeEventListener("keydown", downPaddle);
       window.removeEventListener("keyup", upPaddle);
     };
-  }, [keyboard, waterbomb]);
+  }, [keyboard, waterbombup, waterbombdown]);
 
   if (!client) return <></>;
 
@@ -243,7 +279,7 @@ const PingPong = ({
           position: "absolute",
         }}
       >
-        <WaterBomb images={waterbomb} />
+        <WaterBomb up={waterbombup} down={waterbombdown} />
       </Stack>
       <GamePaddle x={-470} y={gameProps.paddle1} />
       <GamePaddle x={470} y={gameProps.paddle2} />
