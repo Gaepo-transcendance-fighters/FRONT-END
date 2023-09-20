@@ -45,6 +45,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
             children: <WaitAccept nickname={prop.nickname} />,
           });
         } else if (res.code === 400) {
+          alert("상대방이 게임 중 입니다.");
           closeModal();
         }
       }

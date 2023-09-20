@@ -10,18 +10,28 @@ import { ReturnMsgDto } from "@/type/RoomType";
 import { useUser } from "@/context/UserContext";
 import { useEffect } from "react";
 import { useFriend } from "@/context/FriendContext";
+import { IOnGame } from "@/type/type";
 
 const GameStartButton = () => {
   const router = useRouter();
   const { roomState, roomDispatch } = useRoom();
   const { authState } = useAuth();
   const { userState } = useUser();
+  const { friendState, friendDispatch } = useFriend();
 
   useEffect(() => {
-    const SetStatusOnGame = () => {};
+    const SetStatusOnGame = (payload: IOnGame) => {
+      const newFriendList = friendState.friendList.map((friend) => {
+        if (payload.userIdx === friend.friendIdx)
+          return { ...friend, isOnline: payload.isOnline };
+        else return friend;
+      });
+
+      friendDispatch({ type: "SET_FRIENDLIST", value: newFriendList });
+    };
 
     authState.chatSocket?.on("BR_set_status_ongame", SetStatusOnGame);
-  }, []);
+  }, [friendState.friendList]);
 
   const onClick = () => {
     if (!authState.chatSocket) return;

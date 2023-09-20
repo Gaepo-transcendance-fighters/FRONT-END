@@ -144,3 +144,9 @@ export interface user_status {
   userIdx: number;
   isOnline: IOnlineStatus;
 }
+
+export interface IOnGame {
+  nickname: string;
+  userIdx: number;
+  isOnline: IOnlineStatus;
+}

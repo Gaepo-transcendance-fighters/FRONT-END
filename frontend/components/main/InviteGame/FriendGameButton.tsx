@@ -30,17 +30,25 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
         userNickname: userState.nickname,
       },
       (res: ReturnMsgDto) => {
-        console.log("FriendGameButton : ", res);
+        console.log("GameStartButton : ", res);
       }
     );
-    authState.chatSocket.emit("chat_invite_ask", {
-      myUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-      targetUserIdx: prop.friendIdx,
-    });
-    authState.gameSocket!.connect();
-    openModal({
-      children: <WaitAccept nickname={prop.friendNickname} />,
-    });
+    authState.chatSocket.emit(
+      "chat_invite_ask",
+      {
+        myUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+        targetUserIdx: prop.friendIdx,
+      },
+      (res: ReturnMsgDto) => {
+        console.log("handleOpenModal : ", res);
+        if (res.code == 200) {
+          authState.gameSocket!.connect();
+          openModal({
+            children: <WaitAccept nickname={prop.friendNickname} />,
+          });
+        } else if (res.code === 400) alert("상대방이 게임 중 입니다.");
+      }
+    );
   };
 
   useEffect(() => {
@@ -77,12 +85,12 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
               channelIdx: roomState.currentRoom!.channelIdx,
               userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
             },
-            (ret: ReturnMsgDto) => {
-              if (ret.code === 200) {
+            (res: ReturnMsgDto) => {
+              if (res.code === 200) {
                 roomDispatch({ type: "SET_IS_OPEN", value: false });
                 roomDispatch({ type: "SET_CUR_ROOM", value: null });
               } else {
-                console.log("FriendGoToLobby : ", ret.msg);
+                console.log("FriendGoToLobby : ", res.msg);
               }
             }
           );

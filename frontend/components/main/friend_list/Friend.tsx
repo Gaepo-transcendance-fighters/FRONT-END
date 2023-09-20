@@ -40,7 +40,7 @@ const Friend = ({ prop }: { prop: IFriend }) => {
               ? loginOn
               : prop.isOnline === IOnlineStatus.OFFLINE
               ? loginOff
-              : ""}
+              : playing}
             <FriendProfile prop={prop as IFriend} />
           </Stack>
         </Stack>

@@ -66,7 +66,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   });
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
-  const { friendState, friendDispatch } = useFriend();
+  const { friendDispatch } = useFriend();
   const { authState } = useAuth();
 
   const RankSrc =
