@@ -65,6 +65,7 @@ export default function PageRedir() {
     if (dataUrl === "") return;
 
     const formData = new FormData();
+
     formData.append("userIdx", authState.userInfo.id.toString() || "");
     formData.append("userNickname", "");
     formData.append("imgData", dataUrl);
@@ -92,8 +93,6 @@ export default function PageRedir() {
   const readFileAsDataURL = (file: File): Promise<string> => {
     console.log("file", file.size);
     if (file.size > 2000000) {
-      // 임의의 값. 아직 파일 사이즈 미정.
-      //TODO : 사이즈 정하기
       alert("더 작은 사이즈의 파일을 선택해주세요.");
       return new Promise(() => "");
     }
