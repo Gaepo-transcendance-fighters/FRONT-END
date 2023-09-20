@@ -7,14 +7,33 @@ import { useRoom } from "@/context/RoomContext";
 import { useAuth } from "@/context/AuthContext";
 import secureLocalStorage from "react-secure-storage";
 import { ReturnMsgDto } from "@/type/RoomType";
+import { useUser } from "@/context/UserContext";
+import { useEffect } from "react";
+import { useFriend } from "@/context/FriendContext";
 
 const GameStartButton = () => {
   const router = useRouter();
   const { roomState, roomDispatch } = useRoom();
   const { authState } = useAuth();
+  const { userState } = useUser();
+
+  useEffect(() => {
+    const SetStatusOnGame = () => {};
+
+    authState.chatSocket?.on("BR_set_status_ongame", SetStatusOnGame);
+  }, []);
 
   const onClick = () => {
-    console.log("hihi");
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
+      "BR_set_status_ongame",
+      {
+        userNickname: userState.nickname,
+      },
+      (res: ReturnMsgDto) => {
+        console.log("GameStartButton : ", res);
+      }
+    );
     if (roomState.currentRoom?.channelIdx) {
       authState.chatSocket!.emit(
         "chat_goto_lobby",

@@ -11,6 +11,7 @@ import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import secureLocalStorage from "react-secure-storage";
 import { useRoom } from "@/context/RoomContext";
+import { useUser } from "@/context/UserContext";
 
 const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const router = useRouter();
@@ -18,9 +19,19 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const { openModal, closeModal } = useModalContext();
   const { gameDispatch } = useGame();
   const { roomState, roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   const handleOpenModal = () => {
     if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
+      "BR_set_status_ongame",
+      {
+        userNickname: userState.nickname,
+      },
+      (res: ReturnMsgDto) => {
+        console.log("MemberGameButton : ", res);
+      }
+    );
     authState.chatSocket.emit(
       "chat_invite_ask",
       {
