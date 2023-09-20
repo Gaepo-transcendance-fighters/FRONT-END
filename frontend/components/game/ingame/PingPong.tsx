@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { ReturnMsgDto } from "@/type/RoomType";
 import WaterBomb from "./WaterBomb";
 import secureLocalStorage from "react-secure-storage";
+import { Padding } from "@mui/icons-material";
 
 enum EGameStatus {
   ONGOING,
@@ -39,6 +40,10 @@ interface IGameEnd {
 
 const water_end_up_up = (
   <Image
+    style={{
+      margin: 0,
+      padding: 0,
+    }}
     src="/water_up.png"
     width="50"
     height="50"
@@ -51,6 +56,8 @@ const water_end_down_up = (
   <Image
     style={{
       transform: "rotate(180deg)",
+      margin: 0,
+      padding: 0,
     }}
     src="/water_up.png"
     width="50"
@@ -274,6 +281,8 @@ const PingPong = () => {
 
       <Stack
         style={{
+          padding: 0,
+          margin: 0,
           zIndex: 4,
           transform: `translate(${gameProps.ballX}px, ${gameProps.ballY}px)`,
           position: "absolute",

@@ -54,6 +54,7 @@ const WaitAccept = ({ nickname }: { nickname: string | undefined }) => {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
+          backgroundColor: main.main2,
         }}
       >
         <CardContent
@@ -69,7 +70,7 @@ const WaitAccept = ({ nickname }: { nickname: string | undefined }) => {
             {nickname} 님 께 친선전 경기를 요청하였습니다.
           </Typography>
         </CardContent>
-        {/* <CardContent
+        <CardContent
           style={{
             width: "60%",
             height: "100%",
@@ -79,7 +80,7 @@ const WaitAccept = ({ nickname }: { nickname: string | undefined }) => {
             flexDirection: "row",
           }}
           sx={{ display: "flex", gap: "20%", flexDirection: "row" }}
-        ></CardContent> */}
+        ></CardContent>
       </Card>
     </>
   );
