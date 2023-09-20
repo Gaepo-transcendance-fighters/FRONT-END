@@ -54,12 +54,11 @@ const Game = () => {
 
   const ClickRankGame = async () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.RANK });
-    console.log("game mode", gameState.gameMode);
     await axios({
       method: "post",
       url: `${server_domain}/game/normal-match`,
       data: {
-        gameType: gameState.gameMode,
+        gameType: GameType.RANK,
         userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
         speed: SpeedOption.speed2,
         mapNumber: 1,
@@ -67,7 +66,6 @@ const Game = () => {
     })
       .then((res) => {
         console.log(res);
-        console.log("game mode", gameState.gameMode);
         if (res.status === 200) {
           authState.gameSocket?.connect();
           router.replace("/inwaiting");
