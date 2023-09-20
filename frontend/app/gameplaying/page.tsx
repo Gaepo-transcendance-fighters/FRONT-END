@@ -218,7 +218,7 @@ const GamePlaying = () => {
               isShowing={isShowing}
               hide={toggle}
               message="뒤로가기 멈춰!"
-              routing="/?from=game"
+              routing="/home?from=game"
             />
             <Modals
               isShowing={openModal}
@@ -228,7 +228,7 @@ const GamePlaying = () => {
               isShowing={isShowing2}
               hide={toggle2}
               message="새로고침 멈춰!"
-              routing="/?from=game"
+              routing="/home?from=game"
             />
           </CardContent>
         </Stack>

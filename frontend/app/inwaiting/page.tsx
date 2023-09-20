@@ -247,7 +247,7 @@ const Inwaiting = () => {
               isShowing={isShowing}
               hide={toggle}
               message={`뒤로 가면 큐가 취소됩니다. 그래도 뒤로 가시겠습니까?`}
-              routing="/?from=game"
+              routing="/home?from=game"
             />
             <Modal open={openModal}>
               <Box sx={modalStyle} borderRadius={"10px"}>

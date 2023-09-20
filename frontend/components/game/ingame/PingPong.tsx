@@ -118,7 +118,6 @@ const water_down = (
   />
 );
 
-
 const images_up = [water_end_up_up, water_up, water_end_down_up];
 const images_down = [water_end_up_down, water_down, water_end_down_down];
 
@@ -213,13 +212,6 @@ const PingPong = () => {
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
       setWaterbombup(images_up);
       setWaterbombdown(images_down);
-      if (
-        data.gameStatus === EGameStatus.END ||
-        data.gameStatus === EGameStatus.JUDGE
-      ) {
-        router.push("/gameresult");
-        return;
-      }
       authState.gameSocket!.emit(
         "game_pause_score",
         { userIdx: parseInt(secureLocalStorage.getItem("idx") as string) },
@@ -233,7 +225,7 @@ const PingPong = () => {
               data.gameStatus === EGameStatus.JUDGE
             ) {
               gameDispatch({ type: "SCORE_RESET" });
-              router.push("/gameresult");
+              router.replace("/gameresult");
             }
           }
         }
