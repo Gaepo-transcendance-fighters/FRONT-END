@@ -16,6 +16,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 import { io } from "socket.io-client";
+import { useUser } from "@/context/UserContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -36,6 +37,7 @@ export default function InitUser() {
   const router = useRouter();
   const [block, setBlock] = useState<boolean>(false);
   const { authState, authDispatch } = useAuth();
+  const { userDispatch } = useUser();
   const [inputNick, setInputNick] = useState<string>("");
 
   const sendUri = `${server_domain}/users/profile`;
@@ -63,16 +65,20 @@ export default function InitUser() {
     }).then((response) => {
       if (response.status === 200 && response.data.result.nickname !== "") {
         secureLocalStorage.setItem("nickname", response.data.result.nickname);
+        userDispatch({
+          type: "CHANGE_NICK_NAME",
+          value: response.data.result.nickname,
+        });
         const socket = io(`${server_domain}/chat`, {
           query: { userId: secureLocalStorage.getItem("idx") as string },
           autoConnect: false,
         });
-        
+
         const gameSocket = io(`${server_domain}/game/playroom`, {
           query: { userId: secureLocalStorage.getItem("idx") as string },
           autoConnect: false,
         });
-        
+
         authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
         authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
         console.log("🙋🏻‍♂️ [app/init.tsx] go to home");
