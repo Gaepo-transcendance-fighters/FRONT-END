@@ -21,13 +21,7 @@ const GameStartButton = () => {
 
   useEffect(() => {
     const SetStatusOnGame = (payload: IOnGame) => {
-      const newFriendList = friendState.friendList.map((friend) => {
-        if (payload.userIdx === friend.friendIdx)
-          return { ...friend, isOnline: payload.isOnline };
-        else return friend;
-      });
-
-      friendDispatch({ type: "SET_FRIENDLIST", value: newFriendList });
+      // console.log("SetStatusOnGame : ", payload);
     };
 
     authState.chatSocket?.on("BR_set_status_ongame", SetStatusOnGame);

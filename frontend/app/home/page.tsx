@@ -13,7 +13,6 @@ import { server_domain } from "../page";
 import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
 import secureLocalStorage from "react-secure-storage";
-import { useUser } from "@/context/UserContext";
 
 const Page = () => {
   const param = useSearchParams();
@@ -77,6 +76,14 @@ const Page = () => {
     }) => {
       if (answer === false) {
         authState.gameSocket!.disconnect();
+        if (!authState.chatSocket) return;
+        authState.chatSocket.emit(
+          "BR_set_status_online",
+          {
+            userNickname: authState.userInfo.nickname,
+          },
+          (ret: ReturnMsgDto) => {}
+        );
         closeModal();
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });

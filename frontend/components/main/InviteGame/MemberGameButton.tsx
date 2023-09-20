@@ -43,8 +43,12 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
           openModal({
             children: <WaitAccept nickname={prop.nickname} />,
           });
+        } else if (res.msg === "Bad Request, target user is offline") {
+          // TODO : 알맞은 메시지 띄우기
+          alert("상대방이 오프라인입니다.");
+          closeModal();
         } else if (res.code === 400) {
-          alert("상대방이 게임 중 입니다.");
+          alert("상대방이 게임 중입니다.");
           closeModal();
         }
       }
