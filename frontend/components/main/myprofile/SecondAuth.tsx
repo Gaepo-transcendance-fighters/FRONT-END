@@ -132,7 +132,6 @@ export default function SecondAuth({
             >
               2차인증을 활성화 시, 다음 로그인부터 적용됩니다.
               <br />
-              (버튼 클릭 시 메인화면으로 돌아갑니다)
             </CardContent>
             <CardContent
               style={{
