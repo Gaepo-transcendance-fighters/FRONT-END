@@ -6,12 +6,16 @@ import { main } from "@/type/type";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
-import { secondAuthModalStyle } from "@/type/My";
+import { IUserData, secondAuthModalStyle } from "@/type/My";
 import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-export default function SecondAuth() {
+export default function SecondAuth({
+  set2fa,
+}: {
+  set2fa: React.Dispatch<React.SetStateAction<IUserData>>;
+}) {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const [verified, setVerified] = useState<boolean>(false);
@@ -39,6 +43,12 @@ export default function SecondAuth() {
 
   const onChangeSecondAuth = async () => {
     let newVerifiedValue = authState.userInfo.check2Auth;
+
+    set2fa((prevState: IUserData) => ({
+      ...prevState,
+      check2Auth: !prevState.check2Auth,
+    }));
+
     const response = await axios({
       method: "patch",
       url: `${server_domain}/users/profile/second`,
