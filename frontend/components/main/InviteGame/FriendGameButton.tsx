@@ -30,7 +30,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
         userNickname: userState.nickname,
       },
       (res: ReturnMsgDto) => {
-        console.log("GameStartButton : ", res);
+        // console.log("GameStartButton : ", res);
       }
     );
     authState.chatSocket.emit(
@@ -40,7 +40,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
         targetUserIdx: prop.friendIdx,
       },
       (res: ReturnMsgDto) => {
-        console.log("handleOpenModal : ", res);
+        // console.log("handleOpenModal : ", res);
         if (res.code == 200) {
           authState.gameSocket!.connect();
           openModal({
@@ -69,7 +69,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
       targetUserNickname: string;
       answer: boolean;
     }) => {
-      console.log("receive invite", answer);
+      // console.log("receive invite", answer);
       if (answer === false) {
         authState.gameSocket!.disconnect();
         if (!authState.chatSocket) return;
@@ -84,7 +84,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
         const target = { nick: targetUserNickname, id: targetUserIdx };
-        console.log("target", target);
+        // console.log("target", target);
         gameDispatch({ type: "B_PLAYER", value: target });
         if (roomState.currentRoom) {
           authState.chatSocket?.emit(
@@ -98,7 +98,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
                 roomDispatch({ type: "SET_IS_OPEN", value: false });
                 roomDispatch({ type: "SET_CUR_ROOM", value: null });
               } else {
-                console.log("FriendGoToLobby : ", res.msg);
+                // console.log("FriendGoToLobby : ", res.msg);
               }
             }
           );
@@ -109,7 +109,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
     };
 
     const FriendGoToLobby = (payload: IChatRoom[]) => {
-      console.log("FriendGoToLobby : ", payload);
+      // console.log("FriendGoToLobby : ", payload);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
 

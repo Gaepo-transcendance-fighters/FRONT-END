@@ -29,7 +29,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
         userNickname: userState.nickname,
       },
       (res: ReturnMsgDto) => {
-        console.log("MemberGameButton : ", res);
+        // console.log("MemberGameButton : ", res);
       }
     );
     authState.chatSocket.emit(
@@ -93,7 +93,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
               roomDispatch({ type: "SET_IS_OPEN", value: false });
               roomDispatch({ type: "SET_CUR_ROOM", value: null });
             } else {
-              console.log("HomeGoToLobby : ", ret.msg);
+              // console.log("HomeGoToLobby : ", ret.msg);
             }
           }
         );
@@ -103,7 +103,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
     };
 
     const MemGoToLobby = (payload: IChatRoom[]) => {
-      console.log("MemGoToLobby : ", payload);
+      // console.log("MemGoToLobby : ", payload);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
     authState.chatSocket.on("chat_goto_lobby", MemGoToLobby);

@@ -35,7 +35,7 @@ const GameStartButton = () => {
         userNickname: userState.nickname,
       },
       (res: ReturnMsgDto) => {
-        console.log("GameStartButton : ", res);
+        // console.log("GameStartButton : ", res);
       }
     );
     if (roomState.currentRoom?.channelIdx) {
@@ -53,7 +53,7 @@ const GameStartButton = () => {
             roomDispatch({ type: "SET_IS_OPEN", value: false });
             roomDispatch({ type: "SET_CUR_ROOM", value: null });
           } else {
-            console.log("GameStartButton : ", ret.msg);
+            // console.log("GameStartButton : ", ret.msg);
           }
         }
       );
