@@ -71,7 +71,6 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
     }) => {
       console.log("receive invite", answer);
       if (answer === false) {
-        authState.gameSocket!.disconnect();
         closeModal();
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });
@@ -132,7 +131,3 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
 };
 
 export default FriendGameButton;
-
-// display: "flex",
-// alignItems: "center",
-// justifyContent: "center",
