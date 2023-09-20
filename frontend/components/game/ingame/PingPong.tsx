@@ -212,18 +212,18 @@ const PingPong = () => {
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
       setWaterbombup(images_up);
       setWaterbombdown(images_down);
+      if (
+        data.gameStatus === EGameStatus.END ||
+        data.gameStatus === EGameStatus.JUDGE
+      ) {
+        router.replace("/gameresult");
+        return;
+      }
       authState.gameSocket!.emit(
         "game_pause_score",
         { userIdx: parseInt(secureLocalStorage.getItem("idx") as string) },
         (res: ReturnMsgDto) => {
           console.log(res);
-          if (
-            data.gameStatus === EGameStatus.END ||
-            data.gameStatus === EGameStatus.JUDGE
-          ) {
-            gameDispatch({ type: "SCORE_RESET" });
-            router.replace("/gameresult");
-          }
           if (res.code === 200) {
             gameDispatch({ type: "A_SCORE", value: data.userScore1 });
             gameDispatch({ type: "B_SCORE", value: data.userScore2 });
