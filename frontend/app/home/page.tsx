@@ -14,13 +14,15 @@ import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
 import secureLocalStorage from "react-secure-storage";
 import { useUser } from "@/context/UserContext";
+import { io } from "socket.io-client";
 
 const Page = () => {
   const param = useSearchParams();
   const router = useRouter();
   const { gameDispatch } = useGame();
   const [client, setClient] = useState(false);
-  const { authState } = useAuth();
+  const { authState, authDispatch } = useAuth();
+  const { userState } = useUser();
   const { roomState, roomDispatch } = useRoom();
   const { openModal, closeModal } = useModalContext();
   const [count, setCount] = useState(3);
@@ -40,15 +42,29 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    setClient(true);
-    if (authState.chatSocket === undefined) {
-      router.push("/");
-      return;
-    }
-    if (!authState.chatSocket.connected) {
-      authState.chatSocket.connect();
-    }
+    if (!authState.chatSocket === undefined)
+    {
+      const socket = io(`${server_domain}/chat`, {
+        query: { userId: secureLocalStorage.getItem("idx") as string },
+        autoConnect: false,
+      });
 
+      const gameSocket = io(`${server_domain}/game/playroom`, {
+        query: { userId: secureLocalStorage.getItem("idx") as string },
+        autoConnect: false,
+      });
+
+      authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
+      authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
+    }
+    if (!authState.chatSocket?.connected) {
+      console.log("🤷 [home page.tsx] connection try");
+      authState.chatSocket?.connect();
+    }
+}, [authState.chatSocket, authState.chatSocket?.connected])
+
+  useEffect(() => {
+    setClient(true);
     const askInvite = ({
       userIdx,
       userNickname,
@@ -110,6 +126,7 @@ const Page = () => {
     const HomeGoToLobby = (payload: IChatRoom[]) => {
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
+    if (!authState.chatSocket) return;
     authState.chatSocket.on("chat_goto_lobby", HomeGoToLobby);
     authState.chatSocket.on("chat_receive_answer", recieveInvite);
     authState.chatSocket.on("chat_invite_answer", askInvite);
