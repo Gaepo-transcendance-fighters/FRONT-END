@@ -272,7 +272,7 @@ export default function PageRedir() {
                             onChange={handleChange}
                           />
                         </form>
-                        <SecondAuth set={setUserData} />
+                        <SecondAuth set2fa={setUserData} />
                       </Stack>
                     </Stack>
                   </Card>
