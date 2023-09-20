@@ -68,7 +68,7 @@ export default function Member({
         ? setIsAdmin(true)
         : setIsAdmin(false);
     });
-  }, [roomState.adminAry]);
+  }, [roomState.adminAry, roomState.currentRoom]);
 
   const handleOpenMenu = (
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
@@ -98,6 +98,7 @@ export default function Member({
     const ChatRoomAdmin = (payload: IChatRoomAdmin) => {
       roomDispatch({ type: "SET_ADMIN_ARY", value: payload.admin });
     };
+
     authState.chatSocket.on("chat_room_admin", ChatRoomAdmin);
 
     return () => {
