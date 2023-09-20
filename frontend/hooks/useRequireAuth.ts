@@ -16,6 +16,7 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
       !document.URL.includes("/mypage") &&
       !document.URL.includes("/login") &&
       !document.URL.includes("/optionselect") &&
+      !document.URL.includes("/secondauth") &&
       !document.URL.includes("/inwaiting") &&
       !document.URL.includes("/init") &&
       !document.URL.includes("/home") &&
