@@ -1,14 +1,17 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export const useRequireAuth = (redirectUrl: string = "/login") => {
   const router = useRouter();
+  const { authState } = useAuth();
 
   useEffect(() => {
     console.log("🙋🏻 [useRequireAuth] You are in useRequireAuth");
     if (document.URL.includes("/login/auth")) return;
+    if (document.URL.includes("/init") && authState.userInfo.id) return;
     if (
       !document.URL.includes("/mypage") &&
       !document.URL.includes("/login") &&
@@ -24,6 +27,6 @@ export const useRequireAuth = (redirectUrl: string = "/login") => {
       return;
     }
     console.log("👉🏻 [useRequireAuth] You are moved to /");
-    return router.push("/");
+    return router.replace("/");
   }, []);
 };
