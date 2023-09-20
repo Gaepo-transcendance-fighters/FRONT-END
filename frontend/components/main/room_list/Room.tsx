@@ -58,12 +58,13 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
         };
       });
       const newRoom: IChatRoom = {
-        owner: owner ? owner : room.owner,
+        owner: owner,
         channelIdx: roomState.currentRoom!.channelIdx,
         mode: roomState.currentRoom!.mode,
       };
       roomDispatch({ type: "SET_CUR_MEM", value: list });
       roomDispatch({ type: "SET_CUR_ROOM", value: newRoom });
+      room.owner = owner;
     };
     authState.chatSocket.on("chat_room_exit", ChatExitRoom);
 
