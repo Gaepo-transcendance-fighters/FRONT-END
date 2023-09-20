@@ -1,7 +1,6 @@
 import { ReactNode, FC, useState, useContext } from "react";
 import { createContext } from "react";
 
-
 type ModalData = {
   children?: ReactNode;
   onCancel?: () => unknown;
@@ -16,8 +15,8 @@ const ModalContext = createContext<{
 }>({} as any);
 
 export const useModalContext = () => {
-  return useContext(ModalContext)
-}
+  return useContext(ModalContext);
+};
 
 export const ModalContextProvider: FC<{ children: ReactNode }> = ({
   children,

@@ -93,6 +93,14 @@ const Page = () => {
     }) => {
       if (answer === false) {
         authState.gameSocket!.disconnect();
+        if (!authState.chatSocket) return;
+        authState.chatSocket.emit(
+          "BR_set_status_online",
+          {
+            userNickname: authState.userInfo.nickname,
+          },
+          (ret: ReturnMsgDto) => {}
+        );
         closeModal();
       } else if (answer === true) {
         gameDispatch({ type: "SET_GAME_MODE", value: GameType.FRIEND });

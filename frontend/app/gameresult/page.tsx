@@ -10,10 +10,11 @@ import axios from "axios";
 import { server_domain } from "../page";
 import { IGameLog } from "@/type/GameType";
 import { useAuth } from "@/context/AuthContext";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 const GameResult = () => {
   const { gameState, gameDispatch } = useGame();
-  const { authState } = useAuth()
+  const { authState } = useAuth();
   const [client, setClient] = useState(false);
   const [gameLog, setGameLog] = useState<IGameLog | null>(null);
   const [user1Score, setUser1Score] = useState<number>(0);
@@ -22,8 +23,16 @@ const GameResult = () => {
   const router = useRouter();
 
   const BackToMain = () => {
-    authState.gameSocket!.disconnect()
+    authState.gameSocket!.disconnect();
     gameDispatch({ type: "SCORE_RESET" });
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
+      "BR_set_status_online",
+      {
+        userNickname: authState.userInfo.nickname,
+      },
+      (ret: ReturnMsgDto) => {}
+    );
     router.replace("/home?from=game");
   };
 
