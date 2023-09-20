@@ -80,7 +80,7 @@ const OptionSelect = () => {
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
     gameDispatch({ type: "SCORE_RESET" });
 
-    console.log("mode", gameState.gameMode)
+    console.log("mode", gameState.gameMode);
 
     if (gameState.gameMode === GameType.FRIEND) {
       await axios({
@@ -89,7 +89,7 @@ const OptionSelect = () => {
         data: {
           userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           targetIdx: gameState.bPlayer.id,
-          gameType: gameState.gameMode,
+          gameType: GameType.FRIEND,
           speed: selectedSpeedOption,
           mapNumber: selectedMapOption,
         },
@@ -109,14 +109,12 @@ const OptionSelect = () => {
           router.replace("/home?from=game");
         });
       return;
-    } else if (
-      gameState.gameMode === GameType.NORMAL
-    ) {
+    } else if (gameState.gameMode === GameType.NORMAL) {
       await axios({
         method: "post",
         url: `${server_domain}/game/normal-match`,
         data: {
-          gameType: gameState.gameMode,
+          gameType: GameType.NORMAL,
           userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           speed: selectedSpeedOption,
           mapNumber: selectedMapOption,
