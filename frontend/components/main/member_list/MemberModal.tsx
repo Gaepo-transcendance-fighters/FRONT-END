@@ -268,6 +268,15 @@ export default function MemberModal({
 
   const RankSrc = RankImgSelect(gameUserInfo);
 
+  useEffect(() => {
+    let found = roomState.currentRoomMemberList.find((mem) => {
+      return mem.userIdx === person.userIdx;
+    });
+    if (!found || roomState.currentRoomMemberList.length === 1) {
+      handleCloseModal();
+    }
+  }, [roomState.currentRoomMemberList]);
+
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
       <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
