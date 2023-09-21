@@ -42,8 +42,7 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    if (authState.chatSocket === undefined)
-    {
+    if (authState.chatSocket === undefined) {
       const socket = io(`${server_domain}/chat`, {
         query: { userId: secureLocalStorage.getItem("idx") as string },
         autoConnect: false,
@@ -65,7 +64,7 @@ const Page = () => {
       console.log("🤷 [home page.tsx] connection try");
       authState.chatSocket?.connect();
     }
-}, [authState.chatSocket, authState.chatSocket?.connected])
+  }, [authState.chatSocket, authState.chatSocket?.connected]);
 
   useEffect(() => {
     setClient(true);
@@ -95,7 +94,6 @@ const Page = () => {
       answer: boolean;
     }) => {
       if (answer === false) {
-        authState.gameSocket!.disconnect();
         if (!authState.chatSocket) return;
         authState.chatSocket.emit(
           "BR_set_status_online",

@@ -10,7 +10,7 @@ import axios from "axios";
 import { server_domain } from "../page";
 import { IGameLog } from "@/type/GameType";
 import { useAuth } from "@/context/AuthContext";
-import styled from "@emotion/styled";
+import { history } from "../page";
 import { ReturnMsgDto } from "@/type/RoomType";
 
 const winner = {
