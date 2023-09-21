@@ -76,7 +76,7 @@ const FriendList = () => {
   return (
     <Card
       sx={{
-        height: "60vh",
+        height: "57vh",
         borderRadius: "10px",
         margin: 1,
         backgroundColor: main.main2,
@@ -130,21 +130,20 @@ const FriendList = () => {
           sx={{
             my: "7px",
             backgroundColor: main.main5,
-            overflow: "scroll",
+            overflow: "overlay",
             height: "43vh",
             padding: "10px",
             borderRadius: "10px",
           }}
         >
-          {!select && friendState.friendList.length
-            ? friendState.friendList.map((user, idx) => (
-                <Friend key={idx} prop={user} />
-              ))
-            : ""}
+          {!select && 
+            friendState.friendList.map((user, idx) => (
+              <Friend key={idx} prop={user} />
+          ))}
           {select &&
             friendState.blockList.map((user, idx) => (
               <Block key={idx} prop={user} />
-            ))}
+          ))}
         </Card>
       </Stack>
     </Card>
