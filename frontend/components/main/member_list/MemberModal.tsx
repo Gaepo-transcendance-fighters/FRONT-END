@@ -264,11 +264,10 @@ export default function MemberModal({
   const RankSrc = RankImgSelect(gameUserInfo);
 
   useEffect(() => {
-    let lettt = roomState.currentRoomMemberList.find((mem) => {
+    let found = roomState.currentRoomMemberList.find((mem) => {
       return mem.userIdx === person.userIdx;
     });
-    if (!lettt || roomState.currentRoomMemberList.length === 1) {
-      console.log("person isn't here!");
+    if (!found || roomState.currentRoomMemberList.length === 1) {
       handleCloseModal();
     }
   }, [roomState.currentRoomMemberList]);
