@@ -122,7 +122,7 @@ const MyGameLog = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flexDirection: "row",
+                    flexDirection: "column",
                     width: "30%",
                     height: "80%",
                     backgroundColor: main.main0,
