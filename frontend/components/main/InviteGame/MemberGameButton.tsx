@@ -11,6 +11,7 @@ import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import secureLocalStorage from "react-secure-storage";
 import { useRoom } from "@/context/RoomContext";
+import { useUser } from "@/context/UserContext";
 
 const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const router = useRouter();
@@ -18,9 +19,19 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
   const { openModal, closeModal } = useModalContext();
   const { gameDispatch } = useGame();
   const { roomState, roomDispatch } = useRoom();
+  const { userState } = useUser();
 
   const handleOpenModal = () => {
     if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
+      "BR_set_status_ongame",
+      {
+        userNickname: userState.nickname,
+      },
+      (res: ReturnMsgDto) => {
+        // console.log("MemberGameButton : ", res);
+      }
+    );
     authState.chatSocket.emit(
       "chat_invite_ask",
       {
@@ -32,7 +43,12 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
           openModal({
             children: <WaitAccept nickname={prop.nickname} />,
           });
+        } else if (res.msg === "Bad Request, target user is offline") {
+          // TODO : 알맞은 메시지 띄우기
+          alert("상대방이 오프라인입니다.");
+          closeModal();
         } else if (res.code === 400) {
+          alert("상대방이 게임 중입니다.");
           closeModal();
         }
       }
@@ -77,7 +93,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
               roomDispatch({ type: "SET_IS_OPEN", value: false });
               roomDispatch({ type: "SET_CUR_ROOM", value: null });
             } else {
-              console.log("HomeGoToLobby : ", ret.msg);
+              // console.log("HomeGoToLobby : ", ret.msg);
             }
           }
         );
@@ -87,7 +103,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
     };
 
     const MemGoToLobby = (payload: IChatRoom[]) => {
-      console.log("MemGoToLobby : ", payload);
+      // console.log("MemGoToLobby : ", payload);
       roomDispatch({ type: "SET_NON_DM_ROOMS", value: payload });
     };
     authState.chatSocket.on("chat_goto_lobby", MemGoToLobby);

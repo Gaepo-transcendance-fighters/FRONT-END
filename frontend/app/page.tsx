@@ -84,6 +84,7 @@ export default function HomePage() {
     //   return router.replace("/home");
     // }
     console.log("🙋🏻‍♂️ [app/page.tsx] go to login");
+    authState.chatSocket?.disconnect();
     return router.push("/login");
   }, []);
 

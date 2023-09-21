@@ -13,6 +13,7 @@ import { main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -42,6 +43,7 @@ const Modals = ({
   const router = useRouter();
   const { gameState } = useGame();
   const { authState } = useAuth();
+
   return isShowing
     ? createPortal(
         <Modal open={isShowing} onClose={hide}>
@@ -100,6 +102,14 @@ const Modals = ({
                         gameState.aPlayer.id
                       );
                       authState.gameSocket!.disconnect();
+                      if (!authState.chatSocket) return;
+                      authState.chatSocket.emit(
+                        "BR_set_status_online",
+                        {
+                          userNickname: authState.userInfo.nickname,
+                        },
+                        (ret: ReturnMsgDto) => {}
+                      );
                       router.replace(routing);
                     }}
                   >

@@ -19,6 +19,7 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 import { GameType, MapOption, SpeedOption } from "@/type/type";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";
@@ -173,6 +174,14 @@ const OptionSelect = () => {
               backgroundColor: "White",
             }}
             onClick={() => {
+              if (!authState.chatSocket) return;
+              authState.chatSocket.emit(
+                "BR_set_status_online",
+                {
+                  userNickname: authState.userInfo.nickname,
+                },
+                (ret: ReturnMsgDto) => {}
+              );
               router.replace("/home?from=game");
             }}
           >

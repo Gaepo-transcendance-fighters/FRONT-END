@@ -2,7 +2,7 @@
 
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useEffect } from "react";
-import { main } from "@/type/type";
+import { IOnGame, main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useModalContext } from "@/context/ModalContext";
 import { useAuth } from "@/context/AuthContext";
@@ -10,6 +10,7 @@ import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import secureLocalStorage from "react-secure-storage";
 import { useRoom } from "@/context/RoomContext";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -29,7 +30,6 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   const { gameDispatch } = useGame();
   const { authState } = useAuth();
   const router = useRouter();
-  const { roomState } = useRoom();
 
   const handleYes = () => {
     if (!authState.chatSocket) return;
@@ -49,6 +49,14 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   const handleNo = () => {
     if (!authState.chatSocket) return;
     authState.chatSocket.emit(
+      "BR_set_status_online",
+      {
+        userNickname: authState.userInfo.nickname,
+      },
+      (ret: ReturnMsgDto) => {}
+    );
+
+    authState.chatSocket.emit(
       "chat_invite_answer",
       {
         inviteUserIdx: idx,
@@ -60,7 +68,13 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       }
     );
   };
-  
+
+  useEffect(() => {
+    if (!authState.chatSocket) return;
+    const SetStatusOnline = (payload: IOnGame) => {};
+    authState.chatSocket.on("BR_set_status_online", SetStatusOnline);
+  }, []);
+
   return (
     <>
       <Card

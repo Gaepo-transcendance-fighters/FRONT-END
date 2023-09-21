@@ -11,6 +11,7 @@ import { server_domain } from "../page";
 import { IGameLog } from "@/type/GameType";
 import { useAuth } from "@/context/AuthContext";
 import styled from "@emotion/styled";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 const winner = {
   width: "35%",
@@ -47,6 +48,14 @@ const GameResult = () => {
   const BackToMain = () => {
     authState.gameSocket!.disconnect();
     gameDispatch({ type: "SCORE_RESET" });
+    if (!authState.chatSocket) return;
+    authState.chatSocket.emit(
+      "BR_set_status_online",
+      {
+        userNickname: authState.userInfo.nickname,
+      },
+      (ret: ReturnMsgDto) => {}
+    );
     router.replace("/home?from=game");
   };
 
