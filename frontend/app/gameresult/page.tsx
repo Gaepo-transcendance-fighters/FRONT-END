@@ -82,6 +82,7 @@ const GameResult = () => {
       router.replace("/home?from=game");
     };
 
+    history.pushState(null, "", location.href);
     addEventListener("beforeunload", goToBack);
 
     return () => {
