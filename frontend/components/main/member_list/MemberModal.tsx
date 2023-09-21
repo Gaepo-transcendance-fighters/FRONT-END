@@ -125,6 +125,11 @@ export default function MemberModal({
 
   useEffect(() => {
     if (!authState.chatSocket) return;
+    if (!person.userIdx === secureLocalStorage.getItem("idx")) {
+      handleCloseMenu();
+      handleCloseModal();
+      return;
+    }
     const ChatBlock = (data: IChatBlock) => {
       console.log("mmm ChatBlock : ", data);
       const blockList = data.blockInfo
