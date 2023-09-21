@@ -42,7 +42,7 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    if (!authState.chatSocket === undefined)
+    if (authState.chatSocket === undefined)
     {
       const socket = io(`${server_domain}/chat`, {
         query: { userId: secureLocalStorage.getItem("idx") as string },
