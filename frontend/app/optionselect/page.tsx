@@ -84,6 +84,7 @@ const OptionSelect = () => {
     console.log("mode", gameState.gameMode);
 
     if (gameState.gameMode === GameType.FRIEND) {
+      console.log("This is Friend")
       await axios({
         method: "post",
         url: `${server_domain}/game/friend-match`,
@@ -111,6 +112,7 @@ const OptionSelect = () => {
         });
       return;
     } else if (gameState.gameMode === GameType.NORMAL) {
+      console.log("This is Normal")
       await axios({
         method: "post",
         url: `${server_domain}/game/normal-match`,
