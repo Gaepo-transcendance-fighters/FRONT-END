@@ -267,7 +267,7 @@ export default function MemberModal({
     let lettt = roomState.currentRoomMemberList.find((mem) => {
       return mem.userIdx === person.userIdx;
     });
-    if (!lettt) {
+    if (!lettt || roomState.currentRoomMemberList.length === 1) {
       console.log("person isn't here!");
       handleCloseModal();
     }
