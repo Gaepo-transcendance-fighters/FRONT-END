@@ -31,7 +31,7 @@ const Page = () => {
     if (param.get("from") === "game") {
       const handlePopState = (e: PopStateEvent) => {
         e.preventDefault();
-        router.replace("/home");
+        router.replace("/home?from=game");
       };
 
       window.addEventListener("popstate", handlePopState);
