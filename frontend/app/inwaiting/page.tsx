@@ -106,7 +106,11 @@ const Inwaiting = () => {
     setClient(true);
 
     //게임 소켓 - 이벤트 등록
-    authState.gameSocket.on("game_queue_quit", () => {});
+    authState.gameSocket.on("game_queue_quit", (msg) => {
+      console.log("Duplicate connect")
+      router.replace("/home?from=game")
+      alert(msg)
+    });
 
     authState.gameSocket.on("game_start", () => {
       setTimeout(() => {
