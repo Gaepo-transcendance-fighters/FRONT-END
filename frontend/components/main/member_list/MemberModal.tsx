@@ -159,7 +159,7 @@ export default function MemberModal({
       if (!authState.chatSocket) return;
       authState.chatSocket.off("chat_block", ChatBlock);
     };
-  }, []);
+  }, [person]);
 
   useEffect(() => {
     if (friendState.friendList.length) {

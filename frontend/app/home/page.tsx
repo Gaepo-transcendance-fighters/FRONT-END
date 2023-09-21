@@ -57,6 +57,10 @@ const Page = () => {
       authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
       authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
     }
+    console.log(
+      "🤷 [home page.tsx] authState.chatSocket?.connected : ",
+      authState.chatSocket?.connected
+    );
     if (!authState.chatSocket?.connected) {
       console.log("🤷 [home page.tsx] connection try");
       authState.chatSocket?.connect();
