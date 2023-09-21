@@ -42,7 +42,6 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
       (res: ReturnMsgDto) => {
         // console.log("handleOpenModal : ", res);
         if (res.code == 200) {
-          authState.gameSocket!.connect();
           openModal({
             children: <WaitAccept nickname={prop.friendNickname} />,
           });
@@ -71,7 +70,6 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
     }) => {
       // console.log("receive invite", answer);
       if (answer === false) {
-        authState.gameSocket!.disconnect();
         if (!authState.chatSocket) return;
         authState.chatSocket.emit(
           "BR_set_status_online",

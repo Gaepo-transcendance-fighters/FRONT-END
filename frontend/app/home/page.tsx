@@ -72,7 +72,6 @@ const Page = () => {
       userIdx: number;
       userNickname: string;
     }) => {
-      authState.gameSocket!.connect();
       openModal({
         children: <InviteGame nickname={userNickname} idx={userIdx} />,
       });

@@ -7,7 +7,13 @@ import { Stack } from "@mui/material";
 
 //물풍선이 터지는 효과
 
-const WaterBomb = ({ up, down }: { up: JSX.Element[], down: JSX.Element[] }) => {
+const WaterBomb = ({
+  up,
+  down,
+}: {
+  up: JSX.Element[];
+  down: JSX.Element[];
+}) => {
   const [upImage, setUpImage] = useState(up);
   const [downImage, setDownImage] = useState(down);
 
@@ -20,42 +26,38 @@ const WaterBomb = ({ up, down }: { up: JSX.Element[], down: JSX.Element[] }) => 
   };
 
   useEffect(() => {
-    setUpImage(up)
-    setDownImage(down)
+    setUpImage(up);
+    setDownImage(down);
   }, [up, down]);
 
   return (
     <>
       {upImage.map((image, id) => (
-        
-          <div
-            style={{
-              margin: 0,
-              padding: 0,
-            }}
-            key={id + 100}
-            className={styles.moveAndFadeUp}
-            onAnimationEnd={() => handleAnimationUpEnd(id + 100)}
-          >
-            {image}
-          </div>
-        
+        <div
+          style={{
+            margin: 0,
+            padding: 0,
+          }}
+          key={id + 100}
+          className={styles.moveAndFadeUp}
+          onAnimationEnd={() => handleAnimationUpEnd(id + 100)}
+        >
+          {image}
+        </div>
       ))}
 
       {downImage.map((image, id) => (
-        
-          <div
-            style={{
-              margin: 0,
-              padding: 0,
-            }}
-            key={id}
-            className={styles.moveAndFadeDown}
-            onAnimationEnd={() => handleAnimationDownEnd(id)}
-          >
-            {image}
-          </div>
-        
+        <div
+          style={{
+            margin: 0,
+            padding: 0,
+          }}
+          key={id}
+          className={styles.moveAndFadeDown}
+          onAnimationEnd={() => handleAnimationDownEnd(id)}
+        >
+          {image}
+        </div>
       ))}
     </>
   );

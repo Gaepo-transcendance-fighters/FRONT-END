@@ -50,6 +50,7 @@ const MyGameLog = () => {
         }
       )
       .then((res) => {
+        console.log("game record", res.data)
         if (res.data.gameRecord.length > 0) {
           const newData = res.data.gameRecord;
           setGameRecordData((prevRecord) => [...prevRecord, ...newData]);
@@ -154,7 +155,7 @@ const MyGameLog = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecordData.result === 0 ? <>Win</> : <>Lose</>}
+                      {gameRecordData.result === 2 ? <>Win</> : gameRecordData.result === 3 ? <>Lose</> : <>Draw</>}
                     </Typography>
                   </div>
                 </div>
@@ -171,7 +172,7 @@ const MyGameLog = () => {
                 >
                   <Typography sx={{ fontSize: "1.5rem" }}>
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
-                    {userState.nickname} {gameRecordData.score}{" "}
+                    {userState.nickname} {gameRecordData.score ? gameRecordData.score : "0 : 0"}{" "}
                     {gameRecordData.matchUserNickname}
                   </Typography>
                 </div>

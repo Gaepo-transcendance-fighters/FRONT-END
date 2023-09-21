@@ -84,13 +84,14 @@ const OptionSelect = () => {
     console.log("mode", gameState.gameMode);
 
     if (gameState.gameMode === GameType.FRIEND) {
+      console.log("This is Friend")
       await axios({
         method: "post",
         url: `${server_domain}/game/friend-match`,
         data: {
           userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           targetIdx: gameState.bPlayer.id,
-          gameType: gameState.gameMode,
+          gameType: GameType.FRIEND,
           speed: selectedSpeedOption,
           mapNumber: selectedMapOption,
         },
@@ -111,11 +112,12 @@ const OptionSelect = () => {
         });
       return;
     } else if (gameState.gameMode === GameType.NORMAL) {
+      console.log("This is Normal")
       await axios({
         method: "post",
         url: `${server_domain}/game/normal-match`,
         data: {
-          gameType: gameState.gameMode,
+          gameType: GameType.NORMAL,
           userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           speed: selectedSpeedOption,
           mapNumber: selectedMapOption,

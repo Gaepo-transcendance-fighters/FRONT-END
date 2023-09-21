@@ -109,6 +109,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
+          backgroundColor: main.main2,
         }}
       >
         <CardContent

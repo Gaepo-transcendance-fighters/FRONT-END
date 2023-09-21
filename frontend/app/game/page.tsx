@@ -45,7 +45,7 @@ const Game = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [client, setClient] = useState<boolean>(false);
   const [cha, setCha] = useState<string>("");
-  const { authState } = useAuth()
+  const { authState } = useAuth();
 
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
@@ -58,7 +58,7 @@ const Game = () => {
       method: "post",
       url: `${server_domain}/game/normal-match`,
       data: {
-        gameType: gameState.gameMode,
+        gameType: GameType.RANK,
         userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
         speed: SpeedOption.speed2,
         mapNumber: 1,

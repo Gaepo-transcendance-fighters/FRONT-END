@@ -170,7 +170,7 @@ const MemberGameLog = ({
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecordData.result === 0 ? <>Win</> : <>Lose</>}
+                      {gameRecordData.result === 2 ? <>Win</> : gameRecordData.result === 3 ? <>Lose</> : <>Draw</>}
                     </Typography>
                   </div>
                 </div>

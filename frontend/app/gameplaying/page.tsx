@@ -75,15 +75,15 @@ const GamePlaying = () => {
     addEventListener("keydown", preventRefresh);
     addEventListener("beforeunload", preventRefreshButton);
 
-    authState.gameSocket.on("game_force_quit", (msg: string) => {
-      console.log(`game force quit: ${msg}`);
+    authState.gameSocket.on("game_force_quit", () => {
       setOpenModal(true);
       setTimeout(() => {
-        setOpenModal(false);
         authState.gameSocket!.disconnect();
-        router.replace("/home");
+        setOpenModal(false);
+        router.replace("/home?from=game");
       }, 3000);
     });
+
     return () => {
       if (!authState.gameSocket) return;
       authState.gameSocket.off("game_force_quit");
@@ -219,17 +219,17 @@ const GamePlaying = () => {
               isShowing={isShowing}
               hide={toggle}
               message="뒤로가기 멈춰!"
-              routing="/?from=game"
+              routing="/home?from=game"
             />
             <Modals
               isShowing={openModal}
-              message="상대방이 탈주했습니다. 결과페이지로 이동합니다"
+              message="네트워크 상태가 좋지 않습니다. 무효 처리 후 홈으로 넘어갑니다. 😢"
             />
             <Modals
               isShowing={isShowing2}
               hide={toggle2}
               message="새로고침 멈춰!"
-              routing="/?from=game"
+              routing="/home?from=game"
             />
           </CardContent>
         </Stack>

@@ -74,8 +74,6 @@ const Layout = () => {
           }}
         >
           <Myprofile />
-          {/* <InviteGame /> */}
-          {/* <WaitAccept /> */}
         </CardContent>
         <FriendList />
       </Stack>
