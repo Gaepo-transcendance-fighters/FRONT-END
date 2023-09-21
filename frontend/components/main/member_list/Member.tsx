@@ -68,7 +68,7 @@ export default function Member({
         ? setIsAdmin(true)
         : setIsAdmin(false);
     });
-  }, [roomState.adminAry, roomState.currentRoom]);
+  }, [roomState.adminAry]);
 
   const handleOpenMenu = (
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>

@@ -24,15 +24,6 @@ import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
-interface IProfile {
-  nickname: string;
-  imgUrl: string;
-  win: number;
-  lose: number;
-  rank: number;
-  email: string;
-}
-
 export default function PageRedir() {
   const router = useRouter();
   const { userState, userDispatch } = useUser();
