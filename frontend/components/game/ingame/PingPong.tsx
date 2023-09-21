@@ -38,11 +38,11 @@ interface IGameEnd {
 }
 
 const win = (
-  <Image src="/win.png" width="200" height="50" alt="win" key="win" />
+  <Image style={{ position: "absolute", zIndex: 7}} src="/win.png" width="400" height="200" alt="win" key="win" />
 );
 
 const lose = (
-  <Image src="/lose.png" width="200" height="50" alt="lose" key="lose" />
+  <Image style={{ position: "absolute", zIndex: 7}} src="/lose.png" width="400" height="200" alt="lose" key="lose" />
 );
 
 const water_end_up_up = (
@@ -130,6 +130,7 @@ const images_down = [water_end_up_down, water_down, water_end_down_down];
 
 const PingPong = () => {
   const [isWin, setIsWin] = useState<boolean>(false);
+  const [isFinish, setIsFinish] = useState<boolean>(false)
   const [client, setClient] = useState(false);
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
@@ -225,6 +226,7 @@ const PingPong = () => {
         data.gameStatus === EGameStatus.END ||
         data.gameStatus === EGameStatus.JUDGE
       ) {
+        setIsFinish(true)
         gameDispatch({ type: "A_SCORE", value: data.userScore1 });
         gameDispatch({ type: "B_SCORE", value: data.userScore2 });
         if (
@@ -244,6 +246,7 @@ const PingPong = () => {
           }
         }
         setTimeout(() => {
+          setIsFinish(false)
           router.replace("/gameresult");
         }, 3000);
         return;
@@ -305,8 +308,8 @@ const PingPong = () => {
         }}
       >
         <GameBoard />
-        {isWin ? win : lose}
       </div>
+        {isFinish && (isWin ? win : lose)}
 
       <Stack
         style={{
