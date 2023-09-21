@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { IOnlineStatus, font, main } from "@/type/type";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import MyGameLog from "@/components/main/myprofile/MyGameLog";
 import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
@@ -29,6 +29,13 @@ export default function PageRedir() {
   const { userState, userDispatch } = useUser();
   const { authState } = useAuth();
   const [userData, setUserData] = useState<IUserData>({
+    // nickname: "",
+    // imgUrl: "",
+    // win: 0,
+    // lose: 0,
+    // rank: 0,
+    // email: "",
+
     available: false,
     check2Auth: false,
     createdAt: "",
@@ -44,6 +51,34 @@ export default function PageRedir() {
     userIdx: 0,
   });
 
+  const fetch = async () => {
+    await axios({
+      method: "get",
+      url: `${server_domain}/users/profile`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
+      },
+      data: {
+        userNickname: userState.nickname,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        setUserData(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  console.log(userData);
   //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();

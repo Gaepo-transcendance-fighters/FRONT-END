@@ -102,6 +102,7 @@ export default function Member({
     const ChatRoomAdmin = (payload: IChatRoomAdmin) => {
       roomDispatch({ type: "SET_ADMIN_ARY", value: payload.admin });
     };
+
     authState.chatSocket.on("chat_room_admin", ChatRoomAdmin);
 
     return () => {
