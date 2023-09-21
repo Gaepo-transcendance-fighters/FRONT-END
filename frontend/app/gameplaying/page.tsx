@@ -83,6 +83,7 @@ const GamePlaying = () => {
         router.replace("/home?from=game");
       }, 3000);
     });
+
     return () => {
       if (!authState.gameSocket) return;
       authState.gameSocket.off("game_force_quit");

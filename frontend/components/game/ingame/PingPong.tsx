@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import { ReturnMsgDto } from "@/type/RoomType";
 import WaterBomb from "./WaterBomb";
 import secureLocalStorage from "react-secure-storage";
-import { Padding } from "@mui/icons-material";
 
 enum EGameStatus {
   ONGOING,
@@ -37,6 +36,14 @@ interface IGameEnd {
   issueDate: number;
   gameStatus: EGameStatus; // 게임 속행, 게임 종료, 연결문제 판정승, 0, 1, 2
 }
+
+const win = (
+  <Image src="/win.png" width="200" height="50" alt="win" key="win" />
+);
+
+const lose = (
+  <Image src="/lose.png" width="200" height="50" alt="lose" key="lose" />
+);
 
 const water_end_up_up = (
   <Image
@@ -122,6 +129,7 @@ const images_up = [water_end_up_up, water_up, water_end_down_up];
 const images_down = [water_end_up_down, water_down, water_end_down_down];
 
 const PingPong = () => {
+  const [isWin, setIsWin] = useState<boolean>(false);
   const [client, setClient] = useState(false);
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
@@ -212,11 +220,32 @@ const PingPong = () => {
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
       setWaterbombup(images_up);
       setWaterbombdown(images_down);
+      console.log("end", data);
       if (
         data.gameStatus === EGameStatus.END ||
         data.gameStatus === EGameStatus.JUDGE
       ) {
-        router.replace("/gameresult");
+        gameDispatch({ type: "A_SCORE", value: data.userScore1 });
+        gameDispatch({ type: "B_SCORE", value: data.userScore2 });
+        if (
+          data.userIdx1 ===
+          parseInt(secureLocalStorage.getItem("idx") as string)
+        ) {
+          if (data.userScore1 > data.userScore2) {
+            setIsWin(true);
+          } else {
+            setIsWin(false);
+          }
+        } else {
+          if (data.userScore1 > data.userScore2) {
+            setIsWin(false);
+          } else {
+            setIsWin(true);
+          }
+        }
+        setTimeout(() => {
+          router.replace("/gameresult");
+        }, 3000);
         return;
       }
       authState.gameSocket!.emit(
@@ -276,6 +305,7 @@ const PingPong = () => {
         }}
       >
         <GameBoard />
+        {isWin ? win : lose}
       </div>
 
       <Stack
