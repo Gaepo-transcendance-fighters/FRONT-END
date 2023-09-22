@@ -153,7 +153,6 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
       },
       (ret: ReturnMsgDto) => {
         friendDispatch({ type: "SET_IS_FRIEND", value: false });
-        console.log("FriendProfile blockFriend ret : ", ret);
       }
     );
   };

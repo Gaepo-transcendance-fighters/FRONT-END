@@ -134,10 +134,6 @@ export default function Member({
   useEffect(() => {
     if (!authState.chatSocket) return;
     const ChatMute = (data: IChatMute) => {
-      console.log("Mute : ", data);
-      // console로 값 확인 후 아래
-      // emit - roomId 채팅에 있던 사람들한테 알림 쏴주기
-      // TODO : mute된 사람 전역? / useState
     };
     authState.chatSocket.on("chat_mute", ChatMute);
 
@@ -233,7 +229,6 @@ export default function Member({
         targetIdx: person.userIdx,
       },
       (ret: ReturnMsgDto) => {
-        console.log("Ban : ", ret);
         if (ret.code === 200) {
           setShowAlert(true);
           setString(strings[4]);

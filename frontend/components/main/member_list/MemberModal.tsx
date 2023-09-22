@@ -82,7 +82,6 @@ export default function MemberModal({
       },
     })
       .then((res) => {
-        console.log("addFriend res : ", res.data.result);
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: true });
       })
@@ -112,7 +111,6 @@ export default function MemberModal({
       },
     })
       .then((res) => {
-        console.log("MMM deleteFriend : ", res);
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });
         friendDispatch({ type: "SET_IS_FRIEND", value: false });
       })
@@ -131,7 +129,6 @@ export default function MemberModal({
       return;
     }
     const ChatBlock = (data: IChatBlock) => {
-      console.log("mmm ChatBlock : ", data);
       const blockList = data.blockInfo
         ? data.blockInfo.map((block: IBlock) => {
             return {
@@ -239,7 +236,6 @@ export default function MemberModal({
         targetIdx: person.userIdx,
       },
       (ret: ReturnMsgDto) => {
-        console.log("blockFriend ret : ", ret);
       }
     );
   };

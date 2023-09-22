@@ -70,8 +70,6 @@ const OptionSelect = () => {
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
     gameDispatch({ type: "SCORE_RESET" });
 
-    console.log("mode", gameState.gameMode);
-
     if (gameState.gameMode === GameType.FRIEND) {
       console.log("This is Friend")
       await axios({
@@ -86,7 +84,6 @@ const OptionSelect = () => {
         },
       })
         .then((res) => {
-          console.log(res);
           if (res.status === 200) {
             setTimeout(() => {
               authState.gameSocket?.connect();
@@ -115,7 +112,6 @@ const OptionSelect = () => {
         },
       })
         .then((res) => {
-          console.log(res);
           if (res.status === 200) {
             setTimeout(() => {
               authState.gameSocket?.connect();

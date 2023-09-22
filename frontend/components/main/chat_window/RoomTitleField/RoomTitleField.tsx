@@ -72,7 +72,6 @@ const RoomTitleField = ({
         "chat_goto_lobby",
         payload,
         (ret: ReturnMsgDto) => {
-          console.log("leaveRoom chat_goto_lobby ret : ", ret);
         }
       );
     } else {

@@ -127,7 +127,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
             );
             handleCloseModal();
           } else {
-            console.log(ret.msg);
             return;
           }
         }
@@ -139,9 +138,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
         { targetNickname: prop.friendNickname, targetIdx: prop.friendIdx },
         (ret: ReturnMsgDto) => {
           if (ret.code === 200) {
-            console.log(ret.msg);
           } else if (ret.code !== 200) {
-            console.log(ret.msg);
           }
         }
       );
@@ -233,7 +230,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       },
       (ret: ReturnMsgDto) => {
         friendDispatch({ type: "SET_IS_FRIEND", value: false });
-        console.log("FriendProfile blockFriend ret : ", ret);
       }
     );
   };

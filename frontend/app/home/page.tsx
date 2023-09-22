@@ -187,7 +187,6 @@ const Page = () => {
       // console.log("count : ", count);
     }, 200);
     if (count < 0) {
-      console.log("count : 0 end ");
       router.replace("/login");
     }
 

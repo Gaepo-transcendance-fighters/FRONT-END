@@ -66,7 +66,6 @@ const GameResult = () => {
       method: "get",
       url: `${server_domain}/game-result?gameKey=${gameState.roomId}`,
     }).then((res) => {
-      console.log(res.data);
       const gameLog: IGameLog = res.data;
       setGameLog(gameLog);
       const user1Score = gameLog.score.split(" : ")[0];
@@ -91,7 +90,6 @@ const GameResult = () => {
     else
       console.log(`[game result page]🥺 게임 소켓 연결 BAD...`)
     setClient(true);
-    console.log("router", router)
     history.pushState(null, "", location.href);
     addEventListener("popstate", goToBack);
   

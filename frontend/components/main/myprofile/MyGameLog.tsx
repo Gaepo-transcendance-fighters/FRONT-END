@@ -50,7 +50,6 @@ const MyGameLog = () => {
         }
       )
       .then((res) => {
-        console.log("game record", res.data)
         if (res.data.gameRecord.length > 0) {
           const newData = res.data.gameRecord;
           setGameRecordData((prevRecord) => [...prevRecord, ...newData]);

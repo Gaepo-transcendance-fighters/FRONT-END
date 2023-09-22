@@ -117,7 +117,6 @@ export default function PageRedir() {
   };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
-    console.log("file", file.size);
     if (file.size > 2000000) {
       alert("더 작은 사이즈의 파일을 선택해주세요.");
       return new Promise(() => "");

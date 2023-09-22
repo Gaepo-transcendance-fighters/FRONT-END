@@ -20,7 +20,6 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
         answer: true,
       },
       (res: any) => {
-        console.log(res);
       }
     );
   };
@@ -43,7 +42,6 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
         answer: false,
       },
       (res: any) => {
-        console.log(res);
       }
     );
   };

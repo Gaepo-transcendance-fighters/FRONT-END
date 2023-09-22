@@ -122,7 +122,6 @@ const Auth = () => {
           alert(message);
           return router.replace("/login");
         } else {
-          console.log(res.status, res);
         }
       })
       .catch((error) => {

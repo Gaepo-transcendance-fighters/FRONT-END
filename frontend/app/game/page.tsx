@@ -66,7 +66,6 @@ const Game = () => {
       },
     })
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           authState.gameSocket?.connect();
           router.replace("/inwaiting");

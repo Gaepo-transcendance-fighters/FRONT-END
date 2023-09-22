@@ -29,8 +29,8 @@ const SecondAuth = () => {
   const [inputnumber, setInputNumber] = useState<string>("");
   const router = useRouter();
   const sendUri = `${server_domain}/users/second`;
+  
   const SendMail = async () => {
-    console.log("sendUri", sendUri);
     const response = await axios({
       method: "POST",
       url: sendUri,
