@@ -114,7 +114,8 @@ export default function CreateRoomModal({
             </Box>
             <Card sx={{ margin: 1, backgroundColor: "#4292DA" }}>
               <Stack margin={1}>
-                <Typography>방 제목: {userState.nickname}'s</Typography>
+                <Typography>방 제목: GF CHANNEL</Typography>
+                {/* <Typography>방 제목: {userState.nickname}'s</Typography> */}
               </Stack>
               <Stack margin={1}>
                 <Typography>비밀번호 :</Typography>
