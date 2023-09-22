@@ -45,13 +45,13 @@ const GamePlaying = () => {
   useEffect(() => {
     if (!authState.gameSocket) return;
     if (authState.gameSocket?.connected)
-      console.log(`[game playing page]🥳 게임 소켓 연결 상태 Good!`)
-    else
-      console.log(`[game playing page]🥺 게임 소켓 연결 BAD...`)
+      console.log(`[game playing page]🥳 게임 소켓 연결 상태 Good!`);
+    else console.log(`[game playing page]🥺 게임 소켓 연결 BAD...`);
     setClient(true);
     const preventGoBack = (e: PopStateEvent) => {
       e.preventDefault();
-      toggle();
+      history.go(1);
+      // toggle();
     };
 
     const preventRefresh = (e: KeyboardEvent) => {
@@ -61,7 +61,8 @@ const GamePlaying = () => {
         ((e.ctrlKey === true || e.metaKey === true) && e.key === "r")
       ) {
         console.log("새로고침");
-        toggle2();
+        history.go(1);
+        // toggle2();
         return false;
       }
     };
@@ -73,7 +74,7 @@ const GamePlaying = () => {
       router.replace("/home?from=game");
     };
 
-    history.replaceState(null, "", location.href);
+    history.pushState(null, "", location.href);
     addEventListener("popstate", preventGoBack);
     addEventListener("keydown", preventRefresh);
     addEventListener("beforeunload", preventRefreshButton);
