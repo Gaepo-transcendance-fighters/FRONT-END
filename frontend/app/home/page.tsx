@@ -10,7 +10,7 @@ import InviteGame from "@/components/main/InviteGame/InviteGame";
 import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import { server_domain } from "../page";
-import { IChatRoom, ReturnMsgDto } from "@/type/RoomType";
+import { IChatRoom, Mode, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
 import secureLocalStorage from "react-secure-storage";
 import { useUser } from "@/context/UserContext";
@@ -108,24 +108,30 @@ const Page = () => {
         const target = { nick: inviteUserNickname, id: inviteUserIdx };
         gameDispatch({ type: "B_PLAYER", value: target });
         if (roomState.currentRoom) {
-          authState.chatSocket?.emit(
-            "chat_goto_lobby",
-            {
-              channelIdx: roomState.currentRoom!.channelIdx,
-              userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-            },
-            (ret: ReturnMsgDto) => {
-              if (ret.code === 200) {
-                roomDispatch({ type: "SET_IS_OPEN", value: false });
-                roomDispatch({ type: "SET_CUR_ROOM", value: null });
-              } else if (ret.code === 400) {
-                roomDispatch({ type: "SET_IS_OPEN", value: false });
-                roomDispatch({ type: "SET_CUR_ROOM", value: null });
-              } else {
-                console.log("HomeGoToLobby : ", ret.msg);
+          if (!authState.chatSocket) return;
+          if (roomState.currentRoom.mode === Mode.PRIVATE) {
+            roomDispatch({ type: "SET_CUR_ROOM", value: null });
+            roomDispatch({ type: "SET_IS_OPEN", value: false });
+          } else {
+            authState.chatSocket.emit(
+              "chat_goto_lobby",
+              {
+                channelIdx: roomState.currentRoom!.channelIdx,
+                userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+              },
+              (ret: ReturnMsgDto) => {
+                if (ret.code === 200) {
+                  roomDispatch({ type: "SET_IS_OPEN", value: false });
+                  roomDispatch({ type: "SET_CUR_ROOM", value: null });
+                } else if (ret.code === 400) {
+                  roomDispatch({ type: "SET_IS_OPEN", value: false });
+                  roomDispatch({ type: "SET_CUR_ROOM", value: null });
+                } else {
+                  console.log("HomeGoToLobby : ", ret.msg);
+                }
               }
-            }
-          );
+            );
+          }
         }
         closeModal();
         router.replace("./optionselect");
