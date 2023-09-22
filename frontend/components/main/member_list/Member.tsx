@@ -257,9 +257,7 @@ export default function Member({
       >
         <div className="memimg">
           <Image
-            src={`${server_domain}/img/${
-              person.userIdx
-            }.png?${Date.now().toString()}`}
+            src={`${server_domain}/img/${person.userIdx}.png`}
             alt="mem profile"
             width={53}
             height={53}

@@ -200,9 +200,7 @@ const BlockProfile = ({ prop }: { prop: IBlock }) => {
               mx={5}
             >
               <Image
-                src={`${server_domain}/img/${
-                  prop.blockedUserIdx
-                }.png?${Date.now().toString()}`}
+                src={`${server_domain}/img/${prop.blockedUserIdx}.png`}
                 alt="user img"
                 width={100}
                 height={100}
