@@ -34,7 +34,7 @@ const Login = () => {
   const { authState } = useAuth();
 
   const handleLogin = () => {
-    router.push(url);
+    router.replace(url);
   };
 
   useEffect(() => {
