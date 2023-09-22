@@ -43,7 +43,6 @@ const Myprofile = () => {
             width: "150px",
             overflow: "hidden",
             margin: "auto",
-            backgroundColor: "black",
           }}
         >
           {userState.imgUri ? (
