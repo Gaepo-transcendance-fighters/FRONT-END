@@ -91,7 +91,7 @@ const OptionSelect = () => {
             setTimeout(() => {
               authState.gameSocket?.connect();
               router.replace("/inwaiting");
-            }, 3000)
+            }, 50)
           } else {
             console.log("게임방 생성 실패");
             router.replace("/home?from=game");
@@ -120,7 +120,7 @@ const OptionSelect = () => {
             setTimeout(() => {
               authState.gameSocket?.connect();
               router.replace("/inwaiting");
-            }, 3000)
+            }, 50)
           } else {
             console.log("게임방 생성 실패");
             router.replace("/home?from=game");
