@@ -22,7 +22,6 @@ interface Props {
 }
 const BottomField = ({ setMsgs }: Props) => {
   const [msg, setMsg] = useState<string>("");
-  const inputRef = useRef<HTMLInputElement>(null);
   const { roomState } = useRoom();
   const { userState } = useUser();
   const { authState } = useAuth();
@@ -80,7 +79,11 @@ const BottomField = ({ setMsgs }: Props) => {
       if (!authState.chatSocket) return;
       authState.chatSocket.off("chat_send_msg", messageHandler);
     };
-  }, [roomState.currentRoomMemberList, roomState.currentDmRoomMemberList, roomState.currentRoom]);
+  }, [
+    roomState.currentRoomMemberList,
+    roomState.currentDmRoomMemberList,
+    roomState.currentRoom,
+  ]);
 
   const onSubmit = useCallback(
     (event: React.FormEvent) => {
@@ -148,8 +151,6 @@ const BottomField = ({ setMsgs }: Props) => {
                 color: "white",
                 marginTop: "3%",
               }}
-              inputRef={(input) => input && input.focus()}
-              ref={inputRef}
               value={msg}
               onChange={changeMsg}
               placeholder="Please enter message"
