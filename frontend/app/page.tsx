@@ -23,7 +23,7 @@ export default function HomePage() {
     const gameSocket = io(`${server_domain}/game/playroom`, {
       query: { userId: secureLocalStorage.getItem("idx") as string },
       autoConnect: false,
-      transforts: ["websocket"],
+      transports: ["websocket"],
     });
 
     authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
