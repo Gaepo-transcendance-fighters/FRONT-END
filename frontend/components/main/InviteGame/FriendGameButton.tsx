@@ -102,7 +102,7 @@ const FriendGameButton = ({ prop }: { prop: IFriend }) => {
           );
         }
         closeModal();
-        router.push("./optionselect");
+        router.replace("./optionselect");
       }
     };
 

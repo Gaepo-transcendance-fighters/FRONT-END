@@ -98,7 +98,7 @@ const MemberGameButton = ({ prop }: { prop: IMember }) => {
           }
         );
         closeModal();
-        router.push("./optionselect");
+        router.replace("./optionselect");
       }
     };
 

@@ -31,7 +31,7 @@ const Page = () => {
     if (param.get("from") === "game") {
       const handlePopState = (e: PopStateEvent) => {
         e.preventDefault();
-        router.replace("/home");
+        router.replace("/home?from=game");
       };
 
       window.addEventListener("popstate", handlePopState);
@@ -42,8 +42,7 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    if (authState.chatSocket === undefined)
-    {
+    if (authState.chatSocket === undefined) {
       const socket = io(`${server_domain}/chat`, {
         query: { userId: secureLocalStorage.getItem("idx") as string },
         autoConnect: false,
@@ -65,7 +64,7 @@ const Page = () => {
       console.log("🤷 [home page.tsx] connection try");
       authState.chatSocket?.connect();
     }
-}, [authState.chatSocket, authState.chatSocket?.connected])
+  }, [authState.chatSocket, authState.chatSocket?.connected]);
 
   useEffect(() => {
     setClient(true);
@@ -95,7 +94,6 @@ const Page = () => {
       answer: boolean;
     }) => {
       if (answer === false) {
-        authState.gameSocket!.disconnect();
         if (!authState.chatSocket) return;
         authState.chatSocket.emit(
           "BR_set_status_online",
@@ -130,7 +128,7 @@ const Page = () => {
           );
         }
         closeModal();
-        router.push("./optionselect");
+        router.replace("./optionselect");
       }
     };
 
@@ -175,7 +173,7 @@ const Page = () => {
   useEffect(() => {
     const interval_check = setInterval(() => {
       setCount((prev) => prev - 1);
-      console.log("count : ", count);
+      // console.log("count : ", count);
     }, 50);
     if (count < 0) {
       console.log("count : 0 end ");
