@@ -197,7 +197,7 @@ const GamePlaying = () => {
                 wordSpacing: "1rem",
               }}
             >
-              <Typography>
+              <Typography sx={{paddingRight:"5%"}}>
                 Mode:{" "}
                 {gameState.gameMode === 0
                   ? "Friend"
@@ -205,7 +205,7 @@ const GamePlaying = () => {
                   ? "Normal"
                   : "Rank"}
               </Typography>
-              <Typography>
+              <Typography sx={{paddingRight:"5%"}}>
                 Speed:{" "}
                 {gameState.ballSpeedOption === 2
                   ? "Slow"
