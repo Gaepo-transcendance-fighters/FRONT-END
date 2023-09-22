@@ -128,7 +128,7 @@ const Page = () => {
           );
         }
         closeModal();
-        router.push("./optionselect");
+        router.replace("./optionselect");
       }
     };
 
@@ -173,7 +173,7 @@ const Page = () => {
   useEffect(() => {
     const interval_check = setInterval(() => {
       setCount((prev) => prev - 1);
-      console.log("count : ", count);
+      // console.log("count : ", count);
     }, 1000);
     if (count < 0) {
       // console.log("count : 0 end ");

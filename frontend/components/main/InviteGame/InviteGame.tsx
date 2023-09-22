@@ -3,33 +3,12 @@
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { IOnGame, main } from "@/type/type";
-import { useRouter } from "next/navigation";
-import { useModalContext } from "@/context/ModalContext";
 import { useAuth } from "@/context/AuthContext";
-import { useGame } from "@/context/GameContext";
-import { GameType } from "@/type/type";
 import secureLocalStorage from "react-secure-storage";
-import { useRoom } from "@/context/RoomContext";
 import { ReturnMsgDto } from "@/type/RoomType";
 
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 300,
-  height: 150,
-  bgcolor: "#65d9f9",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
 const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
-  const { closeModal } = useModalContext();
-  const { gameDispatch } = useGame();
   const { authState } = useAuth();
-  const router = useRouter();
 
   const handleYes = () => {
     if (!authState.chatSocket) return;

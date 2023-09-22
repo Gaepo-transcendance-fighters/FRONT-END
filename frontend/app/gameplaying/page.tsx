@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { main } from "@/type/type";
 import { useEffect, useState } from "react";
@@ -9,7 +9,6 @@ import { useGame } from "@/context/GameContext";
 import useModal from "@/hooks/useModal";
 import Modals from "@/components/public/Modals";
 import { useAuth } from "@/context/AuthContext";
-import { Style } from "@mui/icons-material";
 
 const myNickname = {
   width: "max-content",
@@ -53,7 +52,6 @@ const GamePlaying = () => {
 
     const preventRefresh = (e: KeyboardEvent) => {
       e.preventDefault();
-      console.log(e.key, e.metaKey);
       if (
         e.key === "F5" ||
         ((e.ctrlKey === true || e.metaKey === true) && e.key === "r")
@@ -70,7 +68,7 @@ const GamePlaying = () => {
       router.replace("/home?from=game");
     };
 
-    history.pushState(null, "", location.href);
+    history.replaceState(null, "", location.href);
     addEventListener("popstate", preventGoBack);
     addEventListener("keydown", preventRefresh);
     addEventListener("beforeunload", preventRefreshButton);

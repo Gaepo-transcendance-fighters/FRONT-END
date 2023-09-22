@@ -11,6 +11,8 @@ import { server_domain } from "../page";
 import { IGameLog } from "@/type/GameType";
 import { useAuth } from "@/context/AuthContext";
 import { ReturnMsgDto } from "@/type/RoomType";
+import useModal from "@/hooks/useModal";
+import Modals from "@/components/public/Modals";
 
 const winner = {
   width: "35%",
@@ -41,7 +43,7 @@ const GameResult = () => {
   const [gameLog, setGameLog] = useState<IGameLog | null>(null);
   const [user1Score, setUser1Score] = useState<number>(0);
   const [user2Score, setUser2Score] = useState<number>(0);
-
+  const { isShowing, toggle } = useModal()
   const router = useRouter();
 
   const BackToMain = () => {
@@ -73,20 +75,22 @@ const GameResult = () => {
     });
   };
 
+  const goToBack = (e: PopStateEvent) => {
+    e.preventDefault();
+    history.pushState(null, "", location.href);
+    toggle()
+  };
+
   useEffect(() => {
     setClient(true);
+    console.log("router", router)
     fetchData();
 
-    const goToBack = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      router.replace("/home?from=game");
-    };
-
-    history.pushState(null, "", location.href);
-    addEventListener("beforeunload", goToBack);
+    history.replaceState(null, "", location.href);
+    addEventListener("popstate", goToBack);
 
     return () => {
-      removeEventListener("beforeunload", goToBack);
+      removeEventListener("popstate", goToBack);
     };
   }, []);
 
@@ -291,8 +295,9 @@ const GameResult = () => {
             }}
             onClick={BackToMain}
           >
-            메인화면으로 돌아가기
+            Back To Main
           </Button>
+          <Modals isShowing={isShowing} hide={toggle} message="메인 화면으로 넘어갑니다." routing="/home?from=game"/>
         </CardContent>
       </Stack>
     </Card>
