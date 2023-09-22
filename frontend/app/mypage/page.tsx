@@ -236,7 +236,6 @@ export default function PageRedir() {
                           alignItems: "center",
                           overflow: "hidden",
                           border: "1px solid",
-                          backgroundColor: "brown",
                         }}
                       >
                         <Image
