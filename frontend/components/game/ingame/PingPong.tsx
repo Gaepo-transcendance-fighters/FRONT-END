@@ -187,6 +187,7 @@ const PingPong = () => {
     setClient(true);
 
     authState.gameSocket.on("game_start", (res) => {
+      console.log("game_start")
       setWaterbombup([]);
       setWaterbombdown([]);
     });
