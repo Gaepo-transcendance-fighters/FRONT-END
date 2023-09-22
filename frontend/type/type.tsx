@@ -15,6 +15,25 @@ export const main = {
   main8: "#64D9F9",
 };
 
+export enum SpeedOption {
+  speed1,
+  speed2,
+  speed3,
+}
+
+export enum MapOption {
+  map1,
+  map2,
+  map3,
+}
+
+export interface IGameOption {
+  gameType: GameType; // FRIED, NORMAL, RANK
+  userIdx: number;
+  speed: SpeedOption; //NORMAL, FAST, FASTER
+  mapNumber: MapOption; // A, B, C
+}
+
 export enum GameType {
   FRIEND,
   NORMAL,
@@ -102,8 +121,8 @@ export interface IBlock {
 }
 
 export interface IChatBlock {
-  blockInfo : IBlock[];
-  friendList : IFriend[];
+  blockInfo: IBlock[];
+  friendList: IFriend[];
 }
 
 export interface IChat {
@@ -121,6 +140,12 @@ export const font = createTheme({
 });
 
 export interface user_status {
+  nickname: string;
+  userIdx: number;
+  isOnline: IOnlineStatus;
+}
+
+export interface IOnGame {
   nickname: string;
   userIdx: number;
   isOnline: IOnlineStatus;

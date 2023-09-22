@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, CardContent } from "@mui/material";
+import { Button, Card, CardContent, Typography } from "@mui/material";
 import { main } from "@/type/type";
 import { useModalContext } from "@/context/ModalContext";
 import { IMember } from "@/type/RoomType";
@@ -18,7 +18,7 @@ const modalStyle = {
   p: 4,
 };
 
-const WaitAccept = ({ nickname }: { nickname: string | undefined}) => {
+const WaitAccept = ({ nickname }: { nickname: string | undefined }) => {
   const { closeModal } = useModalContext();
   return (
     <>
@@ -43,7 +43,7 @@ const WaitAccept = ({ nickname }: { nickname: string | undefined}) => {
             alignItems: "center",
           }}
         >
-          승낙대기
+          <Typography>승낙대기</Typography>
         </CardContent>
       </Card>
       <Card
@@ -54,6 +54,7 @@ const WaitAccept = ({ nickname }: { nickname: string | undefined}) => {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
+          backgroundColor: main.main2,
         }}
       >
         <CardContent
@@ -65,8 +66,9 @@ const WaitAccept = ({ nickname }: { nickname: string | undefined}) => {
             alignItems: "center",
           }}
         >
-          {nickname} 님께 친선전 경기를 요청하였습니다.
-          {/* 추후 optionSelect로 라우팅 시키는거 필요. */}
+          <Typography>
+            {nickname} 님 께 친선전 경기를 요청하였습니다.
+          </Typography>
         </CardContent>
         <CardContent
           style={{

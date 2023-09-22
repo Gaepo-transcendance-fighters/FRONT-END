@@ -7,55 +7,58 @@ import { Stack } from "@mui/material";
 
 //물풍선이 터지는 효과
 
-const WaterBomb = ({ images }: { images: JSX.Element[] }) => {
-  const [visibleImage, setVisibleImage] = useState(images);
+const WaterBomb = ({
+  up,
+  down,
+}: {
+  up: JSX.Element[];
+  down: JSX.Element[];
+}) => {
+  const [upImage, setUpImage] = useState(up);
+  const [downImage, setDownImage] = useState(down);
 
-  const handleAnimationEnd = (index: number) => {
-    setVisibleImage((prev) => prev.filter((_, i) => i !== index));
+  const handleAnimationUpEnd = (index: number) => {
+    setUpImage((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleAnimationDownEnd = (index: number) => {
+    setDownImage((prev) => prev.filter((_, i) => i !== index));
   };
 
   useEffect(() => {
-    console.log("play water bomb", images)
-    if (images.length !== 0)
-      setVisibleImage(images);
-  }, [images]);
+    setUpImage(up);
+    setDownImage(down);
+  }, [up, down]);
 
   return (
     <>
-      {visibleImage.map((image, id) => (
-        <>
-          <div
-            style={{
-              margin: 0,
-              padding: 0,
-            }}
-            key={`up_${id}`}
-            className={styles.moveAndFadeUp}
-            onAnimationEnd={() => handleAnimationEnd(id)}
-          >
-            {image}
-          </div>
-        </>
+      {upImage.map((image, id) => (
+        <div
+          style={{
+            margin: 0,
+            padding: 0,
+          }}
+          key={id + 100}
+          className={styles.moveAndFadeUp}
+          onAnimationEnd={() => handleAnimationUpEnd(id + 100)}
+        >
+          {image}
+        </div>
       ))}
 
-      {visibleImage.map((image, id) => (
-        <>
-          <div
-            style={{
-              margin: 0,
-              padding: 0,
-            }}
-            key={`down_${id}`}
-            className={styles.moveAndFadeDown}
-            onAnimationEnd={() => handleAnimationEnd(id)}
-          >
-            {image}
-          </div>
-        
-        </>
+      {downImage.map((image, id) => (
+        <div
+          style={{
+            margin: 0,
+            padding: 0,
+          }}
+          key={id}
+          className={styles.moveAndFadeDown}
+          onAnimationEnd={() => handleAnimationDownEnd(id)}
+        >
+          {image}
+        </div>
       ))}
-
-
     </>
   );
 };

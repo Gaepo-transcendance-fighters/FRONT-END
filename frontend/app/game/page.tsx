@@ -11,10 +11,14 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { main } from "@/type/type";
-import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useGame } from "@/context/GameContext";
+import secureLocalStorage from "react-secure-storage";
+import { server_domain } from "../page";
+import axios from "axios";
+import { SpeedOption } from "@/type/type";
+import { useAuth } from "@/context/AuthContext";
 
 const infomodalStyle = {
   position: "absolute" as "absolute",
@@ -38,19 +42,42 @@ enum GameType {
 const Game = () => {
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
-  const { authState } = useAuth();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [client, setClient] = useState<boolean>(false);
   const [cha, setCha] = useState<string>("");
+  const { authState } = useAuth();
 
   const ClickNomalGame = () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.NORMAL });
     router.replace("/optionselect");
   };
 
-  const ClickRankGame = () => {
+  const ClickRankGame = async () => {
     gameDispatch({ type: "SET_GAME_MODE", value: GameType.RANK });
-    router.replace("/inwaiting");
+    await axios({
+      method: "post",
+      url: `${server_domain}/game/normal-match`,
+      data: {
+        gameType: GameType.RANK,
+        userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+        speed: SpeedOption.speed2,
+        mapNumber: 1,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          authState.gameSocket?.connect();
+          router.replace("/inwaiting");
+        } else {
+          console.log("게임방 생성 실패");
+          router.replace("/home?from=game");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        router.replace("/home?from=game");
+      });
   };
 
   const BackToMain = () => {

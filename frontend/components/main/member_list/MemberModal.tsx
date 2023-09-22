@@ -30,6 +30,7 @@ import { useRoom } from "@/context/RoomContext";
 import { useAuth } from "@/context/AuthContext";
 import MemberGameLog from "./MemberGameLog";
 import { IGameRecord, IGameUserInfo } from "@/type/GameType";
+import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -73,6 +74,12 @@ export default function MemberModal({
       method: "post",
       url: `${server_domain}/users/follow`,
       data: friendReqData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
+      },
     })
       .then((res) => {
         console.log("addFriend res : ", res.data.result);
@@ -97,6 +104,12 @@ export default function MemberModal({
       method: "delete",
       url: `${server_domain}/users/unfollow`,
       data: friendReqData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
+      },
     })
       .then((res) => {
         console.log("MMM deleteFriend : ", res);
@@ -112,6 +125,11 @@ export default function MemberModal({
 
   useEffect(() => {
     if (!authState.chatSocket) return;
+    if (!person.userIdx === secureLocalStorage.getItem("idx")) {
+      handleCloseMenu();
+      handleCloseModal();
+      return;
+    }
     const ChatBlock = (data: IChatBlock) => {
       console.log("mmm ChatBlock : ", data);
       const blockList = data.blockInfo
@@ -141,7 +159,7 @@ export default function MemberModal({
       if (!authState.chatSocket) return;
       authState.chatSocket.off("chat_block", ChatBlock);
     };
-  }, []);
+  }, [person]);
 
   useEffect(() => {
     if (friendState.friendList.length) {
@@ -249,6 +267,15 @@ export default function MemberModal({
   };
 
   const RankSrc = RankImgSelect(gameUserInfo);
+
+  useEffect(() => {
+    let found = roomState.currentRoomMemberList.find((mem) => {
+      return mem.userIdx === person.userIdx;
+    });
+    if (!found || roomState.currentRoomMemberList.length === 1) {
+      handleCloseModal();
+    }
+  }, [roomState.currentRoomMemberList]);
 
   return (
     <Modal open={openModal} onClose={handleCloseModal}>

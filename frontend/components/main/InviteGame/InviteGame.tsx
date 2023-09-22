@@ -2,13 +2,15 @@
 
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useEffect } from "react";
-import { main } from "@/type/type";
+import { IOnGame, main } from "@/type/type";
 import { useRouter } from "next/navigation";
 import { useModalContext } from "@/context/ModalContext";
 import { useAuth } from "@/context/AuthContext";
 import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
 import secureLocalStorage from "react-secure-storage";
+import { useRoom } from "@/context/RoomContext";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -29,42 +31,6 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   const { authState } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!authState.chatSocket) return;
-    // const recieveInvite = ({
-    //   inviteUserIdx, // 초대 한 사람
-    //   inviteUserNickname,
-    //   targetUserIdx, // 초대 받은 사람
-    //   targetUserNickname,
-    //   answer,
-    // }: {
-    //   inviteUserIdx: number; // 초대 한 사람
-    //   inviteUserNickname: string;
-    //   targetUserIdx: number; // 초대 받은 사람
-    //   targetUserNickname: string;
-    //   answer: number;
-    // }) => {
-    //   console.log("recieve invite", answer);
-    //   if (answer === 0) closeModal();
-    //   else if (answer === 1) {
-    //     gameDispatch({type: "SET_GAME_MODE", value: GameType.FRIEND})
-    //     const target = {nick: targetUserNickname, id: targetUserIdx}
-    //     console.log("target", target)
-    //     gameDispatch({type: "B_PLAYER", value: target})
-    //     closeModal();
-    //     router.push("./optionselect");
-    //   }
-    // };
-    // authState.chatSocket.on("chat_receive_answer", recieveInvite);
-    authState.chatSocket.on("chat_invite_answer", () => {});
-
-    return () => {
-      if (!authState.chatSocket) return;
-      authState.chatSocket.off("chat_invite_answer");
-      // authState.chatSocket.off("chat_receive_answer");
-    };
-  }, []);
-
   const handleYes = () => {
     if (!authState.chatSocket) return;
     authState.chatSocket.emit(
@@ -72,7 +38,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
       {
         inviteUserIdx: idx,
         targetUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-        answer: 1,
+        answer: true,
       },
       (res: any) => {
         console.log(res);
@@ -83,17 +49,32 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
   const handleNo = () => {
     if (!authState.chatSocket) return;
     authState.chatSocket.emit(
+      "BR_set_status_online",
+      {
+        userNickname: authState.userInfo.nickname,
+      },
+      (ret: ReturnMsgDto) => {}
+    );
+
+    authState.chatSocket.emit(
       "chat_invite_answer",
       {
         inviteUserIdx: idx,
         targetUserIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-        answer: 0,
+        answer: false,
       },
       (res: any) => {
         console.log(res);
       }
     );
   };
+
+  useEffect(() => {
+    if (!authState.chatSocket) return;
+    const SetStatusOnline = (payload: IOnGame) => {};
+    authState.chatSocket.on("BR_set_status_online", SetStatusOnline);
+  }, []);
+
   return (
     <>
       <Card
@@ -128,6 +109,7 @@ const InviteGame = ({ nickname, idx }: { nickname: string; idx: number }) => {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
+          backgroundColor: main.main2,
         }}
       >
         <CardContent

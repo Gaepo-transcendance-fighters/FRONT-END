@@ -18,44 +18,13 @@ import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
+import { GameType, MapOption, SpeedOption } from "@/type/type";
+import { ReturnMsgDto } from "@/type/RoomType";
 
 // type SpeedOption = "speed1" | "speed2" | "speed3";
 // type MapOption = "map1" | "map2" | "map3";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
-
-enum SpeedOption {
-  speed1,
-  speed2,
-  speed3,
-}
-
-enum MapOption {
-  map1,
-  map2,
-  map3,
-}
-
-enum GameType {
-  FRIEND,
-  NORMAL,
-  RANK,
-}
-
-interface IGameOption {
-  gameType: GameType; // FRIED, NORMAL, RANK
-  userIdx: number;
-  speed: SpeedOption; //NORMAL, FAST, FASTER
-  mapNumber: MapOption; // A, B, C
-}
-
-// export const gameSocket = io("http://10.19.205.41:4000/game", {
-// const userId =
-//   typeof window !== "undefined" ? localStorage.getItem("idx") : null;
-
-// export const gameSocket = io("http://10.19.205.41:4000/game", {
-//   query: { userId: userId },
-// });
 
 const OptionSelect = () => {
   const router = useRouter();
@@ -112,14 +81,17 @@ const OptionSelect = () => {
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
     gameDispatch({ type: "SCORE_RESET" });
 
+    console.log("mode", gameState.gameMode);
+
     if (gameState.gameMode === GameType.FRIEND) {
+      console.log("This is Friend")
       await axios({
         method: "post",
         url: `${server_domain}/game/friend-match`,
         data: {
           userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           targetIdx: gameState.bPlayer.id,
-          gameType: gameState.gameMode,
+          gameType: GameType.FRIEND,
           speed: selectedSpeedOption,
           mapNumber: selectedMapOption,
         },
@@ -127,8 +99,7 @@ const OptionSelect = () => {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
-            console.log("gameSocket", authState.gameSocket!);
-            authState.gameSocket!.connect();
+            authState.gameSocket?.connect();
             router.replace("/inwaiting");
           } else {
             console.log("게임방 생성 실패");
@@ -140,15 +111,13 @@ const OptionSelect = () => {
           router.replace("/home?from=game");
         });
       return;
-    } else if (
-      gameState.gameMode === GameType.RANK ||
-      gameState.gameMode === GameType.NORMAL
-    ) {
+    } else if (gameState.gameMode === GameType.NORMAL) {
+      console.log("This is Normal")
       await axios({
         method: "post",
         url: `${server_domain}/game/normal-match`,
         data: {
-          gameType: gameState.gameMode,
+          gameType: GameType.NORMAL,
           userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
           speed: selectedSpeedOption,
           mapNumber: selectedMapOption,
@@ -157,8 +126,7 @@ const OptionSelect = () => {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
-            console.log("gameSocket", authState.gameSocket!);
-            authState.gameSocket!.connect();
+            authState.gameSocket?.connect();
             router.replace("/inwaiting");
           } else {
             console.log("게임방 생성 실패");
@@ -208,7 +176,15 @@ const OptionSelect = () => {
               backgroundColor: "White",
             }}
             onClick={() => {
-              router.replace("/?from=game");
+              if (!authState.chatSocket) return;
+              authState.chatSocket.emit(
+                "BR_set_status_online",
+                {
+                  userNickname: authState.userInfo.nickname,
+                },
+                (ret: ReturnMsgDto) => {}
+              );
+              router.replace("/home?from=game");
             }}
           >
             이전화면으로 돌아가기

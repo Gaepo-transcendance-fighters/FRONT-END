@@ -152,7 +152,7 @@ const FriendGameLog = ({ person }: { person: IFriend }) => {
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecordData.result === 0 ? <>Win</> : <>Lose</>}
+                      {gameRecordData.result === 2 ? <>Win</> : gameRecordData.result === 3 ? <>Lose</> : <>Draw</>}
                     </Typography>
                   </div>
                 </div>
@@ -169,7 +169,7 @@ const FriendGameLog = ({ person }: { person: IFriend }) => {
                 >
                   <Typography sx={{ fontSize: "1.5rem" }}>
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
-                    {person.friendNickname} {gameRecordData.score}{" "}
+                    {person.friendNickname} {gameRecordData.score ? gameRecordData.score : "0 : 0"}{" "}
                     {gameRecordData.matchUserNickname}
                   </Typography>
                 </div>

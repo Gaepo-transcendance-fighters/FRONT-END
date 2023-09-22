@@ -14,6 +14,7 @@ import { useRoom } from "@/context/RoomContext";
 import { IChatRoom, Mode, Permission, ReturnMsgDto } from "@/type/RoomType";
 import { useUser } from "@/context/UserContext";
 import { useAuth } from "@/context/AuthContext";
+import RoomEnter from "@/external_functions/RoomEnter";
 
 const style = {
   position: "absolute" as "absolute",
@@ -51,23 +52,7 @@ export default function CreateRoomModal({
       if (!authState.chatSocket) return;
       roomDispatch({ type: "ADD_ROOM", value: data });
       if (data.owner !== userState.nickname) return;
-      if (
-        roomState.currentRoom &&
-        roomState.currentRoom.mode !== Mode.PRIVATE
-      ) {
-        authState.chatSocket.emit(
-          "chat_goto_lobby",
-          {
-            channelIdx: roomState.currentRoom.channelIdx,
-            userIdx: userState.userIdx,
-          },
-          (ret: ReturnMsgDto) => {
-            console.log("ChatCreateRoom chat_goto_lobby ret : ", ret);
-          }
-        );
-      }
-      roomDispatch({ type: "SET_CUR_ROOM", value: data });
-      roomDispatch({ type: "SET_IS_OPEN", value: true });
+      RoomEnter(data, roomState, userState, roomDispatch, authState.chatSocket);
       roomDispatch({
         type: "SET_CUR_MEM",
         value: [

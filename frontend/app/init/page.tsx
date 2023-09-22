@@ -1,13 +1,22 @@
 "use client";
 
-import { Button, Card, Box, CardContent, Stack } from "@mui/material";
+import {
+  Button,
+  Card,
+  Box,
+  CardContent,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { main } from "@/type/type";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
+import { io } from "socket.io-client";
+import { useUser } from "@/context/UserContext";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -28,6 +37,7 @@ export default function InitUser() {
   const router = useRouter();
   const [block, setBlock] = useState<boolean>(false);
   const { authState, authDispatch } = useAuth();
+  const { userDispatch } = useUser();
   const [inputNick, setInputNick] = useState<string>("");
 
   const sendUri = `${server_domain}/users/profile`;
@@ -41,15 +51,38 @@ export default function InitUser() {
     await axios({
       method: "post",
       url: sendUri,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
+      },
       data: {
-        userIdx: secureLocalStorage.getItem("idx") as number,
+        userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
         userNickname: inputNick,
-        imgDate: "",
+        imgData: "",
       },
     }).then((response) => {
       if (response.status === 200 && response.data.result.nickname !== "") {
         secureLocalStorage.setItem("nickname", response.data.result.nickname);
-        return router.push("/");
+        userDispatch({
+          type: "CHANGE_NICK_NAME",
+          value: response.data.result.nickname,
+        });
+        const socket = io(`${server_domain}/chat`, {
+          query: { userId: secureLocalStorage.getItem("idx") as string },
+          autoConnect: false,
+        });
+
+        const gameSocket = io(`${server_domain}/game/playroom`, {
+          query: { userId: secureLocalStorage.getItem("idx") as string },
+          autoConnect: false,
+        });
+
+        authDispatch({ type: "SET_CHAT_SOCKET", value: socket });
+        authDispatch({ type: "SET_GAME_SOCKET", value: gameSocket });
+        console.log("🙋🏻‍♂️ [app/init.tsx] go to home");
+        return router.replace("/home");
       } else if (
         response.status === 200 &&
         response.data.result.nickname === ""
@@ -101,7 +134,7 @@ export default function InitUser() {
                 justifyContent: "center",
               }}
             >
-              사용할 닉네임을 입력해주세요.
+              <Typography>사용할 닉네임을 입력해주세요.</Typography>
             </CardContent>
             <Stack
               direction={"row"}

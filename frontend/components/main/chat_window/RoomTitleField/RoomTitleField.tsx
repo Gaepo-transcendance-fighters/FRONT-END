@@ -43,8 +43,14 @@ const RoomTitleField = ({
         roomDispatch({ type: "SET_IS_OPEN", value: false });
         roomDispatch({ type: "SET_CUR_ROOM", value: null });
         roomDispatch({ type: "SET_IS_LOBBY_BTN", value: false });
-      } else
+        roomDispatch({ type: "SET_NON_DM_ROOMS", value: channel });
+      } else if (roomState.currentRoom && !roomState.isLobbyBtn) {
+        roomDispatch({ type: "SET_IS_OPEN", value: false });
+        roomDispatch({ type: "SET_CUR_ROOM", value: null });
+        roomDispatch({ type: "SET_NON_DM_ROOMS", value: channel });
+      } else {
         console.log("[RoomTItleField] there isn't roomState.currentRoom case");
+      }
     };
     authState.chatSocket.on("chat_goto_lobby", leaveHandler);
 

@@ -106,7 +106,11 @@ const Inwaiting = () => {
     setClient(true);
 
     //게임 소켓 - 이벤트 등록
-    authState.gameSocket.on("game_queue_quit", () => {});
+    authState.gameSocket.on("game_queue_quit", (msg) => {
+      console.log("Duplicate connect")
+      router.replace("/home?from=game")
+      alert(msg)
+    });
 
     authState.gameSocket.on("game_start", () => {
       setTimeout(() => {
@@ -132,6 +136,10 @@ const Inwaiting = () => {
         { userIdx: parseInt(secureLocalStorage.getItem("idx") as string) },
         () => {
           console.log("game_queue_success");
+          gameDispatch({
+            type: "SET_ROOM_ID",
+            value: data.dbKey,
+          });
           gameDispatch({
             type: "A_PLAYER",
             value: { nick: data.userNicknameFirst, id: data.userIdxFirst },
@@ -243,7 +251,7 @@ const Inwaiting = () => {
               isShowing={isShowing}
               hide={toggle}
               message={`뒤로 가면 큐가 취소됩니다. 그래도 뒤로 가시겠습니까?`}
-              routing="/?from=game"
+              routing="/home?from=game"
             />
             <Modal open={openModal}>
               <Box sx={modalStyle} borderRadius={"10px"}>

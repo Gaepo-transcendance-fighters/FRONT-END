@@ -35,37 +35,61 @@ interface IGameEnd {
   userScore2: number;
   issueDate: number;
   gameStatus: EGameStatus; // 게임 속행, 게임 종료, 연결문제 판정승, 0, 1, 2
+  winnerIdx: number | null;
 }
 
-const transparency = (
+const win = (
   <Image
-    style={{
-      opacity: 0,
-    }}
-    src="/water.png"
-    width="50"
-    height="50"
-    alt="water"
+    style={{ position: "absolute", zIndex: 7 }}
+    src="/win.png"
+    width="400"
+    height="200"
+    alt="win"
+    key="win"
   />
 );
 
-const water_end_up = (
-  <Image src="/water_up.png" width="50" height="50" alt="water end" />
+const lose = (
+  <Image
+    style={{ position: "absolute", zIndex: 7 }}
+    src="/lose.png"
+    width="400"
+    height="200"
+    alt="lose"
+    key="lose"
+  />
 );
 
-const water_end_down = (
+const water_end_up_up = (
   <Image
     style={{
-      transform: "rotate(180deg)",
+      margin: 0,
+      padding: 0,
     }}
     src="/water_up.png"
     width="50"
     height="50"
     alt="water end"
+    key="water_end_up_up"
   />
 );
 
-const water = (
+const water_end_down_up = (
+  <Image
+    style={{
+      transform: "rotate(180deg)",
+      margin: 0,
+      padding: 0,
+    }}
+    src="/water_up.png"
+    width="50"
+    height="50"
+    alt="water end"
+    key="water_end_down_up"
+  />
+);
+
+const water_up = (
   <Image
     style={{
       margin: 0,
@@ -75,22 +99,60 @@ const water = (
     width="50"
     height="50"
     alt="water"
+    key="water_up"
   />
 );
 
-const images = [water_end_up, water, water_end_down];
+const water_end_up_down = (
+  <Image
+    src="/water_up.png"
+    width="50"
+    height="50"
+    alt="water end"
+    key="water_end_up_up"
+  />
+);
 
-const PingPong = ({
-  setter,
-}: {
-  setter: Dispatch<SetStateAction<boolean>>;
-}) => {
+const water_end_down_down = (
+  <Image
+    style={{
+      transform: "rotate(180deg)",
+    }}
+    src="/water_up.png"
+    width="50"
+    height="50"
+    alt="water end"
+    key="water_end_down_up"
+  />
+);
+
+const water_down = (
+  <Image
+    style={{
+      margin: 0,
+      padding: 0,
+    }}
+    src="/water.png"
+    width="50"
+    height="50"
+    alt="water"
+    key="water_up"
+  />
+);
+
+const images_up = [water_end_up_up, water_up, water_end_down_up];
+const images_down = [water_end_up_down, water_down, water_end_down_down];
+
+const PingPong = () => {
+  const [isWin, setIsWin] = useState<boolean>(false);
+  const [isFinish, setIsFinish] = useState<boolean>(false);
   const [client, setClient] = useState(false);
   const router = useRouter();
   const { gameState, gameDispatch } = useGame();
   const { authState } = useAuth();
   const [keyboard, setKeyboard] = useState(0);
-  const [waterbomb, setWaterbomb] = useState<JSX.Element[]>([]);
+  const [waterbombup, setWaterbombup] = useState<JSX.Element[]>([]);
+  const [waterbombdown, setWaterbombdown] = useState<JSX.Element[]>([]);
   const [gameProps, setGameProps] = useState<IGameProps>({
     ballX: 0,
     ballY: 0,
@@ -125,7 +187,8 @@ const PingPong = ({
     setClient(true);
 
     authState.gameSocket.on("game_start", (res) => {
-      setWaterbomb([]);
+      setWaterbombup([]);
+      setWaterbombdown([]);
       console.log("game_start", res);
     });
 
@@ -133,17 +196,19 @@ const PingPong = ({
       "game_ping",
       ({ serverTime }: { serverTime: number }) => {
         const now = new Date().getTime();
-        authState.gameSocket!.emit("game_ping_receive", {
-          userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
-          serverTime: serverTime,
-          clientTime: now,
-        }, (res: ReturnMsgDto) => {
-          if (res.code === 200) {
-            console.log("good ping")
-          } else if (res.code === 400)
-            console.log("bad ping")
-            
-        });
+        authState.gameSocket!.emit(
+          "game_ping_receive",
+          {
+            userIdx: parseInt(secureLocalStorage.getItem("idx") as string),
+            serverTime: serverTime,
+            clientTime: now,
+          },
+          (res: ReturnMsgDto) => {
+            if (res.code === 200) {
+              console.log("good ping");
+            } else if (res.code === 400) console.log("bad ping");
+          }
+        );
       }
     );
 
@@ -169,19 +234,49 @@ const PingPong = ({
     );
 
     authState.gameSocket.on("game_pause_score", (data: IGameEnd) => {
-      setWaterbomb(images);
+      setWaterbombup(images_up);
+      setWaterbombdown(images_down);
+      console.log("on");
       if (
         data.gameStatus === EGameStatus.END ||
         data.gameStatus === EGameStatus.JUDGE
       ) {
-        router.push("/gameresult");
-        return;
+        setIsFinish(true);
+        gameDispatch({ type: "A_SCORE", value: data.userScore1 });
+        gameDispatch({ type: "B_SCORE", value: data.userScore2 });
+        if (
+          data.userIdx1 ===
+          parseInt(secureLocalStorage.getItem("idx") as string)
+        ) {
+          if (data.userScore1 > data.userScore2) {
+            setIsWin(true);
+          } else if (data.userScore1 < data.userScore2) {
+            setIsWin(false);
+          } else {
+            if (data.userIdx1 === data.winnerIdx) setIsWin(true);
+            else setIsWin(false);
+          }
+        } else {
+          if (data.userScore1 > data.userScore2) {
+            setIsWin(false);
+          } else if (data.userScore1 < data.userScore2) {
+            setIsWin(true);
+          } else {
+            if (data.userIdx2 === data.winnerIdx) setIsWin(true);
+            else setIsWin(false);
+          }
+        }
+        setTimeout(() => {
+          setIsFinish(false);
+          router.replace("/gameresult");
+        }, 3000);
+        // return;
       }
       authState.gameSocket!.emit(
         "game_pause_score",
         { userIdx: parseInt(secureLocalStorage.getItem("idx") as string) },
         (res: ReturnMsgDto) => {
-          console.log(res);
+          console.log("emit");
           if (res.code === 200) {
             gameDispatch({ type: "A_SCORE", value: data.userScore1 });
             gameDispatch({ type: "B_SCORE", value: data.userScore2 });
@@ -190,7 +285,7 @@ const PingPong = ({
               data.gameStatus === EGameStatus.JUDGE
             ) {
               gameDispatch({ type: "SCORE_RESET" });
-              router.push("/gameresult");
+              router.replace("/gameresult");
             }
           }
         }
@@ -213,7 +308,7 @@ const PingPong = ({
       window.removeEventListener("keydown", downPaddle);
       window.removeEventListener("keyup", upPaddle);
     };
-  }, [keyboard, waterbomb]);
+  }, [keyboard, waterbombup, waterbombdown]);
 
   if (!client) return <></>;
 
@@ -235,15 +330,18 @@ const PingPong = ({
       >
         <GameBoard />
       </div>
+      {isFinish && (isWin ? win : lose)}
 
       <Stack
         style={{
+          padding: 0,
+          margin: 0,
           zIndex: 4,
           transform: `translate(${gameProps.ballX}px, ${gameProps.ballY}px)`,
           position: "absolute",
         }}
       >
-        <WaterBomb images={waterbomb} />
+        <WaterBomb up={waterbombup} down={waterbombdown} />
       </Stack>
       <GamePaddle x={-470} y={gameProps.paddle1} />
       <GamePaddle x={470} y={gameProps.paddle2} />

@@ -51,7 +51,7 @@ const Layout = () => {
       if (!authState.chatSocket) return;
       authState.chatSocket.off("main_enter", MainEnter);
     };
-  }, []);
+  }, [authState.chatSocket?.connected]);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -74,8 +74,6 @@ const Layout = () => {
           }}
         >
           <Myprofile />
-          {/* <InviteGame /> */}
-          {/* <WaitAccept /> */}
         </CardContent>
         <FriendList />
       </Stack>

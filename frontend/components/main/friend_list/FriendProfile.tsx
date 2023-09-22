@@ -32,6 +32,7 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import FriendGameLog from "./FriendGameLog";
 import FriendGameButton from "../InviteGame/FriendGameButton";
+import secureLocalStorage from "react-secure-storage";
 
 const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
@@ -65,7 +66,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   });
   const { roomState, roomDispatch } = useRoom();
   const { userState } = useUser();
-  const { friendState, friendDispatch } = useFriend();
+  const { friendDispatch } = useFriend();
   const { authState } = useAuth();
 
   const RankSrc =
@@ -86,38 +87,6 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
-
-  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다. // 이 2 개는 맨 아래랑 같은 동작같은데 ..? ws
-  // useEffect(() => {
-  //   const UserProfile = (data: IFriendData) => {
-  //     setFriendData(data);
-  //   };
-  //   // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
-  //   authState.socketon("user_profile", UserProfile);
-  // });
-
-  // useEffect(() => {
-  //   const ReqData = {
-  //     //값 변경 필요
-  //     userIdx: userState.userIdx,
-  //     targetNickname: prop.friendNickname,
-  //     targetIdx: prop.friendIdx,
-  //   };
-  //   authState.socketemit("user_profile", ReqData);
-  // }, []);
-
-  // 서버에서 API 호출 무한루프가 돌아서 임시로 수정해놓았씁니다.
-  // useEffect(() => {
-  //   // emit까지 부분은 더보기 버튼을 눌렀을 때 진행되어야할듯.
-  //   const UserProfile = (data: IFriendData) => {
-  //     setFriendData(data);
-  //   };
-  //   authState.socketon("user_profile", UserProfile);
-
-  //   return () => {
-  //     authState.socketoff("user_profile");
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (!authState.chatSocket) return;
@@ -190,6 +159,12 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
       method: "delete",
       url: `${server_domain}/users/unfollow`,
       data: friendReqData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${
+          secureLocalStorage.getItem("token") as string
+        }`,
+      },
     })
       .then((res) => {
         friendDispatch({ type: "SET_FRIENDLIST", value: res.data.result });

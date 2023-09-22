@@ -68,12 +68,16 @@ export default function Member({
         ? setIsAdmin(true)
         : setIsAdmin(false);
     });
-  }, [roomState.adminAry]);
+  }, [roomState.adminAry, roomState.currentRoom]);
 
   const handleOpenMenu = (
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
+    let imAdmin = roomState.adminAry.find((admin) => {
+      return admin.nickname === person.nickname;
+    });
+    if (imAdmin !== undefined) setIsAuthorized(true);
     userState.nickname === roomState.currentRoom?.owner || isAdmin
       ? setAnchorEl(e.currentTarget)
       : null;
@@ -98,6 +102,7 @@ export default function Member({
     const ChatRoomAdmin = (payload: IChatRoomAdmin) => {
       roomDispatch({ type: "SET_ADMIN_ARY", value: payload.admin });
     };
+
     authState.chatSocket.on("chat_room_admin", ChatRoomAdmin);
 
     return () => {
