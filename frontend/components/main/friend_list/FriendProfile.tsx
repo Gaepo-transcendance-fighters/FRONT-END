@@ -70,9 +70,9 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
   const { authState } = useAuth();
 
   const RankSrc =
-    friendData.rank < 800
+    friendData.rank < 3000
       ? "./rank/exp_medal_bronze.png"
-      : friendData.rank >= 800 && friendData.rank < 1100
+      : friendData.rank >= 3000 && friendData.rank < 3100
       ? "./rank/exp_medal_silver.png"
       : "./rank/exp_medal_gold.png";
 
