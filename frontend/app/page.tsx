@@ -30,7 +30,7 @@ export default function HomePage() {
 
     console.log("🙋🏻‍♂️ [app/page.tsx] go to login");
     authState.chatSocket?.disconnect();
-    return router.push("/login");
+    return router.replace("/login");
   }, []);
 
   return null;
