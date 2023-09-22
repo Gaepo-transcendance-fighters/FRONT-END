@@ -156,10 +156,10 @@ export default function PageRedir() {
   };
 
   const RankImgSelect = (data: IUserData) => {
-    if (data.rankpoint < 800) return "./rank/exp_medal_bronze.png";
-    else if (data.rankpoint >= 800 && data.rankpoint < 1100)
+    if (data.rankpoint < 3000) return "./rank/exp_medal_bronze.png";
+    else if (data.rankpoint >= 3000 && data.rankpoint < 3100)
       return "./rank/exp_medal_silver.png";
-    else if (data.rankpoint >= 1100) return "./rank/exp_medal_gold.png";
+    else if (data.rankpoint >= 3100) return "./rank/exp_medal_gold.png";
   };
 
   const RankSrc = RankImgSelect(userData);
