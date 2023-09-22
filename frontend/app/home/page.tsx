@@ -174,7 +174,7 @@ const Page = () => {
     const interval_check = setInterval(() => {
       setCount((prev) => prev - 1);
       // console.log("count : ", count);
-    }, 50);
+    }, 200);
     if (count < 0) {
       console.log("count : 0 end ");
       router.replace("/login");
