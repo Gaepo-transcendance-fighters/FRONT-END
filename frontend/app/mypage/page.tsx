@@ -29,13 +29,6 @@ export default function PageRedir() {
   const { userState, userDispatch } = useUser();
   const { authState } = useAuth();
   const [userData, setUserData] = useState<IUserData>({
-    // nickname: "",
-    // imgUrl: "",
-    // win: 0,
-    // lose: 0,
-    // rank: 0,
-    // email: "",
-
     available: false,
     check2Auth: false,
     createdAt: "",
@@ -78,8 +71,6 @@ export default function PageRedir() {
     fetch();
   }, []);
 
-  console.log(userData);
-  //로컬에 check2Auth는 스트링형태. 받아올때도 스트링이니까 넘버로 바꿨다가 전송해줄때 string으로 변경.
   const OpenFileInput = () => {
     document.getElementById("file_input")?.click();
   };
@@ -274,7 +265,10 @@ export default function PageRedir() {
                         {userState.nickname}
                       </Typography>
                       <Typography style={{ fontSize: "1.2rem" }}>
-                        2차인증 여부 : {userData.check2Auth ? "Y" : "N"}
+                        2차인증 여부 :{" "}
+                        {(secureLocalStorage.getItem("check2Auth") as boolean)
+                          ? "Y"
+                          : "N"}
                       </Typography>
                       <Typography style={{ fontSize: "1.2rem" }}>
                         Email : {authState.userInfo.email}
