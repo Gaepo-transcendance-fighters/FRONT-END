@@ -64,7 +64,7 @@ export default function Member({
   useEffect(() => {
     if (roomState.currentRoom?.owner === userState.nickname) setIsOwner(true);
     roomState.adminAry.map((adminElement) => {
-      return adminElement.nickname === userState.nickname
+      return adminElement.nickname === userState.nickname // 내가 어드민 이라면
         ? setIsAdmin(true)
         : setIsAdmin(false);
     });
@@ -75,10 +75,10 @@ export default function Member({
   ) => {
     e.preventDefault();
     let imAdmin = roomState.adminAry.find((admin) => {
-      return admin.nickname === person.nickname;
+      return admin.nickname === person.nickname; // 클릭한 멤버가 어드민이라면
     });
     if (imAdmin !== undefined) setIsAuthorized(true);
-    userState.nickname === roomState.currentRoom?.owner || isAdmin
+    userState.nickname === roomState.currentRoom?.owner || (isAdmin && !imAdmin) // 내가 어드민이고 우클릭한 대상도 어드민이면
       ? setAnchorEl(e.currentTarget)
       : null;
   };
