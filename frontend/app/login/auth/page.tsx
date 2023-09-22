@@ -110,17 +110,17 @@ const Auth = () => {
           setupCookies();
 
           if (data.available && data.check2Auth === true)
-            return router.push("../secondauth");
-          else if (data.available === false) return router.push("../init");
+            return router.replace("../secondauth");
+          else if (data.available === false) return router.replace("../init");
           else 
           {
             console.log("👸🏻 [secondauth page.tsx] push /home");
-            return router.push(`/home`);
+            return router.replace(`/home`);
           }
         } else if (res.status === 400) {
           const message = await res.json().then((data) => data.message);
           alert(message);
-          return router.push("/login");
+          return router.replace("/login");
         } else {
           console.log(res.status, res);
         }
