@@ -187,7 +187,7 @@ const PingPong = () => {
     setClient(true);
 
     authState.gameSocket.on("game_start", (res) => {
-      console.log("game_start")
+      // console.log("game_start")
       setWaterbombup([]);
       setWaterbombdown([]);
     });
@@ -205,7 +205,7 @@ const PingPong = () => {
           },
           (res: ReturnMsgDto) => {
             if (res.code === 200) {
-              console.log("good ping");
+              // console.log("good ping");
             } else if (res.code === 400) console.log("bad ping");
           }
         );
