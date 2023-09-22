@@ -51,6 +51,7 @@ const Page = () => {
       const socket = io(`${server_domain}/chat`, {
         query: { userId: secureLocalStorage.getItem("idx") as string },
         autoConnect: false,
+        transports: ["websocket"],
       });
 
       const gameSocket = io(`${server_domain}/game/playroom`, {
