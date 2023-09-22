@@ -21,6 +21,7 @@ export interface IGameLog {
   user2lose: number;
   user2rankpoint: number;
   score: string; // "score : score" 구조로 전 달함
+  winnerIdx: number;
 }
 
 export interface IGameRecord {

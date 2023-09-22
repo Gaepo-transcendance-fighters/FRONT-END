@@ -142,7 +142,9 @@ const GameResult = () => {
               backgroundColor: main.main3,
             }}
           >
-            <Card style={user1Score > user2Score ? winner : loser}>
+            <Card
+              style={gameLog?.user1Idx === gameLog?.winnerIdx ? winner : loser}
+            >
               <Stack
                 sx={{
                   display: "flex",
@@ -204,7 +206,9 @@ const GameResult = () => {
                 </Card>
               </Stack>
             </Card>
-            <Card style={user2Score > user1Score ? winner : loser}>
+            <Card
+              style={gameLog?.user2Idx === gameLog?.winnerIdx ? winner : loser}
+            >
               <Stack
                 sx={{
                   display: "flex",
