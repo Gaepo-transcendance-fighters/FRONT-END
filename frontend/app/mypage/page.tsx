@@ -265,10 +265,7 @@ export default function PageRedir() {
                         {userState.nickname}
                       </Typography>
                       <Typography style={{ fontSize: "1.2rem" }}>
-                        2차인증 여부 :{" "}
-                        {(secureLocalStorage.getItem("check2Auth") as boolean)
-                          ? "Y"
-                          : "N"}
+                        2차인증 여부 : {userData.check2Auth ? "Y" : "N"}
                       </Typography>
                       <Typography style={{ fontSize: "1.2rem" }}>
                         Email : {authState.userInfo.email}
