@@ -55,6 +55,10 @@ const OptionSelect = () => {
 
   useEffect(() => {
     if (!authState.gameSocket) return;
+    if (authState.gameSocket?.connected)
+      console.log(`[option select page]🥳 게임 소켓 연결 상태 Good!`)
+    else
+      console.log(`[option select page]🥺 게임 소켓 연결 BAD...`)
     authState.gameSocket.on("game_queue_regist", () => {
       console.log("game_queue_regist 받음");
     });

@@ -28,6 +28,10 @@ const Page = () => {
   const [count, setCount] = useState(3);
 
   useEffect(() => {
+    if (authState.gameSocket?.connected)
+      console.log(`[main page]🥳 게임 소켓 연결 상태 Good!`)
+    else
+      console.log(`[main page]🥺 게임 소켓 연결 BAD...`)
     if (param.get("from") === "game") {
       const handlePopState = (e: PopStateEvent) => {
         e.preventDefault();

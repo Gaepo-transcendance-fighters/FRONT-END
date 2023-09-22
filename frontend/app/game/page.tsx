@@ -94,6 +94,10 @@ const Game = () => {
 
   useEffect(() => {
     setClient(true);
+    if (authState.gameSocket?.connected)
+      console.log(`[game page]🥳 게임 소켓 연결 상태 Good!`)
+    else
+      console.log(`[game page]🥺 게임 소켓 연결 BAD...`)
   }, []);
 
   useEffect(() => {

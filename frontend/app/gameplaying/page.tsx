@@ -44,6 +44,10 @@ const GamePlaying = () => {
 
   useEffect(() => {
     if (!authState.gameSocket) return;
+    if (authState.gameSocket?.connected)
+      console.log(`[game playing page]🥳 게임 소켓 연결 상태 Good!`)
+    else
+      console.log(`[game playing page]🥺 게임 소켓 연결 BAD...`)
     setClient(true);
     const preventGoBack = (e: PopStateEvent) => {
       e.preventDefault();

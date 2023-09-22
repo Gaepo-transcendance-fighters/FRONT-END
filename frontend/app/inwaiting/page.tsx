@@ -102,6 +102,10 @@ const Inwaiting = () => {
 
   useEffect(() => {
     if (!authState.gameSocket) return;
+    if (authState.gameSocket?.connected)
+      console.log(`[inwaiting page]🥳 게임 소켓 연결 상태 Good!`)
+    else
+      console.log(`[inwaiting page]🥺 게임 소켓 연결 BAD...`)
     console.log("waiting");
     setClient(true);
 
