@@ -64,7 +64,7 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
       };
       roomDispatch({ type: "SET_CUR_MEM", value: list });
       roomDispatch({ type: "SET_CUR_ROOM", value: newRoom });
-      room.owner = owner;
+      // room.owner = owner;
     };
     authState.chatSocket.on("chat_room_exit", ChatExitRoom);
 
