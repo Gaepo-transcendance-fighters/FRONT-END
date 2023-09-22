@@ -15,10 +15,11 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useGame } from "@/context/GameContext";
 import secureLocalStorage from "react-secure-storage";
-import { server_domain } from "../page";
+// import { server_domain } from "../page";
 import axios from "axios";
 import { SpeedOption } from "@/type/type";
 import { useAuth } from "@/context/AuthContext";
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 const infomodalStyle = {
   position: "absolute" as "absolute",

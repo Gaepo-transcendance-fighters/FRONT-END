@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { io } from "socket.io-client";
 import secureLocalStorage from "react-secure-storage";
 
-export const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 export default function HomePage() {
   const router = useRouter();
