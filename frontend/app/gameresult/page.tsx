@@ -82,13 +82,15 @@ const GameResult = () => {
   };
 
   useEffect(() => {
+    fetchData();
+  }, [])
+
+  useEffect(() => {
     setClient(true);
     console.log("router", router)
-    fetchData();
-
-    history.replaceState(null, "", location.href);
+    history.pushState(null, "", location.href);
     addEventListener("popstate", goToBack);
-
+  
     return () => {
       removeEventListener("popstate", goToBack);
     };
