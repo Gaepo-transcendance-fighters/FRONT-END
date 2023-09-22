@@ -88,8 +88,10 @@ const OptionSelect = () => {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
-            authState.gameSocket?.connect();
-            router.replace("/inwaiting");
+            setTimeout(() => {
+              authState.gameSocket?.connect();
+              router.replace("/inwaiting");
+            }, 3000)
           } else {
             console.log("게임방 생성 실패");
             router.replace("/home?from=game");
@@ -115,8 +117,10 @@ const OptionSelect = () => {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
-            authState.gameSocket?.connect();
-            router.replace("/inwaiting");
+            setTimeout(() => {
+              authState.gameSocket?.connect();
+              router.replace("/inwaiting");
+            }, 3000)
           } else {
             console.log("게임방 생성 실패");
             router.replace("/home?from=game");
