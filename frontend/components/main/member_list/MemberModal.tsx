@@ -297,9 +297,7 @@ export default function MemberModal({
             mx={5}
           >
             <Image
-              src={`${server_domain}/img/${
-                person.userIdx
-              }.png?${Date.now().toString()}`}
+              src={`${server_domain}/img/${person.userIdx}.png`}
               alt="user img"
               width={100}
               height={100}

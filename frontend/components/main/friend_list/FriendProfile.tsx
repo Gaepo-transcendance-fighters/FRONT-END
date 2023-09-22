@@ -274,9 +274,7 @@ const FriendProfile = ({ prop }: { prop: IFriend }) => {
               mx={5}
             >
               <Image
-                src={`${server_domain}/img/${
-                  prop.friendIdx
-                }.png?${Date.now().toString()}`}
+                src={`${server_domain}/img/${prop.friendIdx}.png`}
                 alt="user img"
                 width={100}
                 height={100}
