@@ -77,8 +77,7 @@ const GameResult = () => {
 
   const goToBack = (e: PopStateEvent) => {
     e.preventDefault();
-    history.pushState(null, "", location.href);
-    toggle()
+    history.go(1);
   };
 
   useEffect(() => {
