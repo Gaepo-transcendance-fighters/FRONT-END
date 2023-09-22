@@ -102,7 +102,10 @@ const RoomTitleField = ({
             <Typography variant="h4">
               {roomState.currentRoom?.mode === "private"
                 ? roomState.currentRoom.targetNickname + "'s room"
-                : roomState.currentRoom?.owner + "'s room"}
+                : "GF CHANNEL"}
+              {/* {roomState.currentRoom?.mode === "private"
+                ? roomState.currentRoom.targetNickname + "'s room"
+                : roomState.currentRoom?.owner + "'s room"} */}
             </Typography>
           }
         </div>

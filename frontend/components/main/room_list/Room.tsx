@@ -262,7 +262,8 @@ export default function Room({ room, idx }: { room: IChatRoom; idx: number }) {
           {leftPadding(room.channelIdx)}
         </div>
         <div className="owner">
-          {room.owner ? room.owner : room.targetNickname}'s
+          {/* {room.owner ? room.owner : room.targetNickname}'s */}
+          GF CHANNEL
         </div>
         <div className="lock">
           {room.mode === Mode.PROTECTED ? (
