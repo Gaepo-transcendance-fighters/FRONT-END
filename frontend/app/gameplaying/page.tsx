@@ -64,6 +64,7 @@ const GamePlaying = () => {
 
     const preventRefreshButton = (e: BeforeUnloadEvent) => {
       e.preventDefault();
+      authState.gameSocket?.disconnect();
       e.returnValue = "";
       router.replace("/home?from=game");
     };
@@ -195,7 +196,7 @@ const GamePlaying = () => {
                 wordSpacing: "1rem",
               }}
             >
-              <Typography sx={{paddingRight:"5%"}}>
+              <Typography sx={{ paddingRight: "5%" }}>
                 Mode:{" "}
                 {gameState.gameMode === 0
                   ? "Friend"
@@ -203,7 +204,7 @@ const GamePlaying = () => {
                   ? "Normal"
                   : "Rank"}
               </Typography>
-              <Typography sx={{paddingRight:"5%"}}>
+              <Typography sx={{ paddingRight: "5%" }}>
                 Speed:{" "}
                 {gameState.ballSpeedOption === 2
                   ? "Slow"
