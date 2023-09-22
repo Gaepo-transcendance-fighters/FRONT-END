@@ -53,25 +53,6 @@ const OptionSelect = () => {
     );
   };
 
-  useEffect(() => {
-    if (!authState.gameSocket) return;
-    if (authState.gameSocket?.connected)
-      console.log(`[option select page]🥳 게임 소켓 연결 상태 Good!`)
-    else
-      console.log(`[option select page]🥺 게임 소켓 연결 BAD...`)
-    authState.gameSocket.on("game_queue_regist", () => {
-      console.log("game_queue_regist 받음");
-    });
-    authState.gameSocket.on("game_option", () => {
-      console.log("game_option 받음");
-    });
-
-    return () => {
-      if (!authState.gameSocket) return;
-      authState.gameSocket.off("game_option");
-      authState.gameSocket.off("game_queue_regist");
-    };
-  }, []);
 
   useEffect(() => {
     countdown > 0 && setTimeout(() => setCountdown(countdown - 1), 1000);
@@ -81,6 +62,10 @@ const OptionSelect = () => {
 
   const cntRedir = async () => {
     if (!authState.gameSocket) return;
+    if (authState.gameSocket?.connected)
+      console.log(`[option select page]🥳 게임 소켓 연결 상태 Good!`)
+    else
+      console.log(`[option select page]🥺 게임 소켓 연결 BAD...`)
     gameDispatch({ type: "SET_BALL_SPEED_OPTION", value: selectedSpeedOption });
     gameDispatch({ type: "SET_MAP_TYPE", value: selectedMapOption });
     gameDispatch({ type: "SCORE_RESET" });
