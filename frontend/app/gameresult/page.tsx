@@ -7,12 +7,13 @@ import { main } from "@/type/type";
 import { useGame } from "@/context/GameContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { server_domain } from "../page";
+// import { server_domain } from "../page";
 import { IGameLog } from "@/type/GameType";
 import { useAuth } from "@/context/AuthContext";
 import { ReturnMsgDto } from "@/type/RoomType";
 import useModal from "@/hooks/useModal";
 import Modals from "@/components/public/Modals";
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 const winner = {
   width: "35%",

@@ -9,12 +9,13 @@ import { useModalContext } from "@/context/ModalContext";
 import InviteGame from "@/components/main/InviteGame/InviteGame";
 import { useGame } from "@/context/GameContext";
 import { GameType } from "@/type/type";
-import { server_domain } from "../page";
+// import { server_domain } from "../page";
 import { IChatRoom, Mode, ReturnMsgDto } from "@/type/RoomType";
 import { useRoom } from "@/context/RoomContext";
 import secureLocalStorage from "react-secure-storage";
 import { useUser } from "@/context/UserContext";
 import { io } from "socket.io-client";
+const server_domain = process.env.NEXT_PUBLIC_SERVER_URL_4000;
 
 const Page = () => {
   const param = useSearchParams();
