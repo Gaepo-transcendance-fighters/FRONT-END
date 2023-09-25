@@ -147,7 +147,8 @@ export default function InitUser() {
               <input
                 id="inputbox"
                 type="text"
-                maxLength={10}
+                // maxLength={10}
+                maxLength={6}
                 style={{
                   width: "40%",
                   height: "32px",

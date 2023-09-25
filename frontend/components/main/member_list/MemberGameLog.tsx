@@ -79,7 +79,8 @@ const MemberGameLog = ({
 
   useEffect(() => {
     if (end === false) {
-      callUser();
+      // callUser();
+      setTimeout(callUser, 1000);
       setLoading(true);
     }
   }, [pageNum]);
@@ -170,7 +171,13 @@ const MemberGameLog = ({
                     }}
                   >
                     <Typography sx={{ fontSize: "1.1rem" }}>
-                      {gameRecordData.result === 2 ? <>Win</> : gameRecordData.result === 3 ? <>Lose</> : <>Draw</>}
+                      {gameRecordData.result === 2 ? (
+                        <>Win</>
+                      ) : gameRecordData.result === 3 ? (
+                        <>Lose</>
+                      ) : (
+                        <>Draw</>
+                      )}
                     </Typography>
                   </div>
                 </div>
@@ -187,7 +194,8 @@ const MemberGameLog = ({
                 >
                   <Typography sx={{ fontSize: "1.5rem" }}>
                     {/* 내닉네임 | 점수 : 점수 | 상대닉네임 */}
-                    {person.nickname} {gameRecordData.score ? gameRecordData.score : "0 : 0"}{" "}
+                    {person.nickname}{" "}
+                    {gameRecordData.score ? gameRecordData.score : "0 : 0"}{" "}
                     {gameRecordData.matchUserNickname}
                   </Typography>
                 </div>
