@@ -27,6 +27,10 @@ const BottomField = ({ setMsgs }: Props) => {
   const { authState } = useAuth();
 
   const changeMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value.length > 2000) {
+      alert("글자 수는 2000자 이하로 보낼 수 있습니다.");
+      return;
+    }
     setMsg(event.target.value);
   };
 
