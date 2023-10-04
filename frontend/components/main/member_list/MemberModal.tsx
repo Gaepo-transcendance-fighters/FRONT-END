@@ -53,6 +53,9 @@ export default function MemberModal({
   const [winningRate, setWinningRate] = useState<number>(0);
 
   const handleCloseModal = () => {
+    setGameUserInfo(null);
+    setGameRecordData([]);
+    setWinningRate(0);
     setOpenModal(false);
   };
 
@@ -235,8 +238,7 @@ export default function MemberModal({
         targetNickname: person.nickname,
         targetIdx: person.userIdx,
       },
-      (ret: ReturnMsgDto) => {
-      }
+      (ret: ReturnMsgDto) => {}
     );
   };
 
@@ -272,7 +274,6 @@ export default function MemberModal({
       handleCloseModal();
     }
   }, [roomState.currentRoomMemberList]);
-
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
       <Box sx={friendProfileModalStyle} borderRadius={"10px"}>
@@ -449,23 +450,6 @@ export default function MemberModal({
                   gameRecordData={gameRecordData}
                   setGameUserInfo={setGameUserInfo}
                 />
-                {/* <Stack direction={"row"}> */}
-                {/* <CardContent
-                    sx={{ "&:last-child": { paddingBottom: "16px" } }}
-                  >
-                    <Typography>WIN</Typography>
-                  </CardContent>
-                  <CardContent
-                    sx={{ "&:last-child": { paddingBottom: "16px" } }}
-                  >
-                    <Typography>hoslim VS jujeon</Typography>
-                  </CardContent>
-                  <CardContent
-                    sx={{ "&:last-child": { paddingBottom: "16px" } }}
-                  >
-                    <Typography>5 : 3</Typography>
-                  </CardContent> */}
-                {/* </Stack> */}
               </Card>
             </Card>
           </Stack>
