@@ -85,9 +85,6 @@ const MemberGameLog = ({
     }
   }, [pageNum]);
 
-  useEffect(() => {
-    console.log(gameRecordData);
-  }, [gameRecordData]);
   return (
     <>
       <div
