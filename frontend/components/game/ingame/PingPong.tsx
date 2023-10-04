@@ -280,13 +280,6 @@ const PingPong = () => {
           if (res.code === 200) {
             gameDispatch({ type: "A_SCORE", value: data.userScore1 });
             gameDispatch({ type: "B_SCORE", value: data.userScore2 });
-            if (
-              data.gameStatus === EGameStatus.END ||
-              data.gameStatus === EGameStatus.JUDGE
-            ) {
-              gameDispatch({ type: "SCORE_RESET" });
-              router.replace("/gameresult");
-            }
           }
         }
       );
