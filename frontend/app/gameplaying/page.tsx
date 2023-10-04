@@ -11,6 +11,8 @@ import Modals from "@/components/public/Modals";
 import { useAuth } from "@/context/AuthContext";
 
 const myNickname = {
+  // overflow: "hidden",
+  // textOverflow: "ellipsis",
   width: "max-content",
   padding: "20px",
   margin: "30px",
@@ -23,6 +25,8 @@ const myNickname = {
 };
 
 const otherNickname = {
+  // overflow: "hidden",
+  // textOverflow: "ellipsis",
   width: "max-content",
   padding: "20px",
   margin: "30px",
